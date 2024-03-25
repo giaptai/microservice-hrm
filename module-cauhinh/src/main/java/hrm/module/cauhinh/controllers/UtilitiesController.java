@@ -89,7 +89,7 @@ public class UtilitiesController {
     private final ILoaiNhomHeSoNgachService.INgachVienChucService ngachVienChucService;
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Bậc lương ", description = "Cấu hình")
     class BacLuongController {
         @GetMapping("/bac-luong")
         public ResponseEntity<ResDTO<List<BacLuong>>> getAll() {
@@ -119,7 +119,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Loại quân hàm quân đội ", description = "Cấu hình")
     class CapBacLoaiQuanHamQuanDoiController {
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi")
         public ResponseEntity<ResDTO<List<ResCapBacLoaiHamQuanDoi>>> getAll() {
@@ -185,7 +185,7 @@ public class UtilitiesController {
 //    }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Chức danh đảng ", description = "Cấu hình")
     class ChucDanhDangController {
         @GetMapping("/chuc-danh-dang")
         public ResponseEntity<ResDTO<List<ResChucDanhDang>>> getAll() {
@@ -218,7 +218,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Chức vụ ", description = "Cấu hình")
     class ChucVuController {
         @GetMapping("/chuc-vu")
         public ResponseEntity<ResDTO<List<ChucVu>>> getAll() {
@@ -247,7 +247,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Cơ quản tổ chức đơn vị ", description = "Cấu hình")
     class CoQuanToChucDonViController {
         @GetMapping("/coquan-tochuc-donvi")
         public ResponseEntity<ResDTO<List<CoQuanToChucDonVi>>> getAll() {
@@ -332,7 +332,7 @@ public class UtilitiesController {
 //    }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Danh hiệu nhà nước ", description = "Cấu hình")
     class DanhHieuNhaNuocPhongTangController {
         @GetMapping("/danh-hieu-nha-nuoc-phong")
         public ResponseEntity<ResDTO<List<DanhHieuNhaNuoc>>> getAll() {
@@ -361,7 +361,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Dân tộc ", description = "Cấu hình")
     class DanTocController {
         private PhanTrang<DanToc> phanTrang = new PhanTrang<>();
 
@@ -392,7 +392,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Đối tượng chính sách ", description = "Cấu hình")
     class DoiTuongChinhSachController {
         @GetMapping("/doi-tuong-chinh-sach")
         public ResponseEntity<ResDTO<List<DoiTuongChinhSach>>> getAll() {
@@ -422,7 +422,7 @@ public class UtilitiesController {
 
     //
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Hình thức khen thưởng ", description = "Cấu hình")
     class HinhThucKhenThuongController {
         @GetMapping("/hinh-thuc-khen-thuong")
         public ResponseEntity<ResDTO<List<HinhThucKhenThuong>>> getAll() {
@@ -451,7 +451,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Học hàm ", description = "Cấu hình")
     class HocHamController {
         @GetMapping("/hoc-ham")
         public ResponseEntity<ResDTO<List<HocHam>>> getAll() {
@@ -480,7 +480,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Loại phụ cấp ", description = "Cấu hình")
     class LoaiPhuCapController {
         @GetMapping("/loai-phu-cap")
         public ResponseEntity<ResDTO<List<LoaiPhuCap>>> getAll() {
@@ -537,7 +537,7 @@ public class UtilitiesController {
 //    }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Mối quan hệ ", description = "Cấu hình")
     class MoiQuanHeController {
         @GetMapping("/moi-quan-he")
         public ResponseEntity<ResDTO<List<MoiQuanHe>>> getAll() {
@@ -594,7 +594,7 @@ public class UtilitiesController {
 //    }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Nhóm máu ", description = "Cấu hình")
     class NhomMauController {
         @GetMapping("/nhom-mau")
         public ResponseEntity<ResDTO<List<NhomMau>>> getAll() {
@@ -623,7 +623,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Thành phần gia đình ", description = "Cấu hình")
     class ThanhPhanGiaDinhController {
         @GetMapping("/thanh-phan-gia-dinh")
         public ResponseEntity<ResDTO<List<ThanhPhanGiaDinh>>> getAll() {
@@ -652,7 +652,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Tôn giáo ", description = "Cấu hình")
     class TonGiaoController {
         @GetMapping("/ton-giao")
         public ResponseEntity<ResDTO<List<TonGiao>>> getAll() {
@@ -681,7 +681,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Trình độ chuyên môn ", description = "Cấu hình")
     class TrinhDoChuyenMonController {
         @GetMapping("/trinh-do-chuyen-mon")
         public ResponseEntity<ResDTO<List<TrinhDoChuyenMon>>> getAll() {
@@ -710,7 +710,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Trình độ giáo dục phổ thông ", description = "Cấu hình")
     class TrinhDoGiaoDucPhoThongController {
         @GetMapping("/trinh-do-giao-duc-pho-thong")
         public ResponseEntity<ResDTO<List<TrinhDoGiaoDucPhoThong>>> getAll() {
@@ -739,7 +739,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Vị trí việc làm ", description = "Cấu hình")
     class ViTriViecLamController {
         @GetMapping("/vi-tri-viec-lam")
         public ResponseEntity<ResDTO<List<ViTriViecLam>>> getAll() {
@@ -768,7 +768,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Loại công chức ", description = "Cấu hình")
     class LoaiCongChucController {
         @GetMapping("/loai-cong-chuc")
         public ResponseEntity<ResDTO<List<LoaiCongChuc>>> getAll() {
@@ -796,7 +796,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Loại viên chức ", description = "Cấu hình")
     class LoaiVienChucController {
         @GetMapping("/loai-vien-chuc")
         public ResponseEntity<ResDTO<List<LoaiVienChuc>>> getAll() {
@@ -823,7 +823,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Nhóm công chức ", description = "Cấu hình")
     class NhomCongChucController {
         @GetMapping("/nhom-cong-chuc")
         public ResponseEntity<ResDTO<List<NhomCongChuc>>> getAll() {
@@ -850,7 +850,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Nhóm viên chức ", description = "Cấu hình")
     class NhomVienChucController {
         @GetMapping("/nhom-vien-chuc")
         public ResponseEntity<ResDTO<List<NhomVienChuc>>> getAll() {
@@ -877,7 +877,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Hệ số lương công chức ", description = "Cấu hình")
     class HeSoLuongCongChucController {
         @GetMapping("/he-so-luong-cong-chuc")
         public ResponseEntity<ResDTO<List<HeSoLuongCongChuc>>> getAll() {
@@ -904,7 +904,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Hệ số lương viên chức ", description = "Cấu hình")
     class HeSoLuongVienChucController {
         @GetMapping("/he-so-luong-vien-chuc")
         public ResponseEntity<ResDTO<List<HeSoLuongVienChuc>>> getAll() {
@@ -931,7 +931,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Ngạch công chức ", description = "Cấu hình")
     class NgachCongChucController {
         @GetMapping("/ngach-cong-chuc")
         public ResponseEntity<ResDTO<List<NgachCongChuc>>> getAll() {
@@ -958,7 +958,7 @@ public class UtilitiesController {
     }
 
     @RestController
-    @Tag(name = "Cau hinh ", description = "Cấu hình")
+    @Tag(name = "Ngạch viên chức ", description = "Cấu hình")
     class NgachVienChucController {
         @GetMapping("/ngach-vien-chuc")
         public ResponseEntity<ResDTO<List<NgachVienChuc>>> getAll() {
