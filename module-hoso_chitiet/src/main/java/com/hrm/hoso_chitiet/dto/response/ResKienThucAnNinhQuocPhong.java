@@ -15,16 +15,5 @@ public record ResKienThucAnNinhQuocPhong(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResKienThucAnNinhQuocPhong mapToResKienThucAnNinhQuocPhong(KienThucAnNinhQuocPhong phong) {
-        return phong != null ? new ResKienThucAnNinhQuocPhong(
-                phong.getId(),
-                phong.getBatDau(),
-                phong.getKetThuc(),
-                phong.getTenCoSoDaoTao(),
-                phong.getChungChiDuocCap(),
-                phong.getXacNhan(),
-                phong.getCreate_at(),
-                phong.getUpdate_at()
-        ) : null;
-    }
+
 }

@@ -14,17 +14,17 @@ import java.util.UUID;
 
 @Repository
 public interface LuongBanThanRepository extends JpaRepository<LuongBanThan, Integer> {
-    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.hoSoId = ?1")
     List<LuongBanThan> listLuongBanThan(UUID id);
 
-    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.hoSoId = ?1")
     List<LuongBanThan> getAllByHoSo(UUID id);
 
-    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.id = ?1 AND c.soYeuLyLich = ?2")
+    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LuongBanThan> findByIdAndHoSo(int id, UUID id1);
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE LuongBanThan c SET c.batDau = ?1, c.ketThuc = ?2, c.maSo =?3, c.bacLuong =?4, c.heSoLuong =?5, c.tienLuongTheoViTri =?6 WHERE c.id = ?7 AND c.soYeuLyLich = ?8")
+    @Query(value = "UPDATE LuongBanThan c SET c.batDau = ?1, c.ketThuc = ?2, c.maSo =?3, c.bacLuong =?4, c.heSoLuong =?5, c.tienLuongTheoViTri =?6 WHERE c.id = ?7 AND c.hoSoId = ?8")
     void updateByIdAndSyll(LocalDateTime batDau, LocalDateTime ketThuc, String maSo, String bacLuong, float heSoLuong, float tienLuongTheoViTri, int id, UUID id1);
 }

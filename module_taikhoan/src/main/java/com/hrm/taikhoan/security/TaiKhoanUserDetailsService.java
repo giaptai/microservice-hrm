@@ -1,5 +1,6 @@
 package com.hrm.taikhoan.security;
 
+import com.hrm.taikhoan.models.TaiKhoan;
 import com.hrm.taikhoan.repository.TaiKhoanRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,7 +17,7 @@ public class TaiKhoanUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDetails taiKhoan = taiKhoanRepository.findByUsername(username);
+        TaiKhoan taiKhoan = taiKhoanRepository.findByUsername(username);
         if (taiKhoan == null) {
             throw new UsernameNotFoundException("User not found with username: " + username);
         }

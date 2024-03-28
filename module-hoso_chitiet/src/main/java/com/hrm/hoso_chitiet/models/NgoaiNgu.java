@@ -2,7 +2,6 @@ package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import com.hrm.hoso_chitiet.dto.response.ResNgoaiNgu;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
@@ -52,8 +51,8 @@ public class NgoaiNgu extends DateTimeObject {
     @Column(name = "ket_thuc", columnDefinition = "datetime")
     LocalDateTime ketThuc;
 
-    @Column(name = "ten_co_so_dao_tao", columnDefinition = "INTEGER")
-    int tenCoSoDaoTao;
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int tenCoSoDaoTaoId;
 
     @Column(name = "ten_ngoai_ngu", columnDefinition = "varchar(50)")
     String tenNgoaiNgu;
@@ -68,24 +67,24 @@ public class NgoaiNgu extends DateTimeObject {
     @Column(name = "xac_nhan")
     XacNhan xacNhan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
     @Override
     public void setUpdate_at() {
         super.setUpdate_at();
     }
 
-    public NgoaiNgu(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTao, String tenNgoaiNgu, String chungChiDuocCap, float diemSo, XacNhan xacNhan, UUID soYeuLyLich) {
+    public NgoaiNgu(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String tenNgoaiNgu, String chungChiDuocCap, float diemSo, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
-        this.tenCoSoDaoTao = tenCoSoDaoTao;
+        this.tenCoSoDaoTaoId = tenCoSoDaoTaoId;
         this.tenNgoaiNgu = tenNgoaiNgu;
         this.chungChiDuocCap = chungChiDuocCap;
         this.diemSo = diemSo;
         this.xacNhan = xacNhan;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 
     public static class NgoaiNguSerializer implements Serializer<List<ResNgoaiNgu>> {

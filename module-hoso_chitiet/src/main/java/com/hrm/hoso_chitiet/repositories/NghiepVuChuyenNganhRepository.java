@@ -11,12 +11,12 @@ import java.util.UUID;
 
 @Repository
 public interface NghiepVuChuyenNganhRepository extends JpaRepository<NghiepVuChuyenNganh, Integer> {
-    @Query(value = "SELECT c FROM NghiepVuChuyenNganh c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM NghiepVuChuyenNganh c WHERE c.hoSoId = ?1")
     List<NghiepVuChuyenNganh> listNghiepVuChuyenNganh(UUID id);
 
-    @Query(value = "SELECT c FROM NghiepVuChuyenNganh c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM NghiepVuChuyenNganh c WHERE c.hoSoId = ?1")
     List<NghiepVuChuyenNganh> getAllByHoSo(UUID id);
 
-    @Query(value = "SELECT c FROM NghiepVuChuyenNganh c WHERE c.id = ?1 AND c.soYeuLyLich = ?2")
+    @Query(value = "SELECT c FROM NghiepVuChuyenNganh c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<NghiepVuChuyenNganh> findByIdAndHoSo(int id, UUID id1);
 }

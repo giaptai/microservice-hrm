@@ -346,7 +346,10 @@ public class UtilitiesController {
 
         @PostMapping("/danh-hieu-nha-nuoc-phong")
         public ResponseEntity<ResDTO<DanhHieuNhaNuoc>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, danhHieuNhaNuocPhongTangService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+            return new ResponseEntity<>(
+                    ResDTO.response(ResEnum.TAO_THANH_CONG, danhHieuNhaNuocPhongTangService.them(utilities)),
+                    ResEnum.TAO_THANH_CONG.getStatusCode()
+            );
         }
 
         @PatchMapping("/danh-hieu-nha-nuoc-phong/{id}")

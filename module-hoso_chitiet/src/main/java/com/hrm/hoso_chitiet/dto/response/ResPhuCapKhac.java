@@ -16,19 +16,4 @@ public record ResPhuCapKhac(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResPhuCapKhac mapToResPhuCapKhac(PhuCapKhac khac) {
-        return khac != null ? new ResPhuCapKhac(
-                khac.getId(),
-                khac.getBatDau(),
-                khac.getKetThuc(),
-                khac.getLoaiPhuCap(),
-                khac.getPhanTramHuongPhuCap(),
-                khac.getHeSoPhuCap(),
-                khac.getHinhThucHuong(),
-                khac.getGiaTri(),
-                khac.getCreate_at(),
-                khac.getUpdate_at()
-        ) : null;
-    }
-
 }

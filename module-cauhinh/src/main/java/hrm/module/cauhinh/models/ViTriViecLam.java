@@ -36,16 +36,16 @@ public class ViTriViecLam extends DateTimeObject {
     String name;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "bac_luong_fk"), name = "bac_luong", referencedColumnName = "id", columnDefinition = "INTEGER")
-    BacLuong bacLuong;
+    @JoinColumn(foreignKey = @ForeignKey(name = "bac_luong_fk"), name = "bac_luong_id", referencedColumnName = "id", columnDefinition = "INTEGER")
+    BacLuong bacLuongId;
 
     @Column(columnDefinition = "double default 0")
     double tienLuong;
 
-    public ViTriViecLam(String name, BacLuong bacLuong, double tienLuong) {
+    public ViTriViecLam(String name, BacLuong bacLuongId, double tienLuong) {
         super();
         this.name = name;
-        this.bacLuong = bacLuong;
+        this.bacLuongId = bacLuongId;
         this.tienLuong = tienLuong;
     }
 }

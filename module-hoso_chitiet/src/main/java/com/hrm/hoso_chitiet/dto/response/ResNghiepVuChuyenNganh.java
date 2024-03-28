@@ -21,20 +21,6 @@ public record ResNghiepVuChuyenNganh(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResNghiepVuChuyenNganh mapToResNghiepVuChuyenNganh(NghiepVuChuyenNganh nganh) {
-        return nganh != null ? new ResNghiepVuChuyenNganh(
-                nganh.getId(),
-                nganh.getSoYeuLyLich(),
-                nganh.getBatDau(),
-                nganh.getKetThuc(),
-                nganh.getTenCoSoDaoTao(),
-                nganh.getChungChiDuocCap(),
-                nganh.getXacNhan(),
-                nganh.getCreate_at(),
-                nganh.getUpdate_at()
-        ) : null;
-    }
-
     public static class ResNghiepVuChuyenNganhSerializer implements Serializer<ResNghiepVuChuyenNganh> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

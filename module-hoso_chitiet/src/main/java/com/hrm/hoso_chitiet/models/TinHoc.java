@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,26 +41,26 @@ public class TinHoc extends DateTimeObject {
     @Column(name = "ket_thuc", columnDefinition = "datetime")
     LocalDateTime ketThuc;
 
-    @Column(name = "ten_co_so_dao_tao", columnDefinition = "INTEGER")
-    int tenCoSoDaoTao;
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int tenCoSoDaoTaoId;
 
     @Column(name = "chung_chi_duoc_cap", columnDefinition = "varchar(50)")
     String chungChiDuocCap;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
     @Override
     public void setUpdate_at() {
         super.setUpdate_at();
     }
 
-    public TinHoc(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTao, String chungChiDuocCap, UUID soYeuLyLich) {
+    public TinHoc(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String chungChiDuocCap, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
-        this.tenCoSoDaoTao = tenCoSoDaoTao;
+        this.tenCoSoDaoTaoId = tenCoSoDaoTaoId;
         this.chungChiDuocCap = chungChiDuocCap;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

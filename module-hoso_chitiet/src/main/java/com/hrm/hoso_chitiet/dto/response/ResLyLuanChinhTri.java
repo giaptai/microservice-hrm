@@ -21,19 +21,6 @@ public record ResLyLuanChinhTri(
         LocalDateTime update_at
 
 ) {
-    public static ResLyLuanChinhTri mapToResLyLuanChinhTri(LyLuanChinhTri tri) {
-        return tri != null ? new ResLyLuanChinhTri(
-                tri.getId(),
-                tri.getSoYeuLyLich(),
-                tri.getBatDau(),
-                tri.getKetThuc(),
-                tri.getTenCoSoDaoTao(),
-                tri.getHinhThucDaoTao(),
-                tri.getVanBangDuocCap(),
-                tri.getCreate_at(),
-                tri.getUpdate_at()
-        ) : null;
-    }
     public static class ResLyLuanChinhTriSerializer implements Serializer<ResLyLuanChinhTri> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

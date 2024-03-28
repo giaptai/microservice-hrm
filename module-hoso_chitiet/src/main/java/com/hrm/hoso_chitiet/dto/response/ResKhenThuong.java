@@ -24,11 +24,12 @@ public record ResKhenThuong(
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime nam,
-        String xepLoaiChuyenMon,
+        XepLoaiChuyenMon xepLoaiChuyenMon,
         XepLoaiChuyenMon xepLoaiChuyenMonEnum,
-        String xepLoaiThiDua,
+        XepLoaiThiDua xepLoaiThiDua,
         XepLoaiThiDua xepLoaiThiDuaEnum,
-        int hinhThucKhenThuong,
+        int hinhThucKhenThuongId,
+        String lyDo,
         XacNhan xacNhan,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -37,23 +38,6 @@ public record ResKhenThuong(
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime update_at
 ) {
-    public static ResKhenThuong maptoResKhenThuong(KhenThuong thuong) {
-        String htktName = "";
-        return thuong != null ? new ResKhenThuong(
-                thuong.getId(),
-                thuong.getSoYeuLyLich(),
-                thuong.getNam(),
-                thuong.getXepLoaiChuyenMon().getName(),
-                thuong.getXepLoaiChuyenMon(),
-                thuong.getXepLoaiThiDua().getName(),
-                thuong.getXepLoaiThiDua(),
-                thuong.getHinhThucKhenThuong(),
-                thuong.getXacNhan(),
-                thuong.getCreate_at(),
-                thuong.getUpdate_at()
-        ) : null;
-    }
-
     public static class ResKhenThuongSerializer implements Serializer<List<ResKhenThuong>> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

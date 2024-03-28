@@ -11,12 +11,12 @@ import java.util.UUID;
 
 @Repository
 public interface TinHocRepository extends JpaRepository<TinHoc, Integer> {
-    @Query(value = "SELECT c FROM TinHoc c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM TinHoc c WHERE c.hoSoId = ?1")
     List<TinHoc> listTinHoc(UUID id);
 
-    @Query(value = "SELECT c FROM TinHoc c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM TinHoc c WHERE c.hoSoId = ?1")
     List<TinHoc> getAllByHoSo(UUID id);
 
-    @Query(value = "SELECT c FROM TinHoc c WHERE c.id = ?1 AND c.soYeuLyLich = ?2")
+    @Query(value = "SELECT c FROM TinHoc c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<TinHoc> findByIdAndHoSo(int id, UUID id1);
 }

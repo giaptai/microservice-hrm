@@ -27,7 +27,7 @@ public record ResKyLuat(
         LocalDateTime ketThuc,
         String hinhThuc,
         String hanhViViPhamChinh,
-        int IdCoQuanQuyetDinh,
+        int CoQuanQuyetDinhId,
         XacNhan xacNhan,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -37,21 +37,6 @@ public record ResKyLuat(
         LocalDateTime update_at
 
 ) {
-    public static ResKyLuat mapToResKyLuat(KyLuat luat) {
-        return luat != null ? new ResKyLuat(
-                luat.getId(),
-                luat.getSoYeuLyLich(),
-                luat.getBatDau(),
-                luat.getKetThuc(),
-                luat.getHinhThuc(),
-                luat.getHanhViViPhamChinh(),
-                luat.getCoQuanQuyetDinh(),
-                luat.getXacNhan(),
-                luat.getCreate_at(),
-                luat.getUpdate_at()
-        ) : null;
-    }
-
     public static class ResKyLuatSerializer implements Serializer<List<ResKyLuat>> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

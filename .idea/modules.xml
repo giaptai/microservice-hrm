@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MicroserviceHRM.iml" filepath="$PROJECT_DIR$/MicroserviceHRM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-cauhinh.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-cauhinh.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-hoso.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-hoso.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module-hoso_chitiet.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module-hoso_chitiet.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/module_taikhoan.main.iml" filepath="$PROJECT_DIR$/.idea/modules/module_taikhoan.main.iml" />
     </modules>
   </component>
 </project>

@@ -15,13 +15,6 @@ public class ResDTO<T> {
     final T data;
     final LocalDateTime time_stamp;
 
-    private ResDTO(ResEnum resEnum) {
-        this.status_code = resEnum.getStatusCode().value();
-        this.message = resEnum.name();
-        this.data = null;
-        this.time_stamp = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-    }
-
     private ResDTO(ResEnum resEnum, T data) {
         this.status_code = resEnum.getStatusCode().value();
         this.message = resEnum.name();

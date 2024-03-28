@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,24 +49,24 @@ public class KyLuat extends DateTimeObject {
     @Column(name = "hanh_vi_vi_pham_chinh", columnDefinition = "varchar(50) default''")
     String hanhViViPhamChinh;
 
-    @Column(name = "co_quan_quyet_dinh", columnDefinition = "INTEGER")
-    int coQuanQuyetDinh;
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int coQuanQuyetDinhId;
 
     @Enumerated
     @Column(name = "xac_nhan")
     XacNhan xacNhan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public KyLuat(LocalDateTime batDau, LocalDateTime ketThuc, String hinhThuc, String hanhViViPhamChinh, int coQuanQuyetDinh, XacNhan xacNhan, UUID soYeuLyLich) {
+    public KyLuat(LocalDateTime batDau, LocalDateTime ketThuc, String hinhThuc, String hanhViViPhamChinh, int coQuanQuyetDinhId, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
         this.hinhThuc = hinhThuc;
         this.hanhViViPhamChinh = hanhViViPhamChinh;
-        this.coQuanQuyetDinh = coQuanQuyetDinh;
+        this.coQuanQuyetDinhId = coQuanQuyetDinhId;
         this.xacNhan = xacNhan;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

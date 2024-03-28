@@ -36,22 +36,6 @@ public record ResNgoaiNgu(
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime update_at
 ) {
-    public static ResNgoaiNgu mapToResNgoaiNgu(NgoaiNgu ngu) {
-        return ngu != null ? new ResNgoaiNgu(
-                ngu.getId(),
-                ngu.getSoYeuLyLich(),
-                ngu.getBatDau(),
-                ngu.getKetThuc(),
-                ngu.getTenCoSoDaoTao(),
-                ngu.getTenNgoaiNgu(),
-                ngu.getChungChiDuocCap(),
-                ngu.getDiemSo(),
-                ngu.getXacNhan(),
-                ngu.getCreate_at(),
-                ngu.getUpdate_at()
-        ) : null;
-    }
-
     public static class ResNgoaiNguSerializer implements Serializer<ResNgoaiNgu> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

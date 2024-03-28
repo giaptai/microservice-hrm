@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,14 +44,14 @@ public class LamViecONuocNgoai extends DateTimeObject {
     @Column(name = "to_chuc_dia_chi_cong_viec", columnDefinition = "text")
     String toChucDiaChiCongViec;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public LamViecONuocNgoai(LocalDateTime batDau, LocalDateTime ketThuc, String toChucDiaChiCongViec, UUID soYeuLyLich) {
+    public LamViecONuocNgoai(LocalDateTime batDau, LocalDateTime ketThuc, String toChucDiaChiCongViec, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
         this.toChucDiaChiCongViec = toChucDiaChiCongViec;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

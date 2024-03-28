@@ -40,15 +40,20 @@ import hrm.module.cauhinh.repositories.TrinhDoChuyenMonRepository;
 import hrm.module.cauhinh.repositories.TrinhDoGiaoDucPhoThongRepository;
 import hrm.module.cauhinh.repositories.ViTriViecLamRepository;
 
+import hrm.module.cauhinh.response.ExceptionCustom;
 import hrm.module.cauhinh.response.ResDTO;
 import hrm.module.cauhinh.response.ResEnum;
 
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -72,7 +77,6 @@ public class UtilitiesService {
     private final TrinhDoChuyenMonRepository trinhDoChuyenMonRepository;
     private final TrinhDoGiaoDucPhoThongRepository trinhDoGiaoDucPhoThongRepository;
     private final ViTriViecLamRepository viTriViecLamRepository;
-
     @Service
     public class BacLuongService implements IUtilitiesService<BacLuong, ReqUtilities> {
         @Override
@@ -82,19 +86,17 @@ public class UtilitiesService {
 
         @Override
         public Optional<BacLuong> xemTheoId(int id) {
-            return bacLuongRepository.findById(id);
+            return Optional.ofNullable(bacLuongRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public BacLuong them(ReqUtilities name) {
             try {
-                BacLuong bl = bacLuongRepository.findByName(name.name()).orElse(null);
-                if (bl == null) {
-                    return bacLuongRepository.save(new BacLuong(name.name()));
-                } else throw ResDTO.error(ResEnum.TRUNG_DU_LIEU);
+                return bacLuongRepository.save(new BacLuong(name.name()));
             } catch (RuntimeException e) {
-                throw ResDTO.error(ResEnum.TRUNG_DU_LIEU);
+                throw new ExceptionCustom(ResEnum.TRUNG_DU_LIEU.name());
             }
+            //khong the xai ExceptionCustom
         }
 
         @Override
@@ -104,9 +106,9 @@ public class UtilitiesService {
                     e.setName(luong.name());
                     e.setUpdate_at();
                     return bacLuongRepository.save(e);
-                }).orElse(null);
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                }).orElseThrow(() -> new ExceptionCustom(ResEnum.HONG_TIM_THAY.name()));
+            } catch (ExceptionCustom e) {
+                throw new ExceptionCustom(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -133,22 +135,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<CapBacLoaiQuanHamQuanDoi> xemTheoId(int id) {
-            return capBacLoaiQuanHamQuanDoiRepository.findById(id);
+            return Optional.ofNullable(capBacLoaiQuanHamQuanDoiRepository.findById(id).orElseThrow(()->new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public CapBacLoaiQuanHamQuanDoi them(ReqUtilities req) {
-            CapBacLoaiQuanHamQuanDoi capBacLoaiQuanHamQuanDoi = capBacLoaiQuanHamQuanDoiRepository.findByName(req.name()).orElse(null);
-//            LoaiQuanHamQuanDoi loaiQuanHamQuanDoi = loaiQuanHamQuanDoiRepository.findById(req.loaiQuanHamQuanDoi()).orElse(null);
             try {
-                if (capBacLoaiQuanHamQuanDoi == null) {
-//                    return capBacLoaiQuanHamQuanDoiRepository.save(new CapBacLoaiQuanHamQuanDoi(req.name(), loaiQuanHamQuanDoi));
-                    return capBacLoaiQuanHamQuanDoiRepository.save(new CapBacLoaiQuanHamQuanDoi(req.name()));
-
-                }
-                return capBacLoaiQuanHamQuanDoi;
+                return capBacLoaiQuanHamQuanDoiRepository.save(new CapBacLoaiQuanHamQuanDoi(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -175,9 +170,9 @@ public class UtilitiesService {
 //                    e.setLoaiQuanHamQuanDoi(loaiQuanHamQuanDoi);
                     e.setUpdate_at();
                     return capBacLoaiQuanHamQuanDoiRepository.save(e);
-                }).orElse(null);
+                }).orElseThrow(()-> new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name());
             }
         }
 
@@ -251,7 +246,7 @@ public class UtilitiesService {
 
         @Override
         public Optional<ChucDanhDang> xemTheoId(int id) {
-            return chucDanhDangRepository.findById(id);
+            return Optional.ofNullable(chucDanhDangRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
@@ -259,13 +254,10 @@ public class UtilitiesService {
             ChucDanhDang chucDanhDang = chucDanhDangRepository.findByName(req.name()).orElse(null);
 //            CapNhomChucDanhDang capNhomChucDanhDang = capNhomChucDanhDangRepository.findById(req.capNhomChucDanhDang()).orElse(null);
             try {
-                if (chucDanhDang == null) {
 //                    return chucDanhDangRepository.save(new ChucDanhDang(req.name(), capNhomChucDanhDang));
-                    return chucDanhDangRepository.save(new ChucDanhDang(req.name()));
-                }
-                return chucDanhDang;
+                return chucDanhDangRepository.save(new ChucDanhDang(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -278,9 +270,9 @@ public class UtilitiesService {
 //                    e.setCapNhomChucDanhDang(capNhomChucDanhDang);
                     e.setUpdate_at();
                     return chucDanhDangRepository.save(e);
-                }).orElse(null);
+                }).orElseThrow(()->new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -307,19 +299,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<ChucVu> xemTheoId(int id) {
-            return chucVuRepository.findById(id);
+            return Optional.ofNullable(chucVuRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public ChucVu them(ReqUtilities req) {
-            ChucVu vu = chucVuRepository.findByName(req.name()).orElse(null);
             try {
-                if (vu == null) {
-                    return chucVuRepository.save(new ChucVu(req.name()));
-                }
-                return vu;
+                return chucVuRepository.save(new ChucVu(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -330,9 +318,9 @@ public class UtilitiesService {
                     e.setName(vu.name());
                     e.setUpdate_at();
                     return chucVuRepository.save(e);
-                }).orElse(null);
+                }).orElseThrow(()->new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -359,19 +347,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<CoQuanToChucDonVi> xemTheoId(int id) {
-            return coQuanToChucDonViRepository.findById(id);
+            return Optional.ofNullable(coQuanToChucDonViRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public CoQuanToChucDonVi them(ReqUtilities req) {
-            CoQuanToChucDonVi co = coQuanToChucDonViRepository.findByName(req.name()).orElse(null);
             try {
-                if (co == null) {
-                    return coQuanToChucDonViRepository.save(new CoQuanToChucDonVi(req.name()));
-                }
-                return co;
+                return coQuanToChucDonViRepository.save(new CoQuanToChucDonVi(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -382,9 +366,9 @@ public class UtilitiesService {
                     e.setName(vi.name());
                     e.setUpdate_at();
                     return coQuanToChucDonViRepository.save(e);
-                }).orElse(null);
+                }).orElseThrow(()->new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -518,19 +502,19 @@ public class UtilitiesService {
 
         @Override
         public Optional<DanhHieuNhaNuoc> xemTheoId(int id) {
-            return danhHieuNhaNuocPhongTangRepository.findById(id);
+            try {
+                return Optional.ofNullable(danhHieuNhaNuocPhongTangRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
+            } catch (RuntimeException e) {
+                throw new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name());
+            }
         }
 
         @Override
         public DanhHieuNhaNuoc them(ReqUtilities req) {
-            DanhHieuNhaNuoc danh = danhHieuNhaNuocPhongTangRepository.findByName(req.name()).orElse(null);
             try {
-                if (danh == null) {
-                    return danhHieuNhaNuocPhongTangRepository.save(new DanhHieuNhaNuoc(req.name()));
-                }
-                return danh;
+                return danhHieuNhaNuocPhongTangRepository.save(new DanhHieuNhaNuoc(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -570,19 +554,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<DanToc> xemTheoId(int id) {
-            return danTocRepository.findById(id);
+            return Optional.ofNullable(danTocRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public DanToc them(ReqUtilities req) {
-            DanToc toc = danTocRepository.findByName(req.name()).orElse(null);
             try {
-                if (toc == null) {
-                    return danTocRepository.save(new DanToc(req.name()));
-                }
-                return toc;
+                return danTocRepository.save(new DanToc(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -622,19 +602,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<DoiTuongChinhSach> xemTheoId(int id) {
-            return doiTuongChinhSachRepository.findById(id);
+            return Optional.ofNullable(doiTuongChinhSachRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public DoiTuongChinhSach them(ReqUtilities req) {
-            DoiTuongChinhSach sach = doiTuongChinhSachRepository.findByName(req.name()).orElse(null);
             try {
-                if (sach == null) {
-                    return doiTuongChinhSachRepository.save(new DoiTuongChinhSach(req.name()));
-                }
-                return sach;
+                return doiTuongChinhSachRepository.save(new DoiTuongChinhSach(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -674,19 +650,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<HinhThucKhenThuong> xemTheoId(int id) {
-            return hinhThucKhenThuongRepository.findById(id);
+            return Optional.ofNullable(hinhThucKhenThuongRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public HinhThucKhenThuong them(ReqUtilities req) {
-            HinhThucKhenThuong thuc = hinhThucKhenThuongRepository.findByName(req.name()).orElse(null);
             try {
-                if (thuc == null) {
-                    return hinhThucKhenThuongRepository.save(new HinhThucKhenThuong(req.name()));
-                }
-                return thuc;
+                return hinhThucKhenThuongRepository.save(new HinhThucKhenThuong(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -727,19 +699,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<HocHam> xemTheoId(int id) {
-            return hocHamRepository.findById(id);
+            return Optional.ofNullable(hocHamRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public HocHam them(ReqUtilities req) {
-            HocHam ham = hocHamRepository.findByName(req.name()).orElse(null);
             try {
-                if (ham == null) {
-                    return hocHamRepository.save(new HocHam(req.name()));
-                }
-                return ham;
+                return hocHamRepository.save(new HocHam(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -780,19 +748,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<LoaiPhuCap> xemTheoId(int id) {
-            return loaiPhuCapRepository.findById(id);
+            return Optional.ofNullable(loaiPhuCapRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public LoaiPhuCap them(ReqUtilities req) {
-            LoaiPhuCap ham = loaiPhuCapRepository.findByName(req.name()).orElse(null);
             try {
-                if (ham == null) {
-                    return loaiPhuCapRepository.save(new LoaiPhuCap(req.name()));
-                }
-                return ham;
+                return loaiPhuCapRepository.save(new LoaiPhuCap(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -885,19 +849,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<MoiQuanHe> xemTheoId(int id) {
-            return moiQuanHeRepository.findById(id);
+            return Optional.ofNullable(moiQuanHeRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public MoiQuanHe them(ReqUtilities req) {
-            MoiQuanHe he = moiQuanHeRepository.findByName(req.name()).orElse(null);
             try {
-                if (he == null) {
-                    return moiQuanHeRepository.save(new MoiQuanHe(req.name()));
-                }
-                return he;
+                return moiQuanHeRepository.save(new MoiQuanHe(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -991,19 +951,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<NhomMau> xemTheoId(int id) {
-            return nhomMauRepository.findById(id);
+            return Optional.ofNullable(nhomMauRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public NhomMau them(ReqUtilities req) {
-            NhomMau mau = nhomMauRepository.findByName(req.name()).orElse(null);
             try {
-                if (mau == null) {
-                    return nhomMauRepository.save(new NhomMau(req.name()));
-                }
-                return mau;
+                return nhomMauRepository.save(new NhomMau(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -1044,19 +1000,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<ThanhPhanGiaDinh> xemTheoId(int id) {
-            return thanhPhanGiaDinhRepository.findById(id);
+            return Optional.ofNullable(thanhPhanGiaDinhRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public ThanhPhanGiaDinh them(ReqUtilities req) {
-            ThanhPhanGiaDinh gia = thanhPhanGiaDinhRepository.findByName(req.name()).orElse(null);
             try {
-                if (gia == null) {
-                    return thanhPhanGiaDinhRepository.save(new ThanhPhanGiaDinh(req.name()));
-                }
-                return gia;
+                return thanhPhanGiaDinhRepository.save(new ThanhPhanGiaDinh(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -1097,19 +1049,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<TonGiao> xemTheoId(int id) {
-            return tonGiaoRepository.findById(id);
+            return Optional.ofNullable(tonGiaoRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public TonGiao them(ReqUtilities req) {
-            TonGiao giao = tonGiaoRepository.findByName(req.name()).orElse(null);
             try {
-                if (giao == null) {
-                    return tonGiaoRepository.save(new TonGiao(req.name()));
-                }
-                return giao;
+                return tonGiaoRepository.save(new TonGiao(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -1150,19 +1098,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<TrinhDoChuyenMon> xemTheoId(int id) {
-            return trinhDoChuyenMonRepository.findById(id);
+            return Optional.ofNullable(trinhDoChuyenMonRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public TrinhDoChuyenMon them(ReqUtilities req) {
-            TrinhDoChuyenMon mon = trinhDoChuyenMonRepository.findByName(req.name()).orElse(null);
             try {
-                if (mon == null) {
-                    return trinhDoChuyenMonRepository.save(new TrinhDoChuyenMon(req.name()));
-                }
-                return mon;
+                return trinhDoChuyenMonRepository.save(new TrinhDoChuyenMon(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -1203,19 +1147,15 @@ public class UtilitiesService {
 
         @Override
         public Optional<TrinhDoGiaoDucPhoThong> xemTheoId(int id) {
-            return trinhDoGiaoDucPhoThongRepository.findById(id);
+            return Optional.ofNullable(trinhDoGiaoDucPhoThongRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public TrinhDoGiaoDucPhoThong them(ReqUtilities req) {
-            TrinhDoGiaoDucPhoThong thong = trinhDoGiaoDucPhoThongRepository.findByName(req.name()).orElse(null);
             try {
-                if (thong == null) {
-                    return trinhDoGiaoDucPhoThongRepository.save(new TrinhDoGiaoDucPhoThong(req.name()));
-                }
-                return thong;
+                return trinhDoGiaoDucPhoThongRepository.save(new TrinhDoGiaoDucPhoThong(req.name()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
             }
         }
 
@@ -1256,30 +1196,26 @@ public class UtilitiesService {
 
         @Override
         public Optional<ViTriViecLam> xemTheoId(int id) {
-            return viTriViecLamRepository.findById(id);
+            return Optional.ofNullable(viTriViecLamRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
         }
 
         @Override
         public ViTriViecLam them(ReqUtilities req) {
-            ViTriViecLam viec = viTriViecLamRepository.findByName(req.name()).orElse(null);
-            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
             try {
-                if (viec == null) {
-                    return viTriViecLamRepository.save(new ViTriViecLam(req.name(), bacLuong, req.tienLuong()));
-                }
-                return viec;
+                return viTriViecLamRepository.save(new ViTriViecLam(req.name(), bacLuong, req.tienLuong()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new ExceptionCustom.CrushEmT(ResEnum.KAFKA_THANH_CONG.name());
             }
         }
 
         @Override
         public ViTriViecLam sua(int id, ReqUtilities req) {
-            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
             try {
                 return viTriViecLamRepository.findById(id).map(e -> {
                     e.setName(req.name());
-                    e.setBacLuong(bacLuong);
+                    e.setBacLuongId(bacLuong);
                     e.setTienLuong(req.tienLuong());
                     e.setUpdate_at();
                     return viTriViecLamRepository.save(e);

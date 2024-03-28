@@ -188,7 +188,7 @@ public class LoaiNhomHeSoNgachService {
             try {
                 LoaiCongChuc loai = loaiCongChucRepository.findById(nhom.loai()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return nhomCongChucRepository.findById(id).map(e -> {
-                            e.setLoaiCongChuc(loai);
+                            e.setLoaiCongChucId(loai);
                             e.setName(nhom.name());
                             e.setUpdate_at();
                             return nhomCongChucRepository.save(e);
@@ -244,7 +244,7 @@ public class LoaiNhomHeSoNgachService {
             try {
                 LoaiVienChuc loai = loaiVienChucRepository.findById(nhom.loai()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return nhomVienChucRepository.findById(id).map(e -> {
-                            e.setLoaiVienChuc(loai);
+                            e.setLoaiVienChucId(loai);
                             e.setName(nhom.name());
                             e.setUpdate_at();
                             return nhomVienChucRepository.save(e);
@@ -299,8 +299,8 @@ public class LoaiNhomHeSoNgachService {
                 NhomCongChuc nhom = nhomCongChucRepository.findById(luong.nhom()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 BacLuong bac = bacLuongRepository.findById(luong.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return heSoLuongCongChucRepository.findById(id).map(e -> {
-                    e.setNhomCongChuc(nhom);
-                    e.setBacLuong(bac);
+                    e.setNhomCongChucId(nhom);
+                    e.setBacLuongId(bac);
                     e.setHeSo(luong.heSo());
                     e.setUpdate_at();
                     return heSoLuongCongChucRepository.save(e);
@@ -354,8 +354,8 @@ public class LoaiNhomHeSoNgachService {
                 NhomVienChuc nhom = nhomVienChucRepository.findById(luong.nhom()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 BacLuong bac = bacLuongRepository.findById(luong.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return heSoLuongVienChucRepository.findById(id).map(e -> {
-                    e.setNhomVienChuc(nhom);
-                    e.setBacLuong(bac);
+                    e.setNhomVienChucId(nhom);
+                    e.setBacLuongId(bac);
                     e.setHeSo(luong.heSo());
                     e.setUpdate_at();
                     return heSoLuongVienChucRepository.save(e);
@@ -412,7 +412,7 @@ public class LoaiNhomHeSoNgachService {
                 return ngachCongChucRepository.findById(id).map(e -> {
                     e.setMa(req.ma());
                     e.setName(req.name());
-                    e.setHeSoLuongCongChuc(heSo);
+                    e.setHeSoLuongCongChucId(heSo);
                     e.setUpdate_at();
                     return ngachCongChucRepository.save(e);
                 }).orElse(null);
@@ -467,7 +467,7 @@ public class LoaiNhomHeSoNgachService {
                 return ngachVienChucRepository.findById(id).map(e -> {
                     e.setMa(req.ma());
                     e.setName(req.name());
-                    e.setHeSoLuongVienChuc(heSo);
+                    e.setHeSoLuongVienChucId(heSo);
                     e.setUpdate_at();
                     return ngachVienChucRepository.save(e);
                 }).orElse(null);

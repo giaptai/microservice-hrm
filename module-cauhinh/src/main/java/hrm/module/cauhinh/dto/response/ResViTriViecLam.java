@@ -16,7 +16,7 @@ public record ResViTriViecLam(
         return lam != null ? new ResViTriViecLam(
                 lam.getId(),
                 lam.getName(),
-                lam.getBacLuong().getName(),
+                lam.getBacLuongId().getName(),
                 lam.getTienLuong(),
                 lam.getCreate_at(),
                 lam.getUpdate_at()

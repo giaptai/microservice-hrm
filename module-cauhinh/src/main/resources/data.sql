@@ -153,7 +153,7 @@ values ('A3', 'Chuyên viên cao cấp'),
        ('B', 'Nhân viên'),
        ('C', 'Khác');
 -- nhom_vien_chuc
-INSERT into nhom_vien_chuc (name, loai_vien_chuc)
+INSERT into nhom_vien_chuc (name, loai_vien_chuc_id)
 values ('A3.1', 1),
        ('A3.2', 1),
        ('A2.1', 2),
@@ -162,7 +162,7 @@ values ('A3.1', 1),
        ('A0', 4),
        ('B', 5);
 -- nhom_cong_chuc
-INSERT into nhom_cong_chuc (name, loai_cong_chuc)
+INSERT into nhom_cong_chuc (name, loai_cong_chuc_id)
 values ('A3.1', 1),
        ('A3.2', 1),
        ('A2.1', 2),
@@ -172,7 +172,7 @@ values ('A3.1', 1),
        ('B', 5),
        ('C1', 6);
 -- he_so_luong_vien_chuc
-INSERT into he_so_luong_vien_chuc (nhom_vien_chuc, bac_luong, he_so)
+INSERT into he_so_luong_vien_chuc (nhom_vien_chuc_id, bac_luong_id, he_so)
 values (1, 1, 6.2),
        (1, 2, 6.56),
        (1, 3, 6.92),
@@ -233,7 +233,7 @@ values (1, 1, 6.2),
        (7, 11, 3.86),
        (7, 12, 4.06);
 -- he_so_luong_cong_chuc
-INSERT into he_so_luong_cong_chuc (nhom_cong_chuc, bac_luong, he_so)
+INSERT into he_so_luong_cong_chuc (nhom_cong_chuc_id, bac_luong_id, he_so)
 values (1, 1, 6.2),
        (1, 2, 6.56),
        (1, 3, 6.92),
@@ -410,7 +410,7 @@ VALUES ('Đại tướng'),
        ('Binh nhất'),
        ('Binh nhì');
 --ngach/chuc_danh_nghe_nghiep_cong_chuc
-INSERT INTO ngach_cong_chuc (ma, name, he_so_luong_cong_chuc)
+INSERT INTO ngach_cong_chuc (ma, name, he_so_luong_cong_chuc_id)
 VALUES ('01.001', 'Chuyên viên cao cấp', 1),
        ('04.023', 'Thanh tra viên cao cấp', 1),
        ('06.029', 'Kế toán viên cao cấp', 1),
@@ -483,7 +483,7 @@ VALUES ('01.001', 'Chuyên viên cao cấp', 1),
        ('19.186', 'Bảo vệ, tuần tra canh gác', 15),
        ('19.224', 'Nhân viên bảo vệ kho dự trữ (Công chức loại C1)', 12);
 --ngach/chuc_danh_nghe_nghiep vien chuc
-INSERT INTO ngach_vien_chuc (ma, name, he_so_luong_vien_chuc)
+INSERT INTO ngach_vien_chuc (ma, name, he_so_luong_vien_chuc_id)
 values ('V.07.01.01', 'Giảng viên cao cấp (hạng I)', 1),
        ('V.07.08.20', 'Giảng viên cao đẳng sư phạm cao cấp (hạng I)', 1),
        ('V.09.02.01', 'Giảng viên giáo dục nghề nghiệp cao cấp (hạng I)', 1),
@@ -561,7 +561,7 @@ VALUES ('Phụ cấp kiêm nhiệm'),
        ('Phụ cấp phục vụ an ninh, quốc phòng'),
        ('Phụ cấp đặc thù đối với lực lượng vũ trang');
 -- vi_tri_viec_lam
-INSERT into vi_tri_viec_lam (name, bac_luong, tien_luong)
+INSERT into vi_tri_viec_lam (name, bac_luong_id, tien_luong)
 VALUES ('Giám đốc', 6, 9000000),
        ('Thư ký', 4, 6000000),
        ('Thù kho', 2, 3000000),

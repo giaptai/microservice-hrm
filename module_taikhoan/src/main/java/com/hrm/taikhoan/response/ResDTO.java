@@ -15,13 +15,6 @@ public class ResDTO<T> {
     final T data;
     final LocalDateTime time_stamp;
 
-    private ResDTO(ResEnum resEnum) {
-        this.status_code = resEnum.getStatusCode().value();
-        this.message = resEnum.name();
-        this.data = null;
-        this.time_stamp = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-    }
-
     private ResDTO(ResEnum resEnum, T data) {
         this.status_code = resEnum.getStatusCode().value();
         this.message = resEnum.name();
@@ -29,7 +22,7 @@ public class ResDTO<T> {
         this.time_stamp = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
     }
 
-    public ResponseEntity<ResDTO<T>> response2(ResEnum resEnum, T data) {
+    public static <T> ResponseEntity<ResDTO<T>> reply(T data, ResEnum resEnum) {
         return new ResponseEntity<>(new ResDTO<T>(resEnum, data), resEnum.getStatusCode());
     }
 

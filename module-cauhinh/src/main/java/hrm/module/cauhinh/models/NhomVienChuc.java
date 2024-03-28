@@ -35,12 +35,12 @@ public class NhomVienChuc extends DateTimeObject {
     String name;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "loai_vien_chuc_fk"), name = "loai_vien_chuc", referencedColumnName = "id", columnDefinition = "INTEGER")
-    LoaiVienChuc loaiVienChuc;
+    @JoinColumn(foreignKey = @ForeignKey(name = "loai_vien_chuc_fk"), name = "loai_vien_chuc_id", referencedColumnName = "id", columnDefinition = "INTEGER")
+    LoaiVienChuc loaiVienChucId;
 
-    public NhomVienChuc(String name, LoaiVienChuc loaiVienChuc) {
+    public NhomVienChuc(String name, LoaiVienChuc loaiVienChucId) {
         super();
         this.name = name;
-        this.loaiVienChuc = loaiVienChuc;
+        this.loaiVienChucId = loaiVienChucId;
     }
 }

@@ -33,23 +33,23 @@ public class HeSoLuongVienChuc extends DateTimeObject {
 //    @Id
     @ManyToOne
 //    @MapsId("nhom_loai_vien_chuc")
-    @JoinColumn(foreignKey = @ForeignKey(name = "nhom_vien_chuc_fk"), name = "nhom_vien_chuc", columnDefinition = "INTEGER", referencedColumnName = "id")
+    @JoinColumn(foreignKey = @ForeignKey(name = "nhom_vien_chuc_fk"), name = "nhom_vien_chuc_id", columnDefinition = "INTEGER", referencedColumnName = "id")
 //    @JsonIgnore
-    NhomVienChuc nhomVienChuc;
+    NhomVienChuc nhomVienChucId;
 
 //    @Id
     @ManyToOne
 //    @MapsId("bac_luong")
-    @JoinColumn(foreignKey = @ForeignKey(name = "bac_luong_vien_chuc_fk"), name = "bac_luong", columnDefinition = "INTEGER", referencedColumnName = "id")
-    BacLuong bacLuong;
+    @JoinColumn(foreignKey = @ForeignKey(name = "bac_luong_vien_chuc_fk"), name = "bac_luong_id", columnDefinition = "INTEGER", referencedColumnName = "id")
+    BacLuong bacLuongId;
 
     @Column(name = "he_so", columnDefinition = "FLOAT")
     float heSo;
 
-    public HeSoLuongVienChuc(NhomVienChuc nhomVienChuc, BacLuong bacLuong, float heSo) {
+    public HeSoLuongVienChuc(NhomVienChuc nhomVienChucId, BacLuong bacLuongId, float heSo) {
         super();
-        this.nhomVienChuc = nhomVienChuc;
-        this.bacLuong = bacLuong;
+        this.nhomVienChucId = nhomVienChucId;
+        this.bacLuongId = bacLuongId;
         this.heSo = heSo;
     }
 }

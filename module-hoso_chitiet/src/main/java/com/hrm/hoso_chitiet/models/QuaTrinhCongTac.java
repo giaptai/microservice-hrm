@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,21 +41,21 @@ public class QuaTrinhCongTac extends DateTimeObject {
     @Column(name = "ket_thuc", columnDefinition = "datetime")
     LocalDateTime ketThuc;
 
-    @Column(name = "don_vi_cong_tac", columnDefinition = "INTEGER")
-    int donViCongTac;
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int donViCongTacId;
 
     @Column(name = "chuc_danh", columnDefinition = "varchar(100)")
     String chucDanh;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public QuaTrinhCongTac(LocalDateTime batDau, LocalDateTime ketThuc, int donViCongTac, String chucDanh, UUID soYeuLyLich) {
+    public QuaTrinhCongTac(LocalDateTime batDau, LocalDateTime ketThuc, int donViCongTacId, String chucDanh, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
-        this.donViCongTac = donViCongTac;
+        this.donViCongTacId = donViCongTacId;
         this.chucDanh = chucDanh;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

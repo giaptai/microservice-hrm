@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,7 +42,7 @@ public class PhuCapKhac extends DateTimeObject {
     LocalDateTime ketThuc;
 
     @Column(name = "loai_phu_cap", columnDefinition = "INTEGER")
-    int loaiPhuCap;
+    int loaiPhuCapId;
 
     @Column(name = "phan_tram_huong_phu_cap", columnDefinition = "float")
     float phanTramHuongPhuCap;
@@ -57,18 +56,18 @@ public class PhuCapKhac extends DateTimeObject {
     @Column(name = "gia_tri", columnDefinition = "double")
     double giaTri;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public PhuCapKhac(LocalDateTime batDau, LocalDateTime ketThuc, int loaiPhuCap, float phanTramHuongPhuCap, float heSoPhuCap, String hinhThucHuong, double giaTri, UUID soYeuLyLich) {
+    public PhuCapKhac(LocalDateTime batDau, LocalDateTime ketThuc, int loaiPhuCapId, float phanTramHuongPhuCap, float heSoPhuCap, String hinhThucHuong, double giaTri, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
-        this.loaiPhuCap = loaiPhuCap;
+        this.loaiPhuCapId = loaiPhuCapId;
         this.phanTramHuongPhuCap = phanTramHuongPhuCap;
         this.heSoPhuCap = heSoPhuCap;
         this.hinhThucHuong = hinhThucHuong;
         this.giaTri = giaTri;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

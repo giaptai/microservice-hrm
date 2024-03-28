@@ -25,9 +25,11 @@ public class ResDTO<T> {
     public static <T> ResDTO<T> response(ResEnum resEnum, T data) {
         return new ResDTO<>(resEnum, data);
     }
-    public static <T> ResponseEntity<ResDTO<T>> reply(ResEnum resEnum, T data) {
+
+    public static <T> ResponseEntity<ResDTO<T>> reply(T data, ResEnum resEnum) {
         return new ResponseEntity<>(new ResDTO<>(resEnum, data), resEnum.getStatusCode());
     }
+
     @Bean
     public static RuntimeException error(ResEnum resEnum) {
         return new ResponseStatusException(resEnum.getStatusCode(), resEnum.name());

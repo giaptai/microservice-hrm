@@ -42,16 +42,16 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         security.cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(configure ->
-                                configure
-                                        .requestMatchers("/dang-nhap").permitAll()
-                                        .requestMatchers(HttpMethod.GET, "/ca-nhan/tai-khoan").hasAnyAuthority("ADMIN", "EMPLOYEE")
-                                        .requestMatchers("/nhan-vien/**").hasAuthority(RoleTaiKhoan.ADMIN.name())
-                                        .requestMatchers("/ca-nhan/**").hasRole("EMPLOYEE")
-                                        .anyRequest().permitAll()
+                        configure
+                                .requestMatchers("/dang-nhap").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/ca-nhan/tai-khoan").hasAnyAuthority("ADMIN", "EMPLOYEE")
+                                .requestMatchers("/nhan-vien/**").permitAll()
+                                .requestMatchers("/ca-nhan/**").hasRole("EMPLOYEE")
+                                .anyRequest().permitAll()
                 )
                 .logout(logout -> logout
 //                                .logoutUrl("/dang-xuat").permitAll()
-                        .logoutSuccessUrl("/dang-xuat").permitAll()
+                                .logoutSuccessUrl("/dang-xuat").permitAll()
                 )
                 .exceptionHandling(execHandle ->
                         execHandle

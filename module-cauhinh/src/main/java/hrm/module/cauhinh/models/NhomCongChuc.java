@@ -40,12 +40,12 @@ public class NhomCongChuc extends DateTimeObject {
     @JsonIgnore
     //name là tên cột chứa khóa ngoại tron sql
     //referencedColumnName nghĩa là lấy theo tên của trường trong class
-    @JoinColumn(foreignKey = @ForeignKey(name = "loai_cong_chuc_fk"),name = "loai_cong_chuc", referencedColumnName = "id", columnDefinition = "INTEGER")
-    LoaiCongChuc loaiCongChuc;
+    @JoinColumn(foreignKey = @ForeignKey(name = "loai_cong_chuc_fk"),name = "loai_cong_chuc_id", referencedColumnName = "id", columnDefinition = "INTEGER")
+    LoaiCongChuc loaiCongChucId;
 
-    public NhomCongChuc(String name, LoaiCongChuc loaiCongChuc) {
+    public NhomCongChuc(String name, LoaiCongChuc loaiCongChucId) {
         super();
         this.name = name;
-        this.loaiCongChuc = loaiCongChuc;
+        this.loaiCongChucId = loaiCongChucId;
     }
 }

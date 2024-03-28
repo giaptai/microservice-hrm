@@ -65,18 +65,18 @@ public class TaiKhoan extends DateTimeObject implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     RoleTaiKhoan roleTaiKhoan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16) unique")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16) unique")
+    UUID hoSoId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 //        return List.of(new SimpleGrantedAuthority(roleTaiKhoan.getName()));
         return Arrays.stream(RoleTaiKhoan.values())
                 .map(role -> new SimpleGrantedAuthority(role.name()))
-                .collect(Collectors.toList());
+                .toList();
     }
 
-    //ko can getPassword getUsername do @Data no lam roi
+    //ko can getPassword getUsername do @Data no lam roi nhưng tao vẫn làm
     @Override
     public String getUsername() {
         return username;
@@ -105,19 +105,5 @@ public class TaiKhoan extends DateTimeObject implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "TaiKhoan{" +
-                "id=" + id +
-                ", hoVaTen='" + hoVaTen + '\'' +
-                ", soCCCD='" + soCCCD + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", roleTaiKhoan=" + roleTaiKhoan +
-                ", soYeuLyLich=" + soYeuLyLich +
-                '}';
     }
 }

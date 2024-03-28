@@ -17,17 +17,17 @@ public interface LyLuanChinhTriRepository extends JpaRepository<LyLuanChinhTri, 
 //    @Query(nativeQuery = true, value = "")
 //    List<LyLuanChinhTri> findAllByLoaiSoYeuLyLichChiTiet();
 
-    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.hoSoId = ?1")
     List<LyLuanChinhTri> listLyLuanChinhTri(UUID id);
 
-    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.hoSoId = ?1")
     List<LyLuanChinhTri> getAllByHoSo(UUID id);
 
-    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.id = ?1 AND c.soYeuLyLich = ?2")
+    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LyLuanChinhTri> findByIdAndHoSo(int id, UUID id1);
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE LyLuanChinhTri c SET c.batDau = ?1, c.ketThuc = ?2, c.tenCoSoDaoTao =?3, c.hinhThucDaoTao =?4, c.vanBangDuocCap =?5 WHERE c.id = ?6 AND c.soYeuLyLich = ?7")
+    @Query(value = "UPDATE LyLuanChinhTri c SET c.batDau = ?1, c.ketThuc = ?2, c.tenCoSoDaoTaoId =?3, c.hinhThucDaoTao =?4, c.vanBangDuocCap =?5 WHERE c.id = ?6 AND c.hoSoId = ?7")
     void updateByIdAndSyll(LocalDateTime batDau, LocalDateTime ketThuc, String tenCoSoDaoTao, String hinhThucDaoTao, String vanBangDuocCap, int id, UUID id1);
 }

@@ -18,18 +18,6 @@ public record ResLamViecONuocNgoai(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResLamViecONuocNgoai mapToResLamViecONuocNgoai(LamViecONuocNgoai ngoai) {
-        return ngoai != null ? new ResLamViecONuocNgoai(
-                ngoai.getId(),
-                ngoai.getSoYeuLyLich(),
-                ngoai.getBatDau(),
-                ngoai.getKetThuc(),
-                ngoai.getToChucDiaChiCongViec(),
-                ngoai.getCreate_at(),
-                ngoai.getUpdate_at()
-        ) : null;
-    }
-
     public static class ResLamViecONuocNgoaiSerializer implements Serializer<ResLamViecONuocNgoai> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

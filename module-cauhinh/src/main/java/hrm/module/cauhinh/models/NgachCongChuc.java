@@ -46,13 +46,13 @@ public class NgachCongChuc extends DateTimeObject {
 //    BacNgachCongChuc bacNgachCongChuc;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "he_so_luong_cong_chuc_fk"), name = "he_so_luong_cong_chuc", referencedColumnName = "id", columnDefinition = "integer")
-    HeSoLuongCongChuc heSoLuongCongChuc;
+    @JoinColumn(foreignKey = @ForeignKey(name = "he_so_luong_cong_chuc_fk"), name = "he_so_luong_cong_chuc_id", referencedColumnName = "id", columnDefinition = "integer")
+    HeSoLuongCongChuc heSoLuongCongChucId;
 
-    public NgachCongChuc(String ma, String name, HeSoLuongCongChuc heSoLuongCongChuc) {
+    public NgachCongChuc(String ma, String name, HeSoLuongCongChuc heSoLuongCongChucId) {
         super();
         this.ma = ma;
         this.name = name;
-        this.heSoLuongCongChuc = heSoLuongCongChuc;
+        this.heSoLuongCongChucId = heSoLuongCongChucId;
     }
 }

@@ -14,16 +14,4 @@ public record ResTinHoc(
         LocalDateTime update_at
 
 ) {
-    public static ResTinHoc mapToResTinHoc(TinHoc hoc) {
-        return hoc != null ? new ResTinHoc(
-                hoc.getId(),
-                hoc.getBatDau(),
-                hoc.getKetThuc(),
-                hoc.getTenCoSoDaoTao(),
-                hoc.getChungChiDuocCap(),
-                hoc.getCreate_at(),
-                hoc.getUpdate_at()
-        ) : null;
-    }
-
 }

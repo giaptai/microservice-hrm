@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,8 +43,8 @@ public class LyLuanChinhTri extends DateTimeObject {
     @Column(name = "ket_thuc", columnDefinition = "datetime")
     LocalDateTime ketThuc;
 
-    @Column(name = "ten_co_so_dao_tao", columnDefinition = "INTEGER")
-    int tenCoSoDaoTao;
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int tenCoSoDaoTaoId;
 
     @Column(name = "hinh_thuc_dao_tao", columnDefinition = "varchar(50)")
     String hinhThucDaoTao;
@@ -57,17 +56,17 @@ public class LyLuanChinhTri extends DateTimeObject {
     @Column(name = "xac_nhan")
     XacNhan xacNhan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public LyLuanChinhTri(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTao, String hinhThucDaoTao, String vanBangDuocCap, XacNhan xacNhan, UUID soYeuLyLich) {
+    public LyLuanChinhTri(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String hinhThucDaoTao, String vanBangDuocCap, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
-        this.tenCoSoDaoTao = tenCoSoDaoTao;
+        this.tenCoSoDaoTaoId = tenCoSoDaoTaoId;
         this.hinhThucDaoTao = hinhThucDaoTao;
         this.vanBangDuocCap = vanBangDuocCap;
         this.xacNhan = xacNhan;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

@@ -28,7 +28,7 @@ public record ResTaiKhoan(
                 taiKhoan.getSoCCCD(),
                 taiKhoan.getUsername(),
                 taiKhoan.getEmail(),
-                Optional.ofNullable(taiKhoan).map(TaiKhoan::getSoYeuLyLich).orElse(null),
+                Optional.of(taiKhoan).map(TaiKhoan::getHoSoId).orElse(null),
                 taiKhoan.getRoleTaiKhoan().getName(),
                 taiKhoan.isTrangThai(),
                 taiKhoan.getCreate_at(),

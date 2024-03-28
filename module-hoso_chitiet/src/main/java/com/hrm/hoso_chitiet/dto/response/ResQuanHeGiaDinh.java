@@ -13,15 +13,4 @@ public record ResQuanHeGiaDinh(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResQuanHeGiaDinh mapToResQuanHeGiaDinh(QuanHeGiaDinh dinh) {
-        return dinh != null ? new ResQuanHeGiaDinh(
-                dinh.getId(),
-                dinh.getMoiQuanHe(),
-                dinh.getHoVaTen(),
-                dinh.getNamSinh(),
-                dinh.getThongTinThanNhan(),
-                dinh.getCreate_at(),
-                dinh.getUpdate_at()
-        ) : null;
-    }
 }

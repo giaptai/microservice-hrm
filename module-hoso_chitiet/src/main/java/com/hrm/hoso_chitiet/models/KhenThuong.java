@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.enums.XepLoaiChuyenMon;
 import com.hrm.hoso_chitiet.enums.XepLoaiThiDua;
@@ -34,7 +33,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"soYeuLyLich"})
 public class KhenThuong extends DateTimeObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,8 +50,8 @@ public class KhenThuong extends DateTimeObject {
     @Enumerated(EnumType.STRING)
     XepLoaiThiDua xepLoaiThiDua;
 
-    @Column(name = "hinh_thuc_khen_thuong", columnDefinition = "integer")
-    int hinhThucKhenThuong;
+    @Column(name = "hinh_thuc_khen_thuong_id", columnDefinition = "integer")
+    int hinhThucKhenThuongId;
 
     @Column(name = "ly_do", columnDefinition = "text")
     String lyDo;
@@ -62,17 +60,17 @@ public class KhenThuong extends DateTimeObject {
     @Column(name = "xac_nhan")
     XacNhan xacNhan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public KhenThuong(LocalDateTime nam, XepLoaiChuyenMon xepLoaiChuyenMon, XepLoaiThiDua xepLoaiThiDua, int hinhThucKhenThuong, String lyDo, XacNhan xacNhan, UUID soYeuLyLich) {
+    public KhenThuong(LocalDateTime nam, XepLoaiChuyenMon xepLoaiChuyenMon, XepLoaiThiDua xepLoaiThiDua, int hinhThucKhenThuongId, String lyDo, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.nam = nam;
         this.xepLoaiChuyenMon = xepLoaiChuyenMon;
         this.xepLoaiThiDua = xepLoaiThiDua;
-        this.hinhThucKhenThuong = hinhThucKhenThuong;
+        this.hinhThucKhenThuongId = hinhThucKhenThuongId;
         this.lyDo = lyDo;
         this.xacNhan = xacNhan;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

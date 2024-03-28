@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,20 +49,20 @@ public class QuanHeGiaDinh extends DateTimeObject {
     @Column(name = "thong_tin_than_nhan", columnDefinition = "text")
     String thongTinThanNhan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
     @Override
     public void setUpdate_at() {
         super.setUpdate_at();
     }
 
-    public QuanHeGiaDinh(int moiQuanHe, String hoVaTen, short namSinh, String thongTinThanNhan, UUID soYeuLyLich) {
+    public QuanHeGiaDinh(int moiQuanHe, String hoVaTen, short namSinh, String thongTinThanNhan, UUID hoSoId) {
         super();
         this.moiQuanHe = moiQuanHe;
         this.hoVaTen = hoVaTen;
         this.namSinh = namSinh;
         this.thongTinThanNhan = thongTinThanNhan;
-        this.soYeuLyLich = soYeuLyLich;
+        this.hoSoId = hoSoId;
     }
 }

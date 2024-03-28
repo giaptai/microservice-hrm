@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.hrm.hoso_chitiet.dto.DateTimeObject;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,8 +43,8 @@ public class KienThucAnNinhQuocPhong extends DateTimeObject {
     @Column(name = "ket_thuc", columnDefinition = "datetime")
     LocalDateTime ketThuc;
 
-    @Column(name = "ten_co_so_dao_tao", columnDefinition = "INTEGER")
-    int tenCoSoDaoTao;
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int tenCoSoDaoTaoId;
 
     @Column(name = "chung_chi_duoc_cap", columnDefinition = "varchar(50)")
     String chungChiDuocCap;
@@ -54,15 +53,16 @@ public class KienThucAnNinhQuocPhong extends DateTimeObject {
     @Column(name = "xac_nhan")
     XacNhan xacNhan;
 
-    @Column(name = "so_yeu_ly_lich", columnDefinition = "binary(16)")
-    UUID soYeuLyLich;
+    @Column(name = "ho_so_id", columnDefinition = "binary(16)")
+    UUID hoSoId;
 
-    public KienThucAnNinhQuocPhong(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTao, String chungChiDuocCap, UUID soYeuLyLich) {
+    public KienThucAnNinhQuocPhong(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String chungChiDuocCap, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
-        this.tenCoSoDaoTao = tenCoSoDaoTao;
+        this.tenCoSoDaoTaoId = tenCoSoDaoTaoId;
         this.chungChiDuocCap = chungChiDuocCap;
-        this.soYeuLyLich = soYeuLyLich;
+        this.xacNhan = xacNhan;
+        this.hoSoId = hoSoId;
     }
 }

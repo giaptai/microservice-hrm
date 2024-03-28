@@ -11,10 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface QuaTrinhCongTacRepository extends JpaRepository<QuaTrinhCongTac, Integer> {
-    @Query(value = "SELECT c FROM QuaTrinhCongTac c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM QuaTrinhCongTac c WHERE c.hoSoId = ?1")
     List<QuaTrinhCongTac> listQuaTrinhCongTac(UUID id);
-    @Query(value = "SELECT c FROM QuaTrinhCongTac c WHERE c.soYeuLyLich = ?1")
+    @Query(value = "SELECT c FROM QuaTrinhCongTac c WHERE c.hoSoId = ?1")
     List<QuaTrinhCongTac> getAllByHoSo(UUID id);
-    @Query(value = "SELECT c FROM QuaTrinhCongTac c WHERE c.id = ?1 AND c.soYeuLyLich = ?2")
+    @Query(value = "SELECT c FROM QuaTrinhCongTac c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<QuaTrinhCongTac> findByIdAndHoSo(int id, UUID id1);
 }

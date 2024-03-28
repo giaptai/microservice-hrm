@@ -16,17 +16,4 @@ public record ResLuongBanThan(
         LocalDateTime update_at
 
 ) {
-    public static ResLuongBanThan mapToResLuongBanThan(LuongBanThan than) {
-        return than != null ? new ResLuongBanThan(
-                than.getId(),
-                than.getBatDau(),
-                than.getKetThuc(),
-                than.getMaSo(),
-                than.getBacLuong(),
-                than.getHeSoLuong(),
-                than.getTienLuongTheoViTri(),
-                than.getCreate_at(),
-                than.getUpdate_at()
-        ) : null;
-    }
 }

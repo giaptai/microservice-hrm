@@ -17,17 +17,6 @@ public record ResQuaTrinhCongTac(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResQuaTrinhCongTac mapToResQuaTrinhCongTac(QuaTrinhCongTac tac) {
-        return tac != null ? new ResQuaTrinhCongTac(
-                tac.getId(),
-                tac.getBatDau(),
-                tac.getKetThuc(),
-                tac.getDonViCongTac(),
-                tac.getChucDanh(),
-                tac.getCreate_at(),
-                tac.getUpdate_at()
-        ) : null;
-    }
     public static class ResQuaTrinhCongTacSerializer implements Serializer<ResQuaTrinhCongTac> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
