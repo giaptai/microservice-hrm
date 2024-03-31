@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.phu_cap_khac;
 
 import com.hrm.taikhoan.dto.client.phu_cap_khac.PhuCapKhac;
 import com.hrm.taikhoan.dto.client.phu_cap_khac.PhuCapKhacClient;
+import com.hrm.taikhoan.dto.client.phu_cap_khac.PhuCapKhacDTO;
 import com.hrm.taikhoan.dto.client.phu_cap_khac.ReqPhuCapKhac;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,9 +19,16 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PhuCapKhacService implements IPhuCapKhacService{
     final PhuCapKhacClient client;
+    final IAuthenticationFacade facade;
     @Override
     public List<PhuCapKhac> xemDanhSach() {
         return client.getAll();
+    }
+
+    @Override
+    public List<PhuCapKhacDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return client.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -29,6 +39,12 @@ public class PhuCapKhacService implements IPhuCapKhacService{
     @Override
     public PhuCapKhac them(UUID id, ReqPhuCapKhac req) {
         return client.add(id, req);
+    }
+
+    @Override
+    public PhuCapKhac themCaNhan(ReqPhuCapKhac req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

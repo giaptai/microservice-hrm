@@ -1,10 +1,12 @@
 package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganh;
+import com.hrm.taikhoan.dto.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhDTO;
 import com.hrm.taikhoan.dto.client.nghiep_vu_chuyen_nganh.ReqNghiepVuChuyenNganh;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.nghiep_vu_chuyen_nganh.INghiepVuChuyenNganhService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class NghiepVuChuyenNganhController {
     final INghiepVuChuyenNganhService nghiepVuChuyenNganhService;
     @GetMapping("/nghiep-vu-chuyen-nganh")
@@ -53,6 +56,28 @@ public class NghiepVuChuyenNganhController {
 
     @DeleteMapping("/nghiep-vu-chuyen-nganh/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = nghiepVuChuyenNganhService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/nghiep-vu-chuyen-nganh")
+    public ResponseEntity<ResDTO<List<NghiepVuChuyenNganhDTO>>> CaNhanGetAll() {
+        List<NghiepVuChuyenNganhDTO> ls = nghiepVuChuyenNganhService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/nghiep-vu-chuyen-nganh")
+    public ResponseEntity<ResDTO<NghiepVuChuyenNganh>> caNhanAdd(@RequestBody ReqNghiepVuChuyenNganh req) {
+        NghiepVuChuyenNganh ls = nghiepVuChuyenNganhService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/nghiep-vu-chuyen-nganh/{id}")
+    public ResponseEntity<ResDTO<NghiepVuChuyenNganh>> caNhanEdit(@PathVariable int id, @RequestBody ReqNghiepVuChuyenNganh req) {
+        NghiepVuChuyenNganh ls = nghiepVuChuyenNganhService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/nghiep-vu-chuyen-nganh/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = nghiepVuChuyenNganhService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }

@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.ky_luat;
 
 import com.hrm.taikhoan.dto.client.ky_luat.KyLuat;
 import com.hrm.taikhoan.dto.client.ky_luat.KyLuatClient;
+import com.hrm.taikhoan.dto.client.ky_luat.KyLuatDTO;
 import com.hrm.taikhoan.dto.client.ky_luat.ReqKyLuat;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +19,16 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KyLuatService implements IKyLuatService {
     final KyLuatClient client;
-
+    final IAuthenticationFacade facade;
     @Override
     public List<KyLuat> xemDanhSach() {
         return client.getAll();
+    }
+
+    @Override
+    public List<KyLuatDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return client.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -30,6 +39,12 @@ public class KyLuatService implements IKyLuatService {
     @Override
     public KyLuat them(UUID id, ReqKyLuat req) {
         return client.add(id, req);
+    }
+
+    @Override
+    public KyLuat themCaNhan(ReqKyLuat req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

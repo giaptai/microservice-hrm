@@ -1,10 +1,12 @@
 package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTri;
+import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTriDTO;
 import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.ReqLyLuanChinhTri;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.ly_luan_chinh_tri.ILyLuanChinhTriService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class LyLuanChinhTriController {
     final ILyLuanChinhTriService lyLuanChinhTriService;
 
@@ -54,6 +57,28 @@ public class LyLuanChinhTriController {
 
     @DeleteMapping("/ly-luan-chinh-tri/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = lyLuanChinhTriService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/ly-luan-chinh-tri")
+    public ResponseEntity<ResDTO<List<LyLuanChinhTriDTO>>> CaNhanGetAll() {
+        List<LyLuanChinhTriDTO> ls = lyLuanChinhTriService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/ly-luan-chinh-tri")
+    public ResponseEntity<ResDTO<LyLuanChinhTri>> caNhanAdd(@RequestBody ReqLyLuanChinhTri req) {
+        LyLuanChinhTri ls = lyLuanChinhTriService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/ly-luan-chinh-tri/{id}")
+    public ResponseEntity<ResDTO<LyLuanChinhTri>> caNhanEdit(@PathVariable int id, @RequestBody ReqLyLuanChinhTri req) {
+        LyLuanChinhTri ls = lyLuanChinhTriService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/ly-luan-chinh-tri/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = lyLuanChinhTriService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }

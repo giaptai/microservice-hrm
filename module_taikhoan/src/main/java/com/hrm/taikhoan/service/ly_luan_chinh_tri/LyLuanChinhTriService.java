@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.ly_luan_chinh_tri;
 
 import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTri;
 import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTriClient;
+import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTriDTO;
 import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.ReqLyLuanChinhTri;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +19,16 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LyLuanChinhTriService implements ILyLuanChinhTriService {
     final LyLuanChinhTriClient client;
-
+    final IAuthenticationFacade facade;
     @Override
     public List<LyLuanChinhTri> xemDanhSach() {
         return client.getAll();
+    }
+
+    @Override
+    public List<LyLuanChinhTriDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return client.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -30,6 +39,12 @@ public class LyLuanChinhTriService implements ILyLuanChinhTriService {
     @Override
     public LyLuanChinhTri them(UUID id, ReqLyLuanChinhTri req) {
         return client.add(id, req);
+    }
+
+    @Override
+    public LyLuanChinhTri themCaNhan(ReqLyLuanChinhTri req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

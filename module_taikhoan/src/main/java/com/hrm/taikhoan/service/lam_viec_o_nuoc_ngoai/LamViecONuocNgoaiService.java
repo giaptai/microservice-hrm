@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.lam_viec_o_nuoc_ngoai;
 
 import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoai;
 import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiClient;
+import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiDTO;
 import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.ReqLamViecONuocNgoai;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,9 +19,16 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LamViecONuocNgoaiService implements ILamViecONuocNgoaiService{
     final LamViecONuocNgoaiClient client;
+    final IAuthenticationFacade facade;
     @Override
     public List<LamViecONuocNgoai> xemDanhSach() {
         return client.getAll();
+    }
+
+    @Override
+    public List<LamViecONuocNgoaiDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return client.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -29,6 +39,12 @@ public class LamViecONuocNgoaiService implements ILamViecONuocNgoaiService{
     @Override
     public LamViecONuocNgoai them(UUID id, ReqLamViecONuocNgoai req) {
         return client.add(id, req);
+    }
+
+    @Override
+    public LamViecONuocNgoai themCaNhan(ReqLamViecONuocNgoai req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

@@ -1,10 +1,12 @@
 package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhong;
+import com.hrm.taikhoan.dto.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongDTO;
 import com.hrm.taikhoan.dto.client.kien_thuc_an_ninh_quoc_phong.ReqKienThucAnNinhQuocPhong;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.kien_thuc_an_ninh_quoc_phong.IKienThucAnNinhQuocPhongService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class KienThucAnNinhQuocPhongController {
     final IKienThucAnNinhQuocPhongService kienThucAnNinhQuocPhongService;
     @GetMapping("/kien-thuc-an-ninh-quoc-phong")
@@ -51,6 +54,28 @@ public class KienThucAnNinhQuocPhongController {
 
     @DeleteMapping("/kien-thuc-an-ninh-quoc-phong/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = kienThucAnNinhQuocPhongService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong")
+    public ResponseEntity<ResDTO<List<KienThucAnNinhQuocPhongDTO>>> CaNhanGetAll() {
+        List<KienThucAnNinhQuocPhongDTO> ls = kienThucAnNinhQuocPhongService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong")
+    public ResponseEntity<ResDTO<KienThucAnNinhQuocPhong>> caNhanAdd(@RequestBody ReqKienThucAnNinhQuocPhong req) {
+        KienThucAnNinhQuocPhong ls = kienThucAnNinhQuocPhongService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong/{id}")
+    public ResponseEntity<ResDTO<KienThucAnNinhQuocPhong>> caNhanEdit(@PathVariable int id, @RequestBody ReqKienThucAnNinhQuocPhong req) {
+        KienThucAnNinhQuocPhong ls = kienThucAnNinhQuocPhongService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = kienThucAnNinhQuocPhongService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }

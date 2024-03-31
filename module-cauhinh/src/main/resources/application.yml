@@ -10,6 +10,7 @@ springdoc:
 spring:
   profiles:
     default: cau-hinh
+#    active:
   application:
     name: cau--hinh #name application in eureka
   config:

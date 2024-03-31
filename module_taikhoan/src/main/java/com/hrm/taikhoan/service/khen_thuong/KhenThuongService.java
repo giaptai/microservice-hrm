@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.khen_thuong;
 
 import com.hrm.taikhoan.dto.client.khen_thuong.KhenThuong;
 import com.hrm.taikhoan.dto.client.khen_thuong.KhenThuongClient;
+import com.hrm.taikhoan.dto.client.khen_thuong.KhenThuongDTO;
 import com.hrm.taikhoan.dto.client.khen_thuong.ReqKhenThuong;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +19,17 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KhenThuongService implements IKhenThuongService {
     final KhenThuongClient khenThuongClient;
+    final IAuthenticationFacade facade;
 
     @Override
     public List<KhenThuong> xemDanhSach() {
         return khenThuongClient.getAll();
+    }
+
+    @Override
+    public List<KhenThuongDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return khenThuongClient.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -30,6 +40,12 @@ public class KhenThuongService implements IKhenThuongService {
     @Override
     public KhenThuong them(UUID id, ReqKhenThuong req) {
         return khenThuongClient.add(id, req);
+    }
+
+    @Override
+    public KhenThuong themCaNhan(ReqKhenThuong req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

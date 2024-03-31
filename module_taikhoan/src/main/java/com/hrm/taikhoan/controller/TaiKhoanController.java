@@ -26,10 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@Tag(name = "Tài khoản")
-@SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class TaiKhoanController {
     final ITaiKhoanService taiKhoanService;
 

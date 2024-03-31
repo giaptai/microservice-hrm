@@ -24,7 +24,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Tag(name = "Admin ho-so", description = "Quản lý")
 @SecurityRequirement(name = "Bearer Authentication")
 public class HoSoController {
     final IHoSoService hoSoService;
@@ -41,7 +40,7 @@ public class HoSoController {
 
     @PatchMapping("/nhan-vien/ho-so/{id}")
     public ResponseEntity<ResDTO<HoSoDTO>> editHoSoById(@PathVariable UUID id, @RequestBody ReqHoSoDTO dto) {
-        return ResDTO.reply(hoSoService.editHoSoById(id, dto), ResEnum.THANH_CONG);
+        return ResDTO.reply(hoSoService.editHoSoById(id, dto), ResEnum.CAP_NHAT_THANH_CONG);
     }
 
     @GetMapping("/ca-nhan/ho-so")

@@ -1,10 +1,12 @@
 package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNgu;
+import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNguDTO;
 import com.hrm.taikhoan.dto.client.ngoai_ngu.ReqNgoaiNgu;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.ngoai_ngu.INgoaiNguService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class NgoaiNguController {
     final INgoaiNguService ngoaiNguService;
     @GetMapping("/ngoai-ngu")
@@ -53,6 +56,28 @@ public class NgoaiNguController {
 
     @DeleteMapping("/ngoai-ngu/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = ngoaiNguService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/ngoai-ngu")
+    public ResponseEntity<ResDTO<List<NgoaiNguDTO>>> CaNhanGetAll() {
+        List<NgoaiNguDTO> ls = ngoaiNguService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/ngoai-ngu")
+    public ResponseEntity<ResDTO<NgoaiNgu>> caNhanAdd(@RequestBody ReqNgoaiNgu req) {
+        NgoaiNgu ls = ngoaiNguService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/ngoai-ngu/{id}")
+    public ResponseEntity<ResDTO<NgoaiNgu>> caNhanEdit(@PathVariable int id, @RequestBody ReqNgoaiNgu req) {
+        NgoaiNgu ls = ngoaiNguService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/ngoai-ngu/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = ngoaiNguService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }

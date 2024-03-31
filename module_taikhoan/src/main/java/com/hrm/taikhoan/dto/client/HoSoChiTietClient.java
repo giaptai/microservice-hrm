@@ -23,32 +23,30 @@ import java.util.UUID;
 
 @FeignClient(name = "ho-so-chi-tiet", url = "${moduleUrl.ho-so-chi-tiet}")
 public interface HoSoChiTietClient {
-    @GetMapping(value = "/ho-so/{id}/lam-viec-cho-che-do-cu")
+    @GetMapping(value = "/{id}/lam-viec-cho-che-do-cu")
     List<LamViecChoCheDoCuDTO> getByBanThanCoLamViecChoCheDoCu(@PathVariable UUID id);
-    @GetMapping(value = "/lam-viec-cho-che-do-cu")
-    List<LamViecChoCheDoCu> getAllBanThanCoLamViecChoCheDoCu();
-    @GetMapping(value = "/ho-so/{id}/khen-thuong")
+    @GetMapping(value = "/{id}/khen-thuong")
     List<KhenThuongDTO> getByKhenThuong(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/kien-thuc-an-ninh-quoc-phong")
+    @GetMapping(value = "/{id}/kien-thuc-an-ninh-quoc-phong")
     List<KienThucAnNinhQuocPhongDTO> getByKienThucAnNinhQuocPhong(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/ky-luat")
+    @GetMapping(value = "/{id}/ky-luat")
     List<KyLuatDTO> getByKyLuat(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/lam-viec-o-nuoc-ngoai")
+    @GetMapping(value = "/{id}/lam-viec-o-nuoc-ngoai")
     List<LamViecONuocNgoaiDTO> getByLamViecONuocNgoai(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/luong-ban-than")
+    @GetMapping(value = "/{id}/luong-ban-than")
     List<LuongBanThanDTO> getByLuongBanThan(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/ly-luan-chinh-tri")
+    @GetMapping(value = "/{id}/ly-luan-chinh-tri")
     List<LyLuanChinhTriDTO> getByLyLuanChinhTri(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/nghiep-vu-chuyen-nganh")
+    @GetMapping(value = "/{id}/nghiep-vu-chuyen-nganh")
     List<NghiepVuChuyenNganhDTO> getByNghiepVuChuyenNganh(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/ngoai-ngu")
+    @GetMapping(value = "/{id}/ngoai-ngu")
     List<NgoaiNguDTO> getByNgoaiNgu(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/phu-cap-khac")
+    @GetMapping(value = "/{id}/phu-cap-khac")
     List<PhuCapKhacDTO> getByPhuCapKhac(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/quan-he-gia-dinh")
+    @GetMapping(value = "/{id}/quan-he-gia-dinh")
     List<QuanHeGiaDinhDTO> getByQuanHeGiaDinh(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/qua-trinh-cong-tac")
+    @GetMapping(value = "/{id}/qua-trinh-cong-tac")
     List<QuaTrinhCongTacDTO> getByQuaTrinhCongTac(@PathVariable UUID id);
-    @GetMapping(value = "/ho-so/{id}/tin-hoc")
+    @GetMapping(value = "/{id}/tin-hoc")
     List<TinHocDTO> getByTinHoc(@PathVariable UUID id);
 }

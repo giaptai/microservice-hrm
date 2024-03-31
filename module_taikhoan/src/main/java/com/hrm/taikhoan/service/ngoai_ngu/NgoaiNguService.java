@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.ngoai_ngu;
 
 import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNgu;
 import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNguClient;
+import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNguDTO;
 import com.hrm.taikhoan.dto.client.ngoai_ngu.ReqNgoaiNgu;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,10 +19,16 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NgoaiNguService implements INgoaiNguService {
     final NgoaiNguClient client;
-
+    final IAuthenticationFacade facade;
     @Override
     public List<NgoaiNgu> xemDanhSach() {
         return client.getAll();
+    }
+
+    @Override
+    public List<NgoaiNguDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return client.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -30,6 +39,12 @@ public class NgoaiNguService implements INgoaiNguService {
     @Override
     public NgoaiNgu them(UUID id, ReqNgoaiNgu req) {
         return client.add(id, req);
+    }
+
+    @Override
+    public NgoaiNgu themCaNhan(ReqNgoaiNgu req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

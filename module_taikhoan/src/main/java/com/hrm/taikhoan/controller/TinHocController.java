@@ -2,9 +2,11 @@ package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.tin_hoc.ReqTinHoc;
 import com.hrm.taikhoan.dto.client.tin_hoc.TinHoc;
+import com.hrm.taikhoan.dto.client.tin_hoc.TinHocDTO;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.tin_hoc.ITinHocService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class TinHocController {
     final ITinHocService tinHocService;
     @GetMapping("/tin-hoc")
@@ -54,6 +57,28 @@ public class TinHocController {
 
     @DeleteMapping("/tin-hoc/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = tinHocService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/tin-hoc")
+    public ResponseEntity<ResDTO<List<TinHocDTO>>> CaNhanGetAll() {
+        List<TinHocDTO> ls = tinHocService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/tin-hoc")
+    public ResponseEntity<ResDTO<TinHoc>> caNhanAdd(@RequestBody ReqTinHoc req) {
+        TinHoc ls = tinHocService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/tin-hoc/{id}")
+    public ResponseEntity<ResDTO<TinHoc>> caNhanEdit(@PathVariable int id, @RequestBody ReqTinHoc req) {
+        TinHoc ls = tinHocService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/tin-hoc/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = tinHocService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }

@@ -2,7 +2,10 @@ package com.hrm.taikhoan.service.lam_cho_che_do_cu;
 
 import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCu;
 import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCuClient;
+import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCuDTO;
 import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.ReqLamViecChoCheDoCu;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,9 +19,16 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LamViecChoCheDoCuService implements ILamViecChoCheDoCuService {
     final LamViecChoCheDoCuClient client;
+    final IAuthenticationFacade facade;
     @Override
     public List<LamViecChoCheDoCu> xemDanhSach() {
         return client.getAll();
+    }
+
+    @Override
+    public List<LamViecChoCheDoCuDTO> xemDanhSachCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return client.getAllByHoSoId(taiKhoan.getHoSoId());
     }
 
     @Override
@@ -29,6 +39,12 @@ public class LamViecChoCheDoCuService implements ILamViecChoCheDoCuService {
     @Override
     public LamViecChoCheDoCu them(UUID id, ReqLamViecChoCheDoCu req) {
         return client.add(id, req);
+    }
+
+    @Override
+    public LamViecChoCheDoCu themCaNhan(ReqLamViecChoCheDoCu req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        return them(taiKhoan.getHoSoId(), req);
     }
 
     @Override

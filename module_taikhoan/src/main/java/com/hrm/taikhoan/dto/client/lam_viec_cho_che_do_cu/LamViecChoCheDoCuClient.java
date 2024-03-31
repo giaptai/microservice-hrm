@@ -15,7 +15,7 @@ import java.util.UUID;
 @FeignClient(name = "lam-viec-cho-che-do-cu", url = "${moduleUrl.ho-so-chi-tiet}")
 public interface LamViecChoCheDoCuClient {
     @GetMapping("/{id}/lam-viec-cho-che-do-cu")
-    ResponseEntity<List<LamViecChoCheDoCuDTO>> getAllByHoSoId(@PathVariable UUID id);
+    List<LamViecChoCheDoCuDTO> getAllByHoSoId(@PathVariable UUID id);
 
     @GetMapping(value = "/lam-viec-cho-che-do-cu")
     List<LamViecChoCheDoCu> getAll();

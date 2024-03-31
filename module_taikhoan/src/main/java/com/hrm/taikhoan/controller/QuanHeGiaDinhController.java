@@ -1,10 +1,12 @@
 package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.QuanHeGiaDinh;
+import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.QuanHeGiaDinhDTO;
 import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.ReqQuanHeGiaDinh;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.quan_he_gia_dinh.IQuanHeGiaDinhService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class QuanHeGiaDinhController {
     final IQuanHeGiaDinhService quanHeGiaDinhService;
 
@@ -54,6 +57,28 @@ public class QuanHeGiaDinhController {
 
     @DeleteMapping("/quan-he-gia-dinh/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = quanHeGiaDinhService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/quan-he-gia-dinh")
+    public ResponseEntity<ResDTO<List<QuanHeGiaDinhDTO>>> CaNhanGetAll() {
+        List<QuanHeGiaDinhDTO> ls = quanHeGiaDinhService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/quan-he-gia-dinh")
+    public ResponseEntity<ResDTO<QuanHeGiaDinh>> caNhanAdd(@RequestBody ReqQuanHeGiaDinh req) {
+        QuanHeGiaDinh ls = quanHeGiaDinhService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/quan-he-gia-dinh/{id}")
+    public ResponseEntity<ResDTO<QuanHeGiaDinh>> caNhanEdit(@PathVariable int id, @RequestBody ReqQuanHeGiaDinh req) {
+        QuanHeGiaDinh ls = quanHeGiaDinhService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/quan-he-gia-dinh/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = quanHeGiaDinhService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }

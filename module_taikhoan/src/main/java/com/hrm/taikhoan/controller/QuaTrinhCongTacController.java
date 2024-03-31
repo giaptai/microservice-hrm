@@ -1,10 +1,12 @@
 package com.hrm.taikhoan.controller;
 
 import com.hrm.taikhoan.dto.client.qua_trinh_cong_tac.QuaTrinhCongTac;
+import com.hrm.taikhoan.dto.client.qua_trinh_cong_tac.QuaTrinhCongTacDTO;
 import com.hrm.taikhoan.dto.client.qua_trinh_cong_tac.ReqQuaTrinhCongTac;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.qua_trinh_cong_tac.IQuaTrinhCongTacService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,6 +26,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@SecurityRequirement(name = "Bearer Authentication")
 public class QuaTrinhCongTacController {
     final IQuaTrinhCongTacService quaTrinhCongTacService;
     @GetMapping("/qua-trinh-cong-tac")
@@ -53,6 +56,28 @@ public class QuaTrinhCongTacController {
 
     @DeleteMapping("/qua-trinh-cong-tac/{id}")
     public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
+        boolean ls = quaTrinhCongTacService.xoa(id);
+        return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
+    }
+    @GetMapping("/ca-nhan/qua-trinh-cong-tac")
+    public ResponseEntity<ResDTO<List<QuaTrinhCongTacDTO>>> CaNhanGetAll() {
+        List<QuaTrinhCongTacDTO> ls = quaTrinhCongTacService.xemDanhSachCaNhan();
+        return ResDTO.reply(ls, ResEnum.THANH_CONG);
+    }
+    @PostMapping("/ca-nhan/qua-trinh-cong-tac")
+    public ResponseEntity<ResDTO<QuaTrinhCongTac>> caNhanAdd(@RequestBody ReqQuaTrinhCongTac req) {
+        QuaTrinhCongTac ls = quaTrinhCongTacService.themCaNhan(req);
+        return ResDTO.reply(ls, ResEnum.TAO_THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/qua-trinh-cong-tac/{id}")
+    public ResponseEntity<ResDTO<QuaTrinhCongTac>> caNhanEdit(@PathVariable int id, @RequestBody ReqQuaTrinhCongTac req) {
+        QuaTrinhCongTac ls = quaTrinhCongTacService.sua(id, req);
+        return ResDTO.reply(ls, ResEnum.CAP_NHAT_THANH_CONG);
+    }
+
+    @DeleteMapping("/ca-nhan/qua-trinh-cong-tac/{id}")
+    public ResponseEntity<ResDTO<Boolean>> caNhanDel(@PathVariable int id) {
         boolean ls = quaTrinhCongTacService.xoa(id);
         return ResDTO.reply(ls, ResEnum.XOA_THANH_CONG);
     }
