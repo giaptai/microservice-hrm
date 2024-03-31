@@ -1,7 +1,6 @@
 package com.hrm.hoso.services;
 
-import com.hrm.hoso.dto.client.ResHoSoChiTiet;
-import com.hrm.hoso.dto.response.ResHoSoFullDetails;
+import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.models.ChucVuHienTai;
 import com.hrm.hoso.models.HoSo;
@@ -15,9 +14,8 @@ import com.hrm.hoso.repository.ChucVuHienTaiRepository;
 import com.hrm.hoso.repository.HocVanRepository;
 import com.hrm.hoso.repository.NgachRepository;
 import com.hrm.hoso.dto.client.HoSoChiTietClient;
-import com.hrm.hoso.dto.request.ReqDSSoYeuLyLich;
+import com.hrm.hoso.dto.request.ReqDSHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
-import com.hrm.hoso.dto.request.ReqSoYeuLyLich;
 import com.hrm.hoso.repository.NghiaVuQuanSuRepository;
 import com.hrm.hoso.repository.HoSoRepository;
 import com.hrm.hoso.repository.SucKhoeRepository;
@@ -29,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -36,7 +35,7 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor // tự tạo constructor với filed là final hoặc annotation not null
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SoYeuLyLichService implements ISoYeuLyLichService {
+public class HoHoSoService implements IHoSoService {
     final HoSoRepository hoSoRepository;
     final ChucVuHienTaiRepository chucVuHienTaiRepository;
     final HocVanRepository hocVanRepository;
@@ -75,7 +74,7 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public HoSo capNhatHoSoCaNhan(ReqSoYeuLyLich reqSoYeuLyLich) {
+    public HoSo capNhatHoSoCaNhan(ReqHoSo reqHoSo) {
         try {
 //            SoYeuLyLich soYeuLyLich = facadeEmployee.getSoYeuLyLich();
 //            if (soYeuLyLich != null) {
@@ -89,16 +88,15 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public HoSo taoHoSo(ReqHoSo req) {
-        return hoSoRepository.save(
-                HoSo.builder()
-                        .id(UUID.randomUUID())
-                        .hoVaTen(req.hoVaTen())
-                        .soCCCD(req.soCCCD())
-                        .taiKhoanId(req.taiKhoan())
-                        .pheDuyet(PheDuyet.CHO_PHE_DUYET)
-                        .build()
-        );
+    public HoSo taoHoSo(ReqTaoHoSo req) {
+        HoSo hoSo = HoSo.builder()
+                .hoVaTen(req.hoVaTen())
+                .soCCCD(req.soCCCD())
+                .taiKhoanId(req.taiKhoan())
+                .pheDuyet(PheDuyet.CHO_PHE_DUYET)
+                .create_at(LocalDateTime.now())
+                .build();
+        return hoSoRepository.save(hoSo);
     }
 
     @Override
@@ -111,7 +109,7 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public HoSo xemSoYeuLyLichTheoSoCCCDHoacID(String q) {
+    public HoSo xemHoSoTheoSoCCCDHoacID(String q) {
         try {
             HoSo resSoYeuLyLichSoCCCD = hoSoRepository.findFirstBySoCCCD(q).orElse(null);
             HoSo resHoSoId = null;
@@ -127,7 +125,7 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public HoSo capNhatHoSoCCVC(UUID id, ReqSoYeuLyLich req) {
+    public HoSo capNhatHoSoCCVC(UUID id, ReqHoSo req) {
         HoSo hoSo = hoSoRepository.findById(id).orElse(null);
         if (hoSo != null) {
             return hoSoRepository.save(mapToHoSo(hoSo, req));
@@ -136,7 +134,7 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public HoSo xemSoYeuLyLichTheoId(UUID id) {
+    public HoSo xemHoSoTheoId(UUID id) {
         try {
 //            HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
 //            ResHoSoChiTiet chiTiet = client.getAllByHoSoId(id);
@@ -148,9 +146,9 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public List<HoSo> pheDuyetSoYeuLyLich(List<ReqDSSoYeuLyLich> reqDSSoYeuLyLich) {
+    public List<HoSo> pheDuyetHoSo(List<ReqDSHoSo> reqDSHoSos) {
         try {
-            List<HoSo> hoSos = reqDSSoYeuLyLich.stream().flatMap(c -> c.soYeuLyLichs().stream().map(t -> {
+            List<HoSo> hoSos = reqDSHoSos.stream().flatMap(c -> c.soYeuLyLichs().stream().map(t -> {
                 HoSo hoSo = hoSoRepository.findById(t).orElse(null);
                 if (hoSo != null) {
                     hoSo.setPheDuyet(c.pheDuyet());
@@ -165,7 +163,7 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
     }
 
     @Override
-    public HoSo capNhatTheoId(UUID id, ReqSoYeuLyLich req) {
+    public HoSo capNhatTheoId(UUID id, ReqHoSo req) {
         try {
             HoSo hoSo = hoSoRepository.findById(id).orElse(null);
 //            if (soYeuLyLich != null) {
@@ -187,14 +185,14 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
                 + phuCapChucVu + phuCapKiemNhiem + phuCapKhac) + (luongTheoMucTien * (phamTramHuongLuong + phuCapThamNienVuotKhung));
     }
 
-    private HoSo mapToHoSo(HoSo hoSo, ReqSoYeuLyLich req) {
-        ReqSoYeuLyLich.ReqThongTinTuyenDung tuyenDung = req.thongTinTuyenDung();
-        ReqSoYeuLyLich.ReqQuanSu reqQuanSu = req.quanSu();
-        ReqSoYeuLyLich.ReqHocVan reqHocVan = req.hocVan();
-        ReqSoYeuLyLich.ReqChucVu reqChucVu = req.chucVu();
-        ReqSoYeuLyLich.ReqNgachNhanVien reqNgach = req.ngach();
-        ReqSoYeuLyLich.ReqViecLam reqViecLam = req.viecLam();
-        ReqSoYeuLyLich.ReqSucKhoe reqSucKhoe = req.sucKhoe();
+    private HoSo mapToHoSo(HoSo hoSo, ReqHoSo req) {
+        ReqHoSo.ReqThongTinTuyenDung tuyenDung = req.thongTinTuyenDung();
+        ReqHoSo.ReqQuanSu reqQuanSu = req.quanSu();
+        ReqHoSo.ReqHocVan reqHocVan = req.hocVan();
+        ReqHoSo.ReqChucVu reqChucVu = req.chucVu();
+        ReqHoSo.ReqNgachNhanVien reqNgach = req.ngach();
+        ReqHoSo.ReqViecLam reqViecLam = req.viecLam();
+        ReqHoSo.ReqSucKhoe reqSucKhoe = req.sucKhoe();
         //table
         ThongTinTuyenDung thongTinTuyenDung = thongTinTuyenDungRepository.findById(hoSo.getId()).orElse(null);
         if (tuyenDung != null) {
@@ -285,7 +283,7 @@ public class SoYeuLyLichService implements ISoYeuLyLichService {
             } else
                 sucKhoe = new SucKhoe(reqSucKhoe.tinhTrangSucKhoe(), reqSucKhoe.chieuCao(), reqSucKhoe.canNang(), reqSucKhoe.nhomMau(), hoSo);
         }
-        hoSo.setHoVaTen(req.hovaten());
+        hoSo.setHoVaTen(req.hoVaTen());
         hoSo.setGioiTinh(req.gioiTinh());
         hoSo.setCacTenGoiKhac(req.cacTenGoiKhac());
         hoSo.setSinhNgay(req.sinhNgay());

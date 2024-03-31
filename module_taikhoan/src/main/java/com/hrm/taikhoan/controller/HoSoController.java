@@ -6,6 +6,8 @@ import com.hrm.taikhoan.dto.client.ho_so.ReqHoSoDTO;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.ho_so.IHoSoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,18 +24,33 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Tag(name = "Admin ho-so", description = "Quản lý")
+@SecurityRequirement(name = "Bearer Authentication")
 public class HoSoController {
     final IHoSoService hoSoService;
+
     @GetMapping("/nhan-vien/ho-so")
     public ResponseEntity<ResDTO<List<HoSoDTO>>> getAllHoSo() {
-        return ResDTO.reply(hoSoService.getAllHoSo(),ResEnum.THANH_CONG);
+        return ResDTO.reply(hoSoService.getAllHoSo(), ResEnum.THANH_CONG);
     }
+
     @GetMapping("/nhan-vien/ho-so/{id}")
     public ResponseEntity<ResDTO<HoSoChiTietDTO>> getById(@PathVariable UUID id) {
-        return ResDTO.reply(hoSoService.getByHoSoId(id),ResEnum.THANH_CONG);
+        return ResDTO.reply(hoSoService.getByHoSoId(id), ResEnum.THANH_CONG);
     }
+
     @PatchMapping("/nhan-vien/ho-so/{id}")
     public ResponseEntity<ResDTO<HoSoDTO>> editHoSoById(@PathVariable UUID id, @RequestBody ReqHoSoDTO dto) {
-        return ResDTO.reply(hoSoService.editHoSoById(id, dto),ResEnum.THANH_CONG);
+        return ResDTO.reply(hoSoService.editHoSoById(id, dto), ResEnum.THANH_CONG);
+    }
+
+    @GetMapping("/ca-nhan/ho-so")
+    public ResponseEntity<ResDTO<HoSoChiTietDTO>> caNhan() {
+        return ResDTO.reply(hoSoService.hoSoCaNhan(), ResEnum.THANH_CONG);
+    }
+
+    @PatchMapping("/ca-nhan/ho-so")
+    public ResponseEntity<ResDTO<HoSoDTO>> caNhanEdit(@RequestBody ReqHoSoDTO dto) {
+        return ResDTO.reply(hoSoService.editHoSoCaNhan(dto), ResEnum.CAP_NHAT_THANH_CONG);
     }
 }

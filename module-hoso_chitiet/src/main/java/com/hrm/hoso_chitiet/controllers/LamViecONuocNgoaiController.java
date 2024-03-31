@@ -33,7 +33,7 @@ import java.util.UUID;
 public class LamViecONuocNgoaiController {
     private final IHoSoChiTietServices.IHoLamViecONuocNgoaiServiceChiTiet lamViecONuocNgoaiService;
     private final MapperLamViecONuocNgoai mapper;
-    @GetMapping("/ho-so/{id}/lam-viec-o-nuoc-ngoai")
+    @GetMapping("/{id}/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

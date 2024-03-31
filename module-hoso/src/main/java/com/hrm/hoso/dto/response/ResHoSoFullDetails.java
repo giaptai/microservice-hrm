@@ -221,63 +221,63 @@ public record ResHoSoFullDetails(
         }
     }
 
-    public static ResHoSoFullDetails mapToResHoSoFullDetails(HoSo hoSo, ResHoSoChiTiet chiTiet) {
-        ThongTinTuyenDung tuyenDung = hoSo.getThongTinTuyenDung();
-        NghiaVuQuanSu quanSu = hoSo.getQuanSu();
-        HocVan hocVan = hoSo.getHocVan();
-        ChucVuHienTai chucVu = hoSo.getChucVuHienTai();
-        NgachNhanVien ngach = hoSo.getNgach();
-        ViecLam viecLam = hoSo.getViecLam();
-        SucKhoe sucKhoe = hoSo.getSucKhoe();
-        return new ResHoSoFullDetails(
-                hoSo.getId(),
-                hoSo.getHoVaTen(),
-                hoSo.getGioiTinh(),
-                hoSo.getCacTenGoiKhac(),
-                hoSo.getSinhNgay(),
-                hoSo.getNoiSinh(),
-                hoSo.getQueQuan(),
-                hoSo.getDanTocId(),
-                hoSo.getTonGiaoId(),
-                hoSo.getSoCCCD(),
-                hoSo.getNgayCapCCCD(),
-                hoSo.getSoDienThoai(),
-                hoSo.getSoBHXH(),
-                hoSo.getSoBHYT(),
-                hoSo.getNoiOHienNay(),
-                hoSo.getThanhPhanGiaDinhId(),
-                ResThongTinTuyenDung.mapToResThongTinTuyenDung(tuyenDung),
-                ResQuanSu.mapToResQuanSu(quanSu),
-                hoSo.getDoiTuongChinhSachId(),
-                ResHocVan.mapToResHocVan(hocVan),
-                ResChucVu.mapToResChucVu(chucVu),
-                hoSo.getChucVuKiemNhiemId(),
-                hoSo.getChucVuDangHienTaiId(),
-                hoSo.getChucVuDangKiemNhiemId(),
-                hoSo.getTienLuong(),
-                ResNgachNhanVien.mapToResNgachNhanVien(ngach),
-                hoSo.getPhuCapChucVu(),
-                hoSo.getPhuCapKiemNhiem(),
-                hoSo.getPhuCapKhac(),
-                ResViecLam.mapToResViecLam(viecLam),
-                ResSucKhoe.mapToResSucKhoe(sucKhoe),
-                hoSo.getTaiKhoanId(),
-                hoSo.getPheDuyet(),
-                chiTiet.banThanCoLamViecChoCheDoCus(),
-                chiTiet.khenThuongs(),
-                chiTiet.kienThucAnNinhQuocPhongs(),
-                chiTiet.kyLuats(),
-                chiTiet.lamViecONuocNgoais(),
-                chiTiet.luongBanThans(),
-                chiTiet.lyLuanChinhTris(),
-                chiTiet.nghiepVuChuyenNganhs(),
-                chiTiet.ngoaiNgus(),
-                chiTiet.phuCapKhacs(),
-                chiTiet.quanHeGiaDinhs(),
-                chiTiet.quaTrinhCongTacs(),
-                chiTiet.tinHocs(),
-                hoSo.getUpdate_at(),
-                hoSo.getUpdate_at()
-        );
-    }
+//    public static ResHoSoFullDetails mapToResHoSoFullDetails(HoSo hoSo, ResHoSoChiTiet chiTiet) {
+//        ThongTinTuyenDung tuyenDung = hoSo.getThongTinTuyenDung();
+//        NghiaVuQuanSu quanSu = hoSo.getQuanSu();
+//        HocVan hocVan = hoSo.getHocVan();
+//        ChucVuHienTai chucVu = hoSo.getChucVuHienTai();
+//        NgachNhanVien ngach = hoSo.getNgach();
+//        ViecLam viecLam = hoSo.getViecLam();
+//        SucKhoe sucKhoe = hoSo.getSucKhoe();
+//        return new ResHoSoFullDetails(
+//                hoSo.getId(),
+//                hoSo.getHoVaTen(),
+//                hoSo.getGioiTinh(),
+//                hoSo.getCacTenGoiKhac(),
+//                hoSo.getSinhNgay(),
+//                hoSo.getNoiSinh(),
+//                hoSo.getQueQuan(),
+//                hoSo.getDanTocId(),
+//                hoSo.getTonGiaoId(),
+//                hoSo.getSoCCCD(),
+//                hoSo.getNgayCapCCCD(),
+//                hoSo.getSoDienThoai(),
+//                hoSo.getSoBHXH(),
+//                hoSo.getSoBHYT(),
+//                hoSo.getNoiOHienNay(),
+//                hoSo.getThanhPhanGiaDinhId(),
+//                ResThongTinTuyenDung.mapToResThongTinTuyenDung(tuyenDung),
+//                ResQuanSu.mapToResQuanSu(quanSu),
+//                hoSo.getDoiTuongChinhSachId(),
+//                ResHocVan.mapToResHocVan(hocVan),
+//                ResChucVu.mapToResChucVu(chucVu),
+//                hoSo.getChucVuKiemNhiemId(),
+//                hoSo.getChucVuDangHienTaiId(),
+//                hoSo.getChucVuDangKiemNhiemId(),
+//                hoSo.getTienLuong(),
+//                ResNgachNhanVien.mapToResNgachNhanVien(ngach),
+//                hoSo.getPhuCapChucVu(),
+//                hoSo.getPhuCapKiemNhiem(),
+//                hoSo.getPhuCapKhac(),
+//                ResViecLam.mapToResViecLam(viecLam),
+//                ResSucKhoe.mapToResSucKhoe(sucKhoe),
+//                hoSo.getTaiKhoanId(),
+//                hoSo.getPheDuyet(),
+//                chiTiet.banThanCoLamViecChoCheDoCus(),
+//                chiTiet.khenThuongs(),
+//                chiTiet.kienThucAnNinhQuocPhongs(),
+//                chiTiet.kyLuats(),
+//                chiTiet.lamViecONuocNgoais(),
+//                chiTiet.luongBanThans(),
+//                chiTiet.lyLuanChinhTris(),
+//                chiTiet.nghiepVuChuyenNganhs(),
+//                chiTiet.ngoaiNgus(),
+//                chiTiet.phuCapKhacs(),
+//                chiTiet.quanHeGiaDinhs(),
+//                chiTiet.quaTrinhCongTacs(),
+//                chiTiet.tinHocs(),
+//                hoSo.getUpdate_at(),
+//                hoSo.getUpdate_at()
+//        );
+//    }
 }

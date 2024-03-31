@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hrm.hoso.dto.DateTimeObject;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -67,9 +68,9 @@ public class ThongTinTuyenDung extends DateTimeObject {
     @Column(name = "cong_viec_lam_lau_nhat", columnDefinition = "varchar(150) default ''")
     String congViecLamLauNhat;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @JoinColumn(foreignKey = @ForeignKey(name = "ho_so_tuyen_dung"), name = "ho_so_id", referencedColumnName = "id", columnDefinition = "binary(16)")
+    @JoinColumn(name = "ho_so_id", referencedColumnName = "id", columnDefinition = "binary(16)")
     HoSo hoSoId;
 
     public ThongTinTuyenDung(String ngheNghiepTruocKhiTuyenDung, LocalDateTime ngayDuocTuyenDungLanDau, int coQuanToChucDonViTuyenDungId,

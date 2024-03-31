@@ -15,7 +15,7 @@ public record ResTaiKhoan(
         String soCCCD,
         String username,
         String email,
-        UUID maSoYeuLyLich,
+        UUID hoSoId,
         String role,
         boolean trangThai,
         LocalDateTime create_at,

@@ -1,7 +1,6 @@
 package com.hrm.taikhoan.service.lam_cho_che_do_cu;
 
 import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCu;
-import com.hrm.taikhoan.dto.client.HoSoChiTietClient;
 import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCuClient;
 import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.ReqLamViecChoCheDoCu;
 import lombok.AccessLevel;

@@ -33,7 +33,7 @@ public class KienThucAnNinhQuocPhongController {
     private final IHoSoChiTietServices.IHoKienThucAnNinhQuocPhongServiceChiTiet kienThucAnNinhQuocPhongService;
     private final MapperKienThucAnNinhQuocPhong mapper;
 
-    @GetMapping("/ho-so/{id}/kien-thuc-an-ninh-quoc-phong")
+    @GetMapping("/{id}/kien-thuc-an-ninh-quoc-phong")
     public ResponseEntity<List<ResKienThucAnNinhQuocPhong>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResKienThucAnNinhQuocPhong> ls = kienThucAnNinhQuocPhongService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResKienThucAnNinhQuocPhong).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

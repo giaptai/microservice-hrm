@@ -1,5 +1,7 @@
 package com.hrm.taikhoan.service.tai_khoan;
 
+import com.hrm.taikhoan.dto.client.ho_so.HoSoClient;
+import com.hrm.taikhoan.dto.client.ho_so.HoSoDTO;
 import com.hrm.taikhoan.dto.request.ReqHoSo;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
@@ -9,6 +11,7 @@ import com.hrm.taikhoan.models.TaiKhoan;
 import com.hrm.taikhoan.repository.TaiKhoanRepository;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.security.IAuthenticationFacade;
+import com.hrm.taikhoan.security.TaiKhoanUserDetailsService;
 import com.hrm.taikhoan.security.jwt_utilities.JWTUtilities;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +19,11 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -35,7 +42,8 @@ import static com.hrm.taikhoan.dto.resopnse.ResTaiKhoan.mapToResTaiKhoan;
 public class TaiKhoanService implements ITaiKhoanService {
 
     final TaiKhoanRepository taiKhoanRepository;
-
+    final TaiKhoanUserDetailsService taiKhoanUserDetailsService;
+    final HoSoClient hoSoClient;
 //    final JavaMailSender javaMailSender;
 
     final JWTUtilities jwtUtilities;
@@ -95,9 +103,9 @@ public class TaiKhoanService implements ITaiKhoanService {
     /* ADMIN - ADMIN - ADMIN*/
     @Override
     public List<TaiKhoan> xemDanhSachTaiKhoan() {
-        System.out.println(facade.getTaiKhoan().getUsername());
+//        System.out.println(facade.getTaiKhoan().getUsername());
         try {
-            return taiKhoanRepository.findAll().stream().filter(c->c.getRoleTaiKhoan().equals(RoleTaiKhoan.EMPLOYEE)).toList();
+            return taiKhoanRepository.findAllByRoleTaiKhoan(RoleTaiKhoan.EMPLOYEE);
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());
         }
@@ -127,12 +135,8 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     @Override
     public TaiKhoan them(ReqTaiKhoan reqTaiKhoan) {
-        TaiKhoan taiKhoan = null;
+        TaiKhoan taiKhoan;
         UUID uuid = UUID.randomUUID();
-        WebClient webClient = WebClient
-                .builder()
-                .baseUrl(hoSoUrl)
-                .build();
         try {
             List<TaiKhoan> listUsername = taiKhoanRepository.findAll();
             //tạo username
@@ -145,39 +149,31 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .password(reqTaiKhoan.soCCCD())
                     .email(reqTaiKhoan.email())
                     .roleTaiKhoan(RoleTaiKhoan.EMPLOYEE)
-                    .hoSoId(uuid)
                     .trangThai(true)
                     .create_at(LocalDateTime.now())
                     .build();
-            if (taiKhoan != null) {
+            HoSoDTO hoSoDTO = hoSoClient.addHoSo(new ReqHoSo(uuid, taiKhoan.getHoVaTen(), taiKhoan.getSoCCCD(), taiKhoan.getId()));
+            if (hoSoDTO != null) {
+                taiKhoan.setHoSoId(hoSoDTO.id());
                 taiKhoanRepository.save(taiKhoan);
-                webClient.post()
-                        .bodyValue(new ReqHoSo(uuid, reqTaiKhoan.hoVaTen(), reqTaiKhoan.soCCCD(), taiKhoan.getId()))
-                        .retrieve()
-                        .bodyToMono(Object.class)
-                        .onErrorResume(e -> Mono.empty())
-                        .block();
                 return taiKhoan;
             } else return null;
         } catch (RuntimeException e) {
             return null;
-//            throw new ResponseStatusException(ResEnum.TRUNG_DU_LIEU.getStatusCode(), "Trùng dữ liệu hoặc lỗi gì đó");
-        } finally {
-//            if (taiKhoan != null) {
-//                producers.sendMailProducer(reqTaiKhoan);
-//            }
         }
     }
 
     @Override
     public ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin req) {
         try {
-            TaiKhoan taiKhoanLogin = taiKhoanRepository.findByUsername(req.username());
+            UserDetails taiKhoanLogin = taiKhoanUserDetailsService.loadUserByUsername(req.username());
             if (taiKhoanLogin != null) {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username(), req.password()));
-                System.out.printf("USER IS: %s", taiKhoanLogin.getUsername());
+                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username(), req.password()));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.printf("USER IS: %s\n", taiKhoanLogin.getUsername());
                 return new ResTaiKhoanLogin(
-                        mapToResTaiKhoan(taiKhoanLogin),
+                        taiKhoanLogin.getUsername(),
+                        taiKhoanLogin.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority).orElse(null),
                         jwtUtilities.generationToken(taiKhoanLogin)
                 );
             }

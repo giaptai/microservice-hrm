@@ -10,6 +10,8 @@ import java.util.UUID;
 public interface IHoSoService {
     List<HoSoDTO> getAllHoSo();
     HoSoChiTietDTO getByHoSoId(UUID id);
+    HoSoChiTietDTO hoSoCaNhan();
+    HoSoDTO editHoSoCaNhan(ReqHoSoDTO req);
     HoSoDTO editHoSoById(UUID id, ReqHoSoDTO req);
     String findHoSo();
 }

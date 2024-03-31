@@ -33,7 +33,7 @@ public class PhuCapKhacController {
     private final IHoSoChiTietServices.IHoPhuCapKhacServiceChiTiet phuCapKhacService;
     private final MapperPhuCapKhac mapper;
 
-    @GetMapping("/ho-so/{id}/phu-cap-khac")
+    @GetMapping("/{id}/phu-cap-khac")
     public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

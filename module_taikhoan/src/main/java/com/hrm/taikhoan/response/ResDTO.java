@@ -34,8 +34,4 @@ public class ResDTO<T> {
     public static RuntimeException error(ResEnum resEnum) {
         return new ResponseStatusException(resEnum.getStatusCode(), resEnum.name());
     }
-//    @Bean
-//    public static RuntimeException error2(RuntimeException ex) {
-//        return new ResponseStatusException(ex.getStatusCode(), resEnum.name());
-//    }
 }

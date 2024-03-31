@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record ReqHoSoDTO(
-        String hovaten,
+        String hoVaTen,
         GioiTinh gioiTinh,
         String cacTenGoiKhac,
         LocalDateTime sinhNgay,

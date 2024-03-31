@@ -9,24 +9,6 @@ import java.util.Map;
 
 @Builder
 public record ReqTaiKhoan(String hoVaTen, String soCCCD, String email) {
-    public ReqTaiKhoan {
-    }
-
-    @Override
-    public String hoVaTen() {
-        return hoVaTen;
-    }
-
-    @Override
-    public String soCCCD() {
-        return soCCCD;
-    }
-
-    @Override
-    public String email() {
-        return email;
-    }
-
     public static class ReqTaiKhoanSerializer implements Serializer<ReqTaiKhoan> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 

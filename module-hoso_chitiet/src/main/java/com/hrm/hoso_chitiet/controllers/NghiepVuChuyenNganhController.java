@@ -33,7 +33,7 @@ public class NghiepVuChuyenNganhController {
     private final IHoSoChiTietServices.IHoNghiepVuChuyenNganhServiceChiTiet nghiepVuChuyenNganhService;
     private final MapperNghiepVuChuyenNganh mapper;
 
-    @GetMapping("/ho-so/{id}/nghiep-vu-chuyen-nganh")
+    @GetMapping("/{id}/nghiep-vu-chuyen-nganh")
     public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

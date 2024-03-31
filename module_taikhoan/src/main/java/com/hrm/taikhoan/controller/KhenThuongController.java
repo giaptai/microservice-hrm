@@ -26,7 +26,7 @@ import java.util.UUID;
 public class KhenThuongController {
     final IKhenThuongService khenThuongService;
 
-    @GetMapping("/khen-thuong")
+    @GetMapping("/nhan-vien/khen-thuong")
     public ResponseEntity<ResDTO<List<KhenThuong>>> getAll() {
         List<KhenThuong> ls = khenThuongService.xemDanhSach();
         return ResDTO.reply(ls, ResEnum.THANH_CONG);

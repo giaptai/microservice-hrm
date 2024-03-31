@@ -43,10 +43,9 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(configure ->
                         configure
-                                .requestMatchers("/dang-nhap").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/ca-nhan/tai-khoan").hasAnyAuthority("ADMIN", "EMPLOYEE")
-                                .requestMatchers("/nhan-vien/**").permitAll()
-                                .requestMatchers("/ca-nhan/**").hasRole("EMPLOYEE")
+                                .requestMatchers("/nhan-vien/**").hasAuthority("ADMIN")
+                                .requestMatchers("/ca-nhan/**").hasAuthority("EMPLOYEE")
                                 .anyRequest().permitAll()
                 )
                 .logout(logout -> logout

@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @FeignClient(name = "ngoai-ngu", url = "${moduleUrl.ho-so-chi-tiet}")
 public interface NgoaiNguClient {
-    @GetMapping("/ho-so/{id}/ngoai-ngu")
+    @GetMapping("/{id}/ngoai-ngu")
     ResponseEntity<List<NgoaiNguDTO>> getAllByHoSoId(@PathVariable UUID id);
     @GetMapping(value = "/ngoai-ngu")
     List<NgoaiNgu> getAll();

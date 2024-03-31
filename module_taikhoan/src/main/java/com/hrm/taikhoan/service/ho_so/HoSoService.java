@@ -18,6 +18,8 @@ import com.hrm.taikhoan.dto.client.qua_trinh_cong_tac.QuaTrinhCongTacDTO;
 import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.QuanHeGiaDinhDTO;
 import com.hrm.taikhoan.dto.client.ho_so.ReqHoSoDTO;
 import com.hrm.taikhoan.dto.client.tin_hoc.TinHocDTO;
+import com.hrm.taikhoan.models.TaiKhoan;
+import com.hrm.taikhoan.security.IAuthenticationFacade;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +34,7 @@ import java.util.UUID;
 public class HoSoService implements IHoSoService {
     final HoSoClient hoSoClient;
     final HoSoChiTietClient chiTietClient;
+    final IAuthenticationFacade facade;
 
     @Override
     public List<HoSoDTO> getAllHoSo() {
@@ -107,8 +110,24 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
+    public HoSoChiTietDTO hoSoCaNhan() {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        if (taiKhoan != null) {
+            return getByHoSoId(taiKhoan.getHoSoId());
+        } else return null;
+    }
+
+    @Override
+    public HoSoDTO editHoSoCaNhan(ReqHoSoDTO req) {
+        TaiKhoan taiKhoan = facade.getTaiKhoan();
+        if (taiKhoan != null) {
+            return editHoSoById(taiKhoan.getHoSoId(), req);
+        } else return null;
+    }
+
+    @Override
     public HoSoDTO editHoSoById(UUID id, ReqHoSoDTO req) {
-        return hoSoClient.editHoSoById(id, req);
+        return hoSoClient.editHoSo(id, req);
     }
 
     @Override

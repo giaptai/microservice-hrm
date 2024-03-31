@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TaiKhoanUserDetailsService implements UserDetailsService {
-    final TaiKhoanRepository taiKhoanRepository;
+    private final TaiKhoanRepository taiKhoanRepository;
 
     public TaiKhoanUserDetailsService(TaiKhoanRepository taiKhoanRepository) {
         this.taiKhoanRepository = taiKhoanRepository;

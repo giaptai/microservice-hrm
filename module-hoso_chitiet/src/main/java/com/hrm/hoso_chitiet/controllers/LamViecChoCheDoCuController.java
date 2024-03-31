@@ -32,7 +32,7 @@ import java.util.UUID;
 public class LamViecChoCheDoCuController {
     private final IHoSoChiTietServices.ILamViecChoCheDoCuServiceChiTiet lamViecChoCheDoCuService;
     private final MapperLamViecChoCheDoCu mapper;
-    @GetMapping("/ho-so/{id}/lam-viec-cho-che-do-cu")
+    @GetMapping("/{id}/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSo(id).stream().map(mapper::maptoResBanThanCoLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

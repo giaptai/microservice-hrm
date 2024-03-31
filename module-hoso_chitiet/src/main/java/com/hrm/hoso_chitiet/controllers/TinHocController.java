@@ -33,7 +33,7 @@ public class TinHocController {
     private final IHoSoChiTietServices.IHoTinHocServiceChiTiet tinHocService;
     private final MapperTinHoc mapper;
 
-    @GetMapping("/ho-so/{id}/tin-hoc")
+    @GetMapping("/{id}/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

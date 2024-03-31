@@ -33,7 +33,7 @@ public class LuongBanThanController {
     private final IHoSoChiTietServices.IHoLuongBanThanServiceChiTiet luongBanThanService;
     private final MapperLuongBanThan mapper;
 
-    @GetMapping("/ho-so/{id}/luong-ban-than")
+    @GetMapping("/{id}/luong-ban-than")
     public ResponseEntity<List<ResLuongBanThan>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResLuongBanThan).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

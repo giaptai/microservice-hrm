@@ -33,7 +33,7 @@ public class NgoaiNguController {
     private final IHoSoChiTietServices.IHoNgoaiNguServiceChiTiet ngoaiNguService;
     private final MapperNgoaiNgu mapper;
 
-    @GetMapping("/ho-so/{id}/ngoai-ngu")
+    @GetMapping("/{id}/ngoai-ngu")
     public ResponseEntity<List<ResNgoaiNgu>> getAllByHoSoId(@PathVariable UUID id) {
         List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResNgoaiNgu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());

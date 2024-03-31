@@ -35,9 +35,8 @@ public class JWTUtilities {
     }
 
     //tạo token ngẫu nhiên
-    public String generationToken(TaiKhoan userDetails) {
+    public String generationToken(UserDetails userDetails) {
         Map<String, String> map = new HashMap<>();
-        map.put("id", String.valueOf(userDetails.getId()));
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .claims(map)

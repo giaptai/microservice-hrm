@@ -28,6 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -70,10 +71,10 @@ public class TaiKhoan extends DateTimeObject implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of(new SimpleGrantedAuthority(roleTaiKhoan.getName()));
-        return Arrays.stream(RoleTaiKhoan.values())
-                .map(role -> new SimpleGrantedAuthority(role.name()))
-                .toList();
+        return List.of(new SimpleGrantedAuthority(roleTaiKhoan.name()));
+//        return Arrays.stream(RoleTaiKhoan.values())
+//                .map(role -> new SimpleGrantedAuthority(role.name()))
+//                .toList();
     }
 
     //ko can getPassword getUsername do @Data no lam roi nhưng tao vẫn làm

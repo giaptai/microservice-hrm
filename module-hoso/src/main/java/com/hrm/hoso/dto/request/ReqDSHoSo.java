@@ -6,7 +6,7 @@ import com.hrm.hoso.enums.PheDuyet;
 import java.util.Set;
 import java.util.UUID;
 
-public record ReqDSSoYeuLyLich(
+public record ReqDSHoSo(
         Set<UUID> soYeuLyLichs,
         PheDuyet pheDuyet
 ) {
