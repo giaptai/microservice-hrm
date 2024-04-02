@@ -3,27 +3,39 @@ package com.hrm.taikhoan.controller;
 import com.hrm.taikhoan.dto.request.ReqEmail;
 import com.hrm.taikhoan.dto.request.ReqMatKhau;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
+import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
+import com.hrm.taikhoan.dto.resopnse.ResAuth;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
+import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 import com.hrm.taikhoan.models.TaiKhoan;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 import com.hrm.taikhoan.service.tai_khoan.ITaiKhoanService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.server.ServerWebExchange;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +43,18 @@ import java.util.List;
 @SecurityRequirement(name = "Bearer Authentication")
 public class TaiKhoanController {
     final ITaiKhoanService taiKhoanService;
+
+    @PostMapping("/tai-khoan")
+    public ResponseEntity<ResAuth> dangNhap0(@RequestBody ReqTaiKhoanLogin login) {
+        ResAuth taiKhoan = taiKhoanService.dangNhap0(login);
+        return new ResponseEntity<>(taiKhoan, ResEnum.DANG_NHAP_THANH_CONG.getStatusCode());
+    }
+
+//    @PostMapping("/dang-nhap")
+//    public ResponseEntity<ResAuth> dangNhap(@RequestBody ReqTaiKhoanLogin reqTaiKhoanLogin) {
+//        ResAuth taiKhoan = taiKhoanService.dangNhap(reqTaiKhoanLogin);
+//        return new ResponseEntity<>(taiKhoan, ResEnum.DANG_NHAP_THANH_CONG.getStatusCode());
+//    }
 
     @GetMapping("/nhan-vien/tai-khoan")
     public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan() {

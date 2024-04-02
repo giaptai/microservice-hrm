@@ -32,9 +32,7 @@ import static java.util.Arrays.asList;
 @Configuration
 @RequiredArgsConstructor
 public class WebSecurityConfig implements WebMvcConfigurer {
-
     private final TaiKhoanUserDetailsService taiKhoanUserDetailsService;
-
     private final JWTAuthFilter jwtAuthFilter;
 
     @Bean
@@ -43,23 +41,23 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(configure ->
                         configure
-                                .requestMatchers(HttpMethod.GET, "/ca-nhan/tai-khoan").hasAnyAuthority("ADMIN", "EMPLOYEE")
-                                .requestMatchers(
-                                        "/nhan-vien/**",
-                                        "/tin-hoc/**",
-                                        "/quan-he-gia-dinh/**",
-                                        "/qua-trinh-cong-tac/**",
-                                        "/phu-cap-khac/**",
-                                        "/ngoai-ngu/**",
-                                        "/nghiep-vu-chuyen-nganh/**",
-                                        "/ly-luan-chinh-tri/**",
-                                        "/luong-ban-than/**",
-                                        "/lam-viec-o-nuoc-ngoai/**",
-                                        "/lam-viec-cho-che-do-cu/**",
-                                        "/ky-luat/**",
-                                        "/kien-thuc-an-ninh-quoc-phong/**",
-                                        "/khen-thuong/**").hasAuthority("ADMIN")
-                                .requestMatchers("/ca-nhan/**").hasAuthority("EMPLOYEE")
+//                                .requestMatchers(HttpMethod.GET, "/ca-nhan/tai-khoan").hasAnyAuthority("ADMIN", "EMPLOYEE")
+//                                .requestMatchers(
+//                                        "/nhan-vien/**",
+//                                        "/tin-hoc/**",
+//                                        "/quan-he-gia-dinh/**",
+//                                        "/qua-trinh-cong-tac/**",
+//                                        "/phu-cap-khac/**",
+//                                        "/ngoai-ngu/**",
+//                                        "/nghiep-vu-chuyen-nganh/**",
+//                                        "/ly-luan-chinh-tri/**",
+//                                        "/luong-ban-than/**",
+//                                        "/lam-viec-o-nuoc-ngoai/**",
+//                                        "/lam-viec-cho-che-do-cu/**",
+//                                        "/ky-luat/**",
+//                                        "/kien-thuc-an-ninh-quoc-phong/**",
+//                                        "/khen-thuong/**").hasAuthority("ADMIN")
+//                                .requestMatchers("/ca-nhan/**").hasAuthority("EMPLOYEE")
                                 .anyRequest().permitAll()
                 )
                 .logout(logout -> logout

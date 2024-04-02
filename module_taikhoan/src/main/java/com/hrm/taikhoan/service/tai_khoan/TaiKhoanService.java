@@ -5,6 +5,7 @@ import com.hrm.taikhoan.dto.client.ho_so.HoSoDTO;
 import com.hrm.taikhoan.dto.request.ReqHoSo;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
+import com.hrm.taikhoan.dto.resopnse.ResAuth;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 import com.hrm.taikhoan.enums.RoleTaiKhoan;
 import com.hrm.taikhoan.models.TaiKhoan;
@@ -26,15 +27,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
-import static com.hrm.taikhoan.dto.resopnse.ResTaiKhoan.mapToResTaiKhoan;
 
 @Service
 @RequiredArgsConstructor
@@ -166,7 +163,7 @@ public class TaiKhoanService implements ITaiKhoanService {
     @Override
     public ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin req) {
         try {
-            UserDetails taiKhoanLogin = taiKhoanUserDetailsService.loadUserByUsername(req.username());
+            UserDetails taiKhoanLogin = taiKhoanRepository.findByUsername(req.username());
             if (taiKhoanLogin != null) {
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(req.username(), req.password()));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -176,6 +173,20 @@ public class TaiKhoanService implements ITaiKhoanService {
                         taiKhoanLogin.getAuthorities().stream().findFirst().map(GrantedAuthority::getAuthority).orElse(null),
                         jwtUtilities.generationToken(taiKhoanLogin)
                 );
+            }
+            //không tạo refresh token ok
+            throw new ResponseStatusException(ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.getStatusCode(), ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.name());
+        } catch (AuthenticationException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public ResAuth dangNhap0(ReqTaiKhoanLogin login) {
+        try {
+            TaiKhoan taiKhoan = taiKhoanRepository.findByUsernameAndPassword(login.username(), login.password());
+            if (taiKhoan != null) {
+                return ResAuth.mapToResAuth(taiKhoan);
             }
             //không tạo refresh token ok
             throw new ResponseStatusException(ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.getStatusCode(), ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.name());

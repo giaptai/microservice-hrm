@@ -9,11 +9,14 @@ import com.hrm.taikhoan.models.TaiKhoan;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +26,7 @@ import java.util.function.Function;
 public class JWTUtilities {
     private SecretKey key;
     //create time
-    private static final long EXPIRATION_TIME = 8*60*60*1000; // 1 hour
+    private static final long EXPIRATION_TIME = 8 * 60 * 60 * 1000; // 1 hour
     private final String ALGORITHM = "HmacSHA256"; //thuật toán
     private final String SECRET_KEY = "qwertyuiasdfghjkzxcnmvjfgfgdfesdfafdfdgfgfhfgfdsvdgfbodfmhktnidh"; //khóa bí mật
 
@@ -37,6 +40,7 @@ public class JWTUtilities {
     //tạo token ngẫu nhiên
     public String generationToken(UserDetails userDetails) {
         Map<String, String> map = new HashMap<>();
+        map.put("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList().get(0));
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .claims(map)

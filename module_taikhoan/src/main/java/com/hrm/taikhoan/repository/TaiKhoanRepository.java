@@ -22,6 +22,9 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     @Query
     TaiKhoan findByUsername(String username);
 
+    @Query
+    TaiKhoan findByUsernameAndPassword(String username, String password);
+
     //JPQL
     @Query(value = "UPDATE TaiKhoan tk SET tk.trangThai = ?1 where tk.id= ?2")
     abstract TaiKhoan updateTaiKhoanTrangThaiById(boolean thai, int id);

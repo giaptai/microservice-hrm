@@ -18,7 +18,8 @@ public enum ResEnum {
     TRUNG_DU_LIEU(HttpStatus.CONFLICT),
     KHONG_DUOC_UY_QUYEN(HttpStatus.UNAUTHORIZED), //401 Unauthorized: Client không được phép truy cập tài nguyên.
     TRUY_CAP_BI_CAM(HttpStatus.FORBIDDEN), //403 Forbidden: Client bị cấm truy cập tài nguyên.
-    HONG_TIM_THAY(HttpStatus.NOT_FOUND); //404 Not Found: Tài nguyên không được tìm thấy.
+    HONG_TIM_THAY(HttpStatus.NOT_FOUND), //404 Not Found: Tài nguyên không được tìm thấy.
+    ;
     private final HttpStatus statusCode;
 
     ResEnum(HttpStatus statusCode) {

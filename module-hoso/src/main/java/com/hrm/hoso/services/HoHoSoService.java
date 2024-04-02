@@ -13,7 +13,6 @@ import com.hrm.hoso.models.ViecLam;
 import com.hrm.hoso.repository.ChucVuHienTaiRepository;
 import com.hrm.hoso.repository.HocVanRepository;
 import com.hrm.hoso.repository.NgachRepository;
-import com.hrm.hoso.dto.client.HoSoChiTietClient;
 import com.hrm.hoso.dto.request.ReqDSHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
 import com.hrm.hoso.repository.NghiaVuQuanSuRepository;
@@ -44,7 +43,6 @@ public class HoHoSoService implements IHoSoService {
     final SucKhoeRepository sucKhoeRepository;
     final ThongTinTuyenDungRepository thongTinTuyenDungRepository;
     final ViecLamRepository viecLamRepository;
-    final HoSoChiTietClient client;
     //    final DanTocRepository danTocRepository;
 //    final ThanhPhanGiaDinhRepository thanhPhanGiaDinhRepository;
 //    final CoQuanToChucDonViRepository coQuanToChucDonViRepository;

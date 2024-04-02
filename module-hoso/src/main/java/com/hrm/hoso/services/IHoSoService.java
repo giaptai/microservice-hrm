@@ -8,7 +8,6 @@ import com.hrm.hoso.dto.request.ReqHoSo;
 import java.util.List;
 import java.util.UUID;
 
-
 public interface IHoSoService {
     HoSo xemHoSoCaNhan();
     HoSo capNhatHoSoCaNhan(ReqHoSo reqHoSo);

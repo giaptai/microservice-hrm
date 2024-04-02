@@ -1,7 +1,9 @@
 spring:
+  profiles:
+    default: discovery
   application:
     name: discovery
-  config:
+  config: #because i have config server, so i want this eureka server read configuration from config server.
     import: optional:configserver:http://localhost:1111
 
 server:

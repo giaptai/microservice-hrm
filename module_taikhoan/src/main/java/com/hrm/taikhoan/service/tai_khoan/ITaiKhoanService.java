@@ -3,6 +3,7 @@ package com.hrm.taikhoan.service.tai_khoan;
 
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
+import com.hrm.taikhoan.dto.resopnse.ResAuth;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 import com.hrm.taikhoan.models.TaiKhoan;
 
@@ -27,6 +28,7 @@ public interface ITaiKhoanService {
     TaiKhoan them(ReqTaiKhoan taiKhoan);
 
     ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin reqTaiKhoanLogin);
+    ResAuth dangNhap0(ReqTaiKhoanLogin login);
 
     static boolean checkMatKhau(String matkhau) {
         Pattern pattern = Pattern.compile("^[\\p{Lower}\\p{Upper}\\d\\S]{6,15}$");

@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/auth-service" />
     <file type="web" url="file://$PROJECT_DIR$/config-server" />
     <file type="web" url="file://$PROJECT_DIR$/discovery" />
     <file type="web" url="file://$PROJECT_DIR$/module-cauhinh" />
-    <file type="web" url="file://$PROJECT_DIR$/module-gateaway" />
+    <file type="web" url="file://$PROJECT_DIR$/module-gateway" />
     <file type="web" url="file://$PROJECT_DIR$/module-hoso" />
     <file type="web" url="file://$PROJECT_DIR$/module-hoso_chitiet" />
     <file type="web" url="file://$PROJECT_DIR$/module_taikhoan" />

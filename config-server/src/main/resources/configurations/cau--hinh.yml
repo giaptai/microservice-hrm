@@ -1,0 +1,39 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+spring:
+  application:
+    name: cau--hinh #name will show on eureka server or discovery
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/cau_hinh?createDatabaseIfNotExist=true
+    username: root
+    password: 123456
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: false
+  sql:
+    init:
+      mode: never
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true #this eureka client need to register discovery so set true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+
+

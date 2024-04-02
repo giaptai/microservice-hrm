@@ -18,7 +18,7 @@ public class Swagger {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("public")
-                .packagesToScan("hrm.com.cauhinh.controllers")
+                .packagesToScan("hrm.module.cauhinh.controllers")
                 .build();
     }
 }

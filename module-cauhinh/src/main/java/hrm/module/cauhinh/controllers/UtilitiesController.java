@@ -44,7 +44,9 @@ import hrm.module.cauhinh.services.IUtilitiesService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,47 +54,58 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UtilitiesController {
-    private final IUtilitiesService<BacLuong, ReqUtilities> bacLuongService;
-    private final IUtilitiesService<CapBacLoaiQuanHamQuanDoi, ReqUtilities> capBacLoaiQuanHamQuanDoiService;
-    private final IUtilitiesService<ChucDanhDang, ReqUtilities> chucDanhDangService;
-    private final IUtilitiesService<ChucVu, ReqUtilities> chucVuService;
-    private final IUtilitiesService<CoQuanToChucDonVi, ReqUtilities> coQuanToChucDonViService;
-    private final IUtilitiesService<DanhHieuNhaNuoc, ReqUtilities> danhHieuNhaNuocPhongTangService;
-    private final IUtilitiesService<DanToc, ReqUtilities> danTocService;
-    private final IUtilitiesService<DoiTuongChinhSach, ReqUtilities> doiTuongChinhSachService;
-    private final IUtilitiesService<HinhThucKhenThuong, ReqUtilities> hinhThucKhenThuongService;
-    private final IUtilitiesService<HocHam, ReqUtilities> hocHamService;
-    private final IUtilitiesService<LoaiPhuCap, ReqUtilities> loaiPhuCapService;
-    private final IUtilitiesService<MoiQuanHe, ReqUtilities> moiQuanHeService;
-    private final IUtilitiesService<NhomMau, ReqUtilities> nhomMauService;
-    private final IUtilitiesService<ThanhPhanGiaDinh, ReqUtilities> thanhPhanGiaDinhService;
-    private final IUtilitiesService<TonGiao, ReqUtilities> tonGiaoService;
-    private final IUtilitiesService<TrinhDoChuyenMon, ReqUtilities> trinhDoChuyenMonService;
-    private final IUtilitiesService<TrinhDoGiaoDucPhoThong, ReqUtilities> trinhDoGiaoDucPhoThongService;
-    private final IUtilitiesService<ViTriViecLam, ReqUtilities> viTriViecLamService;
+    final IUtilitiesService<BacLuong, ReqUtilities> bacLuongService;
+    final IUtilitiesService<CapBacLoaiQuanHamQuanDoi, ReqUtilities> capBacLoaiQuanHamQuanDoiService;
+    final IUtilitiesService<ChucDanhDang, ReqUtilities> chucDanhDangService;
+    final IUtilitiesService<ChucVu, ReqUtilities> chucVuService;
+    final IUtilitiesService<CoQuanToChucDonVi, ReqUtilities> coQuanToChucDonViService;
+    final IUtilitiesService<DanhHieuNhaNuoc, ReqUtilities> danhHieuNhaNuocPhongTangService;
+    final IUtilitiesService<DanToc, ReqUtilities> danTocService;
+    final IUtilitiesService<DoiTuongChinhSach, ReqUtilities> doiTuongChinhSachService;
+    final IUtilitiesService<HinhThucKhenThuong, ReqUtilities> hinhThucKhenThuongService;
+    final IUtilitiesService<HocHam, ReqUtilities> hocHamService;
+    final IUtilitiesService<LoaiPhuCap, ReqUtilities> loaiPhuCapService;
+    final IUtilitiesService<MoiQuanHe, ReqUtilities> moiQuanHeService;
+    final IUtilitiesService<NhomMau, ReqUtilities> nhomMauService;
+    final IUtilitiesService<ThanhPhanGiaDinh, ReqUtilities> thanhPhanGiaDinhService;
+    final IUtilitiesService<TonGiao, ReqUtilities> tonGiaoService;
+    final IUtilitiesService<TrinhDoChuyenMon, ReqUtilities> trinhDoChuyenMonService;
+    final IUtilitiesService<TrinhDoGiaoDucPhoThong, ReqUtilities> trinhDoGiaoDucPhoThongService;
+    final IUtilitiesService<ViTriViecLam, ReqUtilities> viTriViecLamService;
     //LOAI-NHOM-HESO-NGACH
-    private final ILoaiNhomHeSoNgachService.ILoaiCongChucService congChucService;
-    private final ILoaiNhomHeSoNgachService.ILoaiVienChucService vienChucService;
-    private final ILoaiNhomHeSoNgachService.INhomCongChucService nhomCongChucService;
-    private final ILoaiNhomHeSoNgachService.INhomVienChucService nhomVienChucService;
-    private final ILoaiNhomHeSoNgachService.IHeSoLuongCongChucService heSoLuongCongChucService;
-    private final ILoaiNhomHeSoNgachService.IHeSoLuongVienChucService heSoLuongVienChucService;
-    private final ILoaiNhomHeSoNgachService.INgachCongChucService ngachCongChucService;
-    private final ILoaiNhomHeSoNgachService.INgachVienChucService ngachVienChucService;
+    final ILoaiNhomHeSoNgachService.ILoaiCongChucService congChucService;
+    final ILoaiNhomHeSoNgachService.ILoaiVienChucService vienChucService;
+    final ILoaiNhomHeSoNgachService.INhomCongChucService nhomCongChucService;
+    final ILoaiNhomHeSoNgachService.INhomVienChucService nhomVienChucService;
+    final ILoaiNhomHeSoNgachService.IHeSoLuongCongChucService heSoLuongCongChucService;
+    final ILoaiNhomHeSoNgachService.IHeSoLuongVienChucService heSoLuongVienChucService;
+    final ILoaiNhomHeSoNgachService.INgachCongChucService ngachCongChucService;
+    final ILoaiNhomHeSoNgachService.INgachVienChucService ngachVienChucService;
 
     @RestController
     @Tag(name = "Bậc lương ", description = "Cấu hình")
     class BacLuongController {
         @GetMapping("/bac-luong")
-        public ResponseEntity<ResDTO<List<BacLuong>>> getAll() {
+        public ResponseEntity<ResDTO<List<BacLuong>>> getAll(
+                @RequestHeader("username-gateway") String username,
+                @RequestHeader(name = "role") String username1
+        ) {
+            Object s = username;
+            Object ss = username1;
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, bacLuongService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -777,6 +790,7 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<LoaiCongChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, congChucService.xemLoaiCongChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/loai-cong-chuc/{id}")
         public ResponseEntity<ResDTO<LoaiCongChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, congChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
@@ -805,10 +819,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<LoaiVienChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, vienChucService.xemLoaiVienChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/loai-vien-chuc/{id}")
         public ResponseEntity<ResDTO<LoaiVienChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, vienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/loai-vien-chuc")
         public ResponseEntity<ResDTO<LoaiVienChuc>> add(@RequestBody ReqLoai loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, vienChucService.themLoaiVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
@@ -832,10 +848,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<NhomCongChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomCongChucService.xemNhomCongChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/nhom-cong-chuc/{id}")
         public ResponseEntity<ResDTO<NhomCongChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomCongChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/nhom-cong-chuc")
         public ResponseEntity<ResDTO<NhomCongChuc>> add(@RequestBody ReqNhom loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, nhomCongChucService.themNhomCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
@@ -859,10 +877,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<NhomVienChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomVienChucService.xemNhomVienChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/nhom-vien-chuc/{id}")
         public ResponseEntity<ResDTO<NhomVienChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomVienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/nhom-vien-chuc")
         public ResponseEntity<ResDTO<NhomVienChuc>> add(@RequestBody ReqNhom loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, nhomVienChucService.themNhomVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
@@ -886,10 +906,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<HeSoLuongCongChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongCongChucService.xemHeSoLuongCongChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/he-so-luong-cong-chuc/{id}")
         public ResponseEntity<ResDTO<HeSoLuongCongChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongCongChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/he-so-luong-cong-chuc")
         public ResponseEntity<ResDTO<HeSoLuongCongChuc>> add(@RequestBody ReqHeSoLuong loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, heSoLuongCongChucService.themHeSoLuongCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
@@ -913,10 +935,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<HeSoLuongVienChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongVienChucService.xemHeSoLuongVienChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/he-so-luong-vien-chuc/{id}")
         public ResponseEntity<ResDTO<HeSoLuongVienChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongVienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/he-so-luong-vien-chuc")
         public ResponseEntity<ResDTO<HeSoLuongVienChuc>> add(@RequestBody ReqHeSoLuong loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, heSoLuongVienChucService.themHeSoLuongVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
@@ -940,10 +964,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<NgachCongChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachCongChucService.xemNgachCongChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/ngach-cong-chuc/{id}")
         public ResponseEntity<ResDTO<NgachCongChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachCongChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/ngach-cong-chuc")
         public ResponseEntity<ResDTO<NgachCongChuc>> add(@RequestBody ReqNgach loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, ngachCongChucService.themNgachCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
@@ -967,10 +993,12 @@ public class UtilitiesController {
         public ResponseEntity<ResDTO<List<NgachVienChuc>>> getAll() {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachVienChucService.xemNgachVienChuc()), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @GetMapping("/ngach-vien-chuc/{id}")
         public ResponseEntity<ResDTO<NgachVienChuc>> getById(@PathVariable int id) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachVienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
         }
+
         @PostMapping("/ngach-vien-chuc")
         public ResponseEntity<ResDTO<NgachVienChuc>> add(@RequestBody ReqNgach loai) {
             return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, ngachVienChucService.themNgachVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());

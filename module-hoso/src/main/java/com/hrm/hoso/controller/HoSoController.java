@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "")
 @RequiredArgsConstructor
 public class HoSoController {
     private final IHoSoService hoSoService;
@@ -37,19 +36,22 @@ public class HoSoController {
         ResHoSo hoSo = ResHoSo.mapToResHoSo(hoSoService.xemHoSoTheoId(id));
         return new ResponseEntity<>(hoSo, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @PostMapping("/ho-so")
     @Transactional
     public ResponseEntity<ResHoSo> addHoSo(@RequestBody ReqTaoHoSo req) {
         ResHoSo hoSo = ResHoSo.mapToResHoSo(hoSoService.taoHoSo(req));
         return new ResponseEntity<>(hoSo, ResEnum.TAO_HO_SO_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/ho-so/{id}")
     @Transactional
     public ResponseEntity<ResHoSo> editHoSo(@PathVariable(name = "id", required = false) UUID id,
-                                                 @RequestBody ReqHoSo reqHoSo) {
+                                            @RequestBody ReqHoSo reqHoSo) {
         ResHoSo resHoSo = ResHoSo.mapToResHoSo(hoSoService.capNhatHoSoCCVC(id, reqHoSo));
         return new ResponseEntity<>(resHoSo, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getStatusCode());
     }
+
     @GetMapping("/ho-so/tim-kiem")
     public ResponseEntity<ResHoSo> getHoSoCCVCBySoCCCDOrId0(@RequestParam(name = "q") String q) {
         ResHoSo hoSo = ResHoSo.mapToResHoSo(hoSoService.xemHoSoTheoSoCCCDHoacID(q));

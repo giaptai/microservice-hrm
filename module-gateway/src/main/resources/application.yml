@@ -1,0 +1,32 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /api/v1
+
+eureka:
+  client:
+    register-with-eureka: true
+
+spring:
+  profiles:
+    default: gateway
+    active: gateway
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+#      routes:
+#        - id: ho--so
+#          uri: http://localhost:8081
+#          predicates:
+#            - Path=/api/v1/ho-so/**
+#
+#        - id: cau--hinh
+#          uri: http://localhost:8080
+#          predicates:
+#            - Path=/api/v1/**
+  config:
+    import: optional:configserver:http://localhost:1111

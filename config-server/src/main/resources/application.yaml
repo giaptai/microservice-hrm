@@ -1,0 +1,13 @@
+server:
+  port: 1111
+spring:
+  profiles:
+    active: native
+    default: native
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        native:
+          search-locations: classpath:/configurations

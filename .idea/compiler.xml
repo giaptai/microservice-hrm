@@ -7,10 +7,15 @@
         <processorPath useClasspath="false">
           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.30/f195ee86e6c896ea47a1d39defbe20eb59cd149d/lombok-1.18.30.jar" />
         </processorPath>
-        <module name="module_taikhoan.main" />
+        <module name="auth-service.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="module-gateaway" target="17" />
+      <module name="module-gateaway.main" target="17" />
+      <module name="module-gateaway.test" target="17" />
+      <module name="module-gateway.main" target="17" />
+      <module name="module-gateway.test" target="17" />
       <module name="module-soyeulylich" target="17" />
       <module name="module-soyeulylich.main" target="17" />
       <module name="module-soyeulylich.test" target="17" />
