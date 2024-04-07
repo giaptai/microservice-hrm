@@ -2,7 +2,6 @@ package com.hrm.hoso.services;
 
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.response.ResHoSo;
-import com.hrm.hoso.dto.response.ResHoSoHoanChinh;
 import com.hrm.hoso.models.HoSo;
 import com.hrm.hoso.dto.request.ReqDSHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;

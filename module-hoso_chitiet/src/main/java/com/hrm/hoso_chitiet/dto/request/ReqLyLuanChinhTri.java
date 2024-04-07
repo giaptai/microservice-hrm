@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 public record ReqLyLuanChinhTri(
         LocalDateTime batDau,
         LocalDateTime ketThuc,
-        int tenCoSoDaoTao,
+        int tenCoSoDaoTaoId,
         String hinhThucDaoTao,
         String vanBangDuocCap
 ) {

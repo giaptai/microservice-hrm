@@ -1,6 +1,6 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.chuc_vu.ChucVuClient;
+import com.hrm.hoso.client.chuc_vu.ChucVuClient;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.models.ChucVuHienTai;
 import lombok.AccessLevel;

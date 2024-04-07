@@ -1,7 +1,7 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.vi_tri_viec_lam.ViTriViecLam;
-import com.hrm.hoso.client.data_chung.vi_tri_viec_lam.ViTriViecLamClient;
+import com.hrm.hoso.client.vi_tri_viec_lam.ViTriViecLam;
+import com.hrm.hoso.client.vi_tri_viec_lam.ViTriViecLamClient;
 import com.hrm.hoso.dto.response.ResViecLam;
 import com.hrm.hoso.models.ViecLam;
 import lombok.AccessLevel;

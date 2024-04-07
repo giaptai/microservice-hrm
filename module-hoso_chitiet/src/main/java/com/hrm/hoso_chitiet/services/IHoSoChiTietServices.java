@@ -41,7 +41,7 @@ import java.util.UUID;
 public interface IHoSoChiTietServices<T, H> {
     List<T> xemDanhSach();
 
-    List<T> xemDanhSachTheoHoSo(UUID id);
+    List<T> xemDanhSachTheoHoSoId(UUID id);
 
     T xemChiTiet(int id);
 

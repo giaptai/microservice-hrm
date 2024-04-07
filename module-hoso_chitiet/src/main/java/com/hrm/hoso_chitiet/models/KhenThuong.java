@@ -1,6 +1,5 @@
 package com.hrm.hoso_chitiet.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.enums.XepLoaiChuyenMon;
 import com.hrm.hoso_chitiet.enums.XepLoaiThiDua;
@@ -11,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "khen_thuong")
+@Table(name = "khen_thuong", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
 @Getter
 @Setter
 @SuperBuilder

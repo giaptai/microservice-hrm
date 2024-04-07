@@ -35,6 +35,12 @@ public class KhenThuongController {
     private final IHoSoChiTietServices.IHoKhenThuongServiceChiTiet khenThuongService;
     private final MapperKhenThuong mapper;
 
+    @GetMapping("/{id}/khen-thuong")
+    public ResponseEntity<List<ResKhenThuong>> getAllByHoSoId(@PathVariable UUID id) {
+        List<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSoId(id).stream().map(mapper::maptoResKhenThuong).toList();
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
     @GetMapping("/khen-thuong")
     public ResponseEntity<List<ResKhenThuong>> getAll() {
         List<ResKhenThuong> ls = khenThuongService.xemDanhSach().stream().map(mapper::maptoResKhenThuong).toList();
@@ -64,12 +70,6 @@ public class KhenThuongController {
     public ResponseEntity<Boolean> del(@PathVariable int id) {
         boolean ls = khenThuongService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
-    }
-
-    @GetMapping("/{id}/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSo(id).stream().map(mapper::maptoResKhenThuong).toList();
-        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     //EMPLOYEE

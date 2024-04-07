@@ -1,11 +1,11 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.chuc_vu.ChucVuClient;
-import com.hrm.hoso.client.data_chung.chuc_vu_dang.ChucVuDangClient;
-import com.hrm.hoso.client.data_chung.dan_toc.DanTocClient;
-import com.hrm.hoso.client.data_chung.doi_tuong_chinh_sach.DoiTuongChinhSachClient;
-import com.hrm.hoso.client.data_chung.thanh_phan_gia_dinh.ThanhPhanGiaDinhClient;
-import com.hrm.hoso.client.data_chung.ton_giao.TonGiaoClient;
+import com.hrm.hoso.client.chuc_vu.ChucVuClient;
+import com.hrm.hoso.client.chuc_vu_dang.ChucVuDangClient;
+import com.hrm.hoso.client.dan_toc.DanTocClient;
+import com.hrm.hoso.client.doi_tuong_chinh_sach.DoiTuongChinhSachClient;
+import com.hrm.hoso.client.thanh_phan_gia_dinh.ThanhPhanGiaDinhClient;
+import com.hrm.hoso.client.ton_giao.TonGiaoClient;
 import com.hrm.hoso.dto.response.ResHoSo;
 
 import com.hrm.hoso.models.ChucVuHienTai;

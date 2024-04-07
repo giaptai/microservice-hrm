@@ -3,7 +3,6 @@ package com.hrm.hoso.controller;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
 import com.hrm.hoso.dto.response.ResHoSo;
-import com.hrm.hoso.dto.response.ResHoSoHoanChinh;
 import com.hrm.hoso.response.ResEnum;
 import com.hrm.hoso.services.IHoSoService;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +60,7 @@ public class HoSoController {
     }
 
     @GetMapping("/nhan-vien/ho-so/tim-kiem")
-    public ResponseEntity<ResHoSo> findHoSoBySoCCCDOrId0(@RequestParam(name = "q") String q) {
+    public ResponseEntity<ResHoSo> findHoSoBySoCCCDO(@RequestParam(name = "q") String q) {
         ResHoSo hoSo = hoSoService.xemHoSoTheoSoCCCD(q);
         return new ResponseEntity<>(hoSo, ResEnum.THANH_CONG.getStatusCode());
     }

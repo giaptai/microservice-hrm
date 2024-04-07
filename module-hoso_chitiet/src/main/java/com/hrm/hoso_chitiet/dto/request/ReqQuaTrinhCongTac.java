@@ -5,9 +5,7 @@ import java.time.LocalDateTime;
 public record ReqQuaTrinhCongTac(
         LocalDateTime batDau,
         LocalDateTime ketThuc,
-        int donViCongTac, //CoQuanToChucDonVi
-        String chucDanh,
-        String loaiSoYeuLyLichChiTiet,
-        String soYeuLyLich
+        int donViCongTacId, //CoQuanToChucDonVi
+        String chucDanh
 ) {
 }

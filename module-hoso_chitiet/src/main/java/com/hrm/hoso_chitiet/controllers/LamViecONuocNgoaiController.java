@@ -31,7 +31,7 @@ public class LamViecONuocNgoaiController {
     private final MapperLamViecONuocNgoai mapper;
     @GetMapping("/{id}/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
+        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

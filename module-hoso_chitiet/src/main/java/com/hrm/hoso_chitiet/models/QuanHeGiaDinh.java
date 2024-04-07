@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -22,7 +23,7 @@ import java.util.UUID;
  * gia dinh bao gom ruot va ben vo hoac chong luon
  **/
 @Entity
-@Table(name = "quan_he_gia_dinh")
+@Table(name = "quan_he_gia_dinh",indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
 @Getter
 @Setter
 @SuperBuilder
@@ -30,7 +31,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"soYeuLyLich"}) //error field SoYeuLyLich soYeuLyLich;
 public class QuanHeGiaDinh extends DateTimeObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

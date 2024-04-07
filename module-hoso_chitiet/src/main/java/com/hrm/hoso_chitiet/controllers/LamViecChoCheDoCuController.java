@@ -31,7 +31,7 @@ public class LamViecChoCheDoCuController {
     private final MapperLamViecChoCheDoCu mapper;
     @GetMapping("/{id}/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSo(id).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSoId(id).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
     @GetMapping("/lam-viec-cho-che-do-cu")

@@ -1,8 +1,8 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.ngach.NgachClient;
-import com.hrm.hoso.client.data_chung.ngach.NgachCongChuc;
-import com.hrm.hoso.client.data_chung.ngach.NgachVienChuc;
+import com.hrm.hoso.client.ngach.NgachClient;
+import com.hrm.hoso.client.ngach.NgachCongChuc;
+import com.hrm.hoso.client.ngach.NgachVienChuc;
 import com.hrm.hoso.dto.response.ResNgachNhanVien;
 import com.hrm.hoso.models.NgachNhanVien;
 import lombok.AccessLevel;

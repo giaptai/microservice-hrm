@@ -102,7 +102,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSo(UUID id) {
+        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id) {
             return lamViecChoCheDoCuRepository.getAllByHoSo(id);
         }
 
@@ -172,7 +172,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachTheoHoSo(UUID id) {
+        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id) {
             return khenThuongRepository.getAllByHoSo(id);
         }
 
@@ -188,7 +188,7 @@ public class HoSoChiTietServices {
         @Override
         public KhenThuong them(UUID id, ReqKhenThuong req) {
             try {
-                return khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuong(), req.lyDo(), XacNhan.CHO_XAC_NHAN, id));
+                return khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuongId(), req.lyDo(), XacNhan.CHO_XAC_NHAN, id));
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
@@ -201,7 +201,7 @@ public class HoSoChiTietServices {
                     c.setNam(req.nam());
                     c.setXepLoaiChuyenMon(req.xepLoaiChuyenMon());
                     c.setXepLoaiThiDua(req.xepLoaiThiDua());
-                    c.setHinhThucKhenThuongId(req.hinhThucKhenThuong());
+                    c.setHinhThucKhenThuongId(req.hinhThucKhenThuongId());
                     c.setLyDo(req.lyDo());
                     c.setUpdate_at();
                     return khenThuongRepository.save(c);
@@ -244,7 +244,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSo(UUID id) {
+        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id) {
             return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id);
         }
 
@@ -317,7 +317,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KyLuat> xemDanhSachTheoHoSo(UUID id) {
+        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id) {
             return kyLuatRepository.getAllByHoSo(id);
         }
 
@@ -333,7 +333,7 @@ public class HoSoChiTietServices {
         @Override
         public KyLuat them(UUID id, ReqKyLuat req) {
             try {
-                return kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinh(), XacNhan.CHO_XAC_NHAN, id));
+                return kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_XAC_NHAN, id));
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
@@ -347,7 +347,7 @@ public class HoSoChiTietServices {
                     c.setKetThuc(req.ketThuc());
                     c.setHinhThuc(req.hinhThuc());
                     c.setHanhViViPhamChinh(req.hanhViViPhamChinh());
-                    c.setCoQuanQuyetDinhId(req.coQuanQuyetDinh());
+                    c.setCoQuanQuyetDinhId(req.coQuanQuyetDinhId());
                     c.setUpdate_at();
                     return kyLuatRepository.save(c);
                 }).orElse(null);
@@ -389,7 +389,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachTheoHoSo(UUID id) {
+        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id) {
             return lamViecONuocNgoaiRepository.getAllByHoSo(id);
         }
 
@@ -461,7 +461,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachTheoHoSo(UUID id) {
+        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id) {
             return luongBanThanRepository.getAllByHoSo(id);
         }
 
@@ -536,7 +536,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachTheoHoSo(UUID id) {
+        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id) {
             return lyLuanChinhTriRepository.getAllByHoSo(id);
         }
 
@@ -552,7 +552,7 @@ public class HoSoChiTietServices {
         @Override
         public LyLuanChinhTri them(UUID id, ReqLyLuanChinhTri req) {
             try {
-                LyLuanChinhTri tri = new LyLuanChinhTri(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.hinhThucDaoTao(), req.vanBangDuocCap(), XacNhan.CHO_XAC_NHAN, id);
+                LyLuanChinhTri tri = new LyLuanChinhTri(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.hinhThucDaoTao(), req.vanBangDuocCap(), XacNhan.CHO_XAC_NHAN, id);
                 tri.setXacNhan(XacNhan.CHO_XAC_NHAN);
                 return lyLuanChinhTriRepository.save(tri);
             } catch (RuntimeException e) {
@@ -566,7 +566,7 @@ public class HoSoChiTietServices {
                 return lyLuanChinhTriRepository.findById(id).map(c -> {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
+                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setHinhThucDaoTao(req.hinhThucDaoTao());
                     c.setVanBangDuocCap(req.vanBangDuocCap());
                     c.setUpdate_at();
@@ -610,7 +610,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSo(UUID id) {
+        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id) {
             return nghiepVuChuyenNganhRepository.getAllByHoSo(id);
         }
 
@@ -626,7 +626,7 @@ public class HoSoChiTietServices {
         @Override
         public NghiepVuChuyenNganh them(UUID id, ReqNghiepVuChuyenNganh req) {
             try {
-                NghiepVuChuyenNganh vu = new NghiepVuChuyenNganh(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id);
+                NghiepVuChuyenNganh vu = new NghiepVuChuyenNganh(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id);
                 vu.setXacNhan(XacNhan.CHO_XAC_NHAN);
                 return nghiepVuChuyenNganhRepository.save(vu);
             } catch (RuntimeException e) {
@@ -640,7 +640,7 @@ public class HoSoChiTietServices {
                 return nghiepVuChuyenNganhRepository.findById(id).map(c -> {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
+                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setChungChiDuocCap(req.chungChiDuocCap());
                     c.setUpdate_at();
                     return nghiepVuChuyenNganhRepository.save(c);
@@ -683,7 +683,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachTheoHoSo(UUID id) {
+        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id) {
             return ngoaiNguRepository.getAllByHoSo(id);
         }
 
@@ -699,7 +699,7 @@ public class HoSoChiTietServices {
         @Override
         public NgoaiNgu them(UUID id, ReqNgoaiNgu req) {
             try {
-                NgoaiNgu ngu = new NgoaiNgu(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.tenNgoaiNgu(), req.chungChiDuocCap(), req.diemSo(), XacNhan.CHO_XAC_NHAN, id);
+                NgoaiNgu ngu = new NgoaiNgu(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.tenNgoaiNgu(), req.chungChiDuocCap(), req.diemSo(), XacNhan.CHO_XAC_NHAN, id);
                 ngu.setXacNhan(XacNhan.CHO_XAC_NHAN);
                 return ngoaiNguRepository.save(ngu);
             } catch (RuntimeException e) {
@@ -713,7 +713,7 @@ public class HoSoChiTietServices {
                 return ngoaiNguRepository.findById(id).map(c -> {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
+                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setTenNgoaiNgu(req.tenNgoaiNgu());
                     c.setChungChiDuocCap(req.chungChiDuocCap());
                     c.setDiemSo(req.diemSo());
@@ -758,7 +758,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachTheoHoSo(UUID id) {
+        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id) {
             return phuCapKhacRepository.getAllByHoSo(id);
         }
 
@@ -774,7 +774,7 @@ public class HoSoChiTietServices {
         @Override
         public PhuCapKhac them(UUID id, ReqPhuCapKhac req) {
             return phuCapKhacRepository.save(new PhuCapKhac(
-                    req.batDau(), req.ketThuc(), req.loaiPhuCap(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), id));
+                    req.batDau(), req.ketThuc(), req.loaiPhuCapId(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), id));
         }
 
         @Override
@@ -783,7 +783,7 @@ public class HoSoChiTietServices {
                 return phuCapKhacRepository.findById(id).map(c -> {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
-                    c.setLoaiPhuCapId(req.loaiPhuCap());
+                    c.setLoaiPhuCapId(req.loaiPhuCapId());
                     c.setPhanTramHuongPhuCap(req.phanTramHuongPhuCap());
                     c.setHeSoPhuCap(req.heSoPhuCap());
                     c.setHinhThucHuong(req.hinhThucThuong());
@@ -829,7 +829,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachTheoHoSo(UUID id) {
+        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id) {
             return quanHeGiaDinhRepository.getAllByHoSo(id);
         }
 
@@ -901,7 +901,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachTheoHoSo(UUID id) {
+        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id) {
             return quaTrinhCongTacRepository.getAllByHoSo(id);
         }
 
@@ -917,7 +917,7 @@ public class HoSoChiTietServices {
         @Override
         public QuaTrinhCongTac them(UUID id, ReqQuaTrinhCongTac req) {
             try {
-                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTac(), req.chucDanh(), id));
+                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), id));
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
@@ -929,7 +929,7 @@ public class HoSoChiTietServices {
                 return quaTrinhCongTacRepository.findById(id).map(c -> {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
-                    c.setDonViCongTacId(req.donViCongTac());
+                    c.setDonViCongTacId(req.donViCongTacId());
                     c.setChucDanh(req.chucDanh());
                     c.setUpdate_at();
                     return quaTrinhCongTacRepository.save(c);
@@ -972,7 +972,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<TinHoc> xemDanhSachTheoHoSo(UUID id) {
+        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id) {
             return tinHocRepository.getAllByHoSo(id);
         }
 
@@ -988,7 +988,7 @@ public class HoSoChiTietServices {
         @Override
         public TinHoc them(UUID id, ReqTinHoc req) {
             try {
-                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.chungChiDuocCap(), id);
+                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), id);
                 return tinHocRepository.save(tin);
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
@@ -1001,7 +1001,7 @@ public class HoSoChiTietServices {
                 return tinHocRepository.findById(id).map(c -> {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
+                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setChungChiDuocCap(req.chungChiDuocCap());
                     c.setUpdate_at();
                     return tinHocRepository.save(c);

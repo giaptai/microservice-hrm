@@ -1,38 +1,5 @@
 package com.hrm.hoso.services;
 
-import com.hrm.hoso.client.data_chung.chuc_vu.ChucVuClient;
-import com.hrm.hoso.client.data_chung.chuc_vu_dang.ChucVuDangClient;
-import com.hrm.hoso.client.data_chung.dan_toc.DanTocClient;
-import com.hrm.hoso.client.data_chung.doi_tuong_chinh_sach.DoiTuongChinhSachClient;
-import com.hrm.hoso.client.chi_tiet.khen_thuong.KhenThuongAuth;
-import com.hrm.hoso.client.chi_tiet.khen_thuong.KhenThuongClient;
-import com.hrm.hoso.client.chi_tiet.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongAuth;
-import com.hrm.hoso.client.chi_tiet.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongClient;
-import com.hrm.hoso.client.chi_tiet.ky_luat.KyLuatAuth;
-import com.hrm.hoso.client.chi_tiet.ky_luat.KyLuatClient;
-import com.hrm.hoso.client.chi_tiet.lam_viec_cho_che_do_cu.LamViecChoCheDoCuAuth;
-import com.hrm.hoso.client.chi_tiet.lam_viec_cho_che_do_cu.LamViecChoCheDoCuClient;
-import com.hrm.hoso.client.chi_tiet.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiAuth;
-import com.hrm.hoso.client.chi_tiet.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiClient;
-import com.hrm.hoso.client.chi_tiet.luong_ban_than.LuongBanThanAuth;
-import com.hrm.hoso.client.chi_tiet.luong_ban_than.LuongBanThanClient;
-import com.hrm.hoso.client.chi_tiet.ly_luan_chinh_tri.LyLuanChinhTriAuth;
-import com.hrm.hoso.client.chi_tiet.ly_luan_chinh_tri.LyLuanChinhTriClient;
-import com.hrm.hoso.client.chi_tiet.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhAuth;
-import com.hrm.hoso.client.chi_tiet.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhClient;
-import com.hrm.hoso.client.chi_tiet.ngoai_ngu.NgoaiNguAuth;
-import com.hrm.hoso.client.chi_tiet.ngoai_ngu.NgoaiNguClient;
-import com.hrm.hoso.client.chi_tiet.phu_cap_khac.PhuCapKhacAuth;
-import com.hrm.hoso.client.chi_tiet.phu_cap_khac.PhuCapKhacClient;
-import com.hrm.hoso.client.chi_tiet.qua_trinh_cong_tac.QuaTrinhCongTacAuth;
-import com.hrm.hoso.client.chi_tiet.qua_trinh_cong_tac.QuaTrinhCongTacClient;
-import com.hrm.hoso.client.chi_tiet.quan_he_gia_dinh.QuanHeGiaDinhAuth;
-import com.hrm.hoso.client.chi_tiet.quan_he_gia_dinh.QuanHeGiaDinhClient;
-import com.hrm.hoso.client.data_chung.thanh_phan_gia_dinh.ThanhPhanGiaDinhClient;
-import com.hrm.hoso.client.chi_tiet.tin_hoc.TinHocAuth;
-import com.hrm.hoso.client.chi_tiet.tin_hoc.TinHocClient;
-
-import com.hrm.hoso.client.data_chung.ton_giao.TonGiaoClient;
 import com.hrm.hoso.dto.mapper.MapperHoSo;
 import com.hrm.hoso.dto.request.ReqChucVu;
 import com.hrm.hoso.dto.request.ReqHocVan;
@@ -42,27 +9,10 @@ import com.hrm.hoso.dto.request.ReqSucKhoe;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqThongTinTuyenDung;
 import com.hrm.hoso.dto.request.ReqViecLam;
-import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
-import com.hrm.hoso.dto.response.ResHoSoHoanChinh;
-import com.hrm.hoso.dto.response.ResHocVan;
-import com.hrm.hoso.dto.response.ResNgachNhanVien;
-import com.hrm.hoso.dto.response.ResQuanSu;
-import com.hrm.hoso.dto.response.ResSucKhoe;
-import com.hrm.hoso.dto.response.ResThongTinTuyenDung;
-import com.hrm.hoso.dto.response.ResViecLam;
 
 import com.hrm.hoso.enums.PheDuyet;
 
-import com.hrm.hoso.dto.mapper.MapperChucVuHienTai;
-import com.hrm.hoso.dto.mapper.MapperHocVan;
-import com.hrm.hoso.dto.mapper.MapperNgach;
-import com.hrm.hoso.dto.mapper.MapperQuanSu;
-import com.hrm.hoso.dto.mapper.MapperSucKhoe;
-import com.hrm.hoso.dto.mapper.MapperThongTinTuyenDung;
-import com.hrm.hoso.dto.mapper.MapperViecLam;
-
-import com.hrm.hoso.dto.request.ReqDSHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
 
 import com.hrm.hoso.models.ChucVuHienTai;
@@ -109,36 +59,8 @@ public class HoSoService implements IHoSoService {
     final SucKhoeRepository sucKhoeRepository;
     final ThongTinTuyenDungRepository thongTinTuyenDungRepository;
     final ViecLamRepository viecLamRepository;
-    //client
-    final KhenThuongClient khenThuongClient;
-    final KienThucAnNinhQuocPhongClient kienThucAnNinhQuocPhongClient;
-    final KyLuatClient kyLuatClient;
-    final LamViecChoCheDoCuClient lamViecChoCheDoCuClient;
-    final LamViecONuocNgoaiClient lamViecONuocNgoaiClient;
-    final LuongBanThanClient luongBanThanClient;
-    final LyLuanChinhTriClient lyLuanChinhTriClient;
-    final NghiepVuChuyenNganhClient nghiepVuChuyenNganhClient;
-    final NgoaiNguClient ngoaiNguClient;
-    final PhuCapKhacClient phuCapKhacClient;
-    final QuaTrinhCongTacClient quaTrinhCongTacClient;
-    final QuanHeGiaDinhClient quanHeGiaDinhClient;
-    final TinHocClient tinHocClient;
     //mapper
-    final MapperThongTinTuyenDung mapperThongTinTuyenDung;
-    final MapperQuanSu mapperQuanSu;
-    final MapperHocVan mapperHocVan;
-    final MapperChucVuHienTai mapperChucVuHienTai;
-    final MapperNgach mapperNgach;
-    final MapperViecLam mapperViecLam;
-    final MapperSucKhoe mapperSucKhoe;
     final MapperHoSo mapperHoSo;
-    //clients
-    final DanTocClient danTocClient;
-    final TonGiaoClient tonGiaoClient;
-    final ThanhPhanGiaDinhClient thanhPhanGiaDinhClient;
-    final DoiTuongChinhSachClient doiTuongChinhSachClient;
-    final ChucVuClient chucVuClient;
-    final ChucVuDangClient chucVuDangClient;
 
     @Override
     public UUID layHoSoId(int taiKhoanId) {
@@ -184,89 +106,8 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoTheoId(UUID id) {
-        try {
-            HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
-//            List<LamViecChoCheDoCuAuth> cheDoCus = lamViecChoCheDoCuClient.getAllByHoSoId(id);
-//            List<KhenThuongAuth> khenThuongs = khenThuongClient.getAllByHoSoId(id);
-//            List<KienThucAnNinhQuocPhongAuth> kienThucAnNinhQuocPhongs = kienThucAnNinhQuocPhongClient.getAllByHoSoId(id);
-//            List<KyLuatAuth> kyLuats = kyLuatClient.getAllByHoSoId(id);
-//            List<LamViecONuocNgoaiAuth> lamViecONuocNgoais = lamViecONuocNgoaiClient.getAllByHoSoId(id);
-//            List<LuongBanThanAuth> luongBanThans = luongBanThanClient.getAllByHoSoId(id);
-//            List<LyLuanChinhTriAuth> lyLuanChinhTris = lyLuanChinhTriClient.getAllByHoSoId(id);
-//            List<NghiepVuChuyenNganhAuth> nghiepVuChuyenNganhs = nghiepVuChuyenNganhClient.getAllByHoSoId(id);
-//            List<NgoaiNguAuth> ngoaiNgus = ngoaiNguClient.getAllByHoSoId(id);
-//            List<PhuCapKhacAuth> phuCapKhacs = phuCapKhacClient.getAllByHoSoId(id);
-//            List<QuanHeGiaDinhAuth> quanHeGiaDinhs = quanHeGiaDinhClient.getAllByHoSoId(id);
-//            List<QuaTrinhCongTacAuth> quaTrinhCongTacs = quaTrinhCongTacClient.getAllByHoSoId(id);
-//            List<TinHocAuth> tinHocs = tinHocClient.getAllByHoSoId(id);
-//            ResThongTinTuyenDung resThongTinTuyenDung = mapperThongTinTuyenDung.mapToResThongTinTuyenDung(hoSo.getThongTinTuyenDung());
-//            ResQuanSu resQuanSu = mapperQuanSu.mapToResQuanSu(hoSo.getQuanSu());
-//            ResHocVan resHocVan = mapperHocVan.mapToResHocVan(hoSo.getHocVan());
-//            ResChucVu resChucVu = mapperChucVuHienTai.mapToResChucVu(hoSo.getChucVuHienTai());
-//            ResNgachNhanVien resNgachNhanVien = mapperNgach.mapToResNgachNhanVien(hoSo.getNgach());
-//            ResViecLam resViecLam = mapperViecLam.mapToResViecLam(hoSo.getViecLam());
-//            ResSucKhoe resSucKhoe = mapperSucKhoe.mapToResSucKhoe(hoSo.getSucKhoe());
-            return mapperHoSo.mapToResHoSo(hoSo);
-//            return new ResHoSoHoanChinh(
-//                    hoSo.getId(),
-//                    hoSo.getHoVaTen(),
-//                    hoSo.getGioiTinh(),
-//                    hoSo.getCacTenGoiKhac(),
-//                    hoSo.getSinhNgay(),
-//                    hoSo.getNoiSinh(),
-//                    hoSo.getQueQuan(),
-//                    hoSo.getDanTocId(),
-//                    danTocClient.getName(hoSo.getDanTocId()),
-//                    hoSo.getTonGiaoId(),
-//                    tonGiaoClient.getName(hoSo.getTonGiaoId()),
-//                    hoSo.getSoCCCD(),
-//                    hoSo.getNgayCapCCCD(),
-//                    hoSo.getSoDienThoai(),
-//                    hoSo.getSoBHXH(),
-//                    hoSo.getSoBHYT(),
-//                    hoSo.getNoiOHienNay(),
-//                    hoSo.getThanhPhanGiaDinhId(),
-//                    thanhPhanGiaDinhClient.getName(hoSo.getThanhPhanGiaDinhId()),
-//                    resThongTinTuyenDung,
-//                    resQuanSu,
-//                    hoSo.getDoiTuongChinhSachId(),
-//                    doiTuongChinhSachClient.getName(hoSo.getDoiTuongChinhSachId()),
-//                    resHocVan,
-//                    resChucVu,
-//                    hoSo.getChucVuKiemNhiemId(),
-//                    chucVuClient.getName(hoSo.getChucVuKiemNhiemId()),
-//                    hoSo.getChucVuDangHienTaiId(),
-//                    chucVuDangClient.getName(hoSo.getChucVuDangHienTaiId()),
-//                    hoSo.getChucVuDangKiemNhiemId(),
-//                    chucVuDangClient.getName(hoSo.getChucVuDangKiemNhiemId()),
-//                    hoSo.getTienLuong(),
-//                    resNgachNhanVien,
-//                    hoSo.getPhuCapChucVu(),
-//                    hoSo.getPhuCapKiemNhiem(),
-//                    hoSo.getPhuCapKhac(),
-//                    resViecLam,
-//                    resSucKhoe,
-//                    cheDoCus,
-//                    khenThuongs,
-//                    kienThucAnNinhQuocPhongs,
-//                    kyLuats,
-//                    lamViecONuocNgoais,
-//                    luongBanThans,
-//                    lyLuanChinhTris,
-//                    nghiepVuChuyenNganhs,
-//                    ngoaiNgus,
-//                    phuCapKhacs,
-//                    quanHeGiaDinhs,
-//                    quaTrinhCongTacs,
-//                    tinHocs,
-//                    hoSo.getTaiKhoanId(),
-//                    hoSo.getPheDuyet(),
-//                    hoSo.getCreate_at(),
-//                    hoSo.getUpdate_at()
-//            );
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getCause());
-        }
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
+        return mapperHoSo.mapToResHoSo(hoSo);
     }
 
 //    @Override

@@ -1,6 +1,6 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.cap_bac_loai_ham_quan_doi.CapBacLoaiHamQuanDoiClient;
+import com.hrm.hoso.client.cap_bac_loai_ham_quan_doi.CapBacLoaiHamQuanDoiClient;
 import com.hrm.hoso.dto.response.ResQuanSu;
 import com.hrm.hoso.models.NghiaVuQuanSu;
 import lombok.AccessLevel;

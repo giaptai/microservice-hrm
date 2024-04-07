@@ -5,12 +5,10 @@ import java.time.LocalDateTime;
 public record ReqPhuCapKhac(
         LocalDateTime batDau,
         LocalDateTime ketThuc,
-        int loaiPhuCap,
+        int loaiPhuCapId,
         float phanTramHuongPhuCap,
         float heSoPhuCap,
         String hinhThucThuong,
-        double giaTri,
-        String loaiSoYeuLyLichChiTiet,
-        String soYeuLyLich
+        double giaTri
 ) {
 }

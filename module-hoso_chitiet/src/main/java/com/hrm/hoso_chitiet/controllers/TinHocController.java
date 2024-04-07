@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperTinHoc;
 import com.hrm.hoso_chitiet.dto.request.ReqTinHoc;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
+import com.hrm.hoso_chitiet.response.ResDTO;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -32,8 +33,9 @@ public class TinHocController {
 
     @GetMapping("/{id}/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResTinHoc).toList();
+        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+//        return ResDTO.reply(ls, ResEnum.THANH_CONG);
     }
 
     @GetMapping("/tin-hoc")

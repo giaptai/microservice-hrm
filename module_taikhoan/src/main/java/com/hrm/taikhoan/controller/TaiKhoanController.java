@@ -9,7 +9,7 @@ import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 
-import com.hrm.taikhoan.service.tai_khoan.ITaiKhoanService;
+import com.hrm.taikhoan.service.ITaiKhoanService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import jakarta.transaction.Transactional;

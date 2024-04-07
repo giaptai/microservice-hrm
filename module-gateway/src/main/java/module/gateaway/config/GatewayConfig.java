@@ -18,17 +18,10 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("ho-so-id",
-                        pred -> pred.path("/api/v1/ho-so/**",
-                                        "/api/v1/nhan-vien/ho-so/**",
+                        pred -> pred.path("/api/v1/nhan-vien/ho-so/**",
                                         "/api/v1/ca-nhan/ho-so/**")
                                 .filters(f -> f.filter(filter))
                                 .uri("http://localhost:8081")
-                )
-                .route("ho-so-chu-tiet-id",
-                        pred -> pred.path("/api/v1/ho-so/**",
-                                        "/api/v1/**")
-                                .filters(f -> f.filter(filter))
-                                .uri("http://localhost:8083")
                 )
                 .route("dang-nhap-id",
                         pred -> pred.path("/api/v1/dang-nhap")
@@ -69,6 +62,12 @@ public class GatewayConfig {
                                         "/api/v1/ngach-vien-chuc/**"
                                 )
                                 .uri("http://localhost:8080")
+                )
+//this route must be at last because the predicate path is "/api/v1/**" is match all the path above
+                .route("ho-so-chi-tiet-id",
+                        pred -> pred.path("/api/v1/**","/api/v1/ca-nhan/**")
+                                .filters(f -> f.filter(filter))
+                                .uri("http://localhost:8083")
                 )
                 .build();
     }

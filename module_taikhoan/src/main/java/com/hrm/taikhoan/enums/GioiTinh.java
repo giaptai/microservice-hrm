@@ -1,6 +1,5 @@
 package com.hrm.taikhoan.enums;
 
-
 public enum GioiTinh {
     NAM(0, "NAM"),
     NU(1, "NỮ"),

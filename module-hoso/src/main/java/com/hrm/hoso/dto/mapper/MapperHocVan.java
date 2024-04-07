@@ -1,9 +1,9 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.danh_hieu_nha_nuoc.DanhHieuNhaNuocClient;
-import com.hrm.hoso.client.data_chung.hoc_ham.HocHamClient;
-import com.hrm.hoso.client.data_chung.trinh_do_chuyen_mon.TrinhDoChuyenMonClient;
-import com.hrm.hoso.client.data_chung.trinh_do_giao_duc_pho_thong.TrinhDoGiaoDucPhoThongClient;
+import com.hrm.hoso.client.danh_hieu_nha_nuoc.DanhHieuNhaNuocClient;
+import com.hrm.hoso.client.hoc_ham.HocHamClient;
+import com.hrm.hoso.client.trinh_do_chuyen_mon.TrinhDoChuyenMonClient;
+import com.hrm.hoso.client.trinh_do_giao_duc_pho_thong.TrinhDoGiaoDucPhoThongClient;
 import com.hrm.hoso.dto.response.ResHocVan;
 import com.hrm.hoso.models.HocVan;
 import lombok.AccessLevel;

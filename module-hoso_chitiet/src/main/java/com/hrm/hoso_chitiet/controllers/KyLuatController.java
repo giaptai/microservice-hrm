@@ -31,7 +31,7 @@ public class KyLuatController {
     private final MapperKyLuat mapper;
     @GetMapping("/{id}/ky-luat")
     public ResponseEntity<List<ResKyLuat>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResKyLuat> ls = kyLuatService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResKyLuat).toList();
+        List<ResKyLuat> ls = kyLuatService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResKyLuat).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
     @GetMapping("/ky-luat")

@@ -11,7 +11,7 @@ public record ReqKhenThuong(
         LocalDateTime nam,
         XepLoaiChuyenMon xepLoaiChuyenMon,
         XepLoaiThiDua xepLoaiThiDua,
-        int hinhThucKhenThuong,
+        int hinhThucKhenThuongId,
         String lyDo
 ) {
 }

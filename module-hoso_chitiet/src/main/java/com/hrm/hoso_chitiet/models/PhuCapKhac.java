@@ -1,11 +1,11 @@
 package com.hrm.hoso_chitiet.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "phu_cap_khac")
+@Table(name = "phu_cap_khac",indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
 @Getter
 @Setter
 @SuperBuilder
@@ -28,7 +28,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"soYeuLyLich"})
 public class PhuCapKhac extends DateTimeObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

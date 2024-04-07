@@ -32,7 +32,7 @@ public class NghiepVuChuyenNganhController {
 
     @GetMapping("/{id}/nghiep-vu-chuyen-nganh")
     public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

@@ -5,7 +5,6 @@ import jakarta.persistence.Converter;
 
 import java.util.stream.Stream;
 
-
 public enum XepLoaiThiDua {
     XUAT_SAC("Xuất sắc"),
     TOT("Tốt"),

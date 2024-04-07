@@ -1,6 +1,6 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.data_chung.nhom_mau.NhomMauClient;
+import com.hrm.hoso.client.nhom_mau.NhomMauClient;
 import com.hrm.hoso.dto.response.ResSucKhoe;
 import com.hrm.hoso.models.SucKhoe;
 import lombok.AccessLevel;

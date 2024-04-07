@@ -32,7 +32,7 @@ public class NgoaiNguController {
 
     @GetMapping("/{id}/ngoai-ngu")
     public ResponseEntity<List<ResNgoaiNgu>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSo(id).stream().map(mapper::mapToResNgoaiNgu).toList();
+        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResNgoaiNgu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
