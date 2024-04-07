@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.ly_luan_chinh_tri;
 
-import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTri;
-import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.LyLuanChinhTriDTO;
-import com.hrm.taikhoan.dto.client.ly_luan_chinh_tri.ReqLyLuanChinhTri;
+import com.hrm.taikhoan.client.ly_luan_chinh_tri.LyLuanChinhTri;
+import com.hrm.taikhoan.client.ly_luan_chinh_tri.LyLuanChinhTriDTO;
+import com.hrm.taikhoan.client.ly_luan_chinh_tri.ReqLyLuanChinhTri;
 
 import java.util.List;
 import java.util.UUID;

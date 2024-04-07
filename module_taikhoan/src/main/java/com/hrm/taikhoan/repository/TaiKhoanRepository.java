@@ -11,10 +11,7 @@ import java.util.List;
 @Repository
 public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     @Query
-    TaiKhoan findBySoCCCD(String soCCCD);
-
-    @Query
-    TaiKhoan findByUsernameContaining(String username);
+    List<TaiKhoan> findByUsernameContaining(String username);
 
     @Query(value = "SELECT c FROM TaiKhoan c WHERE c.roleTaiKhoan = ?1")
     List<TaiKhoan> findAllByRoleTaiKhoan(RoleTaiKhoan role);

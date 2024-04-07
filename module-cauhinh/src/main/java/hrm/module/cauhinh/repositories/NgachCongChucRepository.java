@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NgachCongChucRepository extends JpaRepository<NgachCongChuc, Integer> {
+public interface NgachCongChucRepository extends JpaRepository<NgachCongChuc, String> {
     @Query
     NgachCongChuc findByName(String name);
 

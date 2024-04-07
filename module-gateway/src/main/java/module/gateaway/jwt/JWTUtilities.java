@@ -27,7 +27,7 @@ public class JWTUtilities {
         this.key = new SecretKeySpec(keyBytes, ALGORITHM);
     }
 
-    public String extractUsername(String token) {
+    private String extractUsername(String token) {
         return extractClaims(token, claims -> claims.getSubject());
     }
 

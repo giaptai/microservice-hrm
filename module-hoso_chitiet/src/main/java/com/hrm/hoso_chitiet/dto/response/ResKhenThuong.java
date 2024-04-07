@@ -8,7 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.enums.XepLoaiChuyenMon;
 import com.hrm.hoso_chitiet.enums.XepLoaiThiDua;
-import com.hrm.hoso_chitiet.models.KhenThuong;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -20,17 +19,16 @@ import java.util.UUID;
 
 public record ResKhenThuong(
         int id,
-        UUID maSyll,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime nam,
         XepLoaiChuyenMon xepLoaiChuyenMon,
-        XepLoaiChuyenMon xepLoaiChuyenMonEnum,
         XepLoaiThiDua xepLoaiThiDua,
-        XepLoaiThiDua xepLoaiThiDuaEnum,
         int hinhThucKhenThuongId,
+        String hinhThucKhenThuongName,
         String lyDo,
         XacNhan xacNhan,
+        UUID hoSoId,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime create_at,

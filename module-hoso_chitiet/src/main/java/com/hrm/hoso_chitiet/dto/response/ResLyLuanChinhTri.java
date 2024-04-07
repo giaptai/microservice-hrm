@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.dto.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hrm.hoso_chitiet.models.LyLuanChinhTri;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -11,12 +10,13 @@ import java.util.UUID;
 
 public record ResLyLuanChinhTri(
         int id,
-        UUID maSyll,
         LocalDateTime batDau,
         LocalDateTime ketThuc,
-        int IdTenCoSoDaoTao,
+        int tenCoSoDaoTaoId,
+        String tenCoSoDaoTaoName,
         String hinhThucDaoTao,
         String vanBangDuocCap,
+        UUID hoSoId,
         LocalDateTime create_at,
         LocalDateTime update_at
 

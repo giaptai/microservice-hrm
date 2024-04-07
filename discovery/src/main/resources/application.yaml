@@ -1,22 +1,11 @@
 spring:
   profiles:
     default: discovery
+    active: discovery
   application:
     name: discovery
   config: #because i have config server, so i want this eureka server read configuration from config server.
     import: optional:configserver:http://localhost:1111
-
-server:
-  port: 8761
-
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    register-with-eureka: false #this eureka doesn't need to register itself so set false
-    fetch-registry: false
-    service-url:
-      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
 
 
 

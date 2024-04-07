@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.luong_ban_than;
 
-import com.hrm.taikhoan.dto.client.luong_ban_than.LuongBanThan;
-import com.hrm.taikhoan.dto.client.luong_ban_than.LuongBanThanDTO;
-import com.hrm.taikhoan.dto.client.luong_ban_than.ReqLuongBanThan;
+import com.hrm.taikhoan.client.luong_ban_than.LuongBanThan;
+import com.hrm.taikhoan.client.luong_ban_than.LuongBanThanDTO;
+import com.hrm.taikhoan.client.luong_ban_than.ReqLuongBanThan;
 
 import java.util.List;
 import java.util.UUID;

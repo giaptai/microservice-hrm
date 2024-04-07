@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.ngoai_ngu;
 
-import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNgu;
-import com.hrm.taikhoan.dto.client.ngoai_ngu.NgoaiNguDTO;
-import com.hrm.taikhoan.dto.client.ngoai_ngu.ReqNgoaiNgu;
+import com.hrm.taikhoan.client.ngoai_ngu.NgoaiNgu;
+import com.hrm.taikhoan.client.ngoai_ngu.NgoaiNguDTO;
+import com.hrm.taikhoan.client.ngoai_ngu.ReqNgoaiNgu;
 
 import java.util.List;
 import java.util.UUID;

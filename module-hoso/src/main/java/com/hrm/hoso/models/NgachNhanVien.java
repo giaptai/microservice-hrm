@@ -31,17 +31,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"soYeuLyLich"})
 public class NgachNhanVien extends DateTimeObject {
     @Id
     @Column(name = "ho_so_id")
     UUID id;
 
-    @Column(name = "ngach_cong_chuc_id", columnDefinition = "INTEGER")
-    int ngachCongChucId;
-
-    @Column(name = "ngach_vien_chuc_id", columnDefinition = "INTEGER")
-    int ngachVienChucId;
+    @Column(name = "ngach_id", columnDefinition = "VARCHAR(12) UNIQUE")
+    String ngachId;
 
     @Column(name = "ngay_bo_nhiem_ngach", columnDefinition = "datetime")
     LocalDateTime ngayBoNhiemNgach;
@@ -63,12 +59,11 @@ public class NgachNhanVien extends DateTimeObject {
     @JoinColumn(foreignKey = @ForeignKey(name = "ho_so_ngach"), name = "ho_so_id", referencedColumnName = "id", columnDefinition = "binary(16)")
     HoSo hoSoId;
 
-    public NgachNhanVien(int ngachCongChucId, int ngachVienChucId, LocalDateTime ngayBoNhiemNgach,
-                         LocalDateTime ngayHuongLuongNgach, float phanTramHuongLuongNgach, double phuCapThamNienVuotKhungNgach,
+    public NgachNhanVien(String ngachId, LocalDateTime ngayBoNhiemNgach, LocalDateTime ngayHuongLuongNgach,
+                         float phanTramHuongLuongNgach, double phuCapThamNienVuotKhungNgach,
                          LocalDateTime ngayHuongPCTNVKNgach, HoSo hoSoId) {
         super();
-        this.ngachCongChucId = ngachCongChucId;
-        this.ngachVienChucId = ngachVienChucId;
+        this.ngachId = ngachId;
         this.ngayBoNhiemNgach = ngayBoNhiemNgach;
         this.ngayHuongLuongNgach = ngayHuongLuongNgach;
         this.phanTramHuongLuongNgach = phanTramHuongLuongNgach;

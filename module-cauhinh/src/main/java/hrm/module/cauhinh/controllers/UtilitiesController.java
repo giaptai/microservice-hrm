@@ -1,14 +1,25 @@
 package hrm.module.cauhinh.controllers;
 
-import hrm.module.cauhinh.PhanTrang;
+import hrm.module.cauhinh.dto.mapper.MapperHeSoLuongCongChuc;
+import hrm.module.cauhinh.dto.mapper.MapperHeSoLuongVienChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNgachCongChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNgachVienChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNhomCongChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNhomVienChuc;
+import hrm.module.cauhinh.dto.mapper.MapperViTriViecLam;
 import hrm.module.cauhinh.dto.request.ReqHeSoLuong;
 import hrm.module.cauhinh.dto.request.ReqLoai;
 import hrm.module.cauhinh.dto.request.ReqNgach;
 import hrm.module.cauhinh.dto.request.ReqNhom;
 import hrm.module.cauhinh.dto.request.ReqUtilities;
-import hrm.module.cauhinh.dto.response.ResCapBacLoaiHamQuanDoi;
-import hrm.module.cauhinh.dto.response.ResChucDanhDang;
 
+import hrm.module.cauhinh.dto.response.ResHeSoLuongCongChuc;
+import hrm.module.cauhinh.dto.response.ResHeSoLuongVienChuc;
+import hrm.module.cauhinh.dto.response.ResNgachCongChuc;
+import hrm.module.cauhinh.dto.response.ResNgachVienChuc;
+import hrm.module.cauhinh.dto.response.ResNhomCongChuc;
+import hrm.module.cauhinh.dto.response.ResNhomVienChuc;
+import hrm.module.cauhinh.dto.response.ResViTriViecLam;
 import hrm.module.cauhinh.models.BacLuong;
 import hrm.module.cauhinh.models.CapBacLoaiQuanHamQuanDoi;
 import hrm.module.cauhinh.models.ChucDanhDang;
@@ -17,26 +28,19 @@ import hrm.module.cauhinh.models.CoQuanToChucDonVi;
 import hrm.module.cauhinh.models.DanToc;
 import hrm.module.cauhinh.models.DanhHieuNhaNuoc;
 import hrm.module.cauhinh.models.DoiTuongChinhSach;
-import hrm.module.cauhinh.models.HeSoLuongCongChuc;
-import hrm.module.cauhinh.models.HeSoLuongVienChuc;
 import hrm.module.cauhinh.models.HinhThucKhenThuong;
 import hrm.module.cauhinh.models.HocHam;
 import hrm.module.cauhinh.models.LoaiCongChuc;
 import hrm.module.cauhinh.models.LoaiPhuCap;
 import hrm.module.cauhinh.models.LoaiVienChuc;
 import hrm.module.cauhinh.models.MoiQuanHe;
-import hrm.module.cauhinh.models.NgachCongChuc;
-import hrm.module.cauhinh.models.NgachVienChuc;
-import hrm.module.cauhinh.models.NhomCongChuc;
 import hrm.module.cauhinh.models.NhomMau;
-import hrm.module.cauhinh.models.NhomVienChuc;
 import hrm.module.cauhinh.models.ThanhPhanGiaDinh;
 import hrm.module.cauhinh.models.TonGiao;
 import hrm.module.cauhinh.models.TrinhDoChuyenMon;
 import hrm.module.cauhinh.models.TrinhDoGiaoDucPhoThong;
 import hrm.module.cauhinh.models.ViTriViecLam;
 
-import hrm.module.cauhinh.response.ResDTO;
 import hrm.module.cauhinh.response.ResEnum;
 
 import hrm.module.cauhinh.services.ILoaiNhomHeSoNgachService;
@@ -54,15 +58,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -95,39 +94,47 @@ public class UtilitiesController {
     final ILoaiNhomHeSoNgachService.IHeSoLuongVienChucService heSoLuongVienChucService;
     final ILoaiNhomHeSoNgachService.INgachCongChucService ngachCongChucService;
     final ILoaiNhomHeSoNgachService.INgachVienChucService ngachVienChucService;
+    //MAPPER
+    final MapperHeSoLuongCongChuc mapperHeSoLuongCongChuc;
+    final MapperHeSoLuongVienChuc mapperHeSoLuongVienChuc;
+    final MapperNhomCongChuc mapperNhomCongChuc;
+    final MapperNhomVienChuc mapperNhomVienChuc;
+    final MapperNgachCongChuc mapperNgachCongChuc;
+    final MapperNgachVienChuc mapperNgachVienChuc;
+    final MapperViTriViecLam mapperViTriViecLam;
 
     @RestController
     @Tag(name = "Bậc lương ", description = "Cấu hình")
     class BacLuongController {
         @GetMapping("/bac-luong")
-        public ResponseEntity<ResDTO<List<BacLuong>>> getAll(
-                @RequestHeader("username-gateway") String username,
-                @RequestHeader(name = "role") String username1
-        ) {
-            Object s = username;
-            Object ss = username1;
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, bacLuongService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<BacLuong>> getAll() {
+            return new ResponseEntity<>(bacLuongService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/bac-luong/{id}")
-        public ResponseEntity<ResDTO<BacLuong>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, bacLuongService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<BacLuong> getById(@PathVariable int id) {
+            return new ResponseEntity<>(bacLuongService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/bac-luong-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(bacLuongService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/bac-luong")
-        public ResponseEntity<ResDTO<BacLuong>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, bacLuongService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<BacLuong> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(bacLuongService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         // khong co requestbody van ok, van hieu do la request body
         @PatchMapping("/bac-luong/{id}")
-        public ResponseEntity<ResDTO<BacLuong>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, bacLuongService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<BacLuong> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(bacLuongService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/bac-luong/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, bacLuongService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(bacLuongService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -135,98 +142,67 @@ public class UtilitiesController {
     @Tag(name = "Loại quân hàm quân đội ", description = "Cấu hình")
     class CapBacLoaiQuanHamQuanDoiController {
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi")
-        public ResponseEntity<ResDTO<List<ResCapBacLoaiHamQuanDoi>>> getAll() {
-            List<ResCapBacLoaiHamQuanDoi> resCapBacLoaiHamQuanDois = capBacLoaiQuanHamQuanDoiService.xemDS().stream().map(ResCapBacLoaiHamQuanDoi::mapToResCapBacLoaiHamQuanDoi).toList();
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, resCapBacLoaiHamQuanDois), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<CapBacLoaiQuanHamQuanDoi>> getAll() {
+            return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
-        public ResponseEntity<ResDTO<ResCapBacLoaiHamQuanDoi>> getById(@PathVariable int id) {
-            ResCapBacLoaiHamQuanDoi resCapBacLoaiHamQuanDoi = ResCapBacLoaiHamQuanDoi.mapToResCapBacLoaiHamQuanDoi(capBacLoaiQuanHamQuanDoiService.xemTheoId(id).orElse(null));
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, resCapBacLoaiHamQuanDoi), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> getById(@PathVariable int id) {
+            return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/cap-bac-loai-quan-ham-quan-doi-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/cap-bac-loai-quan-ham-quan-doi")
-        public ResponseEntity<ResDTO<ResCapBacLoaiHamQuanDoi>> add(@RequestBody ReqUtilities utilities) {
-            ResCapBacLoaiHamQuanDoi resCapBacLoaiHamQuanDoi = ResCapBacLoaiHamQuanDoi.mapToResCapBacLoaiHamQuanDoi(capBacLoaiQuanHamQuanDoiService.them(utilities));
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, resCapBacLoaiHamQuanDoi), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
-        public ResponseEntity<ResDTO<ResCapBacLoaiHamQuanDoi>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            ResCapBacLoaiHamQuanDoi resCapBacLoaiHamQuanDoi = ResCapBacLoaiHamQuanDoi.mapToResCapBacLoaiHamQuanDoi(capBacLoaiQuanHamQuanDoiService.sua(id, luong));
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, resCapBacLoaiHamQuanDoi), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, capBacLoaiQuanHamQuanDoiService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
-
-//    @RestController
-//    class CapNhomChucDanhDangController {
-//        @GetMapping("/cap-nhom-chuc-danh-dang")
-//        public ResponseEntity<ResDTO<List<ResCapNhomChucDanhDang>>> getAll() {
-//            List<ResCapNhomChucDanhDang> resCapNhomChucDanhDangs = capNhomChucDanhDangService.xemDS().stream().map(ResCapNhomChucDanhDang::mapToResCapNhomChucDanhDang).toList();
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, resCapNhomChucDanhDangs), HttpStatus.OK);
-//        }
-//
-//        @GetMapping("/cap-nhom-chuc-danh-dang/{id}")
-//        public ResponseEntity<ResDTO<ResCapNhomChucDanhDang>> getById(@PathVariable int id) {
-//            ResCapNhomChucDanhDang resCapNhomChucDanhDang = ResCapNhomChucDanhDang.mapToResCapNhomChucDanhDang(capNhomChucDanhDangService.xemTheoId(id).orElse(null));
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, resCapNhomChucDanhDang), HttpStatus.OK);
-//        }
-//
-//        @PostMapping("/cap-nhom-chuc-danh-dang")
-//        public ResponseEntity<ResDTO<ResCapNhomChucDanhDang>> add(@RequestBody ReqUtilities utilities) {
-//            ResCapNhomChucDanhDang resCapNhomChucDanhDang = ResCapNhomChucDanhDang.mapToResCapNhomChucDanhDang(capNhomChucDanhDangService.them(utilities));
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, resCapNhomChucDanhDang), HttpStatus.OK);
-//        }
-//
-//        // khong co requestbody van ok, van hieu do la request body
-//        @PatchMapping("/cap-nhom-chuc-danh-dang/{id}")
-//        public ResponseEntity<ResDTO<ResCapNhomChucDanhDang>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-//            ResCapNhomChucDanhDang resCapNhomChucDanhDang = ResCapNhomChucDanhDang.mapToResCapNhomChucDanhDang(capNhomChucDanhDangService.sua(id, luong));
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, resCapNhomChucDanhDang), HttpStatus.OK);
-//        }
-//
-//        @DeleteMapping("/cap-nhom-chuc-danh-dang/{id}")
-//        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, capNhomChucDanhDangService.xoa(id)), HttpStatus.OK);
-//        }
-//    }
 
     @RestController
     @Tag(name = "Chức danh đảng ", description = "Cấu hình")
     class ChucDanhDangController {
         @GetMapping("/chuc-danh-dang")
-        public ResponseEntity<ResDTO<List<ResChucDanhDang>>> getAll() {
-            List<ResChucDanhDang> resChucDanhDangs = chucDanhDangService.xemDS().stream().map(ResChucDanhDang::mapToResChucDanhDang).toList();
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, resChucDanhDangs), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ChucDanhDang>> getAll() {
+            return new ResponseEntity<>(chucDanhDangService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/chuc-danh-dang/{id}")
-        public ResponseEntity<ResDTO<ResChucDanhDang>> getById(@PathVariable int id) {
-            ResChucDanhDang resChucDanhDang = ResChucDanhDang.mapToResChucDanhDang(chucDanhDangService.xemTheoId(id).orElse(null));
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, resChucDanhDang), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ChucDanhDang> getById(@PathVariable int id) {
+            return new ResponseEntity<>(chucDanhDangService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/chuc-danh-dang-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(chucDanhDangService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/chuc-danh-dang")
-        public ResponseEntity<ResDTO<ResChucDanhDang>> add(@RequestBody ReqUtilities utilities) {
-            ResChucDanhDang resChucDanhDang = ResChucDanhDang.mapToResChucDanhDang(chucDanhDangService.them(utilities));
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, resChucDanhDang), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ChucDanhDang> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(chucDanhDangService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/chuc-danh-dang/{id}")
-        public ResponseEntity<ResDTO<ResChucDanhDang>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            ResChucDanhDang resChucDanhDang = ResChucDanhDang.mapToResChucDanhDang(chucDanhDangService.sua(id, luong));
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, resChucDanhDang), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ChucDanhDang> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(chucDanhDangService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/chuc-danh-dang/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, chucDanhDangService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(chucDanhDangService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -234,28 +210,33 @@ public class UtilitiesController {
     @Tag(name = "Chức vụ ", description = "Cấu hình")
     class ChucVuController {
         @GetMapping("/chuc-vu")
-        public ResponseEntity<ResDTO<List<ChucVu>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, chucVuService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ChucVu>> getAll() {
+            return new ResponseEntity<>(chucVuService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/chuc-vu/{id}")
-        public ResponseEntity<ResDTO<ChucVu>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, chucVuService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ChucVu> getById(@PathVariable int id) {
+            return new ResponseEntity<>(chucVuService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/chuc-vu-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(chucVuService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/chuc-vu")
-        public ResponseEntity<ResDTO<ChucVu>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, chucVuService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ChucVu> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(chucVuService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/chuc-vu/{id}")
-        public ResponseEntity<ResDTO<ChucVu>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, chucVuService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ChucVu> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(chucVuService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/chuc-vu/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, chucVuService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(chucVuService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -263,147 +244,104 @@ public class UtilitiesController {
     @Tag(name = "Cơ quản tổ chức đơn vị ", description = "Cấu hình")
     class CoQuanToChucDonViController {
         @GetMapping("/coquan-tochuc-donvi")
-        public ResponseEntity<ResDTO<List<CoQuanToChucDonVi>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, coQuanToChucDonViService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<CoQuanToChucDonVi>> getAll() {
+            return new ResponseEntity<>(coQuanToChucDonViService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/coquan-tochuc-donvi/{id}")
-        public ResponseEntity<ResDTO<CoQuanToChucDonVi>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, coQuanToChucDonViService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<CoQuanToChucDonVi> getById(@PathVariable int id) {
+            return new ResponseEntity<>(coQuanToChucDonViService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/coquan-tochuc-donvi-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(coQuanToChucDonViService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/coquan-tochuc-donvi")
-        public ResponseEntity<ResDTO<CoQuanToChucDonVi>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, coQuanToChucDonViService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<CoQuanToChucDonVi> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(coQuanToChucDonViService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/coquan-tochuc-donvi/{id}")
-        public ResponseEntity<ResDTO<CoQuanToChucDonVi>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, coQuanToChucDonViService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<CoQuanToChucDonVi> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(coQuanToChucDonViService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/coquan-tochuc-donvi/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, coQuanToChucDonViService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(coQuanToChucDonViService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
-
-//    @RestController
-//    class BoCoQuanController {
-//        @GetMapping("/bo-coquan")
-//        public ResponseEntity<ResDTO<List<BoCoQuan>>> getAll() {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, boCoQuanService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
-//        }
-//
-//        @GetMapping("/bo-coquan/{id}")
-//        public ResponseEntity<ResDTO<BoCoQuan>> getById(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, boCoQuanService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
-//        }
-//
-//        @PostMapping("/bo-coquan")
-//        public ResponseEntity<ResDTO<BoCoQuan>> add(@RequestBody ReqUtilities utilities) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, boCoQuanService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
-//        }
-//
-//        @PatchMapping("/bo-coquan/{id}")
-//        public ResponseEntity<ResDTO<BoCoQuan>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, boCoQuanService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
-//        }
-//
-//        @DeleteMapping("/bo-coquan/{id}")
-//        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, boCoQuanService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
-//        }
-//    }
-
-//    @RestController
-//    class DonViController {
-//        @GetMapping("/don-vi")
-//        public ResponseEntity<ResDTO<List<DonVi>>> getAll() {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, donViService.xemDS()), HttpStatus.OK);
-//        }
-//
-//        @GetMapping("/don-vi/{id}")
-//        public ResponseEntity<ResDTO<DonVi>> getById(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, donViService.xemTheoId(id).orElse(null)), HttpStatus.OK);
-//        }
-//
-//        @PostMapping("/don-vi")
-//        public ResponseEntity<ResDTO<DonVi>> add(@RequestBody ReqUtilities utilities) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, donViService.them(utilities)), HttpStatus.OK);
-//        }
-//
-//        @PatchMapping("/don-vi/{id}")
-//        public ResponseEntity<ResDTO<DonVi>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, donViService.sua(id, luong)), HttpStatus.OK);
-//        }
-//
-//        @DeleteMapping("/don-vi/{id}")
-//        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, donViService.xoa(id)), HttpStatus.OK);
-//        }
-//    }
 
     @RestController
     @Tag(name = "Danh hiệu nhà nước ", description = "Cấu hình")
     class DanhHieuNhaNuocPhongTangController {
         @GetMapping("/danh-hieu-nha-nuoc-phong")
-        public ResponseEntity<ResDTO<List<DanhHieuNhaNuoc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, danhHieuNhaNuocPhongTangService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<DanhHieuNhaNuoc>> getAll() {
+            return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/danh-hieu-nha-nuoc-phong/{id}")
-        public ResponseEntity<ResDTO<DanhHieuNhaNuoc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, danhHieuNhaNuocPhongTangService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<DanhHieuNhaNuoc> getById(@PathVariable int id) {
+            return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/danh-hieu-nha-nuoc-phong-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/danh-hieu-nha-nuoc-phong")
-        public ResponseEntity<ResDTO<DanhHieuNhaNuoc>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(
-                    ResDTO.response(ResEnum.TAO_THANH_CONG, danhHieuNhaNuocPhongTangService.them(utilities)),
-                    ResEnum.TAO_THANH_CONG.getStatusCode()
+        public ResponseEntity<DanhHieuNhaNuoc> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode()
             );
         }
 
         @PatchMapping("/danh-hieu-nha-nuoc-phong/{id}")
-        public ResponseEntity<ResDTO<DanhHieuNhaNuoc>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, danhHieuNhaNuocPhongTangService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<DanhHieuNhaNuoc> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/danh-hieu-nha-nuoc-phong/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, danhHieuNhaNuocPhongTangService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
     @RestController
     @Tag(name = "Dân tộc ", description = "Cấu hình")
     class DanTocController {
-        private PhanTrang<DanToc> phanTrang = new PhanTrang<>();
+//        private PhanTrang<DanToc> phanTrang = new PhanTrang<>();
 
         @GetMapping("/dan-toc")
-        public ResponseEntity<ResDTO<List<DanToc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, danTocService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<DanToc>> getAll() {
+            return new ResponseEntity<>(danTocService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/dan-toc/{id}")
-        public ResponseEntity<ResDTO<DanToc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, danTocService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<DanToc> getById(@PathVariable int id) {
+            return new ResponseEntity<>(danTocService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/dan-toc-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(danTocService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/dan-toc")
-        public ResponseEntity<ResDTO<DanToc>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, danTocService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<DanToc> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(danTocService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/dan-toc/{id}")
-        public ResponseEntity<ResDTO<DanToc>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, danTocService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<DanToc> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(danTocService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/dan-toc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, danTocService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(danTocService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -411,58 +349,67 @@ public class UtilitiesController {
     @Tag(name = "Đối tượng chính sách ", description = "Cấu hình")
     class DoiTuongChinhSachController {
         @GetMapping("/doi-tuong-chinh-sach")
-        public ResponseEntity<ResDTO<List<DoiTuongChinhSach>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, doiTuongChinhSachService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<DoiTuongChinhSach>> getAll() {
+            return new ResponseEntity<>(doiTuongChinhSachService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/doi-tuong-chinh-sach/{id}")
-        public ResponseEntity<ResDTO<DoiTuongChinhSach>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, doiTuongChinhSachService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<DoiTuongChinhSach> getById(@PathVariable int id) {
+            return new ResponseEntity<>(doiTuongChinhSachService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/doi-tuong-chinh-sach-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(doiTuongChinhSachService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/doi-tuong-chinh-sach")
-        public ResponseEntity<ResDTO<DoiTuongChinhSach>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, doiTuongChinhSachService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<DoiTuongChinhSach> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(doiTuongChinhSachService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/doi-tuong-chinh-sach/{id}")
-        public ResponseEntity<ResDTO<DoiTuongChinhSach>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, doiTuongChinhSachService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<DoiTuongChinhSach> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(doiTuongChinhSachService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/doi-tuong-chinh-sach/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, doiTuongChinhSachService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(doiTuongChinhSachService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
-    //
     @RestController
     @Tag(name = "Hình thức khen thưởng ", description = "Cấu hình")
     class HinhThucKhenThuongController {
         @GetMapping("/hinh-thuc-khen-thuong")
-        public ResponseEntity<ResDTO<List<HinhThucKhenThuong>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, hinhThucKhenThuongService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<HinhThucKhenThuong>> getAll() {
+            return new ResponseEntity<>(hinhThucKhenThuongService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/hinh-thuc-khen-thuong/{id}")
-        public ResponseEntity<ResDTO<HinhThucKhenThuong>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, hinhThucKhenThuongService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<HinhThucKhenThuong> getById(@PathVariable int id) {
+            return new ResponseEntity<>(hinhThucKhenThuongService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/hinh-thuc-khen-thuong-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(hinhThucKhenThuongService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/hinh-thuc-khen-thuong")
-        public ResponseEntity<ResDTO<HinhThucKhenThuong>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, hinhThucKhenThuongService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<HinhThucKhenThuong> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(hinhThucKhenThuongService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/hinh-thuc-khen-thuong/{id}")
-        public ResponseEntity<ResDTO<HinhThucKhenThuong>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, hinhThucKhenThuongService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<HinhThucKhenThuong> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(hinhThucKhenThuongService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/hinh-thuc-khen-thuong/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, hinhThucKhenThuongService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(hinhThucKhenThuongService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -470,28 +417,33 @@ public class UtilitiesController {
     @Tag(name = "Học hàm ", description = "Cấu hình")
     class HocHamController {
         @GetMapping("/hoc-ham")
-        public ResponseEntity<ResDTO<List<HocHam>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, hocHamService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<HocHam>> getAll() {
+            return new ResponseEntity<>(hocHamService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/hoc-ham/{id}")
-        public ResponseEntity<ResDTO<HocHam>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, hocHamService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<HocHam> getById(@PathVariable int id) {
+            return new ResponseEntity<>(hocHamService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/hoc-ham-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(hocHamService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/hoc-ham")
-        public ResponseEntity<ResDTO<HocHam>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, hocHamService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<HocHam> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(hocHamService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/hoc-ham/{id}")
-        public ResponseEntity<ResDTO<HocHam>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, hocHamService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<HocHam> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(hocHamService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/hoc-ham/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, hocHamService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(hocHamService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -499,142 +451,101 @@ public class UtilitiesController {
     @Tag(name = "Loại phụ cấp ", description = "Cấu hình")
     class LoaiPhuCapController {
         @GetMapping("/loai-phu-cap")
-        public ResponseEntity<ResDTO<List<LoaiPhuCap>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, loaiPhuCapService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<LoaiPhuCap>> getAll() {
+            return new ResponseEntity<>(loaiPhuCapService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/loai-phu-cap/{id}")
-        public ResponseEntity<ResDTO<LoaiPhuCap>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, loaiPhuCapService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiPhuCap> getById(@PathVariable int id) {
+            return new ResponseEntity<>(loaiPhuCapService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/loai-phu-cap-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(loaiPhuCapService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/loai-phu-cap")
-        public ResponseEntity<ResDTO<LoaiPhuCap>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, loaiPhuCapService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiPhuCap> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(loaiPhuCapService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/loai-phu-cap/{id}")
-        public ResponseEntity<ResDTO<LoaiPhuCap>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, loaiPhuCapService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiPhuCap> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(loaiPhuCapService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/loai-phu-cap/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, loaiPhuCapService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(loaiPhuCapService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
-
-//    @RestController
-//    class LoaiQuanHamQuanDoiController {
-//        @GetMapping("/loai-quan-ham-quan-doi")
-//        public ResponseEntity<ResDTO<List<LoaiQuanHamQuanDoi>>> getAll() {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, loaiQuanHamQuanDoiService.xemDS()), HttpStatus.OK);
-//        }
-//
-//        @GetMapping("/loai-quan-ham-quan-doi/{id}")
-//        public ResponseEntity<ResDTO<LoaiQuanHamQuanDoi>> getById(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, loaiQuanHamQuanDoiService.xemTheoId(id).orElse(null)), HttpStatus.OK);
-//        }
-//
-//        @PostMapping("/loai-quan-ham-quan-doi")
-//        public ResponseEntity<ResDTO<LoaiQuanHamQuanDoi>> add(@RequestBody ReqUtilities utilities) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, loaiQuanHamQuanDoiService.them(utilities)), HttpStatus.OK);
-//        }
-//
-//        @PatchMapping("/loai-quan-ham-quan-doi/{id}")
-//        public ResponseEntity<ResDTO<LoaiQuanHamQuanDoi>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, loaiQuanHamQuanDoiService.sua(id, luong)), HttpStatus.OK);
-//        }
-//
-//        @DeleteMapping("/loai-quan-ham-quan-doi/{id}")
-//        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, loaiQuanHamQuanDoiService.xoa(id)), HttpStatus.OK);
-//        }
-//    }
 
     @RestController
     @Tag(name = "Mối quan hệ ", description = "Cấu hình")
     class MoiQuanHeController {
         @GetMapping("/moi-quan-he")
-        public ResponseEntity<ResDTO<List<MoiQuanHe>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, moiQuanHeService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<MoiQuanHe>> getAll() {
+            return new ResponseEntity<>(moiQuanHeService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/moi-quan-he/{id}")
-        public ResponseEntity<ResDTO<MoiQuanHe>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, moiQuanHeService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<MoiQuanHe> getById(@PathVariable int id) {
+            return new ResponseEntity<>(moiQuanHeService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/moi-quan-he-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(moiQuanHeService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/moi-quan-he")
-        public ResponseEntity<ResDTO<MoiQuanHe>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, moiQuanHeService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<MoiQuanHe> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(moiQuanHeService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/moi-quan-he/{id}")
-        public ResponseEntity<ResDTO<MoiQuanHe>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, moiQuanHeService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<MoiQuanHe> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(moiQuanHeService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/moi-quan-he/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, moiQuanHeService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(moiQuanHeService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
-
-//    @RestController
-//    class NhomChucDanhDangController {
-//        @GetMapping("/nhom-chuc-danh-dang")
-//        public ResponseEntity<ResDTO<List<NhomChucDanhDang>>> getAll() {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomChucDanhDangService.xemDS()), HttpStatus.OK);
-//        }
-//
-//        @GetMapping("/nhom-chuc-danh-dang/{id}")
-//        public ResponseEntity<ResDTO<NhomChucDanhDang>> getById(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomChucDanhDangService.xemTheoId(id).orElse(null)), HttpStatus.OK);
-//        }
-//
-//        @PostMapping("/nhom-chuc-danh-dang")
-//        public ResponseEntity<ResDTO<NhomChucDanhDang>> add(@RequestBody ReqUtilities utilities) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, nhomChucDanhDangService.them(utilities)), HttpStatus.OK);
-//        }
-//
-//        @PatchMapping("/nhom-chuc-danh-dang/{id}")
-//        public ResponseEntity<ResDTO<NhomChucDanhDang>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, nhomChucDanhDangService.sua(id, luong)), HttpStatus.OK);
-//        }
-//
-//        @DeleteMapping("/nhom-chuc-danh-dang/{id}")
-//        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-//            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, nhomChucDanhDangService.xoa(id)), HttpStatus.OK);
-//        }
-//    }
 
     @RestController
     @Tag(name = "Nhóm máu ", description = "Cấu hình")
     class NhomMauController {
         @GetMapping("/nhom-mau")
-        public ResponseEntity<ResDTO<List<NhomMau>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomMauService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<NhomMau>> getAll() {
+            return new ResponseEntity<>(nhomMauService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/nhom-mau/{id}")
-        public ResponseEntity<ResDTO<NhomMau>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomMauService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<NhomMau> getById(@PathVariable int id) {
+            return new ResponseEntity<>(nhomMauService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/nhom-mau-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(nhomMauService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/nhom-mau")
-        public ResponseEntity<ResDTO<NhomMau>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, nhomMauService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<NhomMau> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(nhomMauService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/nhom-mau/{id}")
-        public ResponseEntity<ResDTO<NhomMau>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, nhomMauService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<NhomMau> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(nhomMauService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/nhom-mau/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, nhomMauService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(nhomMauService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -642,28 +553,33 @@ public class UtilitiesController {
     @Tag(name = "Thành phần gia đình ", description = "Cấu hình")
     class ThanhPhanGiaDinhController {
         @GetMapping("/thanh-phan-gia-dinh")
-        public ResponseEntity<ResDTO<List<ThanhPhanGiaDinh>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, thanhPhanGiaDinhService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ThanhPhanGiaDinh>> getAll() {
+            return new ResponseEntity<>(thanhPhanGiaDinhService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/thanh-phan-gia-dinh/{id}")
-        public ResponseEntity<ResDTO<ThanhPhanGiaDinh>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, thanhPhanGiaDinhService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ThanhPhanGiaDinh> getById(@PathVariable int id) {
+            return new ResponseEntity<>(thanhPhanGiaDinhService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/thanh-phan-gia-dinh-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(thanhPhanGiaDinhService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/thanh-phan-gia-dinh")
-        public ResponseEntity<ResDTO<ThanhPhanGiaDinh>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, thanhPhanGiaDinhService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ThanhPhanGiaDinh> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(thanhPhanGiaDinhService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/thanh-phan-gia-dinh/{id}")
-        public ResponseEntity<ResDTO<ThanhPhanGiaDinh>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, thanhPhanGiaDinhService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ThanhPhanGiaDinh> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(thanhPhanGiaDinhService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/thanh-phan-gia-dinh/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, thanhPhanGiaDinhService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(thanhPhanGiaDinhService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -671,28 +587,33 @@ public class UtilitiesController {
     @Tag(name = "Tôn giáo ", description = "Cấu hình")
     class TonGiaoController {
         @GetMapping("/ton-giao")
-        public ResponseEntity<ResDTO<List<TonGiao>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, tonGiaoService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<TonGiao>> getAll() {
+            return new ResponseEntity<>(tonGiaoService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/ton-giao/{id}")
-        public ResponseEntity<ResDTO<TonGiao>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, tonGiaoService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<TonGiao> getById(@PathVariable int id) {
+            return new ResponseEntity<>(tonGiaoService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/ton-giao-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(tonGiaoService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/ton-giao")
-        public ResponseEntity<ResDTO<TonGiao>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, tonGiaoService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<TonGiao> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(tonGiaoService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/ton-giao/{id}")
-        public ResponseEntity<ResDTO<TonGiao>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, tonGiaoService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<TonGiao> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(tonGiaoService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/ton-giao/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, tonGiaoService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(tonGiaoService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -700,28 +621,33 @@ public class UtilitiesController {
     @Tag(name = "Trình độ chuyên môn ", description = "Cấu hình")
     class TrinhDoChuyenMonController {
         @GetMapping("/trinh-do-chuyen-mon")
-        public ResponseEntity<ResDTO<List<TrinhDoChuyenMon>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, trinhDoChuyenMonService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<TrinhDoChuyenMon>> getAll() {
+            return new ResponseEntity<>(trinhDoChuyenMonService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/trinh-do-chuyen-mon/{id}")
-        public ResponseEntity<ResDTO<TrinhDoChuyenMon>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, trinhDoChuyenMonService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<TrinhDoChuyenMon> getById(@PathVariable int id) {
+            return new ResponseEntity<>(trinhDoChuyenMonService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/trinh-do-chuyen-mon-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(trinhDoChuyenMonService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/trinh-do-chuyen-mon")
-        public ResponseEntity<ResDTO<TrinhDoChuyenMon>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, trinhDoChuyenMonService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<TrinhDoChuyenMon> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(trinhDoChuyenMonService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/trinh-do-chuyen-mon/{id}")
-        public ResponseEntity<ResDTO<TrinhDoChuyenMon>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, trinhDoChuyenMonService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<TrinhDoChuyenMon> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(trinhDoChuyenMonService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/trinh-do-chuyen-mon/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, trinhDoChuyenMonService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(trinhDoChuyenMonService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -729,28 +655,33 @@ public class UtilitiesController {
     @Tag(name = "Trình độ giáo dục phổ thông ", description = "Cấu hình")
     class TrinhDoGiaoDucPhoThongController {
         @GetMapping("/trinh-do-giao-duc-pho-thong")
-        public ResponseEntity<ResDTO<List<TrinhDoGiaoDucPhoThong>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, trinhDoGiaoDucPhoThongService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<TrinhDoGiaoDucPhoThong>> getAll() {
+            return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xemDS(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/trinh-do-giao-duc-pho-thong/{id}")
-        public ResponseEntity<ResDTO<TrinhDoGiaoDucPhoThong>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, trinhDoGiaoDucPhoThongService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<TrinhDoGiaoDucPhoThong> getById(@PathVariable int id) {
+            return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xemTheoId(id).orElse(null), ResEnum.THANH_CONG.getStatusCode());
+        }
+
+        @GetMapping("/trinh-do-giao-duc-pho-thong-name/{id}")
+        public ResponseEntity<String> getName(@PathVariable int id) {
+            return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/trinh-do-giao-duc-pho-thong")
-        public ResponseEntity<ResDTO<TrinhDoGiaoDucPhoThong>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, trinhDoGiaoDucPhoThongService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<TrinhDoGiaoDucPhoThong> add(@RequestBody ReqUtilities utilities) {
+            return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.them(utilities), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/trinh-do-giao-duc-pho-thong/{id}")
-        public ResponseEntity<ResDTO<TrinhDoGiaoDucPhoThong>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, trinhDoGiaoDucPhoThongService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<TrinhDoGiaoDucPhoThong> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+            return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/trinh-do-giao-duc-pho-thong/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, trinhDoGiaoDucPhoThongService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -758,28 +689,32 @@ public class UtilitiesController {
     @Tag(name = "Vị trí việc làm ", description = "Cấu hình")
     class ViTriViecLamController {
         @GetMapping("/vi-tri-viec-lam")
-        public ResponseEntity<ResDTO<List<ViTriViecLam>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, viTriViecLamService.xemDS()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResViTriViecLam>> getAll() {
+            List<ResViTriViecLam> resViTriViecLams = viTriViecLamService.xemDS().stream().map(mapperViTriViecLam::mapToResViTriViecLam).toList();
+            return new ResponseEntity<>(resViTriViecLams, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/vi-tri-viec-lam/{id}")
-        public ResponseEntity<ResDTO<ViTriViecLam>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, viTriViecLamService.xemTheoId(id).orElse(null)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResViTriViecLam> getById(@PathVariable int id) {
+            ResViTriViecLam resViTriViecLam = mapperViTriViecLam.mapToResViTriViecLam(viTriViecLamService.xemTheoId(id).orElse(null));
+            return new ResponseEntity<>(resViTriViecLam, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/vi-tri-viec-lam")
-        public ResponseEntity<ResDTO<ViTriViecLam>> add(@RequestBody ReqUtilities utilities) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, viTriViecLamService.them(utilities)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResViTriViecLam> add(@RequestBody ReqUtilities utilities) {
+            ResViTriViecLam resViTriViecLam = mapperViTriViecLam.mapToResViTriViecLam(viTriViecLamService.them(utilities));
+            return new ResponseEntity<>(resViTriViecLam, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/vi-tri-viec-lam/{id}")
-        public ResponseEntity<ResDTO<ViTriViecLam>> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, viTriViecLamService.sua(id, luong)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResViTriViecLam> edit(@PathVariable int id, @RequestBody ReqUtilities req) {
+            ResViTriViecLam resViTriViecLam = mapperViTriViecLam.mapToResViTriViecLam(viTriViecLamService.sua(id, req));
+            return new ResponseEntity<>(resViTriViecLam, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/vi-tri-viec-lam/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, viTriViecLamService.xoa(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(viTriViecLamService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -787,28 +722,28 @@ public class UtilitiesController {
     @Tag(name = "Loại công chức ", description = "Cấu hình")
     class LoaiCongChucController {
         @GetMapping("/loai-cong-chuc")
-        public ResponseEntity<ResDTO<List<LoaiCongChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, congChucService.xemLoaiCongChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<LoaiCongChuc>> getAll() {
+            return new ResponseEntity<>(congChucService.xemLoaiCongChuc(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/loai-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<LoaiCongChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, congChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiCongChuc> getById(@PathVariable int id) {
+            return new ResponseEntity<>(congChucService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/loai-cong-chuc")
-        public ResponseEntity<ResDTO<LoaiCongChuc>> add(@RequestBody ReqLoai loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, congChucService.themLoaiCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiCongChuc> add(@RequestBody ReqLoai loai) {
+            return new ResponseEntity<>(congChucService.themLoaiCongChuc(loai), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/loai-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<LoaiCongChuc>> edit(@PathVariable int id, @RequestBody ReqLoai loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, congChucService.suaLoaiCongChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiCongChuc> edit(@PathVariable int id, @RequestBody ReqLoai loai) {
+            return new ResponseEntity<>(congChucService.suaLoaiCongChuc(id, loai), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/loai-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, congChucService.xoaLoaiCongChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(congChucService.xoaLoaiCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -816,28 +751,28 @@ public class UtilitiesController {
     @Tag(name = "Loại viên chức ", description = "Cấu hình")
     class LoaiVienChucController {
         @GetMapping("/loai-vien-chuc")
-        public ResponseEntity<ResDTO<List<LoaiVienChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, vienChucService.xemLoaiVienChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<LoaiVienChuc>> getAll() {
+            return new ResponseEntity<>(vienChucService.xemLoaiVienChuc(), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/loai-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<LoaiVienChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, vienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiVienChuc> getById(@PathVariable int id) {
+            return new ResponseEntity<>(vienChucService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/loai-vien-chuc")
-        public ResponseEntity<ResDTO<LoaiVienChuc>> add(@RequestBody ReqLoai loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, vienChucService.themLoaiVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiVienChuc> add(@RequestBody ReqLoai loai) {
+            return new ResponseEntity<>(vienChucService.themLoaiVienChuc(loai), ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/loai-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<LoaiVienChuc>> edit(@PathVariable int id, @RequestBody ReqLoai loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, vienChucService.suaLoaiVienChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<LoaiVienChuc> edit(@PathVariable int id, @RequestBody ReqLoai loai) {
+            return new ResponseEntity<>(vienChucService.suaLoaiVienChuc(id, loai), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/loai-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, vienChucService.xoaLoaiVienChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(vienChucService.xoaLoaiVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -845,28 +780,32 @@ public class UtilitiesController {
     @Tag(name = "Nhóm công chức ", description = "Cấu hình")
     class NhomCongChucController {
         @GetMapping("/nhom-cong-chuc")
-        public ResponseEntity<ResDTO<List<NhomCongChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomCongChucService.xemNhomCongChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResNhomCongChuc>> getAll() {
+            List<ResNhomCongChuc> nhomCongChucs = nhomCongChucService.xemNhomCongChuc().stream().map(mapperNhomCongChuc::mapToResNhomCongChuc).toList();
+            return new ResponseEntity<>(nhomCongChucs, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/nhom-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<NhomCongChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomCongChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNhomCongChuc> getById(@PathVariable int id) {
+            ResNhomCongChuc resNhomCongChuc = mapperNhomCongChuc.mapToResNhomCongChuc(nhomCongChucService.xemTheoId(id));
+            return new ResponseEntity<>(resNhomCongChuc, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/nhom-cong-chuc")
-        public ResponseEntity<ResDTO<NhomCongChuc>> add(@RequestBody ReqNhom loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, nhomCongChucService.themNhomCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNhomCongChuc> add(@RequestBody ReqNhom loai) {
+            ResNhomCongChuc resNhomCongChuc = mapperNhomCongChuc.mapToResNhomCongChuc(nhomCongChucService.themNhomCongChuc(loai));
+            return new ResponseEntity<>(resNhomCongChuc, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/nhom-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<NhomCongChuc>> edit(@PathVariable int id, @RequestBody ReqNhom loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, nhomCongChucService.suaNhomCongChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNhomCongChuc> edit(@PathVariable int id, @RequestBody ReqNhom loai) {
+            ResNhomCongChuc resNhomCongChuc = mapperNhomCongChuc.mapToResNhomCongChuc(nhomCongChucService.suaNhomCongChuc(id, loai));
+            return new ResponseEntity<>(resNhomCongChuc, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/nhom-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, nhomCongChucService.xoaNhomCongChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(nhomCongChucService.xoaNhomCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -874,28 +813,32 @@ public class UtilitiesController {
     @Tag(name = "Nhóm viên chức ", description = "Cấu hình")
     class NhomVienChucController {
         @GetMapping("/nhom-vien-chuc")
-        public ResponseEntity<ResDTO<List<NhomVienChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomVienChucService.xemNhomVienChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResNhomVienChuc>> getAll() {
+            List<ResNhomVienChuc> resNhomVienChucs = nhomVienChucService.xemNhomVienChuc().stream().map(mapperNhomVienChuc::mapToResNhomVienChuc).toList();
+            return new ResponseEntity<>(resNhomVienChucs, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/nhom-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<NhomVienChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, nhomVienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNhomVienChuc> getById(@PathVariable int id) {
+            ResNhomVienChuc resNhomVienChuc = mapperNhomVienChuc.mapToResNhomVienChuc(nhomVienChucService.xemTheoId(id));
+            return new ResponseEntity<>(resNhomVienChuc, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/nhom-vien-chuc")
-        public ResponseEntity<ResDTO<NhomVienChuc>> add(@RequestBody ReqNhom loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, nhomVienChucService.themNhomVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNhomVienChuc> add(@RequestBody ReqNhom loai) {
+            ResNhomVienChuc resNhomVienChuc = mapperNhomVienChuc.mapToResNhomVienChuc(nhomVienChucService.themNhomVienChuc(loai));
+            return new ResponseEntity<>(resNhomVienChuc, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/nhom-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<NhomVienChuc>> edit(@PathVariable int id, @RequestBody ReqNhom loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, nhomVienChucService.suaNhomVienChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNhomVienChuc> edit(@PathVariable int id, @RequestBody ReqNhom loai) {
+            ResNhomVienChuc resNhomVienChuc = mapperNhomVienChuc.mapToResNhomVienChuc(nhomVienChucService.suaNhomVienChuc(id, loai));
+            return new ResponseEntity<>(resNhomVienChuc, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/nhom-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, nhomVienChucService.xoaNhomVienChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(nhomVienChucService.xoaNhomVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -903,28 +846,32 @@ public class UtilitiesController {
     @Tag(name = "Hệ số lương công chức ", description = "Cấu hình")
     class HeSoLuongCongChucController {
         @GetMapping("/he-so-luong-cong-chuc")
-        public ResponseEntity<ResDTO<List<HeSoLuongCongChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongCongChucService.xemHeSoLuongCongChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResHeSoLuongCongChuc>> getAll() {
+            List<ResHeSoLuongCongChuc> res = heSoLuongCongChucService.xemHeSoLuongCongChuc().stream().map(mapperHeSoLuongCongChuc::mapToResHeSoLuongCongChuc).toList();
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/he-so-luong-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<HeSoLuongCongChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongCongChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResHeSoLuongCongChuc> getById(@PathVariable int id) {
+            ResHeSoLuongCongChuc res = mapperHeSoLuongCongChuc.mapToResHeSoLuongCongChuc(heSoLuongCongChucService.xemTheoId(id));
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/he-so-luong-cong-chuc")
-        public ResponseEntity<ResDTO<HeSoLuongCongChuc>> add(@RequestBody ReqHeSoLuong loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, heSoLuongCongChucService.themHeSoLuongCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResHeSoLuongCongChuc> add(@RequestBody ReqHeSoLuong loai) {
+            ResHeSoLuongCongChuc res = mapperHeSoLuongCongChuc.mapToResHeSoLuongCongChuc(heSoLuongCongChucService.themHeSoLuongCongChuc(loai));
+            return new ResponseEntity<>(res, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/he-so-luong-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<HeSoLuongCongChuc>> edit(@PathVariable int id, @RequestBody ReqHeSoLuong loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, heSoLuongCongChucService.suaHeSoLuongCongChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResHeSoLuongCongChuc> edit(@PathVariable int id, @RequestBody ReqHeSoLuong loai) {
+            ResHeSoLuongCongChuc res = mapperHeSoLuongCongChuc.mapToResHeSoLuongCongChuc(heSoLuongCongChucService.suaHeSoLuongCongChuc(id, loai));
+            return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/he-so-luong-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, heSoLuongCongChucService.xoaHeSoLuongCongChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(heSoLuongCongChucService.xoaHeSoLuongCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -932,28 +879,32 @@ public class UtilitiesController {
     @Tag(name = "Hệ số lương viên chức ", description = "Cấu hình")
     class HeSoLuongVienChucController {
         @GetMapping("/he-so-luong-vien-chuc")
-        public ResponseEntity<ResDTO<List<HeSoLuongVienChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongVienChucService.xemHeSoLuongVienChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResHeSoLuongVienChuc>> getAll() {
+            List<ResHeSoLuongVienChuc> res = heSoLuongVienChucService.xemHeSoLuongVienChuc().stream().map(mapperHeSoLuongVienChuc::mapToResNhomVienChuc).toList();
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/he-so-luong-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<HeSoLuongVienChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, heSoLuongVienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResHeSoLuongVienChuc> getById(@PathVariable int id) {
+            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.xemTheoId(id));
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/he-so-luong-vien-chuc")
-        public ResponseEntity<ResDTO<HeSoLuongVienChuc>> add(@RequestBody ReqHeSoLuong loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, heSoLuongVienChucService.themHeSoLuongVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResHeSoLuongVienChuc> add(@RequestBody ReqHeSoLuong loai) {
+            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.themHeSoLuongVienChuc(loai));
+            return new ResponseEntity<>(res, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/he-so-luong-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<HeSoLuongVienChuc>> edit(@PathVariable int id, @RequestBody ReqHeSoLuong loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, heSoLuongVienChucService.suaHeSoLuongVienChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResHeSoLuongVienChuc> edit(@PathVariable int id, @RequestBody ReqHeSoLuong loai) {
+            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.suaHeSoLuongVienChuc(id, loai));
+            return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/he-so-luong-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, heSoLuongVienChucService.xoaHeSoLuongVienChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable int id) {
+            return new ResponseEntity<>(heSoLuongVienChucService.xoaHeSoLuongVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -961,28 +912,32 @@ public class UtilitiesController {
     @Tag(name = "Ngạch công chức ", description = "Cấu hình")
     class NgachCongChucController {
         @GetMapping("/ngach-cong-chuc")
-        public ResponseEntity<ResDTO<List<NgachCongChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachCongChucService.xemNgachCongChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResNgachCongChuc>> getAll() {
+            List<ResNgachCongChuc> res = ngachCongChucService.xemNgachCongChuc().stream().map(mapperNgachCongChuc::mapToResNgachCongChuc).toList();
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/ngach-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<NgachCongChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachCongChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNgachCongChuc> getById(@PathVariable String id) {
+            ResNgachCongChuc res = mapperNgachCongChuc.mapToResNgachCongChuc(ngachCongChucService.xemTheoId(id));
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/ngach-cong-chuc")
-        public ResponseEntity<ResDTO<NgachCongChuc>> add(@RequestBody ReqNgach loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, ngachCongChucService.themNgachCongChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNgachCongChuc> add(@RequestBody ReqNgach loai) {
+            ResNgachCongChuc res = mapperNgachCongChuc.mapToResNgachCongChuc(ngachCongChucService.themNgachCongChuc(loai));
+            return new ResponseEntity<>(res, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/ngach-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<NgachCongChuc>> edit(@PathVariable int id, @RequestBody ReqNgach loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, ngachCongChucService.suaNgachCongChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNgachCongChuc> edit(@PathVariable String id, @RequestBody ReqNgach loai) {
+            ResNgachCongChuc res = mapperNgachCongChuc.mapToResNgachCongChuc(ngachCongChucService.suaNgachCongChuc(id, loai));
+            return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/ngach-cong-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, ngachCongChucService.xoaNgachCongChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable String id) {
+            return new ResponseEntity<>(ngachCongChucService.xoaNgachCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 
@@ -990,28 +945,32 @@ public class UtilitiesController {
     @Tag(name = "Ngạch viên chức ", description = "Cấu hình")
     class NgachVienChucController {
         @GetMapping("/ngach-vien-chuc")
-        public ResponseEntity<ResDTO<List<NgachVienChuc>>> getAll() {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachVienChucService.xemNgachVienChuc()), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<List<ResNgachVienChuc>> getAll() {
+            List<ResNgachVienChuc> res = ngachVienChucService.xemNgachVienChuc().stream().map(mapperNgachVienChuc::mapToResNgachVienChuc).toList();
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/ngach-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<NgachVienChuc>> getById(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.THANH_CONG, ngachVienChucService.xemTheoId(id)), ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNgachVienChuc> getById(@PathVariable String id) {
+            ResNgachVienChuc res = mapperNgachVienChuc.mapToResNgachVienChuc(ngachVienChucService.xemTheoId(id));
+            return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/ngach-vien-chuc")
-        public ResponseEntity<ResDTO<NgachVienChuc>> add(@RequestBody ReqNgach loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.TAO_THANH_CONG, ngachVienChucService.themNgachVienChuc(loai)), ResEnum.TAO_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNgachVienChuc> add(@RequestBody ReqNgach loai) {
+            ResNgachVienChuc res = mapperNgachVienChuc.mapToResNgachVienChuc(ngachVienChucService.themNgachVienChuc(loai));
+            return new ResponseEntity<>(res, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/ngach-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<NgachVienChuc>> edit(@PathVariable int id, @RequestBody ReqNgach loai) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.CAP_NHAT_THANH_CONG, ngachVienChucService.suaNgachVienChuc(id, loai)), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+        public ResponseEntity<ResNgachVienChuc> edit(@PathVariable String id, @RequestBody ReqNgach loai) {
+            ResNgachVienChuc res = mapperNgachVienChuc.mapToResNgachVienChuc(ngachVienChucService.suaNgachVienChuc(id, loai));
+            return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/ngach-vien-chuc/{id}")
-        public ResponseEntity<ResDTO<Boolean>> del(@PathVariable int id) {
-            return new ResponseEntity<>(ResDTO.response(ResEnum.XOA_THANH_CONG, ngachVienChucService.xoaNgachVienChuc(id)), ResEnum.XOA_THANH_CONG.getStatusCode());
+        public ResponseEntity<Boolean> del(@PathVariable String id) {
+            return new ResponseEntity<>(ngachVienChucService.xoaNgachVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
 }

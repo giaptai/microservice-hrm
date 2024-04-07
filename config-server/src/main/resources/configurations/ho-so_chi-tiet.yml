@@ -1,0 +1,43 @@
+server:
+  port: 8083
+  servlet:
+    context-path: /api/v1
+
+springdoc:
+  api-docs:
+    path: /api-docs
+
+spring:
+  application:
+    name: ho-so_chi-tiet #name application in eureka
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/ho_so_chi_tiet?createDatabaseIfNotExist=true
+    username: root
+    password: 123456
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: false
+  sql:
+    init:
+      mode: never
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true #this eureka need to register the eureka server (discovery)
+    fetch-registry: true
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:8761/eureka
+
+moduleUrl:
+  cau-hinh: http://localhost:8080/api/v1
+  ho-so: http://localhost:8081/api/v1
+
+

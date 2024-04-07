@@ -2,7 +2,6 @@ package com.hrm.hoso.dto.request;
 
 import com.hrm.hoso.enums.GioiTinh;
 import com.hrm.hoso.enums.PheDuyet;
-import com.hrm.hoso.enums.TinhTrangSucKhoe;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -42,69 +41,4 @@ public record ReqHoSo(
         int taiKhoan,
         PheDuyet pheDuyet
 ) {
-    public record ReqThongTinTuyenDung(
-            String ngheNghiepTruocKhiTuyenDung,
-            LocalDateTime ngayDuocTuyenDungLanDau,
-            int coQuanToChucDonViTuyenDung, //DonVi donVi,
-            LocalDateTime ngayVaoCoQuanHienDangCongTac,
-            LocalDateTime ngayVaoDangCongSanVietNam,
-            LocalDateTime ngayChinhThuc,
-            LocalDateTime ngayThamGiaToChucChinhTriXaHoiDauTien,
-            String congViecChinhDuocGiao,
-            String soTruongCongTac,
-            String congViecLamLauNhat
-    ) {
-    }
-
-    public record ReqQuanSu(
-            LocalDateTime ngayNhapNgu, //NghiaVuQuanSu quanSu;
-
-            LocalDateTime ngayXuatNgu, //NghiaVuQuanSu quanSu;
-
-            int capBacLoaiQuanHamQuanDoi //NghiaVuQuanSu quanSu;
-    ) {
-    }
-
-    public record ReqHocVan(
-            int trinhDoGiaoDucPhoThong, //TrinhDoGiaoDucPhoThong trinhDoGiaoDucPhoThong,
-            int trinhDoChuyenMon, //TrinhDoChuyenMon trinhDoChuyenMon,
-            int hocHam, //HocHam hocHam,
-            int danhHieuNhaNuocPhongTang //DanhHieuNhaNuocPhongTang danhHieuNhaNuocPhongTang,
-    ) {
-    }
-
-    public record ReqChucVu(
-            int chucVuHienTai, //ChucVu chucVuHienTai
-            LocalDateTime ngayBoNhiem,
-            LocalDateTime ngayBoNhiemLai,
-            String duocQuyHoacChucDanh
-    ) {
-    }
-
-    public record ReqNgachNhanVien(
-            int ngach, //NgachCongChuc ngachCongChuc;  NgachVienChuc ngachVienChuc;
-            LocalDateTime ngayBoNhiemNgach,
-            LocalDateTime ngayHuongLuongNgach,
-            float phanTramHuongLuongNgach,
-            double phuCapThamNienVuotKhungNgach,
-            LocalDateTime ngayHuongPCTNVKNgach
-    ) {
-    }
-
-    public record ReqViecLam(
-            int viTriViecLam,
-            LocalDateTime ngayHuongLuongViTriViecLam,
-            float phamTramHuongLuong,
-            double phuCapThamNienVuotKhung,
-            LocalDateTime ngayHuongPCTNVK
-    ) {
-    }
-
-    public record ReqSucKhoe(
-            TinhTrangSucKhoe tinhTrangSucKhoe, //enum,
-            float chieuCao,
-            float canNang,
-            int nhomMau //NhomMau nhomMau
-    ) {
-    }
 }

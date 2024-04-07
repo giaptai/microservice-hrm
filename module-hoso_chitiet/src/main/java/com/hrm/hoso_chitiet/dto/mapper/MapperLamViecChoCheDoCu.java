@@ -6,12 +6,13 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MapperLamViecChoCheDoCu {
-    public ResLamViecChoCheDoCu maptoResBanThanCoLamViecChoCheDoCu(LamViecChoCheDoCu cu) {
+    public ResLamViecChoCheDoCu maptoResLamViecChoCheDoCu(LamViecChoCheDoCu cu) {
         return cu != null ? new ResLamViecChoCheDoCu(
                 cu.getId(),
                 cu.getBatDau(),
                 cu.getKetThuc(),
                 cu.getChucDanhDonViDiaDiem(),
+                cu.getHoSoId(),
                 cu.getCreate_at(),
                 cu.getUpdate_at()
         ) : null;

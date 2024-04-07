@@ -388,7 +388,7 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
-        public NgachCongChuc xemTheoId(int id) {
+        public NgachCongChuc xemTheoId(String id) {
             return ngachCongChucRepository.findById(id).orElse(null);
         }
 
@@ -406,7 +406,7 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
-        public NgachCongChuc suaNgachCongChuc(int id, ReqNgach req) {
+        public NgachCongChuc suaNgachCongChuc(String id, ReqNgach req) {
             try {
                 HeSoLuongCongChuc heSo = heSoLuongCongChucRepository.findById(req.heSoLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return ngachCongChucRepository.findById(id).map(e -> {
@@ -422,7 +422,7 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
-        public boolean xoaNgachCongChuc(int id) {
+        public boolean xoaNgachCongChuc(String id) {
             try {
                 return ngachCongChucRepository.findById(id).map(e -> {
                     ngachCongChucRepository.deleteById(id);
@@ -443,7 +443,7 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
-        public NgachVienChuc xemTheoId(int id) {
+        public NgachVienChuc xemTheoId(String id) {
             return ngachVienChucRepository.findById(id).orElse(null);
         }
 
@@ -461,7 +461,7 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
-        public NgachVienChuc suaNgachVienChuc(int id, ReqNgach req) {
+        public NgachVienChuc suaNgachVienChuc(String id, ReqNgach req) {
             try {
                 HeSoLuongVienChuc heSo = heSoLuongVienChucRepository.findById(req.heSoLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return ngachVienChucRepository.findById(id).map(e -> {
@@ -477,7 +477,7 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
-        public boolean xoaNgachVienChuc(int id) {
+        public boolean xoaNgachVienChuc(String id) {
             try {
                 return ngachVienChucRepository.findById(id).map(e -> {
                     ngachVienChucRepository.deleteById(id);

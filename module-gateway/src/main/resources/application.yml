@@ -30,3 +30,9 @@ spring:
 #            - Path=/api/v1/**
   config:
     import: optional:configserver:http://localhost:1111
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug

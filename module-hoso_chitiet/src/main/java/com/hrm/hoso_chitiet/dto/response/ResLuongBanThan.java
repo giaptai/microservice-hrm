@@ -1,8 +1,7 @@
 package com.hrm.hoso_chitiet.dto.response;
 
-import com.hrm.hoso_chitiet.models.LuongBanThan;
-
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record ResLuongBanThan(
         int id,
@@ -12,6 +11,7 @@ public record ResLuongBanThan(
         String bacLuong,
         float heSoLuong,
         float tienLuongTheoViTri,
+        UUID hoSoId,
         LocalDateTime create_at,
         LocalDateTime update_at
 

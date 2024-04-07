@@ -9,10 +9,10 @@ public class MapperLamViecONuocNgoai {
     public ResLamViecONuocNgoai mapToResLamViecONuocNgoai(LamViecONuocNgoai ngoai) {
         return ngoai != null ? new ResLamViecONuocNgoai(
                 ngoai.getId(),
-                ngoai.getHoSoId(),
                 ngoai.getBatDau(),
                 ngoai.getKetThuc(),
                 ngoai.getToChucDiaChiCongViec(),
+                ngoai.getHoSoId(),
                 ngoai.getCreate_at(),
                 ngoai.getUpdate_at()
         ) : null;

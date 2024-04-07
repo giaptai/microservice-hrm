@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.phu_cap_khac;
 
-import com.hrm.taikhoan.dto.client.phu_cap_khac.PhuCapKhac;
-import com.hrm.taikhoan.dto.client.phu_cap_khac.PhuCapKhacDTO;
-import com.hrm.taikhoan.dto.client.phu_cap_khac.ReqPhuCapKhac;
+import com.hrm.taikhoan.client.phu_cap_khac.PhuCapKhac;
+import com.hrm.taikhoan.client.phu_cap_khac.PhuCapKhacDTO;
+import com.hrm.taikhoan.client.phu_cap_khac.ReqPhuCapKhac;
 
 import java.util.List;
 import java.util.UUID;

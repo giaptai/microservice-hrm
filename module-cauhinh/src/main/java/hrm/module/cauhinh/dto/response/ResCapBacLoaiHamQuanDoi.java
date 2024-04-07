@@ -10,12 +10,4 @@ public record ResCapBacLoaiHamQuanDoi(
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {
-    public static ResCapBacLoaiHamQuanDoi mapToResCapBacLoaiHamQuanDoi(CapBacLoaiQuanHamQuanDoi doi) {
-        return doi != null ? new ResCapBacLoaiHamQuanDoi(
-                doi.getId(),
-                doi.getName(),
-                doi.getCreate_at(),
-                doi.getUpdate_at()
-        ) : null;
-    }
 }

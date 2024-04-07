@@ -1,9 +1,8 @@
 package com.hrm.taikhoan.service.tai_khoan;
 
-
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
-import com.hrm.taikhoan.dto.resopnse.ResAuth;
+import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 import com.hrm.taikhoan.models.TaiKhoan;
 
@@ -13,22 +12,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface ITaiKhoanService {
-    TaiKhoan xemThongTin();
+    ResTaiKhoan xemTaiKhoanCaNhan(int id);
 
-    boolean doiMatKhau(String matkhau);
+    boolean doiMatKhauTaiKhoanCaNhan(int id, String matkhau);
 
-    boolean doiEmail(String email);
+    boolean doiEmailTaiKhoanCaNhan(int id, String email);
 
-    List<TaiKhoan> xemDanhSachTaiKhoan(); //admin
+    List<ResTaiKhoan> xemDanhSachTaiKhoan(); //admin
 
-    TaiKhoan xemTheoSoCCCDOrUsername(String soCCCD); //admin user
+    List<ResTaiKhoan> xemTheoUsername(String username); //admin user
 
-    TaiKhoan xemTheoId(int id); //admin user
+    ResTaiKhoan xemTheoId(int id); //admin user
 
-    TaiKhoan them(ReqTaiKhoan taiKhoan);
+    ResTaiKhoan them(ReqTaiKhoan taiKhoan);
 
-    ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin reqTaiKhoanLogin);
-    ResAuth dangNhap0(ReqTaiKhoanLogin login);
+    ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin login);
 
     static boolean checkMatKhau(String matkhau) {
         Pattern pattern = Pattern.compile("^[\\p{Lower}\\p{Upper}\\d\\S]{6,15}$");

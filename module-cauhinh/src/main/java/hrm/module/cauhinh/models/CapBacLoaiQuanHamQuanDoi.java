@@ -34,15 +34,7 @@ public class CapBacLoaiQuanHamQuanDoi extends DateTimeObject {
     @Column(length = 50, unique = true)
     String name;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(foreignKey = @ForeignKey(name = "loai_quan_ham_quan_doi_fk"), name = "loai_quan_ham_quan_doi", referencedColumnName = "id", columnDefinition = "INTEGER")
-//    LoaiQuanHamQuanDoi loaiQuanHamQuanDoi;
-
     public CapBacLoaiQuanHamQuanDoi(String name) {
         this.name = name;
     }
-//    public CapBacLoaiQuanHamQuanDoi(String name, LoaiQuanHamQuanDoi loaiQuanHamQuanDoi) {
-//        this.name = name;
-//        this.loaiQuanHamQuanDoi = loaiQuanHamQuanDoi;
-//    }
 }

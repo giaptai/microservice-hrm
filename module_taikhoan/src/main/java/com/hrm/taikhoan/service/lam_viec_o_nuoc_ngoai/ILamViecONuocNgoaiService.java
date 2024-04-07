@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.lam_viec_o_nuoc_ngoai;
 
-import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoai;
-import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiDTO;
-import com.hrm.taikhoan.dto.client.lam_viec_o_nuoc_ngoai.ReqLamViecONuocNgoai;
+import com.hrm.taikhoan.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoai;
+import com.hrm.taikhoan.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiDTO;
+import com.hrm.taikhoan.client.lam_viec_o_nuoc_ngoai.ReqLamViecONuocNgoai;
 
 import java.util.List;
 import java.util.UUID;

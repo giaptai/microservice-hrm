@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.hrm.hoso_chitiet.enums.XacNhan;
-import com.hrm.hoso_chitiet.models.KyLuat;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -27,8 +26,10 @@ public record ResKyLuat(
         LocalDateTime ketThuc,
         String hinhThuc,
         String hanhViViPhamChinh,
-        int CoQuanQuyetDinhId,
+        int coQuanQuyetDinhId,
+        String coQuanQuyetDinhName,
         XacNhan xacNhan,
+        UUID hoSoId,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime create_at,

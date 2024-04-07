@@ -1,15 +1,16 @@
 package com.hrm.hoso_chitiet.dto.response;
 
-import com.hrm.hoso_chitiet.models.TinHoc;
-
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public record ResTinHoc(
         int id,
         LocalDateTime batDau,
         LocalDateTime ketThuc,
-        int IdTenCoSoDaoTao,
+        int tenCoSoDaoTaoId,
+        String tenCoSoDaoTaoName,
         String chungChiDuocCap,
+        UUID hoSoId,
         LocalDateTime create_at,
         LocalDateTime update_at
 

@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.nghiep_vu_chuyen_nganh;
 
-import com.hrm.taikhoan.dto.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganh;
-import com.hrm.taikhoan.dto.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhDTO;
-import com.hrm.taikhoan.dto.client.nghiep_vu_chuyen_nganh.ReqNghiepVuChuyenNganh;
+import com.hrm.taikhoan.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganh;
+import com.hrm.taikhoan.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhDTO;
+import com.hrm.taikhoan.client.nghiep_vu_chuyen_nganh.ReqNghiepVuChuyenNganh;
 
 import java.util.List;
 import java.util.UUID;

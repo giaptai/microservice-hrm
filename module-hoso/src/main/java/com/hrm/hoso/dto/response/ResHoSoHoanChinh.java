@@ -1,0 +1,82 @@
+package com.hrm.hoso.dto.response;
+
+import com.hrm.hoso.client.chi_tiet.khen_thuong.KhenThuongAuth;
+import com.hrm.hoso.client.chi_tiet.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongAuth;
+import com.hrm.hoso.client.chi_tiet.ky_luat.KyLuatAuth;
+import com.hrm.hoso.client.chi_tiet.lam_viec_cho_che_do_cu.LamViecChoCheDoCuAuth;
+import com.hrm.hoso.client.chi_tiet.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiAuth;
+import com.hrm.hoso.client.chi_tiet.luong_ban_than.LuongBanThanAuth;
+import com.hrm.hoso.client.chi_tiet.ly_luan_chinh_tri.LyLuanChinhTriAuth;
+import com.hrm.hoso.client.chi_tiet.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhAuth;
+import com.hrm.hoso.client.chi_tiet.ngoai_ngu.NgoaiNguAuth;
+import com.hrm.hoso.client.chi_tiet.phu_cap_khac.PhuCapKhacAuth;
+import com.hrm.hoso.client.chi_tiet.qua_trinh_cong_tac.QuaTrinhCongTacAuth;
+import com.hrm.hoso.client.chi_tiet.quan_he_gia_dinh.QuanHeGiaDinhAuth;
+import com.hrm.hoso.client.chi_tiet.tin_hoc.TinHocAuth;
+import com.hrm.hoso.enums.GioiTinh;
+import com.hrm.hoso.enums.PheDuyet;
+import lombok.Builder;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
+
+@Builder
+public record ResHoSoHoanChinh(
+        UUID id,
+        String hoVaTen,
+        GioiTinh gioiTinh,
+        String cacTenGoiKhac,
+        LocalDateTime sinhNgay,
+        String noiSinh,
+        String queQuan,
+        int danToc,
+        String danTocName,
+        int tonGiao,
+        String tonGiaoName,
+        String soCCCD,
+        LocalDateTime ngayCapCCCD,
+        String soDienThoai,
+        String soBHXH,
+        String soBHYT,
+        String noiOHienNay,
+        int thanhPhanGiaDinh,
+        String thanhPhanGiaDinhName,
+        ResThongTinTuyenDung thongTinTuyenDung,
+        ResQuanSu quanSu,
+        int doiTuongChinhSach,
+        String doiTuongChinhSachName,
+        ResHocVan hocVan,
+        ResChucVu chucVu,
+        int chucVuKiemNhiem,
+        String chucVuKiemNhiemName,
+        int chucVuDangHienTai,
+        String chucVuDangHienTaiName,
+        int chucVuDangKiemNhiem,
+        String chucVuDangKiemNhiemName,
+        double tienLuong,
+        ResNgachNhanVien ngach,
+        double phuCapChucVu,
+        double phuCapKiemNhiem,
+        double phuCapKhac,
+        ResViecLam viecLam,
+        ResSucKhoe sucKhoe,
+        List<LamViecChoCheDoCuAuth> banThanCoLamViecChoCheDoCus,
+        List<KhenThuongAuth> khenThuongs,
+        List<KienThucAnNinhQuocPhongAuth> kienThucAnNinhQuocPhongs,
+        List<KyLuatAuth> kyLuats,
+        List<LamViecONuocNgoaiAuth> lamViecONuocNgoais,
+        List<LuongBanThanAuth> luongBanThans,
+        List<LyLuanChinhTriAuth> lyLuanChinhTris,
+        List<NghiepVuChuyenNganhAuth> nghiepVuChuyenNganhs,
+        List<NgoaiNguAuth> ngoaiNgus,
+        List<PhuCapKhacAuth> phuCapKhacs,
+        List<QuanHeGiaDinhAuth> quanHeGiaDinhs,
+        List<QuaTrinhCongTacAuth> quaTrinhCongTacs,
+        List<TinHocAuth> tinHocs,
+        int taiKhoan,
+        PheDuyet pheDuyet,
+        LocalDateTime create_at,
+        LocalDateTime update_at
+) {
+}

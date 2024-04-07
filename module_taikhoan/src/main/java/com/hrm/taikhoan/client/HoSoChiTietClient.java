@@ -1,0 +1,51 @@
+package com.hrm.taikhoan.client;
+
+import com.hrm.taikhoan.client.ngoai_ngu.NgoaiNguDTO;
+import com.hrm.taikhoan.client.phu_cap_khac.PhuCapKhacDTO;
+import com.hrm.taikhoan.client.qua_trinh_cong_tac.QuaTrinhCongTacDTO;
+import com.hrm.taikhoan.client.quan_he_gia_dinh.QuanHeGiaDinhDTO;
+import com.hrm.taikhoan.client.tin_hoc.TinHocDTO;
+import com.hrm.taikhoan.client.khen_thuong.KhenThuongDTO;
+import com.hrm.taikhoan.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongDTO;
+import com.hrm.taikhoan.client.ky_luat.KyLuatDTO;
+import com.hrm.taikhoan.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCuDTO;
+import com.hrm.taikhoan.client.lam_viec_o_nuoc_ngoai.LamViecONuocNgoaiDTO;
+import com.hrm.taikhoan.client.luong_ban_than.LuongBanThanDTO;
+import com.hrm.taikhoan.client.ly_luan_chinh_tri.LyLuanChinhTriDTO;
+import com.hrm.taikhoan.client.nghiep_vu_chuyen_nganh.NghiepVuChuyenNganhDTO;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
+import java.util.UUID;
+
+@FeignClient(name = "ho-so-chi-tiet", url = "${moduleUrl.ho-so-chi-tiet}")
+public interface HoSoChiTietClient {
+    @GetMapping(value = "/{id}/lam-viec-cho-che-do-cu")
+    List<LamViecChoCheDoCuDTO> getByBanThanCoLamViecChoCheDoCu(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/khen-thuong")
+    List<KhenThuongDTO> getByKhenThuong(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/kien-thuc-an-ninh-quoc-phong")
+    List<KienThucAnNinhQuocPhongDTO> getByKienThucAnNinhQuocPhong(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/ky-luat")
+    List<KyLuatDTO> getByKyLuat(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/lam-viec-o-nuoc-ngoai")
+    List<LamViecONuocNgoaiDTO> getByLamViecONuocNgoai(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/luong-ban-than")
+    List<LuongBanThanDTO> getByLuongBanThan(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/ly-luan-chinh-tri")
+    List<LyLuanChinhTriDTO> getByLyLuanChinhTri(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/nghiep-vu-chuyen-nganh")
+    List<NghiepVuChuyenNganhDTO> getByNghiepVuChuyenNganh(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/ngoai-ngu")
+    List<NgoaiNguDTO> getByNgoaiNgu(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/phu-cap-khac")
+    List<PhuCapKhacDTO> getByPhuCapKhac(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/quan-he-gia-dinh")
+    List<QuanHeGiaDinhDTO> getByQuanHeGiaDinh(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/qua-trinh-cong-tac")
+    List<QuaTrinhCongTacDTO> getByQuaTrinhCongTac(@PathVariable UUID id);
+    @GetMapping(value = "/{id}/tin-hoc")
+    List<TinHocDTO> getByTinHoc(@PathVariable UUID id);
+}

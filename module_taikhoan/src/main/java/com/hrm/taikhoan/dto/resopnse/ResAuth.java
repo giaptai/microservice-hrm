@@ -15,13 +15,5 @@ public record ResAuth(
         UUID hoSoId,
         String role
 ) {
-    public static ResAuth mapToResAuth(TaiKhoan taiKhoan) {
-        return new ResAuth(
-                taiKhoan.getId(),
-                taiKhoan.getUsername(),
-                taiKhoan.getPassword(),
-                Optional.of(taiKhoan).map(TaiKhoan::getHoSoId).orElse(null),
-                taiKhoan.getRoleTaiKhoan().name()
-        );
-    }
+
 }

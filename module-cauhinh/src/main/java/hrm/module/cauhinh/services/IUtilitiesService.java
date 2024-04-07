@@ -9,16 +9,13 @@ import java.util.Optional;
 
 public interface IUtilitiesService<T, R> {
     List<T> xemDS();
-
     default List<T> xemDS(PhanTrang<T> phanTrang){
         return new ArrayList<>();
     };
     Optional<T> xemTheoId(int id);
-
+    String xemTheoIdTraVeName(int id);
     T them(R name);
-
     T sua(int id, R req);
-
     default boolean xoa(int id) {
         return true;
     }

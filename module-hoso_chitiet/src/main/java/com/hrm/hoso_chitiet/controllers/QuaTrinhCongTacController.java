@@ -3,8 +3,6 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
-import com.hrm.hoso_chitiet.models.QuaTrinhCongTac;
-import com.hrm.hoso_chitiet.response.ResDTO;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -18,14 +16,13 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping(value = "")
 @Tag(name = "Quá trình công tác ")
 @SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
@@ -40,32 +37,57 @@ public class QuaTrinhCongTacController {
     }
 
     @GetMapping("/qua-trinh-cong-tac")
-    public ResponseEntity<List<QuaTrinhCongTac>> getAll() {
-        List<QuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSach();
+    public ResponseEntity<List<ResQuaTrinhCongTac>> getAll() {
+        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSach().stream().map(mapper::mapToResQuaTrinhCongTac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/qua-trinh-cong-tac/{id}")
-    public ResponseEntity<QuaTrinhCongTac> getById(@PathVariable int id) {
-        QuaTrinhCongTac ls = quaTrinhCongTacService.xemChiTiet(id);
+    public ResponseEntity<ResQuaTrinhCongTac> getById(@PathVariable int id) {
+        ResQuaTrinhCongTac ls = mapper.mapToResQuaTrinhCongTac(quaTrinhCongTacService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/qua-trinh-cong-tac/{id}")
     @Transactional
-    public ResponseEntity<QuaTrinhCongTac> add(@PathVariable UUID id, @RequestBody ReqQuaTrinhCongTac cu) {
-        QuaTrinhCongTac ls = quaTrinhCongTacService.them(id, cu);
+    public ResponseEntity<ResQuaTrinhCongTac> add(@PathVariable UUID id, @RequestBody ReqQuaTrinhCongTac cu) {
+        ResQuaTrinhCongTac ls = mapper.mapToResQuaTrinhCongTac(quaTrinhCongTacService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/qua-trinh-cong-tac/{id}")
-    public ResponseEntity<QuaTrinhCongTac> edit(@PathVariable int id, @RequestBody ReqQuaTrinhCongTac cu) {
-        QuaTrinhCongTac ls = quaTrinhCongTacService.sua(id, cu);
+    public ResponseEntity<ResQuaTrinhCongTac> edit(@PathVariable int id, @RequestBody ReqQuaTrinhCongTac cu) {
+        ResQuaTrinhCongTac ls = mapper.mapToResQuaTrinhCongTac(quaTrinhCongTacService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/qua-trinh-cong-tac/{id}")
     public ResponseEntity<Boolean> del(@PathVariable int id) {
+        boolean ls = quaTrinhCongTacService.xoa(id);
+        return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
+    }
+    //EMPLOYEE
+    @GetMapping("/ca-nhan/qua-trinh-cong-tac")
+    public ResponseEntity<List<ResQuaTrinhCongTac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
+        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @PostMapping("/ca-nhan/qua-trinh-cong-tac")
+    @Transactional
+    public ResponseEntity<ResQuaTrinhCongTac> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqQuaTrinhCongTac cu) {
+        ResQuaTrinhCongTac ls = mapper.mapToResQuaTrinhCongTac(quaTrinhCongTacService.themCaNhan(id, cu));
+        return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
+    }
+
+    @PatchMapping("/ca-nhan/qua-trinh-cong-tac/{id}")
+    public ResponseEntity<ResQuaTrinhCongTac> editCaNhan(@PathVariable int id, @RequestBody ReqQuaTrinhCongTac cu) {
+        ResQuaTrinhCongTac ls = mapper.mapToResQuaTrinhCongTac(quaTrinhCongTacService.sua(id, cu));
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
+
+    @DeleteMapping("/ca-nhan/qua-trinh-cong-tac/{id}")
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
         boolean ls = quaTrinhCongTacService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

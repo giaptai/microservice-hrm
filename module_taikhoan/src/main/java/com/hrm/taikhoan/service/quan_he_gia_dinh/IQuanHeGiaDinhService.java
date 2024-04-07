@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.quan_he_gia_dinh;
 
-import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.QuanHeGiaDinh;
-import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.QuanHeGiaDinhDTO;
-import com.hrm.taikhoan.dto.client.quan_he_gia_dinh.ReqQuanHeGiaDinh;
+import com.hrm.taikhoan.client.quan_he_gia_dinh.QuanHeGiaDinh;
+import com.hrm.taikhoan.client.quan_he_gia_dinh.QuanHeGiaDinhDTO;
+import com.hrm.taikhoan.client.quan_he_gia_dinh.ReqQuanHeGiaDinh;
 
 import java.util.List;
 import java.util.UUID;

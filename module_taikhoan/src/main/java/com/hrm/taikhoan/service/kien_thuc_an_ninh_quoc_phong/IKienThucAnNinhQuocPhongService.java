@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.kien_thuc_an_ninh_quoc_phong;
 
-import com.hrm.taikhoan.dto.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhong;
-import com.hrm.taikhoan.dto.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongDTO;
-import com.hrm.taikhoan.dto.client.kien_thuc_an_ninh_quoc_phong.ReqKienThucAnNinhQuocPhong;
+import com.hrm.taikhoan.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhong;
+import com.hrm.taikhoan.client.kien_thuc_an_ninh_quoc_phong.KienThucAnNinhQuocPhongDTO;
+import com.hrm.taikhoan.client.kien_thuc_an_ninh_quoc_phong.ReqKienThucAnNinhQuocPhong;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

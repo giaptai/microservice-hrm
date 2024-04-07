@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.khen_thuong;
 
-import com.hrm.taikhoan.dto.client.khen_thuong.KhenThuong;
-import com.hrm.taikhoan.dto.client.khen_thuong.KhenThuongDTO;
-import com.hrm.taikhoan.dto.client.khen_thuong.ReqKhenThuong;
+import com.hrm.taikhoan.client.khen_thuong.KhenThuong;
+import com.hrm.taikhoan.client.khen_thuong.KhenThuongDTO;
+import com.hrm.taikhoan.client.khen_thuong.ReqKhenThuong;
 
 import java.util.List;
 import java.util.UUID;

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.hrm.hoso_chitiet.enums.XacNhan;
-import com.hrm.hoso_chitiet.models.NgoaiNgu;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -17,18 +16,19 @@ import java.util.UUID;
 
 public record ResNgoaiNgu(
         int id,
-        UUID maSyll,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime batDau,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime ketThuc,
-        int IdTenCoSoDaoTao,
+        int tenCoSoDaoTaoId,
+        String tenCoSoDaoTaoName,
         String tenNgoaiNgu,
         String chungChiDuocCap,
         float diemSo,
         XacNhan xacNhan,
+        UUID hoSoId,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime create_at,

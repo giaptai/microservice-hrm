@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.tin_hoc;
 
-import com.hrm.taikhoan.dto.client.tin_hoc.ReqTinHoc;
-import com.hrm.taikhoan.dto.client.tin_hoc.TinHoc;
-import com.hrm.taikhoan.dto.client.tin_hoc.TinHocDTO;
+import com.hrm.taikhoan.client.tin_hoc.ReqTinHoc;
+import com.hrm.taikhoan.client.tin_hoc.TinHoc;
+import com.hrm.taikhoan.client.tin_hoc.TinHocDTO;
 
 import java.util.List;
 import java.util.UUID;

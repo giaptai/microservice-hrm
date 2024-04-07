@@ -37,8 +37,8 @@ public class QuanHeGiaDinh extends DateTimeObject {
     @Column(columnDefinition = "INTEGER AUTO_INCREMENT")
     int id;
 
-    @Column(name = "moi_quan_he", columnDefinition = "INTEGER")
-    int moiQuanHe;
+    @Column(name = "moi_quan_he_id", columnDefinition = "INTEGER")
+    int moiQuanHeId;
 
     @Column(name = "ho_va_ten", columnDefinition = "varchar(50)")
     String hoVaTen;
@@ -57,9 +57,9 @@ public class QuanHeGiaDinh extends DateTimeObject {
         super.setUpdate_at();
     }
 
-    public QuanHeGiaDinh(int moiQuanHe, String hoVaTen, short namSinh, String thongTinThanNhan, UUID hoSoId) {
+    public QuanHeGiaDinh(int moiQuanHeId, String hoVaTen, short namSinh, String thongTinThanNhan, UUID hoSoId) {
         super();
-        this.moiQuanHe = moiQuanHe;
+        this.moiQuanHeId = moiQuanHeId;
         this.hoVaTen = hoVaTen;
         this.namSinh = namSinh;
         this.thongTinThanNhan = thongTinThanNhan;

@@ -1,8 +1,8 @@
 package com.hrm.taikhoan.service.lam_cho_che_do_cu;
 
-import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCu;
-import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCuDTO;
-import com.hrm.taikhoan.dto.client.lam_viec_cho_che_do_cu.ReqLamViecChoCheDoCu;
+import com.hrm.taikhoan.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCu;
+import com.hrm.taikhoan.client.lam_viec_cho_che_do_cu.LamViecChoCheDoCuDTO;
+import com.hrm.taikhoan.client.lam_viec_cho_che_do_cu.ReqLamViecChoCheDoCu;
 
 import java.util.List;
 import java.util.UUID;

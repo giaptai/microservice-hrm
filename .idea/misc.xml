@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="FrameworkDetectionExcludesConfiguration">
@@ -9,6 +8,7 @@
     <file type="web" url="file://$PROJECT_DIR$/module-gateway" />
     <file type="web" url="file://$PROJECT_DIR$/module-hoso" />
     <file type="web" url="file://$PROJECT_DIR$/module-hoso_chitiet" />
+    <file type="web" url="file://$PROJECT_DIR$/module-token" />
     <file type="web" url="file://$PROJECT_DIR$/module_taikhoan" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK">

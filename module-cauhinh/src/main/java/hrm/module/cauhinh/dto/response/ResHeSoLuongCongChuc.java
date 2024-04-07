@@ -8,9 +8,10 @@ import java.time.LocalDateTime;
 public record ResHeSoLuongCongChuc(
         int id,
         float heSo,
-        String bacLuong,
-        String nhomLoaiCongChuc,
-        boolean trangThai,
+        int bacLuongId,
+        String bacLuongName,
+        int nhomCongChucId,
+        String nhomCongChucName,
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {

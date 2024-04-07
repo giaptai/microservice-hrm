@@ -32,7 +32,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"soYeuLyLich"})
 public class ThongTinTuyenDung extends DateTimeObject {
     @Id
     @Column(name = "ho_so_id")

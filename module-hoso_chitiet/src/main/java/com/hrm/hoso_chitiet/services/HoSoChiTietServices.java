@@ -1,5 +1,6 @@
 package com.hrm.hoso_chitiet.services;
 
+import com.hrm.hoso_chitiet.client.ho_so.HoSoClient;
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKienThucAnNinhQuocPhong;
@@ -69,6 +70,8 @@ public class HoSoChiTietServices {
     final QuanHeGiaDinhRepository quanHeGiaDinhRepository;
     final QuaTrinhCongTacRepository quaTrinhCongTacRepository;
     final TinHocRepository tinHocRepository;
+    //clients
+    final HoSoClient hoSoClient;
 
     public ResHoSoChiTiet getAllByHoSoId(UUID id) {
         List<LamViecChoCheDoCu> cheDoCus = lamViecChoCheDoCuRepository.getAllByHoSo(id);
@@ -147,6 +150,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return lamViecChoCheDoCuRepository.listBanThanCoLamViecChoCheDoCu(id);
+        }
+
+        @Override
+        public LamViecChoCheDoCu themCaNhan(int taiKhoanId, ReqLamViecChoCheDoCu cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -206,6 +221,18 @@ public class HoSoChiTietServices {
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
+        }
+
+        @Override
+        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return khenThuongRepository.listKhenThuong(id);
+        }
+
+        @Override
+        public KhenThuong themCaNhan(int taiKhoanId, ReqKhenThuong cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
         }
     }
 
@@ -268,6 +295,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return kienThucAnNinhQuocPhongRepository.listKienThucAnNinhQuocPhong(id);
+        }
+
+        @Override
+        public KienThucAnNinhQuocPhong themCaNhan(int taiKhoanId, ReqKienThucAnNinhQuocPhong cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -328,6 +367,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return kyLuatRepository.listKyLuat(id);
+        }
+
+        @Override
+        public KyLuat themCaNhan(int taiKhoanId, ReqKyLuat cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -387,6 +438,18 @@ public class HoSoChiTietServices {
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
+        }
+
+        @Override
+        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return lamViecONuocNgoaiRepository.listLamViecONuocNgoai(id);
+        }
+
+        @Override
+        public LamViecONuocNgoai themCaNhan(int taiKhoanId, ReqLamViecONuocNgoai cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
         }
     }
 
@@ -451,6 +514,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return luongBanThanRepository.listLuongBanThan(id);
+        }
+
+        @Override
+        public LuongBanThan themCaNhan(int taiKhoanId, ReqLuongBanThan cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -513,6 +588,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return lyLuanChinhTriRepository.listLyLuanChinhTri(id);
+        }
+
+        @Override
+        public LyLuanChinhTri themCaNhan(int taiKhoanId, ReqLyLuanChinhTri cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -573,6 +660,18 @@ public class HoSoChiTietServices {
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
+        }
+
+        @Override
+        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return nghiepVuChuyenNganhRepository.listNghiepVuChuyenNganh(id);
+        }
+
+        @Override
+        public NghiepVuChuyenNganh themCaNhan(int taiKhoanId, ReqNghiepVuChuyenNganh cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
         }
     }
 
@@ -637,6 +736,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return ngoaiNguRepository.listNgoaiNgu(id);
+        }
+
+        @Override
+        public NgoaiNgu themCaNhan(int taiKhoanId, ReqNgoaiNgu cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -696,6 +807,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return phuCapKhacRepository.listPhuCapKhac(id);
+        }
+
+        @Override
+        public PhuCapKhac themCaNhan(int taiKhoanId, ReqPhuCapKhac cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -722,7 +845,7 @@ public class HoSoChiTietServices {
         @Override
         public QuanHeGiaDinh them(UUID id, ReqQuanHeGiaDinh req) {
             try {
-                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHe(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), id);
+                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), id);
                 return quanHeGiaDinhRepository.save(dinh);
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
@@ -733,7 +856,7 @@ public class HoSoChiTietServices {
         public QuanHeGiaDinh sua(int id, ReqQuanHeGiaDinh req) {
             try {
                 return quanHeGiaDinhRepository.findById(id).map(c -> {
-                    c.setMoiQuanHe(req.moiQuanHe());
+                    c.setMoiQuanHeId(req.moiQuanHeId());
                     c.setHoVaTen(req.hoVaTen());
                     c.setNamSinh(req.namSinh());
                     c.setThongTinThanNhan(req.thongTinThanNhan());
@@ -755,6 +878,18 @@ public class HoSoChiTietServices {
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
+        }
+
+        @Override
+        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return quanHeGiaDinhRepository.listQuanHeGiaDinh(id);
+        }
+
+        @Override
+        public QuanHeGiaDinh themCaNhan(int taiKhoanId, ReqQuanHeGiaDinh cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
         }
     }
 
@@ -815,6 +950,18 @@ public class HoSoChiTietServices {
                 throw new RuntimeException(e.getCause());
             }
         }
+
+        @Override
+        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return quaTrinhCongTacRepository.listQuaTrinhCongTac(id);
+        }
+
+        @Override
+        public QuaTrinhCongTac themCaNhan(int taiKhoanId, ReqQuaTrinhCongTac cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
+        }
     }
 
     @Service
@@ -874,6 +1021,18 @@ public class HoSoChiTietServices {
             } catch (RuntimeException e) {
                 throw new RuntimeException(e.getCause());
             }
+        }
+
+        @Override
+        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return tinHocRepository.listTinHoc(id);
+        }
+
+        @Override
+        public TinHoc themCaNhan(int taiKhoanId, ReqTinHoc cu) {
+            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            return them(id, cu);
         }
     }
 }

@@ -68,17 +68,17 @@ public interface ILoaiNhomHeSoNgachService {
 
     interface INgachVienChucService {
         List<NgachVienChuc> xemNgachVienChuc();
-        NgachVienChuc xemTheoId(int id);
+        NgachVienChuc xemTheoId(String id);
         NgachVienChuc themNgachVienChuc(ReqNgach req);
-        NgachVienChuc suaNgachVienChuc(int id, ReqNgach req);
-        boolean xoaNgachVienChuc(int id);
+        NgachVienChuc suaNgachVienChuc(String id, ReqNgach req);
+        boolean xoaNgachVienChuc(String id);
     }
 
     interface INgachCongChucService {
         List<NgachCongChuc> xemNgachCongChuc();
-        NgachCongChuc xemTheoId(int id);
+        NgachCongChuc xemTheoId(String id);
         NgachCongChuc themNgachCongChuc(ReqNgach req);
-        NgachCongChuc suaNgachCongChuc(int id, ReqNgach req);
-        boolean xoaNgachCongChuc(int id);
+        NgachCongChuc suaNgachCongChuc(String id, ReqNgach req);
+        boolean xoaNgachCongChuc(String id);
     }
 }

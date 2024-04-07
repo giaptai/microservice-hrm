@@ -1,7 +1,7 @@
 package com.hrm.hoso_chitiet.dto.request;
 
 public record ReqQuanHeGiaDinh(
-        int moiQuanHe,
+        int moiQuanHeId,
         String hoVaTen,
         short namSinh,
         String thongTinThanNhan

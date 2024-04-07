@@ -1,6 +1,5 @@
 package com.hrm.hoso_chitiet.services;
 
-
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuongNhanVien;
@@ -51,7 +50,9 @@ public interface IHoSoChiTietServices<T, H> {
     T sua(int id, H cu);
 
     boolean xoa(int id);
-
+    //EMPLOYEE
+    List<T> xemDanhSachCaNhan(int taiKhoanId);
+    T themCaNhan(int taiKhoanId, H cu);
     default List<T> suaDanhSachThongTin(List<H> cu) {
         return new ArrayList<>();
     }

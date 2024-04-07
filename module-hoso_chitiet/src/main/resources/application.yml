@@ -1,53 +1,9 @@
-server:
-  port: 8083
-  servlet:
-    context-path: /api/v1
-
-springdoc:
-  api-docs:
-    path: /api-docs
-
 spring:
   profiles:
-    default: hoso_chitiet
+    default: ho-so_chi-tiet
+    active: ho-so_chi-tiet
   application:
-    name: hoso_chitiet #name application in eureka
+    name: ho-so_chi-tiet #name application in eureka
   config:
     import: optional:configserver:http://localhost:1111
-  datasource:
-    url: jdbc:mysql://127.0.0.1:3306/ho_so_chi_tiet?createDatabaseIfNotExist=true
-    username: root
-    password: 123456
-  jpa:
-    database: mysql
-    show-sql: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        format_sql: true
-    defer-datasource-initialization: false
-  sql:
-    init:
-      mode: never
-
-eureka:
-  instance:
-    hostname: localhost
-  client:
-    register-with-eureka: true #this eureka doesn't need to register itself so set false
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-
-#logging:
-#  level:
-#    org:
-#      springframework:
-#        security: debug
-
-moduleUrl:
-  cau-hinh: http://localhost:8080/api/v1
-  so-yeu-lu-lich: http://localhost:8081/api/v1
-  tai-khoan: http://localhost:8082/api/v1
 

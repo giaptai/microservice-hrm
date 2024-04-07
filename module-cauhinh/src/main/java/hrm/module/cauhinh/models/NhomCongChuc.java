@@ -37,7 +37,6 @@ public class NhomCongChuc extends DateTimeObject {
 //    List<HeSoLuongCongChuc> heSoLuongCongChucs;
 
     @ManyToOne
-    @JsonIgnore
     //name là tên cột chứa khóa ngoại tron sql
     //referencedColumnName nghĩa là lấy theo tên của trường trong class
     @JoinColumn(foreignKey = @ForeignKey(name = "loai_cong_chuc_fk"),name = "loai_cong_chuc_id", referencedColumnName = "id", columnDefinition = "INTEGER")

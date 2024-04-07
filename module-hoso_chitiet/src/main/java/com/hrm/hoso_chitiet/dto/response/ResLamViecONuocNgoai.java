@@ -1,7 +1,6 @@
 package com.hrm.hoso_chitiet.dto.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hrm.hoso_chitiet.models.LamViecONuocNgoai;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
@@ -11,10 +10,10 @@ import java.util.UUID;
 
 public record ResLamViecONuocNgoai(
         int id,
-        UUID maSyll,
         LocalDateTime batDau,
         LocalDateTime ketThuc,
         String toChucDiaChiCongViec,
+        UUID hoSoId,
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {

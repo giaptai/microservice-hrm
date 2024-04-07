@@ -24,7 +24,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"capNhomChucDanhDang"})
 public class ChucDanhDang extends DateTimeObject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
