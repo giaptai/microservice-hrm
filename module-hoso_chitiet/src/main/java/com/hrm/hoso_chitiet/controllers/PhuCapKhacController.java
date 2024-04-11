@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,14 +32,17 @@ public class PhuCapKhacController {
     private final MapperPhuCapKhac mapper;
 
     @GetMapping("/{id}/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResPhuCapKhac).toList();
+    public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable UUID id,
+                                                              @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAll() {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSach().stream().map(mapper::mapToResPhuCapKhac).toList();
+    public ResponseEntity<List<ResPhuCapKhac>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -66,16 +70,19 @@ public class PhuCapKhacController {
         boolean ls = phuCapKhacService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResPhuCapKhac).toList();
+    public ResponseEntity<List<ResPhuCapKhac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/phu-cap-khac")
     @Transactional
-    public ResponseEntity<ResPhuCapKhac> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqPhuCapKhac cu) {
+    public ResponseEntity<ResPhuCapKhac> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqPhuCapKhac cu) {
         ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

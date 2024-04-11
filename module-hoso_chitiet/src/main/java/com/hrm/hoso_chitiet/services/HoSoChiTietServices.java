@@ -14,7 +14,6 @@ import com.hrm.hoso_chitiet.dto.request.ReqPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.request.ReqTinHoc;
-import com.hrm.hoso_chitiet.dto.response.ResHoSoChiTiet;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.models.KhenThuong;
@@ -45,6 +44,7 @@ import com.hrm.hoso_chitiet.repositories.TinHocRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -73,37 +73,37 @@ public class HoSoChiTietServices {
     //clients
     final HoSoClient hoSoClient;
 
-    public ResHoSoChiTiet getAllByHoSoId(UUID id) {
-        List<LamViecChoCheDoCu> cheDoCus = lamViecChoCheDoCuRepository.getAllByHoSo(id);
-        List<KhenThuong> khenThuongs = khenThuongRepository.getAllByHoSo(id);
-        List<KienThucAnNinhQuocPhong> ninhQuocPhongs = kienThucAnNinhQuocPhongRepository.getAllByHoSo(id);
-        List<KyLuat> kyLuats = kyLuatRepository.getAllByHoSo(id);
-        List<LamViecONuocNgoai> nuocNgoais = lamViecONuocNgoaiRepository.getAllByHoSo(id);
-        List<LuongBanThan> luongBanThans = luongBanThanRepository.getAllByHoSo(id);
-        List<LyLuanChinhTri> tris = lyLuanChinhTriRepository.getAllByHoSo(id);
-        List<NghiepVuChuyenNganh> chuyenNganhs = nghiepVuChuyenNganhRepository.getAllByHoSo(id);
-        List<NgoaiNgu> ngoaiNgus = ngoaiNguRepository.getAllByHoSo(id);
-        List<PhuCapKhac> phuCapKhacs = phuCapKhacRepository.getAllByHoSo(id);
-        List<QuanHeGiaDinh> quanHeGiaDinhs = quanHeGiaDinhRepository.getAllByHoSo(id);
-        List<QuaTrinhCongTac> congTacs = quaTrinhCongTacRepository.getAllByHoSo(id);
-        List<TinHoc> tinHocs = tinHocRepository.getAllByHoSo(id);
-        return new ResHoSoChiTiet(
-                cheDoCus, khenThuongs, ninhQuocPhongs, kyLuats, nuocNgoais, luongBanThans, tris,
-                chuyenNganhs, ngoaiNgus, phuCapKhacs, quanHeGiaDinhs, congTacs, tinHocs
-        );
-    }
+//    public ResHoSoChiTiet getAllByHoSoId(UUID id) {
+//        List<LamViecChoCheDoCu> cheDoCus = lamViecChoCheDoCuRepository.getAllByHoSo(id);
+//        List<KhenThuong> khenThuongs = khenThuongRepository.getAllByHoSo(id).getContent();
+//        List<KienThucAnNinhQuocPhong> ninhQuocPhongs = kienThucAnNinhQuocPhongRepository.getAllByHoSo(id);
+//        List<KyLuat> kyLuats = kyLuatRepository.getAllByHoSo(id);
+//        List<LamViecONuocNgoai> nuocNgoais = lamViecONuocNgoaiRepository.getAllByHoSo(id);
+//        List<LuongBanThan> luongBanThans = luongBanThanRepository.getAllByHoSo(id);
+//        List<LyLuanChinhTri> tris = lyLuanChinhTriRepository.getAllByHoSo(id);
+//        List<NghiepVuChuyenNganh> chuyenNganhs = nghiepVuChuyenNganhRepository.getAllByHoSo(id);
+//        List<NgoaiNgu> ngoaiNgus = ngoaiNguRepository.getAllByHoSo(id);
+//        List<PhuCapKhac> phuCapKhacs = phuCapKhacRepository.getAllByHoSo(id);
+//        List<QuanHeGiaDinh> quanHeGiaDinhs = quanHeGiaDinhRepository.getAllByHoSo(id);
+//        List<QuaTrinhCongTac> congTacs = quaTrinhCongTacRepository.getAllByHoSo(id);
+//        List<TinHoc> tinHocs = tinHocRepository.getAllByHoSo(id);
+//        return new ResHoSoChiTiet(
+//                cheDoCus, khenThuongs, ninhQuocPhongs, kyLuats, nuocNgoais, luongBanThans, tris,
+//                chuyenNganhs, ngoaiNgus, phuCapKhacs, quanHeGiaDinhs, congTacs, tinHocs
+//        );
+//    }
 
 
     @Service
     public class LamViecChoCheDoCuService implements IHoSoChiTietServices.ILamViecChoCheDoCuServiceChiTiet {
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSach() {
-            return lamViecChoCheDoCuRepository.findAll();
+        public List<LamViecChoCheDoCu> xemDanhSach(int pageNumber, int pageSize) {
+            return lamViecChoCheDoCuRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id) {
-            return lamViecChoCheDoCuRepository.getAllByHoSo(id);
+        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return lamViecChoCheDoCuRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -152,9 +152,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return lamViecChoCheDoCuRepository.listBanThanCoLamViecChoCheDoCu(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -167,15 +167,14 @@ public class HoSoChiTietServices {
     @Service
     public class KhenThuongService implements IHoSoChiTietServices.IHoKhenThuongServiceChiTiet {
         @Override
-        public List<KhenThuong> xemDanhSach() {
-            return khenThuongRepository.findAll();
+        public List<KhenThuong> xemDanhSach(int pageNumber, int pageSize) {
+            return khenThuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id) {
-            return khenThuongRepository.getAllByHoSo(id);
+        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return khenThuongRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
-
         @Override
         public KhenThuong xemChiTiet(int id) {
             try {
@@ -224,9 +223,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return khenThuongRepository.listKhenThuong(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -239,13 +238,13 @@ public class HoSoChiTietServices {
     @Service
     public class KienThucAnNinhQuocPhongService implements IHoSoChiTietServices.IHoKienThucAnNinhQuocPhongServiceChiTiet {
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSach() {
-            return kienThucAnNinhQuocPhongRepository.findAll();
+        public List<KienThucAnNinhQuocPhong> xemDanhSach(int pageNumber, int pageSize) {
+            return kienThucAnNinhQuocPhongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id) {
-            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id);
+        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -297,9 +296,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return kienThucAnNinhQuocPhongRepository.listKienThucAnNinhQuocPhong(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -312,13 +311,13 @@ public class HoSoChiTietServices {
     @Service
     public class KyLuatService implements IHoSoChiTietServices.IHoKyLuatServiceChiTiet {
         @Override
-        public List<KyLuat> xemDanhSach() {
-            return kyLuatRepository.findAll();
+        public List<KyLuat> xemDanhSach(int pageNumber, int pageSize) {
+            return kyLuatRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id) {
-            return kyLuatRepository.getAllByHoSo(id);
+        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return kyLuatRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -369,9 +368,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return kyLuatRepository.listKyLuat(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -384,13 +383,13 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecONuocNgoaiServcie implements IHoSoChiTietServices.IHoLamViecONuocNgoaiServiceChiTiet {
         @Override
-        public List<LamViecONuocNgoai> xemDanhSach() {
-            return lamViecONuocNgoaiRepository.findAll();
+        public List<LamViecONuocNgoai> xemDanhSach(int pageNumber, int pageSize) {
+            return lamViecONuocNgoaiRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id) {
-            return lamViecONuocNgoaiRepository.getAllByHoSo(id);
+        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return lamViecONuocNgoaiRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -441,9 +440,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return lamViecONuocNgoaiRepository.listLamViecONuocNgoai(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -456,13 +455,13 @@ public class HoSoChiTietServices {
     @Service
     public class LuongBanThanService implements IHoSoChiTietServices.IHoLuongBanThanServiceChiTiet {
         @Override
-        public List<LuongBanThan> xemDanhSach() {
-            return luongBanThanRepository.findAll();
+        public List<LuongBanThan> xemDanhSach(int pageNumber, int pageSize) {
+            return luongBanThanRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id) {
-            return luongBanThanRepository.getAllByHoSo(id);
+        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return luongBanThanRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -516,9 +515,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return luongBanThanRepository.listLuongBanThan(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -531,13 +530,13 @@ public class HoSoChiTietServices {
     @Service
     public class LyHoLuanChinhTriServiceChiTiet implements IHoSoChiTietServices.IHoLyLuanChinhTriServiceChiTiet {
         @Override
-        public List<LyLuanChinhTri> xemDanhSach() {
-            return lyLuanChinhTriRepository.findAll();
+        public List<LyLuanChinhTri> xemDanhSach(int pageNumber, int pageSize) {
+            return lyLuanChinhTriRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id) {
-            return lyLuanChinhTriRepository.getAllByHoSo(id);
+        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return lyLuanChinhTriRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -590,9 +589,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return lyLuanChinhTriRepository.listLyLuanChinhTri(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -605,13 +604,13 @@ public class HoSoChiTietServices {
     @Service
     public class NghiepVuChuyenNganhService implements IHoSoChiTietServices.IHoNghiepVuChuyenNganhServiceChiTiet {
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSach() {
-            return nghiepVuChuyenNganhRepository.findAll();
+        public List<NghiepVuChuyenNganh> xemDanhSach(int pageNumber, int pageSize) {
+            return nghiepVuChuyenNganhRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id) {
-            return nghiepVuChuyenNganhRepository.getAllByHoSo(id);
+        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return nghiepVuChuyenNganhRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -663,9 +662,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return nghiepVuChuyenNganhRepository.listNghiepVuChuyenNganh(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -678,13 +677,13 @@ public class HoSoChiTietServices {
     @Service
     public class NgoaiNguService implements IHoSoChiTietServices.IHoNgoaiNguServiceChiTiet {
         @Override
-        public List<NgoaiNgu> xemDanhSach() {
-            return ngoaiNguRepository.findAll();
+        public List<NgoaiNgu> xemDanhSach(int pageNumber, int pageSize) {
+            return ngoaiNguRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id) {
-            return ngoaiNguRepository.getAllByHoSo(id);
+        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return ngoaiNguRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -738,9 +737,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return ngoaiNguRepository.listNgoaiNgu(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -753,13 +752,13 @@ public class HoSoChiTietServices {
     @Service
     public class PhuCapKhacService implements IHoSoChiTietServices.IHoPhuCapKhacServiceChiTiet {
         @Override
-        public List<PhuCapKhac> xemDanhSach() {
-            return phuCapKhacRepository.findAll();
+        public List<PhuCapKhac> xemDanhSach(int pageNumber, int pageSize) {
+            return phuCapKhacRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id) {
-            return phuCapKhacRepository.getAllByHoSo(id);
+        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return phuCapKhacRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -809,9 +808,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return phuCapKhacRepository.listPhuCapKhac(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -824,13 +823,13 @@ public class HoSoChiTietServices {
     @Service
     public class QuanHeGiaDinhService implements IHoSoChiTietServices.IHoQuanHeGiaDinhServiceChiTiet {
         @Override
-        public List<QuanHeGiaDinh> xemDanhSach() {
-            return quanHeGiaDinhRepository.findAll();
+        public List<QuanHeGiaDinh> xemDanhSach(int pageNumber, int pageSize) {
+            return quanHeGiaDinhRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id) {
-            return quanHeGiaDinhRepository.getAllByHoSo(id);
+        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return quanHeGiaDinhRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -881,9 +880,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return quanHeGiaDinhRepository.listQuanHeGiaDinh(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -896,13 +895,13 @@ public class HoSoChiTietServices {
     @Service
     public class QuaTrinhCongTacService implements IHoSoChiTietServices.IHoQuaTrinhCongTacServiceChiTiet {
         @Override
-        public List<QuaTrinhCongTac> xemDanhSach() {
-            return quaTrinhCongTacRepository.findAll();
+        public List<QuaTrinhCongTac> xemDanhSach(int pageNumber, int pageSize) {
+            return quaTrinhCongTacRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id) {
-            return quaTrinhCongTacRepository.getAllByHoSo(id);
+        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return quaTrinhCongTacRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -952,9 +951,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return quaTrinhCongTacRepository.listQuaTrinhCongTac(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override
@@ -967,13 +966,13 @@ public class HoSoChiTietServices {
     @Service
     public class TinHocService implements IHoSoChiTietServices.IHoTinHocServiceChiTiet {
         @Override
-        public List<TinHoc> xemDanhSach() {
-            return tinHocRepository.findAll();
+        public List<TinHoc> xemDanhSach(int pageNumber, int pageSize) {
+            return tinHocRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
 
         @Override
-        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id) {
-            return tinHocRepository.getAllByHoSo(id);
+        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
+            return tinHocRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
 
         @Override
@@ -1024,9 +1023,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId) {
+        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return tinHocRepository.listTinHoc(id);
+            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
         }
 
         @Override

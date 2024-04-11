@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,15 +33,18 @@ public class TinHocController {
     private final MapperTinHoc mapper;
 
     @GetMapping("/{id}/tin-hoc")
-    public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResTinHoc).toList();
+    public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable UUID id,
+                                                          @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                          @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
 //        return ResDTO.reply(ls, ResEnum.THANH_CONG);
     }
 
     @GetMapping("/tin-hoc")
-    public ResponseEntity<List<ResTinHoc>> getAll() {
-        List<ResTinHoc> ls = tinHocService.xemDanhSach().stream().map(mapper::mapToResTinHoc).toList();
+    public ResponseEntity<List<ResTinHoc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResTinHoc> ls = tinHocService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -68,16 +72,19 @@ public class TinHocController {
         boolean ls = tinHocService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/tin-hoc")
-    public ResponseEntity<List<ResTinHoc>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResTinHoc).toList();
+    public ResponseEntity<List<ResTinHoc>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                        @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                        @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResTinHoc> ls = tinHocService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/tin-hoc")
     @Transactional
-    public ResponseEntity<ResTinHoc> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqTinHoc cu) {
+    public ResponseEntity<ResTinHoc> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqTinHoc cu) {
         ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

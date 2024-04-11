@@ -5,6 +5,16 @@ import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.web.cors.reactive.CorsUtils;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
 
 @Configuration
 public class GatewayConfig {
@@ -12,6 +22,41 @@ public class GatewayConfig {
 
     public GatewayConfig(AuthenticationFilter filter) {
         this.filter = filter;
+    }
+
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://localhost:8888"));
+//        configuration.setAllowedMethods(asList("GET", "POST", "PATCH", "PUT", "DELETE"));
+//        configuration.setAllowedHeaders(List.of("*")); //Keep in mind however that the CORS spec does not allow "*" when allowCredentials is set to true
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
+    @Bean
+    public WebFilter corsFilter() {
+        // https://stackoverflow.com/questions/63144563/how-to-disable-global-cors-config-in-spring-cloud-gateway-yml-config-to-allow-r
+        final String ALLOWED_HEADERS = "x-requested-with, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN";
+        final String ALLOWED_METHODS = "GET, PUT, POST, DELETE, OPTIONS, PATCH";
+        final String MAX_AGE = "7200";
+        return (ServerWebExchange ctx, WebFilterChain chain) -> {
+            ServerHttpRequest request = ctx.getRequest();
+            if (CorsUtils.isCorsRequest(request)) {
+                ServerHttpResponse response = ctx.getResponse();
+                HttpHeaders headers = response.getHeaders();
+                headers.add("Access-Control-Allow-Origin", "*"); //only one is allowed
+                headers.add("Access-Control-Allow-Methods", ALLOWED_METHODS);
+                headers.add("Access-Control-Max-Age", MAX_AGE); //OPTION how long the results of a preflight request (that is the information contained in the Access-Control-Allow-Methods and Access-Control-Allow-Headers headers) can be cached.
+                headers.add("Access-Control-Allow-Headers", ALLOWED_HEADERS);
+                if (request.getMethod() == HttpMethod.OPTIONS) {
+                    response.setStatusCode(HttpStatus.OK);
+                    return Mono.empty();
+                }
+            }
+            return chain.filter(ctx);
+        };
     }
 
     @Bean
@@ -65,7 +110,7 @@ public class GatewayConfig {
                 )
 //this route must be at last because the predicate path is "/api/v1/**" is match all the path above
                 .route("ho-so-chi-tiet-id",
-                        pred -> pred.path("/api/v1/**","/api/v1/ca-nhan/**")
+                        pred -> pred.path("/api/v1/{id}/**", "/api/v1/ca-nhan/**")
                                 .filters(f -> f.filter(filter))
                                 .uri("http://localhost:8083")
                 )

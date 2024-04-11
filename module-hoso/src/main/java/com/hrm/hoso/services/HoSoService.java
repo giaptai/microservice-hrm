@@ -1,5 +1,6 @@
 package com.hrm.hoso.services;
 
+import com.hrm.hoso.dto.mapper.MapperChucVuHienTai;
 import com.hrm.hoso.dto.mapper.MapperHoSo;
 import com.hrm.hoso.dto.request.ReqChucVu;
 import com.hrm.hoso.dto.request.ReqHocVan;
@@ -9,12 +10,14 @@ import com.hrm.hoso.dto.request.ReqSucKhoe;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqThongTinTuyenDung;
 import com.hrm.hoso.dto.request.ReqViecLam;
+import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 
 import com.hrm.hoso.enums.PheDuyet;
 
 import com.hrm.hoso.dto.request.ReqHoSo;
 
+import com.hrm.hoso.kakfka.KafkaConfig;
 import com.hrm.hoso.models.ChucVuHienTai;
 import com.hrm.hoso.models.HoSo;
 import com.hrm.hoso.models.HocVan;
@@ -39,6 +42,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -61,10 +70,12 @@ public class HoSoService implements IHoSoService {
     final ViecLamRepository viecLamRepository;
     //mapper
     final MapperHoSo mapperHoSo;
+    final MapperChucVuHienTai mapperChucVuHienTai;
+
 
     @Override
     public UUID layHoSoId(int taiKhoanId) {
-        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(() -> new NotFoundException());
+        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(NotFoundException::new);
     }
 
     @Override
@@ -81,10 +92,10 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
-    public List<ResHoSo> xemDanhSachHoSo() {
-        List<HoSo> hoSos = hoSoRepository.findAll();
-        return hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
+    public List<ResHoSo> xemDanhSachHoSo(int pageNumber, int pageSize) {
+        return hoSoRepository.findAll(PageRequest.of(pageNumber, pageSize)).stream().map(mapperHoSo::mapToResHoSo).toList();
     }
+
 
     @Override
     public ResHoSo xemHoSoTheoSoCCCD(String q) {
@@ -102,6 +113,58 @@ public class HoSoService implements IHoSoService {
         mapToHoSo(hoSo, req);
         hoSoRepository.save(hoSo);
         return mapperHoSo.mapToResHoSo(hoSo);
+    }
+
+    @Override
+    public ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu) {
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
+        ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
+        if (reqChucVu != null) {
+            if (chucVuHienTai != null) {
+                chucVuHienTai.setChucVuId(reqChucVu.chucVuHienTaiId());
+                chucVuHienTai.setNgayBoNhiem(reqChucVu.ngayBoNhiem());
+                chucVuHienTai.setNgayBoNhiemLai(reqChucVu.ngayBoNhiemLai());
+                chucVuHienTai.setDuocQuyHoacChucDanh(reqChucVu.duocQuyHoacChucDanh());
+                chucVuHienTai.setCoQuanToChucDonViTuyenDungId(reqChucVu.coQuanToChucDonViTuyenDungId());
+                chucVuHienTai.setUpdate_at();
+            } else {
+                chucVuHienTai = new ChucVuHienTai(
+                        reqChucVu.chucVuHienTaiId(),
+                        reqChucVu.ngayBoNhiem(),
+                        reqChucVu.ngayBoNhiemLai(),
+                        reqChucVu.duocQuyHoacChucDanh(),
+                        reqChucVu.coQuanToChucDonViTuyenDungId(),
+                        hoSo);
+            }
+            chucVuHienTaiRepository.save(chucVuHienTai);
+        }
+        ResChucVu resChucVu = mapperChucVuHienTai.mapToResChucVu(chucVuHienTai);
+        KafkaConfig kafkaConfig = new KafkaConfig(StringSerializer.class.getName(), ResChucVu.ResChucVuSerializer.class.getName());
+        // create the producer
+        KafkaProducer<String, ResChucVu> producer = new KafkaProducer<>(kafkaConfig.getProperties());
+        // create a producer record
+        ProducerRecord<String, ResChucVu> producerRecord = new ProducerRecord<>("qua-trinh-cong-tac", resChucVu);
+        // send data - asynchronous
+        producer.send(producerRecord, (metadata, exc) -> {
+            if (exc == null) {
+                System.out.printf("""
+                                Received new metadata
+                                "Topic: %s
+                                Partition: %s
+                                Offset: %s
+                                Timestamp: %s
+                                """,
+                        metadata.topic(),
+                        metadata.partition(),
+                        metadata.offset(),
+                        metadata.timestamp());
+            }
+        });
+        // flush data - synchronous
+        producer.flush();
+        // flush and close producer
+        producer.close();
+        return resChucVu;
     }
 
     @Override
@@ -140,7 +203,7 @@ public class HoSoService implements IHoSoService {
         return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
     }
 
-    private HoSo mapToHoSo(HoSo hoSo, ReqHoSo req) {
+    private void mapToHoSo(HoSo hoSo, ReqHoSo req) {
         ReqThongTinTuyenDung tuyenDung = req.thongTinTuyenDung();
         ReqQuanSu reqQuanSu = req.quanSu();
         ReqHocVan reqHocVan = req.hocVan();
@@ -154,7 +217,6 @@ public class HoSoService implements IHoSoService {
             if (thongTinTuyenDung != null) {
                 thongTinTuyenDung.setNgheNghiepTruocKhiTuyenDung(tuyenDung.ngheNghiepTruocKhiTuyenDung());
                 thongTinTuyenDung.setNgayDuocTuyenDungLanDau(tuyenDung.ngayDuocTuyenDungLanDau());
-                thongTinTuyenDung.setCoQuanToChucDonViTuyenDungId(tuyenDung.coQuanToChucDonViTuyenDung());
                 thongTinTuyenDung.setNgayVaoCoQuanHienDangCongTac(tuyenDung.ngayVaoCoQuanHienDangCongTac());
                 thongTinTuyenDung.setNgayVaoDangCongSanVietNam(tuyenDung.ngayVaoDangCongSanVietNam());
                 thongTinTuyenDung.setNgayChinhThuc(tuyenDung.ngayChinhThuc());
@@ -164,9 +226,10 @@ public class HoSoService implements IHoSoService {
                 thongTinTuyenDung.setCongViecLamLauNhat(tuyenDung.congViecLamLauNhat());
                 thongTinTuyenDung.setUpdate_at();
             } else
-                thongTinTuyenDung = new ThongTinTuyenDung(tuyenDung.ngheNghiepTruocKhiTuyenDung(), tuyenDung.ngayDuocTuyenDungLanDau(), tuyenDung.coQuanToChucDonViTuyenDung(),
-                        tuyenDung.ngayVaoCoQuanHienDangCongTac(), tuyenDung.ngayVaoDangCongSanVietNam(), tuyenDung.ngayChinhThuc(), tuyenDung.ngayThamGiaToChucChinhTriXaHoiDauTien(),
-                        tuyenDung.congViecChinhDuocGiao(), tuyenDung.soTruongCongTac(), tuyenDung.soTruongCongTac(), hoSo);
+                thongTinTuyenDung = new ThongTinTuyenDung(tuyenDung.ngheNghiepTruocKhiTuyenDung(), tuyenDung.ngayDuocTuyenDungLanDau(),
+                        tuyenDung.ngayVaoCoQuanHienDangCongTac(), tuyenDung.ngayVaoDangCongSanVietNam(), tuyenDung.ngayChinhThuc(),
+                        tuyenDung.ngayThamGiaToChucChinhTriXaHoiDauTien(), tuyenDung.congViecChinhDuocGiao(),
+                        tuyenDung.soTruongCongTac(), tuyenDung.soTruongCongTac(), hoSo);
         }
         NghiaVuQuanSu quanSu = nghiaVuQuanSuRepository.findById(hoSo.getId()).orElse(null);
         if (reqQuanSu != null) {
@@ -192,15 +255,21 @@ public class HoSoService implements IHoSoService {
         ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
         if (reqChucVu != null) {
             if (chucVuHienTai != null) {
-                chucVuHienTai.setChucVuId(reqChucVu.chucVuHienTai());
+                chucVuHienTai.setChucVuId(reqChucVu.chucVuHienTaiId());
                 chucVuHienTai.setNgayBoNhiem(reqChucVu.ngayBoNhiem());
                 chucVuHienTai.setNgayBoNhiemLai(reqChucVu.ngayBoNhiemLai());
                 chucVuHienTai.setDuocQuyHoacChucDanh(reqChucVu.duocQuyHoacChucDanh());
+                chucVuHienTai.setCoQuanToChucDonViTuyenDungId(reqChucVu.coQuanToChucDonViTuyenDungId());
                 chucVuHienTai.setUpdate_at();
             } else
-                chucVuHienTai = new ChucVuHienTai(reqChucVu.chucVuHienTai(), reqChucVu.ngayBoNhiem(), reqChucVu.ngayBoNhiemLai(), reqChucVu.duocQuyHoacChucDanh(), hoSo);
+                chucVuHienTai = new ChucVuHienTai(
+                        reqChucVu.chucVuHienTaiId(),
+                        reqChucVu.ngayBoNhiem(),
+                        reqChucVu.ngayBoNhiemLai(),
+                        reqChucVu.duocQuyHoacChucDanh(),
+                        reqChucVu.coQuanToChucDonViTuyenDungId(),
+                        hoSo);
         }
-
         NgachNhanVien ngach = ngachRepository.findById(hoSo.getId()).orElse(null);
         if (reqNgach != null) {
             if (ngach != null) {
@@ -270,6 +339,5 @@ public class HoSoService implements IHoSoService {
         hoSo.setSucKhoe(sucKhoe);
         hoSo.setPheDuyet(req.pheDuyet());
         hoSo.setUpdate_at();
-        return hoSo;
     }
 }

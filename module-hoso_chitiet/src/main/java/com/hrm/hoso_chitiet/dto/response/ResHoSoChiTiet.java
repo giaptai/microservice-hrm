@@ -16,19 +16,19 @@ import com.hrm.hoso_chitiet.models.TinHoc;
 
 import java.util.List;
 
-public record ResHoSoChiTiet(
-        List<LamViecChoCheDoCu> lamViecChoCheDoCuses,
-        List<KhenThuong> khenThuongs,
-        List<KienThucAnNinhQuocPhong> kienThucAnNinhQuocPhongs,
-        List<KyLuat> kyLuats,
-        List<LamViecONuocNgoai> lamViecONuocNgoais,
-        List<LuongBanThan> luongBanThans,
-        List<LyLuanChinhTri> lyLuanChinhTris,
-        List<NghiepVuChuyenNganh> nghiepVuChuyenNganhs,
-        List<NgoaiNgu> ngoaiNgus,
-        List<PhuCapKhac> phuCapKhacs,
-        List<QuanHeGiaDinh> quanHeGiaDinhs,
-        List<QuaTrinhCongTac> quaTrinhCongTacs,
-        List<TinHoc> tinHocs
-) {
-}
+//public record ResHoSoChiTiet(
+//        List<LamViecChoCheDoCu> lamViecChoCheDoCuses,
+//        List<KhenThuong> khenThuongs,
+//        List<KienThucAnNinhQuocPhong> kienThucAnNinhQuocPhongs,
+//        List<KyLuat> kyLuats,
+//        List<LamViecONuocNgoai> lamViecONuocNgoais,
+//        List<LuongBanThan> luongBanThans,
+//        List<LyLuanChinhTri> lyLuanChinhTris,
+//        List<NghiepVuChuyenNganh> nghiepVuChuyenNganhs,
+//        List<NgoaiNgu> ngoaiNgus,
+//        List<PhuCapKhac> phuCapKhacs,
+//        List<QuanHeGiaDinh> quanHeGiaDinhs,
+//        List<QuaTrinhCongTac> quaTrinhCongTacs,
+//        List<TinHoc> tinHocs
+//) {
+//}

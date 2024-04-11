@@ -30,6 +30,7 @@ import hrm.module.cauhinh.response.ResEnum;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -55,6 +56,11 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public List<LoaiCongChuc> xemLoaiCongChuc() {
             return loaiCongChucRepository.findAll();
+        }
+
+        @Override
+        public List<LoaiCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return loaiCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
         }
 
         @Override
@@ -112,6 +118,11 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
+        public List<LoaiVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return loaiVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        }
+
+        @Override
         public LoaiVienChuc xemTheoId(int id) {
             return loaiVienChucRepository.findById(id).orElse(null);
         }
@@ -163,6 +174,11 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public List<NhomCongChuc> xemNhomCongChuc() {
             return nhomCongChucRepository.findAll();
+        }
+
+        @Override
+        public List<NhomCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return nhomCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
         }
 
         @Override
@@ -222,6 +238,11 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
+        public List<NhomVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return nhomVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        }
+
+        @Override
         public NhomVienChuc xemTheoId(int id) {
             return nhomVienChucRepository.findById(id).orElse(null);
         }
@@ -275,6 +296,11 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public List<HeSoLuongCongChuc> xemHeSoLuongCongChuc() {
             return heSoLuongCongChucRepository.findAll();
+        }
+
+        @Override
+        public List<HeSoLuongCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return heSoLuongCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
         }
 
         @Override
@@ -333,6 +359,11 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
+        public List<HeSoLuongVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return heSoLuongVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        }
+
+        @Override
         public HeSoLuongVienChuc xemTheoId(int id) {
             return heSoLuongVienChucRepository.findById(id).orElse(null);
         }
@@ -388,6 +419,11 @@ public class LoaiNhomHeSoNgachService {
         }
 
         @Override
+        public List<NgachCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return ngachCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        }
+
+        @Override
         public NgachCongChuc xemTheoId(String id) {
             return ngachCongChucRepository.findById(id).orElse(null);
         }
@@ -440,6 +476,11 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public List<NgachVienChuc> xemNgachVienChuc() {
             return ngachVienChucRepository.findAll();
+        }
+
+        @Override
+        public List<NgachVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            return ngachVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
         }
 
         @Override

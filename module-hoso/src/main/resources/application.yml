@@ -1,6 +1,7 @@
 spring:
   profiles:
     default: hoso
+    active: hoso
   application: #this must same name at yml file in config-server
     name: ho-so #name application in eureka
   config:

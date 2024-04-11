@@ -6,8 +6,10 @@ import com.hrm.hoso.client.dan_toc.DanTocClient;
 import com.hrm.hoso.client.doi_tuong_chinh_sach.DoiTuongChinhSachClient;
 import com.hrm.hoso.client.thanh_phan_gia_dinh.ThanhPhanGiaDinhClient;
 import com.hrm.hoso.client.ton_giao.TonGiaoClient;
+import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 
+import com.hrm.hoso.kakfka.KafkaConfig;
 import com.hrm.hoso.models.ChucVuHienTai;
 import com.hrm.hoso.models.HoSo;
 import com.hrm.hoso.models.HocVan;
@@ -58,6 +60,7 @@ public class MapperHoSo {
         String chucVuKiemNhiemName = chucVuClient.getName(hoSo.getChucVuKiemNhiemId());
         String chucVuDangHienTaiName = chucVuDangClient.getName(hoSo.getChucVuDangHienTaiId());
         String chucVuDangKiemNhiemName = chucVuDangClient.getName(hoSo.getChucVuDangKiemNhiemId());
+        ResChucVu chucVuHienTai = mapperChucVuHienTai.mapToResChucVu(chucVu);
         return new ResHoSo(
                 hoSo.getId(),
                 hoSo.getHoVaTen(),
@@ -83,7 +86,7 @@ public class MapperHoSo {
                 hoSo.getDoiTuongChinhSachId(),
                 doiTuongChinhSachName,
                 mapperHocVan.mapToResHocVan(hocVan),
-                mapperChucVuHienTai.mapToResChucVu(chucVu),
+                chucVuHienTai,
                 hoSo.getChucVuKiemNhiemId(),
                 chucVuKiemNhiemName,
                 hoSo.getChucVuDangHienTaiId(),

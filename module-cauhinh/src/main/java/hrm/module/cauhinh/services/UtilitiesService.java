@@ -27,7 +27,7 @@ import hrm.module.cauhinh.repositories.ChucDanhDangRepository;
 import hrm.module.cauhinh.repositories.ChucVuRepository;
 import hrm.module.cauhinh.repositories.CoQuanToChucDonViRepository;
 import hrm.module.cauhinh.repositories.DanTocRepository;
-import hrm.module.cauhinh.repositories.DanhHieuNhaNuocPhongTangRepository;
+import hrm.module.cauhinh.repositories.DanhHieuNhaNuocRepository;
 import hrm.module.cauhinh.repositories.DoiTuongChinhSachRepository;
 import hrm.module.cauhinh.repositories.HinhThucKhenThuongRepository;
 import hrm.module.cauhinh.repositories.HocHamRepository;
@@ -39,16 +39,16 @@ import hrm.module.cauhinh.repositories.TonGiaoRepository;
 import hrm.module.cauhinh.repositories.TrinhDoChuyenMonRepository;
 import hrm.module.cauhinh.repositories.TrinhDoGiaoDucPhoThongRepository;
 import hrm.module.cauhinh.repositories.ViTriViecLamRepository;
-
-import hrm.module.cauhinh.response.ExceptionCustom;
-import hrm.module.cauhinh.response.ResEnum;
+import hrm.module.cauhinh.response.APIExceptionCustom;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // if field is set final or @not null
@@ -58,7 +58,7 @@ public class UtilitiesService {
     private final ChucDanhDangRepository chucDanhDangRepository;
     private final ChucVuRepository chucVuRepository;
     private final CoQuanToChucDonViRepository coQuanToChucDonViRepository;
-    private final DanhHieuNhaNuocPhongTangRepository danhHieuNhaNuocPhongTangRepository;
+    private final DanhHieuNhaNuocRepository danhHieuNhaNuocRepository;
     private final DanTocRepository danTocRepository;
     private final DoiTuongChinhSachRepository doiTuongChinhSachRepository;
     private final HinhThucKhenThuongRepository hinhThucKhenThuongRepository;
@@ -80,13 +80,21 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<BacLuong> xemTheoId(int id) {
-            return Optional.ofNullable(bacLuongRepository.findById(id).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name())));
+        public List<BacLuong> xemDanhSach(int pageNumber, int pageSize) {
+            Page<BacLuong> concac = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            Slice<BacLuong> concac2 = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            System.out.printf("s1: %d, s2: %d, s3: %d\n", concac.getNumber(), concac.getTotalElements(), concac.getTotalPages());
+            return bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public BacLuong xemTheoId(int id) {
+            return bacLuongRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(BacLuong::getName).orElse(null);
+            return bacLuongRepository.findById(id).map(BacLuong::getName).orElse("");
         }
 
         @Override
@@ -94,34 +102,29 @@ public class UtilitiesService {
             try {
                 return bacLuongRepository.save(new BacLuong(name.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
-            //khong the xai ExceptionCustom
         }
 
         @Override
         public BacLuong sua(int id, ReqUtilities luong) {
-            try {
-                return xemTheoId(id).map(e -> {
-                    e.setName(luong.name());
-                    e.setUpdate_at();
-                    return bacLuongRepository.save(e);
-                }).orElseThrow(() -> new ExceptionCustom(ResEnum.HONG_TIM_THAY.name()));
-            } catch (ExceptionCustom e) {
-                throw new ExceptionCustom(ResEnum.TRUNG_DU_LIEU.name());
-            }
+            return bacLuongRepository.findById(id).map(e -> {
+                e.setName(luong.name());
+                e.setUpdate_at();
+                return bacLuongRepository.save(e);
+            }).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     bacLuongRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -134,13 +137,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<CapBacLoaiQuanHamQuanDoi> xemTheoId(int id) {
-            return capBacLoaiQuanHamQuanDoiRepository.findById(id);
+        public List<CapBacLoaiQuanHamQuanDoi> xemDanhSach(int pageNumber, int pageSize) {
+            return capBacLoaiQuanHamQuanDoiRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public CapBacLoaiQuanHamQuanDoi xemTheoId(int id) {
+            return capBacLoaiQuanHamQuanDoiRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(CapBacLoaiQuanHamQuanDoi::getName).orElse(null);
+            return capBacLoaiQuanHamQuanDoiRepository.findById(id).map(CapBacLoaiQuanHamQuanDoi::getName).orElse("");
         }
 
         @Override
@@ -148,42 +156,30 @@ public class UtilitiesService {
             try {
                 return capBacLoaiQuanHamQuanDoiRepository.save(new CapBacLoaiQuanHamQuanDoi(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
-//        public CapBacLoaiQuanHamQuanDoi themCapBacLoaiQuanHamQuanDoi(String name, int loaiQuanHamName) {
-//            CapBacLoaiQuanHamQuanDoi capBacLoaiQuanHamQuanDoi = capBacLoaiQuanHamQuanDoiRepository.findByName(name).orElse(null);
-////            LoaiQuanHamQuanDoi loaiQuanHamQuanDoi = loaiQuanHamQuanDoiRepository.findById(loaiQuanHamName).orElse(null);
-//            try {
-//                if (capBacLoaiQuanHamQuanDoi == null) {
-////                    return capBacLoaiQuanHamQuanDoiRepository.save(new CapBacLoaiQuanHamQuanDoi(name, loaiQuanHamQuanDoi));
-//                    return capBacLoaiQuanHamQuanDoiRepository.save(new CapBacLoaiQuanHamQuanDoi(name));
-//                }
-//                return capBacLoaiQuanHamQuanDoi;
-//            } catch (RuntimeException e) {
-//                throw new RuntimeException(e.getCause());
-//            }
-//        }
-
         @Override
         public CapBacLoaiQuanHamQuanDoi sua(int id, ReqUtilities doi) {
-//            LoaiQuanHamQuanDoi loaiQuanHamQuanDoi = loaiQuanHamQuanDoiRepository.findById(doi.loaiQuanHamQuanDoi()).orElse(null);
-            try {
-                return capBacLoaiQuanHamQuanDoiRepository.findById(id).map(e -> {
-                    e.setName(doi.name() != null ? doi.name() : e.getName());
-//                    e.setLoaiQuanHamQuanDoi(loaiQuanHamQuanDoi);
-                    e.setUpdate_at();
-                    return capBacLoaiQuanHamQuanDoiRepository.save(e);
-                }).orElseThrow(() -> new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name()));
-            } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name());
-            }
+            return capBacLoaiQuanHamQuanDoiRepository.findById(id).map(e -> {
+                e.setName(doi.name() != null ? doi.name() : e.getName());
+                e.setUpdate_at();
+                return capBacLoaiQuanHamQuanDoiRepository.save(e);
+            }).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public boolean xoa(int id) {
-            return IUtilitiesService.super.xoa(id);
+            try {
+                if (xemTheoId(id) != null) {
+                    capBacLoaiQuanHamQuanDoiRepository.deleteById(id);
+                    return true;
+                }
+                return false;
+            } catch (RuntimeException e) {
+                throw new APIExceptionCustom.NotFoundData();
+            }
         }
     }
 
@@ -195,50 +191,48 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<ChucDanhDang> xemTheoId(int id) {
-            return chucDanhDangRepository.findById(id);
+        public List<ChucDanhDang> xemDanhSach(int pageNumber, int pageSize) {
+            return chucDanhDangRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public ChucDanhDang xemTheoId(int id) {
+            return chucDanhDangRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(ChucDanhDang::getName).orElse("");
+            return chucDanhDangRepository.findById(id).map(ChucDanhDang::getName).orElse("");
         }
 
         @Override
         public ChucDanhDang them(ReqUtilities req) {
-            ChucDanhDang chucDanhDang = chucDanhDangRepository.findByName(req.name()).orElse(null);
             try {
                 return chucDanhDangRepository.save(new ChucDanhDang(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
         @Override
         public ChucDanhDang sua(int id, ReqUtilities dang) {
-//            CapNhomChucDanhDang capNhomChucDanhDang = capNhomChucDanhDangRepository.findById(dang.capNhomChucDanhDang()).orElse(null);
-            try {
-                return chucDanhDangRepository.findById(id).map(e -> {
-                    e.setName(dang.name() != null ? dang.name() : e.getName());
-//                    e.setCapNhomChucDanhDang(capNhomChucDanhDang);
-                    e.setUpdate_at();
-                    return chucDanhDangRepository.save(e);
-                }).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
-            } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
-            }
+            return chucDanhDangRepository.findById(id).map(e -> {
+                e.setName(dang.name() != null ? dang.name() : e.getName());
+                e.setUpdate_at();
+                return chucDanhDangRepository.save(e);
+            }).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     chucDanhDangRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -251,13 +245,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<ChucVu> xemTheoId(int id) {
-            return chucVuRepository.findById(id);
+        public List<ChucVu> xemDanhSach(int pageNumber, int pageSize) {
+            return chucVuRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public ChucVu xemTheoId(int id) {
+            return chucVuRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(ChucVu::getName).orElse("");
+            return chucVuRepository.findById(id).map(ChucVu::getName).orElse("");
         }
 
         @Override
@@ -265,33 +264,29 @@ public class UtilitiesService {
             try {
                 return chucVuRepository.save(new ChucVu(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
         @Override
         public ChucVu sua(int id, ReqUtilities vu) {
-            try {
-                return chucVuRepository.findById(id).map(e -> {
-                    e.setName(vu.name());
-                    e.setUpdate_at();
-                    return chucVuRepository.save(e);
-                }).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
-            } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
-            }
+            return chucVuRepository.findById(id).map(e -> {
+                e.setName(vu.name());
+                e.setUpdate_at();
+                return chucVuRepository.save(e);
+            }).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     chucVuRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -304,13 +299,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<CoQuanToChucDonVi> xemTheoId(int id) {
-            return coQuanToChucDonViRepository.findById(id);
+        public List<CoQuanToChucDonVi> xemDanhSach(int pageNumber, int pageSize) {
+            return coQuanToChucDonViRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public CoQuanToChucDonVi xemTheoId(int id) {
+            return coQuanToChucDonViRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(CoQuanToChucDonVi::getName).orElse("");
+            return coQuanToChucDonViRepository.findById(id).map(CoQuanToChucDonVi::getName).orElse("");
         }
 
         @Override
@@ -318,7 +318,7 @@ public class UtilitiesService {
             try {
                 return coQuanToChucDonViRepository.save(new CoQuanToChucDonVi(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -329,75 +329,76 @@ public class UtilitiesService {
                     e.setName(vi.name());
                     e.setUpdate_at();
                     return coQuanToChucDonViRepository.save(e);
-                }).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
+                }).orElseThrow(APIExceptionCustom.NotFoundData::new);
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     coQuanToChucDonViRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
 
     @Service
-    public class DanhHieuNhaNuocPhongTangService implements IUtilitiesService<DanhHieuNhaNuoc, ReqUtilities> {
+    public class DanhHieuNhaNuocService implements IUtilitiesService<DanhHieuNhaNuoc, ReqUtilities> {
         @Override
         public List<DanhHieuNhaNuoc> xemDS() {
-            return danhHieuNhaNuocPhongTangRepository.findAll();
+            return danhHieuNhaNuocRepository.findAll();
         }
 
         @Override
-        public Optional<DanhHieuNhaNuoc> xemTheoId(int id) {
-            return danhHieuNhaNuocPhongTangRepository.findById(id);
+        public List<DanhHieuNhaNuoc> xemDanhSach(int pageNumber, int pageSize) {
+            return danhHieuNhaNuocRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public DanhHieuNhaNuoc xemTheoId(int id) {
+            return danhHieuNhaNuocRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(DanhHieuNhaNuoc::getName).orElse(null);
+            return danhHieuNhaNuocRepository.findById(id).map(DanhHieuNhaNuoc::getName).orElse("");
         }
 
         @Override
         public DanhHieuNhaNuoc them(ReqUtilities req) {
             try {
-                return danhHieuNhaNuocPhongTangRepository.save(new DanhHieuNhaNuoc(req.name()));
+                return danhHieuNhaNuocRepository.save(new DanhHieuNhaNuoc(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
         @Override
         public DanhHieuNhaNuoc sua(int id, ReqUtilities danh) {
-            try {
-                return danhHieuNhaNuocPhongTangRepository.findById(id).map(e -> {
-                    e.setName(danh.name());
-                    e.setUpdate_at();
-                    return danhHieuNhaNuocPhongTangRepository.save(e);
-                }).orElse(null);
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
-            }
+            return danhHieuNhaNuocRepository.findById(id).map(e -> {
+                e.setName(danh.name());
+                e.setUpdate_at();
+                return danhHieuNhaNuocRepository.save(e);
+            }).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
-                    danhHieuNhaNuocPhongTangRepository.deleteById(id);
+                if (xemTheoId(id) != null) {
+                    danhHieuNhaNuocRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -410,13 +411,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<DanToc> xemTheoId(int id) {
-            return danTocRepository.findById(id);
+        public List<DanToc> xemDanhSach(int pageNumber, int pageSize) {
+            return danTocRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public DanToc xemTheoId(int id) {
+            return danTocRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(DanToc::getName).orElse("");
+            return danTocRepository.findById(id).map(DanToc::getName).orElse("");
         }
 
         @Override
@@ -424,7 +430,7 @@ public class UtilitiesService {
             try {
                 return danTocRepository.save(new DanToc(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -437,20 +443,20 @@ public class UtilitiesService {
                     return danTocRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     danTocRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -463,13 +469,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<DoiTuongChinhSach> xemTheoId(int id) {
-            return doiTuongChinhSachRepository.findById(id);
+        public List<DoiTuongChinhSach> xemDanhSach(int pageNumber, int pageSize) {
+            return doiTuongChinhSachRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public DoiTuongChinhSach xemTheoId(int id) {
+            return doiTuongChinhSachRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(DoiTuongChinhSach::getName).orElse("");
+            return doiTuongChinhSachRepository.findById(id).map(DoiTuongChinhSach::getName).orElse("");
         }
 
         @Override
@@ -477,7 +488,7 @@ public class UtilitiesService {
             try {
                 return doiTuongChinhSachRepository.save(new DoiTuongChinhSach(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -490,20 +501,20 @@ public class UtilitiesService {
                     return doiTuongChinhSachRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     doiTuongChinhSachRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -516,13 +527,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<HinhThucKhenThuong> xemTheoId(int id) {
-            return hinhThucKhenThuongRepository.findById(id);
+        public List<HinhThucKhenThuong> xemDanhSach(int pageNumber, int pageSize) {
+            return hinhThucKhenThuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public HinhThucKhenThuong xemTheoId(int id) {
+            return hinhThucKhenThuongRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(HinhThucKhenThuong::getName).orElse("");
+            return hinhThucKhenThuongRepository.findById(id).map(HinhThucKhenThuong::getName).orElse("");
         }
 
         @Override
@@ -530,7 +546,7 @@ public class UtilitiesService {
             try {
                 return hinhThucKhenThuongRepository.save(new HinhThucKhenThuong(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -543,20 +559,20 @@ public class UtilitiesService {
                     return hinhThucKhenThuongRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     hinhThucKhenThuongRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -570,13 +586,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<HocHam> xemTheoId(int id) {
-            return hocHamRepository.findById(id);
+        public List<HocHam> xemDanhSach(int pageNumber, int pageSize) {
+            return hocHamRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public HocHam xemTheoId(int id) {
+            return hocHamRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(HocHam::getName).orElse(null);
+            return hocHamRepository.findById(id).map(HocHam::getName).orElse("");
         }
 
         @Override
@@ -584,7 +605,7 @@ public class UtilitiesService {
             try {
                 return hocHamRepository.save(new HocHam(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -597,20 +618,20 @@ public class UtilitiesService {
                     return hocHamRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     hocHamRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -624,13 +645,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<LoaiPhuCap> xemTheoId(int id) {
-            return loaiPhuCapRepository.findById(id);
+        public List<LoaiPhuCap> xemDanhSach(int pageNumber, int pageSize) {
+            return loaiPhuCapRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public LoaiPhuCap xemTheoId(int id) {
+            return loaiPhuCapRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(LoaiPhuCap::getName).orElse("");
+            return loaiPhuCapRepository.findById(id).map(LoaiPhuCap::getName).orElse("");
         }
 
         @Override
@@ -638,7 +664,7 @@ public class UtilitiesService {
             try {
                 return loaiPhuCapRepository.save(new LoaiPhuCap(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -649,78 +675,25 @@ public class UtilitiesService {
                     e.setName(req.name());
                     e.setUpdate_at();
                     return loaiPhuCapRepository.save(e);
-                }).orElse(null);
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                }).orElseThrow(APIExceptionCustom.NotFoundData::new);
+            } catch (APIExceptionCustom.DuplicateData e) {
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     loaiPhuCapRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
-
-//    @Service
-//    public class LoaiQuanHamQuanDoiService implements IUtilitiesService<LoaiQuanHamQuanDoi, ReqUtilities> {
-//
-//        @Override
-//        public List<LoaiQuanHamQuanDoi> xemDS() {
-//            return loaiQuanHamQuanDoiRepository.findAll();
-//        }
-//
-//        @Override
-//        public Optional<LoaiQuanHamQuanDoi> xemTheoId(int id) {
-//            return loaiQuanHamQuanDoiRepository.findById(id);
-//        }
-//
-//        @Override
-//        public LoaiQuanHamQuanDoi them(ReqUtilities req) {
-//            LoaiQuanHamQuanDoi ham = loaiQuanHamQuanDoiRepository.findByName(req.name()).orElse(null);
-//            try {
-//                if (ham == null) {
-//                    return loaiQuanHamQuanDoiRepository.save(new LoaiQuanHamQuanDoi(req.name()));
-//                }
-//                return ham;
-//            } catch (RuntimeException e) {
-//                throw new RuntimeException(e.getCause());
-//            }
-//        }
-//
-//        @Override
-//        public LoaiQuanHamQuanDoi sua(int id, ReqUtilities req) {
-//            try {
-//                return loaiQuanHamQuanDoiRepository.findById(id).map(e -> {
-//                    e.setName(req.name());
-//                    e.setUpdate_at();
-//                    return loaiQuanHamQuanDoiRepository.save(e);
-//                }).orElse(null);
-//            } catch (RuntimeException e) {
-//                throw new RuntimeException(e.getCause());
-//            }
-//        }
-//
-//        @Override
-//        public boolean xoa(int id) {
-//            try {
-//                if (xemTheoId(id).isPresent()) {
-//                    loaiQuanHamQuanDoiRepository.deleteById(id);
-//                    return true;
-//                }
-//                return false;
-//            } catch (RuntimeException e) {
-//                throw new RuntimeException(e.getCause());
-//            }
-//        }
-//    }
 
     @Service
     public class MoiQuanHeService implements IUtilitiesService<MoiQuanHe, ReqUtilities> {
@@ -730,13 +703,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<MoiQuanHe> xemTheoId(int id) {
-            return moiQuanHeRepository.findById(id);
+        public List<MoiQuanHe> xemDanhSach(int pageNumber, int pageSize) {
+            return moiQuanHeRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public MoiQuanHe xemTheoId(int id) {
+            return moiQuanHeRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(MoiQuanHe::getName).orElse("");
+            return moiQuanHeRepository.findById(id).map(MoiQuanHe::getName).orElse("");
         }
 
         @Override
@@ -744,7 +722,7 @@ public class UtilitiesService {
             try {
                 return moiQuanHeRepository.save(new MoiQuanHe(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -757,20 +735,20 @@ public class UtilitiesService {
                     return moiQuanHeRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     moiQuanHeRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -784,13 +762,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<NhomMau> xemTheoId(int id) {
-            return nhomMauRepository.findById(id);
+        public List<NhomMau> xemDanhSach(int pageNumber, int pageSize) {
+            return nhomMauRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public NhomMau xemTheoId(int id) {
+            return nhomMauRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(NhomMau::getName).orElse("");
+            return nhomMauRepository.findById(id).map(NhomMau::getName).orElse("");
         }
 
         @Override
@@ -798,7 +781,7 @@ public class UtilitiesService {
             try {
                 return nhomMauRepository.save(new NhomMau(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -811,20 +794,20 @@ public class UtilitiesService {
                     return nhomMauRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     nhomMauRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -838,13 +821,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<ThanhPhanGiaDinh> xemTheoId(int id) {
-            return thanhPhanGiaDinhRepository.findById(id);
+        public List<ThanhPhanGiaDinh> xemDanhSach(int pageNumber, int pageSize) {
+            return thanhPhanGiaDinhRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public ThanhPhanGiaDinh xemTheoId(int id) {
+            return thanhPhanGiaDinhRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(ThanhPhanGiaDinh::getName).orElse("");
+            return thanhPhanGiaDinhRepository.findById(id).map(ThanhPhanGiaDinh::getName).orElse("");
         }
 
         @Override
@@ -852,7 +840,7 @@ public class UtilitiesService {
             try {
                 return thanhPhanGiaDinhRepository.save(new ThanhPhanGiaDinh(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -865,20 +853,20 @@ public class UtilitiesService {
                     return thanhPhanGiaDinhRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     thanhPhanGiaDinhRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -892,13 +880,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<TonGiao> xemTheoId(int id) {
-            return tonGiaoRepository.findById(id);
+        public List<TonGiao> xemDanhSach(int pageNumber, int pageSize) {
+            return tonGiaoRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public TonGiao xemTheoId(int id) {
+            return tonGiaoRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(TonGiao::getName).orElse("");
+            return tonGiaoRepository.findById(id).map(TonGiao::getName).orElse("");
         }
 
         @Override
@@ -906,7 +899,7 @@ public class UtilitiesService {
             try {
                 return tonGiaoRepository.save(new TonGiao(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -919,20 +912,20 @@ public class UtilitiesService {
                     return tonGiaoRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     tonGiaoRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -946,13 +939,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<TrinhDoChuyenMon> xemTheoId(int id) {
-            return trinhDoChuyenMonRepository.findById(id);
+        public List<TrinhDoChuyenMon> xemDanhSach(int pageNumber, int pageSize) {
+            return trinhDoChuyenMonRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public TrinhDoChuyenMon xemTheoId(int id) {
+            return trinhDoChuyenMonRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(TrinhDoChuyenMon::getName).orElse(null);
+            return trinhDoChuyenMonRepository.findById(id).map(TrinhDoChuyenMon::getName).orElse("");
         }
 
         @Override
@@ -960,7 +958,7 @@ public class UtilitiesService {
             try {
                 return trinhDoChuyenMonRepository.save(new TrinhDoChuyenMon(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -973,20 +971,20 @@ public class UtilitiesService {
                     return trinhDoChuyenMonRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     trinhDoChuyenMonRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -1000,13 +998,18 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<TrinhDoGiaoDucPhoThong> xemTheoId(int id) {
-            return trinhDoGiaoDucPhoThongRepository.findById(id);
+        public List<TrinhDoGiaoDucPhoThong> xemDanhSach(int pageNumber, int pageSize) {
+            return trinhDoGiaoDucPhoThongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public TrinhDoGiaoDucPhoThong xemTheoId(int id) {
+            return trinhDoGiaoDucPhoThongRepository.findById(id).orElseThrow(APIExceptionCustom.NotFoundData::new);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(TrinhDoGiaoDucPhoThong::getName).orElse(null);
+            return trinhDoGiaoDucPhoThongRepository.findById(id).map(TrinhDoGiaoDucPhoThong::getName).orElse("");
         }
 
         @Override
@@ -1014,7 +1017,7 @@ public class UtilitiesService {
             try {
                 return trinhDoGiaoDucPhoThongRepository.save(new TrinhDoGiaoDucPhoThong(req.name()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.ExceptionConflict(ResEnum.TRUNG_DU_LIEU.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
@@ -1027,20 +1030,20 @@ public class UtilitiesService {
                     return trinhDoGiaoDucPhoThongRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     trinhDoGiaoDucPhoThongRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }
@@ -1054,28 +1057,33 @@ public class UtilitiesService {
         }
 
         @Override
-        public Optional<ViTriViecLam> xemTheoId(int id) {
-            return viTriViecLamRepository.findById(id);
+        public List<ViTriViecLam> xemDanhSach(int pageNumber, int pageSize) {
+            return viTriViecLamRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        }
+
+        @Override
+        public ViTriViecLam xemTheoId(int id) {
+            return viTriViecLamRepository.findById(id).orElse(null);
         }
 
         @Override
         public String xemTheoIdTraVeName(int id) {
-            return xemTheoId(id).map(ViTriViecLam::getName).orElse(null);
+            return viTriViecLamRepository.findById(id).map(ViTriViecLam::getName).orElse("");
         }
 
         @Override
         public ViTriViecLam them(ReqUtilities req) {
-            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
+            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(APIExceptionCustom.NotFoundData::new);
             try {
                 return viTriViecLamRepository.save(new ViTriViecLam(req.name(), bacLuong, req.tienLuong()));
             } catch (RuntimeException e) {
-                throw new ExceptionCustom.CrushEmT(ResEnum.KAFKA_THANH_CONG.name());
+                throw new APIExceptionCustom.DuplicateData();
             }
         }
 
         @Override
         public ViTriViecLam sua(int id, ReqUtilities req) {
-            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(() -> new ExceptionCustom.ExceptionNotFound(ResEnum.HONG_TIM_THAY.name()));
+            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(APIExceptionCustom.NotFoundData::new);
             try {
                 return viTriViecLamRepository.findById(id).map(e -> {
                     e.setName(req.name());
@@ -1085,20 +1093,20 @@ public class UtilitiesService {
                     return viTriViecLamRepository.save(e);
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
 
         @Override
         public boolean xoa(int id) {
             try {
-                if (xemTheoId(id).isPresent()) {
+                if (xemTheoId(id) != null) {
                     viTriViecLamRepository.deleteById(id);
                     return true;
                 }
                 return false;
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                throw new APIExceptionCustom.NotFoundData();
             }
         }
     }

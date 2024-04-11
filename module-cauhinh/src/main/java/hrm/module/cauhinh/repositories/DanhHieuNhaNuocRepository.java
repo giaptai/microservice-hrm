@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface DanhHieuNhaNuocPhongTangRepository extends JpaRepository<DanhHieuNhaNuoc, Integer> {
+public interface DanhHieuNhaNuocRepository extends JpaRepository<DanhHieuNhaNuoc, Integer> {
     @Query
     Optional<DanhHieuNhaNuoc> findByName(String name);
 }

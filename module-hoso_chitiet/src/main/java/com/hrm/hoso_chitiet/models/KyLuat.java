@@ -22,7 +22,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ky_luat",indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "ky_luat", indexes = {
+        @Index(name = "ho_so_idx", columnList = "ho_so_id"),
+        @Index(name = "bat_dau_idx", columnList = "bat_dau")
+})
 @Getter
 @Setter
 @SuperBuilder

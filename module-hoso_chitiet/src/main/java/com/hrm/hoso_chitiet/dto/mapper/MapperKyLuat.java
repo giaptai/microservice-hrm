@@ -16,7 +16,6 @@ public class MapperKyLuat {
     public ResKyLuat mapToResKyLuat(KyLuat luat) {
         return luat != null ? new ResKyLuat(
                 luat.getId(),
-                luat.getHoSoId(),
                 luat.getBatDau(),
                 luat.getKetThuc(),
                 luat.getHinhThuc(),

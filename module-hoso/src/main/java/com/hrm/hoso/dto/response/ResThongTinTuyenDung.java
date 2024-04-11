@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 public record ResThongTinTuyenDung(
         String ngheNghiepTruocKhiTuyenDung,
         LocalDateTime ngayDuocTuyenDungLanDau,
-        int coQuanToChucDonViTuyenDung,
-        String coQuanToChucDonViTuyenDungName,
         LocalDateTime ngayVaoCoQuanHienDangCongTac,
         LocalDateTime ngayVaoDangCongSanVietNam,
         LocalDateTime ngayChinhThuc,

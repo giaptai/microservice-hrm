@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,16 +30,25 @@ import java.util.UUID;
 public class KyLuatController {
     private final IHoSoChiTietServices.IHoKyLuatServiceChiTiet kyLuatService;
     private final MapperKyLuat mapper;
+
     @GetMapping("/{id}/ky-luat")
-    public ResponseEntity<List<ResKyLuat>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResKyLuat> ls = kyLuatService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResKyLuat).toList();
+    public ResponseEntity<List<ResKyLuat>> getAllByHoSoId(
+            @PathVariable UUID id,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResKyLuat> ls = kyLuatService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResKyLuat).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @GetMapping("/ky-luat")
-    public ResponseEntity<List<ResKyLuat>> getAll() {
-        List<ResKyLuat> ls = kyLuatService.xemDanhSach().stream().map(mapper::mapToResKyLuat).toList();
+    public ResponseEntity<List<ResKyLuat>> getAll(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResKyLuat> ls = kyLuatService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResKyLuat).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @GetMapping("/ky-luat/{id}")
     public ResponseEntity<ResKyLuat> getById(@PathVariable int id) {
         ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.xemChiTiet(id));
@@ -63,16 +73,20 @@ public class KyLuatController {
         boolean ls = kyLuatService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/ky-luat")
-    public ResponseEntity<List<ResKyLuat>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResKyLuat> ls = kyLuatService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResKyLuat).toList();
+    public ResponseEntity<List<ResKyLuat>> getAllCaNhan(
+            @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResKyLuat> ls = kyLuatService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResKyLuat).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/ky-luat")
     @Transactional
-    public ResponseEntity<ResKyLuat> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqKyLuat cu) {
+    public ResponseEntity<ResKyLuat> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqKyLuat cu) {
         ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

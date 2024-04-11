@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,15 +30,22 @@ import java.util.UUID;
 public class LamViecONuocNgoaiController {
     private final IHoSoChiTietServices.IHoLamViecONuocNgoaiServiceChiTiet lamViecONuocNgoaiService;
     private final MapperLamViecONuocNgoai mapper;
+
     @GetMapping("/{id}/lam-viec-o-nuoc-ngoai")
-    public ResponseEntity<List<ResLamViecONuocNgoai>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
+    public ResponseEntity<List<ResLamViecONuocNgoai>> getAllByHoSoId(
+            @PathVariable UUID id,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/lam-viec-o-nuoc-ngoai")
-    public ResponseEntity<List<ResLamViecONuocNgoai>> getAll() {
-        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSach().stream().map(mapper::mapToResLamViecONuocNgoai).toList();
+    public ResponseEntity<List<ResLamViecONuocNgoai>> getAll(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -65,16 +73,20 @@ public class LamViecONuocNgoaiController {
         boolean ls = lamViecONuocNgoaiService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/lam-viec-o-nuoc-ngoai")
-    public ResponseEntity<List<ResLamViecONuocNgoai>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
+    public ResponseEntity<List<ResLamViecONuocNgoai>> getAllCaNhan(
+            @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/lam-viec-o-nuoc-ngoai")
     @Transactional
-    public ResponseEntity<ResLamViecONuocNgoai> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqLamViecONuocNgoai cu) {
+    public ResponseEntity<ResLamViecONuocNgoai> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLamViecONuocNgoai cu) {
         ResLamViecONuocNgoai ls = mapper.mapToResLamViecONuocNgoai(lamViecONuocNgoaiService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

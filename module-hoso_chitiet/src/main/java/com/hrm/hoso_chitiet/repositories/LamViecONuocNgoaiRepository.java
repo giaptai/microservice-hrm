@@ -1,6 +1,7 @@
 package com.hrm.hoso_chitiet.repositories;
 
 import com.hrm.hoso_chitiet.models.LamViecONuocNgoai;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,10 +16,7 @@ import java.util.UUID;
 @Repository
 public interface LamViecONuocNgoaiRepository extends JpaRepository<LamViecONuocNgoai, Integer> {
     @Query(value = "SELECT c FROM LamViecONuocNgoai c WHERE c.hoSoId = ?1")
-    List<LamViecONuocNgoai> listLamViecONuocNgoai(UUID id);
-
-    @Query(value = "SELECT c FROM LamViecONuocNgoai c WHERE c.hoSoId = ?1")
-    List<LamViecONuocNgoai> getAllByHoSo(UUID id);
+    List<LamViecONuocNgoai> getAllByHoSo(UUID id, Pageable pageable);
 
     @Query(value = "SELECT c FROM LamViecONuocNgoai c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LamViecONuocNgoai> findByIdAndHoSo(int id, UUID id1);

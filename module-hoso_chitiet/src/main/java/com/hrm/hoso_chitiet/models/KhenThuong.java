@@ -25,7 +25,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "khen_thuong", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "khen_thuong", indexes = {
+        @Index(name = "ho_so_idx", columnList = "ho_so_id"),
+        @Index(name = "nam_idx", columnList = "nam")
+})
 @Getter
 @Setter
 @SuperBuilder

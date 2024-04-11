@@ -15,6 +15,7 @@ import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 
 import com.hrm.taikhoan.enums.RoleTaiKhoan;
 
+import com.hrm.taikhoan.kafka.HoSoProducer;
 import com.hrm.taikhoan.models.TaiKhoan;
 
 import com.hrm.taikhoan.repository.TaiKhoanRepository;
@@ -25,6 +26,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import org.apache.kafka.clients.producer.Callback;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -46,6 +51,7 @@ public class TaiKhoanService implements ITaiKhoanService {
     //mappers
     final MapperAuth mapperAuth;
     final MapperTaiKhoan mapperTaiKhoan;
+    final HoSoProducer hoSoProducer;
 
     /* ADMIN - ADMIN - ADMIN*/
     @Override
@@ -96,12 +102,42 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .trangThai(true)
                     .create_at(LocalDateTime.now())
                     .build();
-            HoSoDTO hoSoDTO = hoSoClient.addHoSo(new ReqHoSo(uuid, taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId()));
-            if (hoSoDTO != null) {
-                taiKhoan.setHoSoId(hoSoDTO.id());
-                taiKhoanRepository.save(taiKhoan);
-                return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
-            } else return null;
+            taiKhoanRepository.save(taiKhoan);
+            ReqHoSo reqHoSo = new ReqHoSo(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
+//            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqHoSo);
+            // create the producer
+            KafkaProducer<String, ReqHoSo> producer = new KafkaProducer<>(hoSoProducer.getProperties());
+            // create a producer record
+            ProducerRecord<String, ReqHoSo> producerRecord = new ProducerRecord<>("hoso_create", reqHoSo);
+            // send data - asynchronous
+            producer.send(producerRecord, new Callback() {
+                @Override
+                public void onCompletion(RecordMetadata metadata, Exception e) {
+                    if (e == null) {
+                        System.out.printf("""
+                                        Received new metadata
+                                        "Topic: %s
+                                        Partition: %s
+                                        Offset: %s
+                                        Timestamp: %s
+                                        """,
+                                metadata.topic(),
+                                metadata.partition(),
+                                metadata.offset(),
+                                metadata.timestamp());
+                    }
+                }
+            });
+            // flush data - synchronous
+            producer.flush();
+            // flush and close producer
+            producer.close();
+            return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
+//            if (hoSoDTO != null) {
+//                taiKhoan.setHoSoId(hoSoDTO.id());
+//                taiKhoanRepository.save(taiKhoan);
+//                return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
+//            } else return null;
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());
         }

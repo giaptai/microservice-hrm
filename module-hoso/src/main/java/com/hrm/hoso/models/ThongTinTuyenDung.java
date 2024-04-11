@@ -43,9 +43,6 @@ public class ThongTinTuyenDung extends DateTimeObject {
     @Column(name = "ngay_duoc_tuyen_dung_lan_dau", columnDefinition = "datetime")
     LocalDateTime ngayDuocTuyenDungLanDau;
 
-    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
-    int coQuanToChucDonViTuyenDungId;
-
     @Column(name = "ngay_vao_co_quan_hien_dang_cong_tac", columnDefinition = "datetime")
     LocalDateTime ngayVaoCoQuanHienDangCongTac;
 
@@ -72,14 +69,12 @@ public class ThongTinTuyenDung extends DateTimeObject {
     @JoinColumn(name = "ho_so_id", referencedColumnName = "id", columnDefinition = "binary(16)")
     HoSo hoSoId;
 
-    public ThongTinTuyenDung(String ngheNghiepTruocKhiTuyenDung, LocalDateTime ngayDuocTuyenDungLanDau, int coQuanToChucDonViTuyenDungId,
-                             LocalDateTime ngayVaoCoQuanHienDangCongTac, LocalDateTime ngayVaoDangCongSanVietNam, LocalDateTime ngayChinhThuc,
+    public ThongTinTuyenDung(String ngheNghiepTruocKhiTuyenDung, LocalDateTime ngayDuocTuyenDungLanDau, LocalDateTime ngayVaoCoQuanHienDangCongTac, LocalDateTime ngayVaoDangCongSanVietNam, LocalDateTime ngayChinhThuc,
                              LocalDateTime ngayThamGiaToChucChinhTriXaHoiDauTien, String congViecChinhDuocGiao, String soTruongCongTac,
                              String congViecLamLauNhat, HoSo hoSoId) {
         super();
         this.ngheNghiepTruocKhiTuyenDung = ngheNghiepTruocKhiTuyenDung;
         this.ngayDuocTuyenDungLanDau = ngayDuocTuyenDungLanDau;
-        this.coQuanToChucDonViTuyenDungId = coQuanToChucDonViTuyenDungId;
         this.ngayVaoCoQuanHienDangCongTac = ngayVaoCoQuanHienDangCongTac;
         this.ngayVaoDangCongSanVietNam = ngayVaoDangCongSanVietNam;
         this.ngayChinhThuc = ngayChinhThuc;

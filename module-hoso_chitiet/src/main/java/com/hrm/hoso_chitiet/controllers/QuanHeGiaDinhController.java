@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -29,16 +30,22 @@ import java.util.UUID;
 public class QuanHeGiaDinhController {
     private final IHoSoChiTietServices.IHoQuanHeGiaDinhServiceChiTiet quanHeGiaDinhService;
     private final MapperQuanHeGiaDinh mapper;
+
     @GetMapping("/{id}/quan-he-gia-dinh")
-    public ResponseEntity<List<ResQuanHeGiaDinh>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
+    public ResponseEntity<List<ResQuanHeGiaDinh>> getAllByHoSoId(@PathVariable UUID id,
+                                                                 @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @GetMapping("/quan-he-gia-dinh")
-    public ResponseEntity<List<ResQuanHeGiaDinh>> getAll() {
-        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSach().stream().map(mapper::mapToResQuanHeGiaDinh).toList();
+    public ResponseEntity<List<ResQuanHeGiaDinh>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @GetMapping("/quan-he-gia-dinh/{id}")
     public ResponseEntity<ResQuanHeGiaDinh> getById(@PathVariable int id) {
         ResQuanHeGiaDinh ls = mapper.mapToResQuanHeGiaDinh(quanHeGiaDinhService.xemChiTiet(id));
@@ -63,16 +70,19 @@ public class QuanHeGiaDinhController {
         boolean ls = quanHeGiaDinhService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/quan-he-gia-dinh")
-    public ResponseEntity<List<ResQuanHeGiaDinh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
+    public ResponseEntity<List<ResQuanHeGiaDinh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                               @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                               @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/quan-he-gia-dinh")
     @Transactional
-    public ResponseEntity<ResQuanHeGiaDinh> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqQuanHeGiaDinh cu) {
+    public ResponseEntity<ResQuanHeGiaDinh> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqQuanHeGiaDinh cu) {
         ResQuanHeGiaDinh ls = mapper.mapToResQuanHeGiaDinh(quanHeGiaDinhService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

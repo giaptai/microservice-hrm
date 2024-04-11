@@ -50,17 +50,21 @@ public class ChucVuHienTai extends DateTimeObject {
     @Column(name = "duoc_quy_hoach_chuc_danh", columnDefinition = "varchar(50) default ''")
     String duocQuyHoacChucDanh;
 
+    @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
+    int coQuanToChucDonViTuyenDungId;
+
     @OneToOne
     @MapsId
     @JoinColumn(name = "ho_so_id")
     HoSo hoSoId;
 
-    public ChucVuHienTai(int chucVuId, LocalDateTime ngayBoNhiem, LocalDateTime ngayBoNhiemLai, String duocQuyHoacChucDanh, HoSo hoSoId) {
+    public ChucVuHienTai(int chucVuId, LocalDateTime ngayBoNhiem, LocalDateTime ngayBoNhiemLai, String duocQuyHoacChucDanh, int coQuanToChucDonViTuyenDungId, HoSo hoSoId) {
         super();
         this.chucVuId = chucVuId;
         this.ngayBoNhiem = ngayBoNhiem;
         this.ngayBoNhiemLai = ngayBoNhiemLai;
         this.duocQuyHoacChucDanh = duocQuyHoacChucDanh;
+        this.coQuanToChucDonViTuyenDungId = coQuanToChucDonViTuyenDungId;
         this.hoSoId = hoSoId;
     }
 }

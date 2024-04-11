@@ -1,6 +1,7 @@
 package com.hrm.hoso_chitiet.repositories;
 
 import com.hrm.hoso_chitiet.models.LuongBanThan;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,10 +16,7 @@ import java.util.UUID;
 @Repository
 public interface LuongBanThanRepository extends JpaRepository<LuongBanThan, Integer> {
     @Query(value = "SELECT c FROM LuongBanThan c WHERE c.hoSoId = ?1")
-    List<LuongBanThan> listLuongBanThan(UUID id);
-
-    @Query(value = "SELECT c FROM LuongBanThan c WHERE c.hoSoId = ?1")
-    List<LuongBanThan> getAllByHoSo(UUID id);
+    List<LuongBanThan> getAllByHoSo(UUID id, Pageable pageable);
 
     @Query(value = "SELECT c FROM LuongBanThan c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LuongBanThan> findByIdAndHoSo(int id, UUID id1);

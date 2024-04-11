@@ -27,12 +27,12 @@ ext {
 }
 
 dependencies {
-//    // https://mvnrepository.com/artifact/io.github.openfeign/feign-hc5
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.7.0'
+    // https://mvnrepository.com/artifact/io.github.openfeign/feign-hc5
     implementation group: 'io.github.openfeign', name: 'feign-hc5', version: '13.2.1'
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.0'
-    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
-    implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.6.1'
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.3'
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl
@@ -47,7 +47,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

@@ -67,20 +67,20 @@ public class TaiKhoanController {
     //EMPLOYEE - EMPLOYEE - EMPLOYEE
     @GetMapping("/ca-nhan/tai-khoan")
     @Transactional
-    public ResponseEntity<ResDTO<ResTaiKhoan>> getTaiKhoanCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
+    public ResponseEntity<ResDTO<ResTaiKhoan>> getTaiKhoanCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id) {
         return ResDTO.reply(taiKhoanService.xemTaiKhoanCaNhan(id), ResEnum.THANH_CONG);
     }
 
     @PatchMapping("/ca-nhan/tai-khoan/doi-mat-khau")
     @Transactional
-    public ResponseEntity<ResDTO<Boolean>> doi_mat_khau(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqMatKhau matkhau) {
+    public ResponseEntity<ResDTO<Boolean>> doi_mat_khau(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqMatKhau matkhau) {
         boolean doiMk = taiKhoanService.doiMatKhauTaiKhoanCaNhan(id, matkhau.matkhau());
         return ResDTO.reply(doiMk, ResEnum.DOI_MAT_KHAU_THANH_CONG);
     }
 
     @PatchMapping("/ca-nhan/tai-khoan/doi-email")
     @Transactional
-    public ResponseEntity<ResDTO<Boolean>> doi_email(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqEmail email) {
+    public ResponseEntity<ResDTO<Boolean>> doi_email(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqEmail email) {
         boolean doiEm = taiKhoanService.doiEmailTaiKhoanCaNhan(id, email.email());
         return ResDTO.reply(doiEm, ResEnum.DOI_EMAIL_THANH_CONG);
     }

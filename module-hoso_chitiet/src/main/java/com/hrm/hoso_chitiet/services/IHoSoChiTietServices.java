@@ -20,6 +20,7 @@ import com.hrm.hoso_chitiet.dto.request.ReqQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuaTrinhCongTacNhanVien;
 import com.hrm.hoso_chitiet.dto.request.ReqQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.request.ReqTinHoc;
+
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.models.KhenThuong;
 import com.hrm.hoso_chitiet.models.KienThucAnNinhQuocPhong;
@@ -39,9 +40,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IHoSoChiTietServices<T, H> {
-    List<T> xemDanhSach();
+    List<T> xemDanhSach(int pageNumber, int pageSize);
 
-    List<T> xemDanhSachTheoHoSoId(UUID id);
+    List<T> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize);
 
     T xemChiTiet(int id);
 
@@ -50,9 +51,12 @@ public interface IHoSoChiTietServices<T, H> {
     T sua(int id, H cu);
 
     boolean xoa(int id);
+
     //EMPLOYEE
-    List<T> xemDanhSachCaNhan(int taiKhoanId);
+    List<T> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize);
+
     T themCaNhan(int taiKhoanId, H cu);
+
     default List<T> suaDanhSachThongTin(List<H> cu) {
         return new ArrayList<>();
     }

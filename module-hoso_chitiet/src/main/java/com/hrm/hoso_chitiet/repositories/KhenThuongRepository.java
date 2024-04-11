@@ -1,6 +1,9 @@
 package com.hrm.hoso_chitiet.repositories;
 
 import com.hrm.hoso_chitiet.models.KhenThuong;
+import com.hrm.hoso_chitiet.models.KyLuat;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,18 +17,15 @@ import java.util.UUID;
 
 @Repository
 public interface KhenThuongRepository extends JpaRepository<KhenThuong, Integer> {
-    @Query(value = "SELECT c FROM KhenThuong c WHERE c.hoSoId = ?1")
-    List<KhenThuong> listKhenThuong(UUID id);
-
     //EMPLOYEE
     //READ ALL
     @Query(value = "SELECT c FROM KhenThuong c WHERE c.hoSoId = ?1")
-    List<KhenThuong> getAllByHoSo(UUID uuid);
-
+    List<KhenThuong> getAllByHoSo(UUID uuid, Pageable pageable);
     //READ SPECIFIC
     @Query(value = "SELECT c FROM KhenThuong c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<KhenThuong> findByIdAndHoSo(int id, UUID uuid);
-
+    @Query(value = "SELECT * FROM khen_thuong WHERE nam BETWEEN NOW() AND DATE_ADD(NOW(),INTERVAL 7 DAY) ORDER BY nam", nativeQuery = true)
+    List<KhenThuong> getAllByHoSoInLast7Days();
     //UPDATE
     @Transactional
     @Modifying

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,14 +32,19 @@ public class NghiepVuChuyenNganhController {
     private final MapperNghiepVuChuyenNganh mapper;
 
     @GetMapping("/{id}/nghiep-vu-chuyen-nganh")
-    public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSoId(id).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+    public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllByHoSoId(@PathVariable UUID id,
+                                                                       @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                       @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/nghiep-vu-chuyen-nganh")
-    public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAll() {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSach().stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+    public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAll(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -66,16 +72,19 @@ public class NghiepVuChuyenNganhController {
         boolean ls = nghiepVuChuyenNganhService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/nghiep-vu-chuyen-nganh")
-    public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachCaNhan(id).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+    public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                                     @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                     @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/nghiep-vu-chuyen-nganh")
     @Transactional
-    public ResponseEntity<ResNghiepVuChuyenNganh> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqNghiepVuChuyenNganh cu) {
+    public ResponseEntity<ResNghiepVuChuyenNganh> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqNghiepVuChuyenNganh cu) {
         ResNghiepVuChuyenNganh ls = mapper.mapToResNghiepVuChuyenNganh(nghiepVuChuyenNganhService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

@@ -1,6 +1,7 @@
 package com.hrm.hoso_chitiet.repositories;
 
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,13 +15,10 @@ import java.util.UUID;
 @Repository
 public interface LamViecChoCheDoCuRepository extends JpaRepository<LamViecChoCheDoCu, Integer> {
     //JPQL
-    @Query(value = "SELECT c FROM LamViecChoCheDoCu c WHERE c.hoSoId = ?1")
-    List<LamViecChoCheDoCu> listBanThanCoLamViecChoCheDoCu(UUID id);
-
     //EMPLOYEE
     //READ ALL
     @Query(value = "SELECT c FROM LamViecChoCheDoCu c WHERE c.hoSoId = ?1")
-    List<LamViecChoCheDoCu> getAllByHoSo(UUID uuid);
+    List<LamViecChoCheDoCu> getAllByHoSo(UUID uuid, Pageable pageable);
 
     //READ SPECIFIC
     @Query(value = "SELECT c FROM LamViecChoCheDoCu c WHERE c.id = ?1 AND c.hoSoId = ?2")

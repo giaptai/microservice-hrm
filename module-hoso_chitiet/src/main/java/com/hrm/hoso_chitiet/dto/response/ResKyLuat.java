@@ -17,7 +17,6 @@ import java.util.UUID;
 
 public record ResKyLuat(
         int id,
-        UUID maSyll,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime batDau,

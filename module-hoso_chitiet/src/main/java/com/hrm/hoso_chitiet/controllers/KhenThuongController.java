@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -36,14 +37,20 @@ public class KhenThuongController {
     private final MapperKhenThuong mapper;
 
     @GetMapping("/{id}/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAllByHoSoId(@PathVariable UUID id) {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSoId(id).stream().map(mapper::maptoResKhenThuong).toList();
+    public ResponseEntity<List<ResKhenThuong>> getAllByHoSoId(
+            @PathVariable UUID id,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAll() {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSach().stream().map(mapper::maptoResKhenThuong).toList();
+    public ResponseEntity<List<ResKhenThuong>> getAll(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResKhenThuong> ls = khenThuongService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -74,14 +81,18 @@ public class KhenThuongController {
 
     //EMPLOYEE
     @GetMapping("/ca-nhan/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAllCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSachCaNhan(id).stream().map(mapper::maptoResKhenThuong).toList();
+    public ResponseEntity<List<ResKhenThuong>> getAllCaNhan(
+            @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResKhenThuong> ls = khenThuongService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/khen-thuong")
     @Transactional
-    public ResponseEntity<ResKhenThuong> addCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqKhenThuong cu) {
+    public ResponseEntity<ResKhenThuong> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqKhenThuong cu) {
         ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.themCaNhan(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }

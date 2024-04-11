@@ -1,10 +1,11 @@
-package com.hrm.hoso.dto.response;
+package com.hrm.hoso_chitiet.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.kafka.common.errors.SerializationException;
-import org.apache.kafka.common.serialization.Serializer;
+import org.apache.kafka.common.serialization.Deserializer;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
@@ -19,29 +20,27 @@ public record ResChucVu(
         String coQuanToChucDonViTuyenDungName,
         UUID hoSoId
 ) {
-    public static class ResChucVuSerializer implements Serializer<ResChucVu> {
+    public static class ResChucVuSoDeserializer implements Deserializer<ResChucVu> {
         private final ObjectMapper objectMapper = new ObjectMapper();
-
         @Override
         public void configure(Map<String, ?> configs, boolean isKey) {
         }
 
         @Override
-        public byte[] serialize(String topic, ResChucVu data) {
+        public ResChucVu deserialize(String topic, byte[] data) {
             try {
-//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-//                ObjectOutputStream oos = new ObjectOutputStream(bos);
                 if (data == null) {
-                    System.out.println("Null received at serializing");
+                    System.out.println("Null received at deserializing");
                     return null;
                 }
-                System.out.println("Serializing...");
-//                oos.writeObject(data);
-//                oos.flush();
+//                ByteArrayInputStream bis = new ByteArrayInputStream(data);
+//                ObjectInputStream ois = new ObjectInputStream(bis);
+                System.out.println("Deserializing...");
+//                return (ReqTaoHoSo) ois.readObject();
                 objectMapper.registerModule(new JavaTimeModule());
-                return objectMapper.writeValueAsBytes(data);
+                return objectMapper.readValue(new String(data, StandardCharsets.UTF_8), ResChucVu.class);
             } catch (Exception e) {
-                throw new SerializationException("Error when serializing ReqChucVu to byte[]" + e.getMessage());
+                throw new SerializationException("Error when deserializing byte[] to ResChucVu");
             }
         }
 

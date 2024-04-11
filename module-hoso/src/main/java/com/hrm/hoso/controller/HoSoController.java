@@ -1,10 +1,13 @@
 package com.hrm.hoso.controller;
 
+import com.hrm.hoso.dto.request.ReqChucVu;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
+import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 import com.hrm.hoso.response.ResEnum;
 import com.hrm.hoso.services.IHoSoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class HoSoController {
     private final IHoSoService hoSoService;
 
@@ -33,8 +37,11 @@ public class HoSoController {
 
     //ADMIN - ADMIN - ADMIN
     @GetMapping("/nhan-vien/ho-so")
-    public ResponseEntity<List<ResHoSo>> getAllHoSo() {
-        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo();
+    public ResponseEntity<List<ResHoSo>> getAllHoSo(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo(pageNumber, pageSize);
         return new ResponseEntity<>(resHoSos, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -49,6 +56,12 @@ public class HoSoController {
     public ResponseEntity<ResHoSo> addHoSo(@RequestBody ReqTaoHoSo req) {
         ResHoSo hoSo = hoSoService.taoHoSo(req);
         return new ResponseEntity<>(hoSo, ResEnum.TAO_HO_SO_THANH_CONG.getStatusCode());
+    }
+    @PatchMapping("/nhan-vien/ho-so/{id}/chuc-vu")
+    @Transactional
+    public ResponseEntity<ResChucVu> editChucVu(@PathVariable(name = "id") UUID id, @RequestBody ReqChucVu req) {
+        ResChucVu chucVu = hoSoService.capNhatChucVuHienTai(id, req);
+        return new ResponseEntity<>(chucVu, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/nhan-vien/ho-so/{id}")
@@ -67,13 +80,13 @@ public class HoSoController {
 
     //EMPLOYEE --- EMPLOYEE --- EMPLOYEE
     @GetMapping("/ca-nhan/ho-so")
-    public ResponseEntity<ResHoSo> getHoSoCaNhan(@RequestHeader(name = "taiKhoanId") int id) {
+    public ResponseEntity<ResHoSo> getHoSoCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id) {
         ResHoSo hoSo = hoSoService.xemHoSoCaNhan(id);
         return new ResponseEntity<>(hoSo, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/ca-nhan/ho-so")
-    public ResponseEntity<ResHoSo> editHoSoCaNhan(@RequestHeader(name = "taiKhoanId") int id, @RequestBody ReqHoSo reqHoSo) {
+    public ResponseEntity<ResHoSo> editHoSoCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqHoSo reqHoSo) {
         ResHoSo resHoSo = hoSoService.capNhatHoSoCaNhan(id, reqHoSo);
         return new ResponseEntity<>(resHoSo, ResEnum.THANH_CONG.getStatusCode());
     }
