@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 public record ReqThongTinTuyenDung(
         String ngheNghiepTruocKhiTuyenDung,
         LocalDateTime ngayDuocTuyenDungLanDau,
-        int coQuanToChucDonViTuyenDung, //DonVi donVi,
         LocalDateTime ngayVaoCoQuanHienDangCongTac,
         LocalDateTime ngayVaoDangCongSanVietNam,
         LocalDateTime ngayChinhThuc,

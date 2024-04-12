@@ -252,24 +252,24 @@ public class HoSoService implements IHoSoService {
             } else
                 hocVan = new HocVan(reqHocVan.trinhDoGiaoDucPhoThong(), reqHocVan.trinhDoChuyenMon(), reqHocVan.hocHam(), reqHocVan.danhHieuNhaNuocPhongTang(), hoSo);
         }
-        ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
-        if (reqChucVu != null) {
-            if (chucVuHienTai != null) {
-                chucVuHienTai.setChucVuId(reqChucVu.chucVuHienTaiId());
-                chucVuHienTai.setNgayBoNhiem(reqChucVu.ngayBoNhiem());
-                chucVuHienTai.setNgayBoNhiemLai(reqChucVu.ngayBoNhiemLai());
-                chucVuHienTai.setDuocQuyHoacChucDanh(reqChucVu.duocQuyHoacChucDanh());
-                chucVuHienTai.setCoQuanToChucDonViTuyenDungId(reqChucVu.coQuanToChucDonViTuyenDungId());
-                chucVuHienTai.setUpdate_at();
-            } else
-                chucVuHienTai = new ChucVuHienTai(
-                        reqChucVu.chucVuHienTaiId(),
-                        reqChucVu.ngayBoNhiem(),
-                        reqChucVu.ngayBoNhiemLai(),
-                        reqChucVu.duocQuyHoacChucDanh(),
-                        reqChucVu.coQuanToChucDonViTuyenDungId(),
-                        hoSo);
-        }
+//        ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
+//        if (reqChucVu != null) {
+//            if (chucVuHienTai != null) {
+//                chucVuHienTai.setChucVuId(reqChucVu.chucVuHienTaiId());
+//                chucVuHienTai.setNgayBoNhiem(reqChucVu.ngayBoNhiem());
+//                chucVuHienTai.setNgayBoNhiemLai(reqChucVu.ngayBoNhiemLai());
+//                chucVuHienTai.setDuocQuyHoacChucDanh(reqChucVu.duocQuyHoacChucDanh());
+//                chucVuHienTai.setCoQuanToChucDonViTuyenDungId(reqChucVu.coQuanToChucDonViTuyenDungId());
+//                chucVuHienTai.setUpdate_at();
+//            } else
+//                chucVuHienTai = new ChucVuHienTai(
+//                        reqChucVu.chucVuHienTaiId(),
+//                        reqChucVu.ngayBoNhiem(),
+//                        reqChucVu.ngayBoNhiemLai(),
+//                        reqChucVu.duocQuyHoacChucDanh(),
+//                        reqChucVu.coQuanToChucDonViTuyenDungId(),
+//                        hoSo);
+//        }
         NgachNhanVien ngach = ngachRepository.findById(hoSo.getId()).orElse(null);
         if (reqNgach != null) {
             if (ngach != null) {
@@ -326,7 +326,7 @@ public class HoSoService implements IHoSoService {
         hoSo.setQuanSu(quanSu);
         hoSo.setDoiTuongChinhSachId(req.doiTuongChinhSach());
         hoSo.setHocVan(hocVan);
-        hoSo.setChucVuHienTai(chucVuHienTai);
+//        hoSo.setChucVuHienTai(chucVuHienTai);
         hoSo.setChucVuKiemNhiemId(req.chucVuKiemNhiem());
         hoSo.setChucVuDangHienTaiId(req.chucVuDangHienTai());
         hoSo.setChucVuDangKiemNhiemId(req.chucVuDangKiemNhiem());

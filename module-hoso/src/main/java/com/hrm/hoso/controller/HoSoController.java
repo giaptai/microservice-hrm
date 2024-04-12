@@ -57,6 +57,7 @@ public class HoSoController {
         ResHoSo hoSo = hoSoService.taoHoSo(req);
         return new ResponseEntity<>(hoSo, ResEnum.TAO_HO_SO_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/nhan-vien/ho-so/{id}/chuc-vu")
     @Transactional
     public ResponseEntity<ResChucVu> editChucVu(@PathVariable(name = "id") UUID id, @RequestBody ReqChucVu req) {

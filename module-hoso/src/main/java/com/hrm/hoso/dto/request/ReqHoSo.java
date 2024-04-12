@@ -38,7 +38,7 @@ public record ReqHoSo(
         double phuCapKhac,
         ReqViecLam viecLam,
         ReqSucKhoe sucKhoe,
-        int taiKhoan,
+//        int taiKhoan,
         PheDuyet pheDuyet
 ) {
 }

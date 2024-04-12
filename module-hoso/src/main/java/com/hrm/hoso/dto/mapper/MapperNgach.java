@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MapperNgach {
     final NgachClient ngachClient;
-
     public ResNgachNhanVien mapToResNgachNhanVien(NgachNhanVien ngach) {
         if (ngach == null) {
             return null;

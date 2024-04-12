@@ -22,7 +22,7 @@ public class Swagger {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("public")
-                .packagesToScan("com.hrm.taikhoan.controller", "com.hrm.taikhoan.security")
+                .packagesToScan("com.hrm.taikhoan.controller")
                 .build();
     }
 
