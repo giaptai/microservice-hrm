@@ -15,6 +15,7 @@ import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 
 import com.hrm.taikhoan.enums.RoleTaiKhoan;
 
+import com.hrm.taikhoan.jwt_token.JWTUtilities;
 import com.hrm.taikhoan.kafka.HoSoProducer;
 import com.hrm.taikhoan.models.TaiKhoan;
 
@@ -42,6 +43,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaiKhoanService implements ITaiKhoanService {
+    final JWTUtilities jwtUtilities;
     final TokenClient client;
     final TaiKhoanRepository taiKhoanRepository;
     final HoSoClient hoSoClient;
@@ -174,7 +176,8 @@ public class TaiKhoanService implements ITaiKhoanService {
         TaiKhoan taiKhoan = taiKhoanRepository.findByUsernameAndPassword(login.username(), login.password());
         if (taiKhoan != null) {
             ResAuth auth = mapperAuth.mapToResAuth(taiKhoan);
-            String token = client.taoToken(auth);
+            String token = jwtUtilities.generationToken(taiKhoan);
+//            String token = client.taoToken(auth);
             return new ResTaiKhoanLogin(taiKhoan.getUsername(), taiKhoan.getRoleTaiKhoan().name(), token);
         }
         //không tạo refresh token ok

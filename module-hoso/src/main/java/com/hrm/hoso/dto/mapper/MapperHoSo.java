@@ -44,8 +44,7 @@ public class MapperHoSo {
     final ChucVuClient chucVuClient;
     final ChucVuDangClient chucVuDangClient;
 
-    final
-    public ResHoSo mapToResHoSo(HoSo hoSo) {
+    final public ResHoSo mapToResHoSo(HoSo hoSo) {
         ThongTinTuyenDung tuyenDung = hoSo.getThongTinTuyenDung();
         NghiaVuQuanSu quanSu = hoSo.getQuanSu();
         HocVan hocVan = hoSo.getHocVan();
