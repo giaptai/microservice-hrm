@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "chuc-danh-dang", url = "${moduleUrl.cau-hinh}")
 public interface ChucVuDangClient {
     @GetMapping("/chuc-danh-dang-name/{id}")
-    String getName(@PathVariable int id);
+    String getName(@PathVariable(name = "id") int id);
 }
