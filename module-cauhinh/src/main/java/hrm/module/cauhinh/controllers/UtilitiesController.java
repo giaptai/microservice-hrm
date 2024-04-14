@@ -116,12 +116,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/bac-luong/{id}")
-        public ResponseEntity<BacLuong> getById(@PathVariable int id) {
+        public ResponseEntity<BacLuong> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(bacLuongService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/bac-luong-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(bacLuongService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -132,12 +132,12 @@ public class UtilitiesController {
 
         // khong co requestbody van ok, van hieu do la request body
         @PatchMapping("/bac-luong/{id}")
-        public ResponseEntity<BacLuong> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<BacLuong> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(bacLuongService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/bac-luong/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(bacLuongService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -152,12 +152,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
-        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> getById(@PathVariable int id) {
+        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -167,12 +167,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
-        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<CapBacLoaiQuanHamQuanDoi> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -187,12 +187,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/chuc-danh-dang/{id}")
-        public ResponseEntity<ChucDanhDang> getById(@PathVariable int id) {
+        public ResponseEntity<ChucDanhDang> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(chucDanhDangService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/chuc-danh-dang-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(chucDanhDangService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -202,12 +202,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/chuc-danh-dang/{id}")
-        public ResponseEntity<ChucDanhDang> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<ChucDanhDang> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(chucDanhDangService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/chuc-danh-dang/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(chucDanhDangService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -222,12 +222,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/chuc-vu/{id}")
-        public ResponseEntity<ChucVu> getById(@PathVariable int id) {
+        public ResponseEntity<ChucVu> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(chucVuService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/chuc-vu-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(chucVuService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -237,12 +237,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/chuc-vu/{id}")
-        public ResponseEntity<ChucVu> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<ChucVu> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(chucVuService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/chuc-vu/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(chucVuService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -257,12 +257,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/coquan-tochuc-donvi/{id}")
-        public ResponseEntity<CoQuanToChucDonVi> getById(@PathVariable int id) {
+        public ResponseEntity<CoQuanToChucDonVi> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(coQuanToChucDonViService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/coquan-tochuc-donvi-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(coQuanToChucDonViService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -272,12 +272,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/coquan-tochuc-donvi/{id}")
-        public ResponseEntity<CoQuanToChucDonVi> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<CoQuanToChucDonVi> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(coQuanToChucDonViService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/coquan-tochuc-donvi/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(coQuanToChucDonViService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -292,12 +292,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/danh-hieu-nha-nuoc-phong/{id}")
-        public ResponseEntity<DanhHieuNhaNuoc> getById(@PathVariable int id) {
+        public ResponseEntity<DanhHieuNhaNuoc> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/danh-hieu-nha-nuoc-phong-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -308,12 +308,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/danh-hieu-nha-nuoc-phong/{id}")
-        public ResponseEntity<DanhHieuNhaNuoc> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<DanhHieuNhaNuoc> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/danh-hieu-nha-nuoc-phong/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -328,12 +328,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/dan-toc/{id}")
-        public ResponseEntity<DanToc> getById(@PathVariable int id) {
+        public ResponseEntity<DanToc> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(danTocService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/dan-toc-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(danTocService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -343,12 +343,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/dan-toc/{id}")
-        public ResponseEntity<DanToc> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<DanToc> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(danTocService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/dan-toc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(danTocService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -363,12 +363,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/doi-tuong-chinh-sach/{id}")
-        public ResponseEntity<DoiTuongChinhSach> getById(@PathVariable int id) {
+        public ResponseEntity<DoiTuongChinhSach> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(doiTuongChinhSachService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/doi-tuong-chinh-sach-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(doiTuongChinhSachService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -378,12 +378,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/doi-tuong-chinh-sach/{id}")
-        public ResponseEntity<DoiTuongChinhSach> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<DoiTuongChinhSach> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(doiTuongChinhSachService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/doi-tuong-chinh-sach/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(doiTuongChinhSachService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -398,12 +398,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/hinh-thuc-khen-thuong/{id}")
-        public ResponseEntity<HinhThucKhenThuong> getById(@PathVariable int id) {
+        public ResponseEntity<HinhThucKhenThuong> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(hinhThucKhenThuongService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/hinh-thuc-khen-thuong-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(hinhThucKhenThuongService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -413,12 +413,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/hinh-thuc-khen-thuong/{id}")
-        public ResponseEntity<HinhThucKhenThuong> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<HinhThucKhenThuong> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(hinhThucKhenThuongService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/hinh-thuc-khen-thuong/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(hinhThucKhenThuongService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -433,12 +433,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/hoc-ham/{id}")
-        public ResponseEntity<HocHam> getById(@PathVariable int id) {
+        public ResponseEntity<HocHam> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(hocHamService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/hoc-ham-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(hocHamService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -448,12 +448,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/hoc-ham/{id}")
-        public ResponseEntity<HocHam> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<HocHam> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(hocHamService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/hoc-ham/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(hocHamService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -468,12 +468,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/loai-phu-cap/{id}")
-        public ResponseEntity<LoaiPhuCap> getById(@PathVariable int id) {
+        public ResponseEntity<LoaiPhuCap> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(loaiPhuCapService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/loai-phu-cap-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(loaiPhuCapService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -483,12 +483,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/loai-phu-cap/{id}")
-        public ResponseEntity<LoaiPhuCap> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<LoaiPhuCap> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(loaiPhuCapService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/loai-phu-cap/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(loaiPhuCapService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -503,12 +503,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/moi-quan-he/{id}")
-        public ResponseEntity<MoiQuanHe> getById(@PathVariable int id) {
+        public ResponseEntity<MoiQuanHe> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(moiQuanHeService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/moi-quan-he-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(moiQuanHeService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -518,12 +518,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/moi-quan-he/{id}")
-        public ResponseEntity<MoiQuanHe> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<MoiQuanHe> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(moiQuanHeService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/moi-quan-he/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(moiQuanHeService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -538,12 +538,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/nhom-mau/{id}")
-        public ResponseEntity<NhomMau> getById(@PathVariable int id) {
+        public ResponseEntity<NhomMau> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(nhomMauService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/nhom-mau-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(nhomMauService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -553,12 +553,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/nhom-mau/{id}")
-        public ResponseEntity<NhomMau> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<NhomMau> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(nhomMauService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/nhom-mau/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(nhomMauService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -573,12 +573,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/thanh-phan-gia-dinh/{id}")
-        public ResponseEntity<ThanhPhanGiaDinh> getById(@PathVariable int id) {
+        public ResponseEntity<ThanhPhanGiaDinh> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(thanhPhanGiaDinhService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/thanh-phan-gia-dinh-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(thanhPhanGiaDinhService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -588,12 +588,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/thanh-phan-gia-dinh/{id}")
-        public ResponseEntity<ThanhPhanGiaDinh> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<ThanhPhanGiaDinh> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(thanhPhanGiaDinhService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/thanh-phan-gia-dinh/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(thanhPhanGiaDinhService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -608,12 +608,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/ton-giao/{id}")
-        public ResponseEntity<TonGiao> getById(@PathVariable int id) {
+        public ResponseEntity<TonGiao> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(tonGiaoService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/ton-giao-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(tonGiaoService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -623,12 +623,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/ton-giao/{id}")
-        public ResponseEntity<TonGiao> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<TonGiao> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(tonGiaoService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/ton-giao/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(tonGiaoService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -643,12 +643,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/trinh-do-chuyen-mon/{id}")
-        public ResponseEntity<TrinhDoChuyenMon> getById(@PathVariable int id) {
+        public ResponseEntity<TrinhDoChuyenMon> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(trinhDoChuyenMonService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/trinh-do-chuyen-mon-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(trinhDoChuyenMonService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -658,12 +658,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/trinh-do-chuyen-mon/{id}")
-        public ResponseEntity<TrinhDoChuyenMon> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<TrinhDoChuyenMon> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(trinhDoChuyenMonService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/trinh-do-chuyen-mon/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(trinhDoChuyenMonService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -678,12 +678,12 @@ public class UtilitiesController {
         }
 
         @GetMapping("/trinh-do-giao-duc-pho-thong/{id}")
-        public ResponseEntity<TrinhDoGiaoDucPhoThong> getById(@PathVariable int id) {
+        public ResponseEntity<TrinhDoGiaoDucPhoThong> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/trinh-do-giao-duc-pho-thong-name/{id}")
-        public ResponseEntity<String> getName(@PathVariable int id) {
+        public ResponseEntity<String> getName(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xemTheoIdTraVeName(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -693,12 +693,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/trinh-do-giao-duc-pho-thong/{id}")
-        public ResponseEntity<TrinhDoGiaoDucPhoThong> edit(@PathVariable int id, @RequestBody ReqUtilities luong) {
+        public ResponseEntity<TrinhDoGiaoDucPhoThong> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities luong) {
             return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.sua(id, luong), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/trinh-do-giao-duc-pho-thong/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -714,7 +714,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/vi-tri-viec-lam/{id}")
-        public ResponseEntity<ResViTriViecLam> getById(@PathVariable int id) {
+        public ResponseEntity<ResViTriViecLam> getById(@PathVariable(name = "id") int id) {
             ResViTriViecLam resViTriViecLam = mapperViTriViecLam.mapToResViTriViecLam(viTriViecLamService.xemTheoId(id));
             return new ResponseEntity<>(resViTriViecLam, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -726,13 +726,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/vi-tri-viec-lam/{id}")
-        public ResponseEntity<ResViTriViecLam> edit(@PathVariable int id, @RequestBody ReqUtilities req) {
+        public ResponseEntity<ResViTriViecLam> edit(@PathVariable(name = "id") int id, @RequestBody ReqUtilities req) {
             ResViTriViecLam resViTriViecLam = mapperViTriViecLam.mapToResViTriViecLam(viTriViecLamService.sua(id, req));
             return new ResponseEntity<>(resViTriViecLam, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/vi-tri-viec-lam/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(viTriViecLamService.xoa(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -747,7 +747,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/loai-cong-chuc/{id}")
-        public ResponseEntity<LoaiCongChuc> getById(@PathVariable int id) {
+        public ResponseEntity<LoaiCongChuc> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(congChucService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -757,12 +757,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/loai-cong-chuc/{id}")
-        public ResponseEntity<LoaiCongChuc> edit(@PathVariable int id, @RequestBody ReqLoai loai) {
+        public ResponseEntity<LoaiCongChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqLoai loai) {
             return new ResponseEntity<>(congChucService.suaLoaiCongChuc(id, loai), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/loai-cong-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(congChucService.xoaLoaiCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -777,7 +777,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/loai-vien-chuc/{id}")
-        public ResponseEntity<LoaiVienChuc> getById(@PathVariable int id) {
+        public ResponseEntity<LoaiVienChuc> getById(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(vienChucService.xemTheoId(id), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -787,12 +787,12 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/loai-vien-chuc/{id}")
-        public ResponseEntity<LoaiVienChuc> edit(@PathVariable int id, @RequestBody ReqLoai loai) {
+        public ResponseEntity<LoaiVienChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqLoai loai) {
             return new ResponseEntity<>(vienChucService.suaLoaiVienChuc(id, loai), ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/loai-vien-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(vienChucService.xoaLoaiVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -808,7 +808,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/nhom-cong-chuc/{id}")
-        public ResponseEntity<ResNhomCongChuc> getById(@PathVariable int id) {
+        public ResponseEntity<ResNhomCongChuc> getById(@PathVariable(name = "id") int id) {
             ResNhomCongChuc resNhomCongChuc = mapperNhomCongChuc.mapToResNhomCongChuc(nhomCongChucService.xemTheoId(id));
             return new ResponseEntity<>(resNhomCongChuc, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -820,13 +820,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/nhom-cong-chuc/{id}")
-        public ResponseEntity<ResNhomCongChuc> edit(@PathVariable int id, @RequestBody ReqNhom loai) {
+        public ResponseEntity<ResNhomCongChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqNhom loai) {
             ResNhomCongChuc resNhomCongChuc = mapperNhomCongChuc.mapToResNhomCongChuc(nhomCongChucService.suaNhomCongChuc(id, loai));
             return new ResponseEntity<>(resNhomCongChuc, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/nhom-cong-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(nhomCongChucService.xoaNhomCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -842,7 +842,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/nhom-vien-chuc/{id}")
-        public ResponseEntity<ResNhomVienChuc> getById(@PathVariable int id) {
+        public ResponseEntity<ResNhomVienChuc> getById(@PathVariable(name = "id") int id) {
             ResNhomVienChuc resNhomVienChuc = mapperNhomVienChuc.mapToResNhomVienChuc(nhomVienChucService.xemTheoId(id));
             return new ResponseEntity<>(resNhomVienChuc, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -854,13 +854,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/nhom-vien-chuc/{id}")
-        public ResponseEntity<ResNhomVienChuc> edit(@PathVariable int id, @RequestBody ReqNhom loai) {
+        public ResponseEntity<ResNhomVienChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqNhom loai) {
             ResNhomVienChuc resNhomVienChuc = mapperNhomVienChuc.mapToResNhomVienChuc(nhomVienChucService.suaNhomVienChuc(id, loai));
             return new ResponseEntity<>(resNhomVienChuc, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/nhom-vien-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(nhomVienChucService.xoaNhomVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -876,7 +876,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/he-so-luong-cong-chuc/{id}")
-        public ResponseEntity<ResHeSoLuongCongChuc> getById(@PathVariable int id) {
+        public ResponseEntity<ResHeSoLuongCongChuc> getById(@PathVariable(name = "id") int id) {
             ResHeSoLuongCongChuc res = mapperHeSoLuongCongChuc.mapToResHeSoLuongCongChuc(heSoLuongCongChucService.xemTheoId(id));
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -888,13 +888,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/he-so-luong-cong-chuc/{id}")
-        public ResponseEntity<ResHeSoLuongCongChuc> edit(@PathVariable int id, @RequestBody ReqHeSoLuong loai) {
+        public ResponseEntity<ResHeSoLuongCongChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqHeSoLuong loai) {
             ResHeSoLuongCongChuc res = mapperHeSoLuongCongChuc.mapToResHeSoLuongCongChuc(heSoLuongCongChucService.suaHeSoLuongCongChuc(id, loai));
             return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/he-so-luong-cong-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(heSoLuongCongChucService.xoaHeSoLuongCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -910,7 +910,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/he-so-luong-vien-chuc/{id}")
-        public ResponseEntity<ResHeSoLuongVienChuc> getById(@PathVariable int id) {
+        public ResponseEntity<ResHeSoLuongVienChuc> getById(@PathVariable(name = "id") int id) {
             ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.xemTheoId(id));
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -922,13 +922,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/he-so-luong-vien-chuc/{id}")
-        public ResponseEntity<ResHeSoLuongVienChuc> edit(@PathVariable int id, @RequestBody ReqHeSoLuong loai) {
+        public ResponseEntity<ResHeSoLuongVienChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqHeSoLuong loai) {
             ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.suaHeSoLuongVienChuc(id, loai));
             return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/he-so-luong-vien-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable int id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
             return new ResponseEntity<>(heSoLuongVienChucService.xoaHeSoLuongVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -944,7 +944,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/ngach-cong-chuc/{id}")
-        public ResponseEntity<ResNgachCongChuc> getById(@PathVariable String id) {
+        public ResponseEntity<ResNgachCongChuc> getById(@PathVariable(name = "id") String id) {
             ResNgachCongChuc res = mapperNgachCongChuc.mapToResNgachCongChuc(ngachCongChucService.xemTheoId(id));
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -956,13 +956,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/ngach-cong-chuc/{id}")
-        public ResponseEntity<ResNgachCongChuc> edit(@PathVariable String id, @RequestBody ReqNgach loai) {
+        public ResponseEntity<ResNgachCongChuc> edit(@PathVariable(name = "id") String id, @RequestBody ReqNgach loai) {
             ResNgachCongChuc res = mapperNgachCongChuc.mapToResNgachCongChuc(ngachCongChucService.suaNgachCongChuc(id, loai));
             return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/ngach-cong-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable String id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") String id) {
             return new ResponseEntity<>(ngachCongChucService.xoaNgachCongChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }
@@ -978,7 +978,7 @@ public class UtilitiesController {
         }
 
         @GetMapping("/ngach-vien-chuc/{id}")
-        public ResponseEntity<ResNgachVienChuc> getById(@PathVariable String id) {
+        public ResponseEntity<ResNgachVienChuc> getById(@PathVariable(name = "id") String id) {
             ResNgachVienChuc res = mapperNgachVienChuc.mapToResNgachVienChuc(ngachVienChucService.xemTheoId(id));
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
@@ -990,13 +990,13 @@ public class UtilitiesController {
         }
 
         @PatchMapping("/ngach-vien-chuc/{id}")
-        public ResponseEntity<ResNgachVienChuc> edit(@PathVariable String id, @RequestBody ReqNgach loai) {
+        public ResponseEntity<ResNgachVienChuc> edit(@PathVariable(name = "id") String id, @RequestBody ReqNgach loai) {
             ResNgachVienChuc res = mapperNgachVienChuc.mapToResNgachVienChuc(ngachVienChucService.suaNgachVienChuc(id, loai));
             return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
         @DeleteMapping("/ngach-vien-chuc/{id}")
-        public ResponseEntity<Boolean> del(@PathVariable String id) {
+        public ResponseEntity<Boolean> del(@PathVariable(name = "id") String id) {
             return new ResponseEntity<>(ngachVienChucService.xoaNgachVienChuc(id), ResEnum.XOA_THANH_CONG.getStatusCode());
         }
     }

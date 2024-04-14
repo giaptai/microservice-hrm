@@ -33,7 +33,7 @@ public class TinHocController {
     private final MapperTinHoc mapper;
 
     @GetMapping("/{id}/tin-hoc")
-    public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable UUID id,
+    public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
                                                           @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
@@ -49,26 +49,26 @@ public class TinHocController {
     }
 
     @GetMapping("/tin-hoc/{id}")
-    public ResponseEntity<ResTinHoc> getById(@PathVariable int id) {
+    public ResponseEntity<ResTinHoc> getById(@PathVariable(name = "id") int id) {
         ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/tin-hoc/{id}")
     @Transactional
-    public ResponseEntity<ResTinHoc> add(@PathVariable UUID id, @RequestBody ReqTinHoc cu) {
+    public ResponseEntity<ResTinHoc> add(@PathVariable(name = "id") UUID id, @RequestBody ReqTinHoc cu) {
         ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/tin-hoc/{id}")
-    public ResponseEntity<ResTinHoc> edit(@PathVariable int id, @RequestBody ReqTinHoc cu) {
+    public ResponseEntity<ResTinHoc> edit(@PathVariable(name = "id") int id, @RequestBody ReqTinHoc cu) {
         ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/tin-hoc/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = tinHocService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -90,13 +90,13 @@ public class TinHocController {
     }
 
     @PatchMapping("/ca-nhan/tin-hoc/{id}")
-    public ResponseEntity<ResTinHoc> editCaNhan(@PathVariable int id, @RequestBody ReqTinHoc cu) {
+    public ResponseEntity<ResTinHoc> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqTinHoc cu) {
         ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/tin-hoc/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = tinHocService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

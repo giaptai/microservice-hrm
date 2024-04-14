@@ -32,7 +32,7 @@ public class NgoaiNguController {
     private final MapperNgoaiNgu mapper;
 
     @GetMapping("/{id}/ngoai-ngu")
-    public ResponseEntity<List<ResNgoaiNgu>> getAllByHoSoId(@PathVariable UUID id,
+    public ResponseEntity<List<ResNgoaiNgu>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
                                                             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
@@ -47,26 +47,26 @@ public class NgoaiNguController {
     }
 
     @GetMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> getById(@PathVariable int id) {
+    public ResponseEntity<ResNgoaiNgu> getById(@PathVariable(name = "id") int id) {
         ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ngoai-ngu/{id}")
     @Transactional
-    public ResponseEntity<ResNgoaiNgu> add(@PathVariable UUID id, @RequestBody ReqNgoaiNgu cu) {
+    public ResponseEntity<ResNgoaiNgu> add(@PathVariable(name = "id") UUID id, @RequestBody ReqNgoaiNgu cu) {
         ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> edit(@PathVariable int id, @RequestBody ReqNgoaiNgu cu) {
+    public ResponseEntity<ResNgoaiNgu> edit(@PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
         ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = ngoaiNguService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -88,13 +88,13 @@ public class NgoaiNguController {
     }
 
     @PatchMapping("/ca-nhan/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> editCaNhan(@PathVariable int id, @RequestBody ReqNgoaiNgu cu) {
+    public ResponseEntity<ResNgoaiNgu> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
         ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/ngoai-ngu/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = ngoaiNguService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

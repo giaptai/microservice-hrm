@@ -32,7 +32,7 @@ public class PhuCapKhacController {
     private final MapperPhuCapKhac mapper;
 
     @GetMapping("/{id}/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable UUID id,
+    public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
                                                               @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                               @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
@@ -47,26 +47,26 @@ public class PhuCapKhacController {
     }
 
     @GetMapping("/phu-cap-khac/{id}")
-    public ResponseEntity<ResPhuCapKhac> getById(@PathVariable int id) {
+    public ResponseEntity<ResPhuCapKhac> getById(@PathVariable(name = "id") int id) {
         ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/phu-cap-khac/{id}")
     @Transactional
-    public ResponseEntity<ResPhuCapKhac> add(@PathVariable UUID id, @RequestBody ReqPhuCapKhac cu) {
+    public ResponseEntity<ResPhuCapKhac> add(@PathVariable(name = "id") UUID id, @RequestBody ReqPhuCapKhac cu) {
         ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/phu-cap-khac/{id}")
-    public ResponseEntity<ResPhuCapKhac> edit(@PathVariable int id, @RequestBody ReqPhuCapKhac cu) {
+    public ResponseEntity<ResPhuCapKhac> edit(@PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
         ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/phu-cap-khac/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = phuCapKhacService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -88,13 +88,13 @@ public class PhuCapKhacController {
     }
 
     @PatchMapping("/ca-nhan/phu-cap-khac/{id}")
-    public ResponseEntity<ResPhuCapKhac> editCaNhan(@PathVariable int id, @RequestBody ReqPhuCapKhac cu) {
+    public ResponseEntity<ResPhuCapKhac> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
         ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/phu-cap-khac/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = phuCapKhacService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

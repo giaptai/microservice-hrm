@@ -33,7 +33,7 @@ public class KienThucAnNinhQuocPhongController {
 
     @GetMapping("/{id}/kien-thuc-an-ninh-quoc-phong")
     public ResponseEntity<List<ResKienThucAnNinhQuocPhong>> getAllByHoSoId(
-            @PathVariable UUID id,
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResKienThucAnNinhQuocPhong> ls = kienThucAnNinhQuocPhongService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResKienThucAnNinhQuocPhong).toList();
@@ -50,26 +50,26 @@ public class KienThucAnNinhQuocPhongController {
     }
 
     @GetMapping("/kien-thuc-an-ninh-quoc-phong/{id}")
-    public ResponseEntity<ResKienThucAnNinhQuocPhong> getById(@PathVariable int id) {
+    public ResponseEntity<ResKienThucAnNinhQuocPhong> getById(@PathVariable(name = "id") int id) {
         ResKienThucAnNinhQuocPhong ls = mapper.mapToResKienThucAnNinhQuocPhong(kienThucAnNinhQuocPhongService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/kien-thuc-an-ninh-quoc-phong/{id}")
     @Transactional
-    public ResponseEntity<ResKienThucAnNinhQuocPhong> add(@PathVariable UUID id, @RequestBody ReqKienThucAnNinhQuocPhong cu) {
+    public ResponseEntity<ResKienThucAnNinhQuocPhong> add(@PathVariable(name = "id") UUID id, @RequestBody ReqKienThucAnNinhQuocPhong cu) {
         ResKienThucAnNinhQuocPhong ls = mapper.mapToResKienThucAnNinhQuocPhong(kienThucAnNinhQuocPhongService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/kien-thuc-an-ninh-quoc-phong/{id}")
-    public ResponseEntity<ResKienThucAnNinhQuocPhong> edit(@PathVariable int id, @RequestBody ReqKienThucAnNinhQuocPhong cu) {
+    public ResponseEntity<ResKienThucAnNinhQuocPhong> edit(@PathVariable(name = "id") int id, @RequestBody ReqKienThucAnNinhQuocPhong cu) {
         ResKienThucAnNinhQuocPhong ls = mapper.mapToResKienThucAnNinhQuocPhong(kienThucAnNinhQuocPhongService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/kien-thuc-an-ninh-quoc-phong/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = kienThucAnNinhQuocPhongService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -92,13 +92,13 @@ public class KienThucAnNinhQuocPhongController {
     }
 
     @PatchMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong/{id}")
-    public ResponseEntity<ResKienThucAnNinhQuocPhong> editCaNhan(@PathVariable int id, @RequestBody ReqKienThucAnNinhQuocPhong cu) {
+    public ResponseEntity<ResKienThucAnNinhQuocPhong> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqKienThucAnNinhQuocPhong cu) {
         ResKienThucAnNinhQuocPhong ls = mapper.mapToResKienThucAnNinhQuocPhong(kienThucAnNinhQuocPhongService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = kienThucAnNinhQuocPhongService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

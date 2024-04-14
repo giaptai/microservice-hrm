@@ -32,7 +32,7 @@ public class QuanHeGiaDinhController {
     private final MapperQuanHeGiaDinh mapper;
 
     @GetMapping("/{id}/quan-he-gia-dinh")
-    public ResponseEntity<List<ResQuanHeGiaDinh>> getAllByHoSoId(@PathVariable UUID id,
+    public ResponseEntity<List<ResQuanHeGiaDinh>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
@@ -47,26 +47,26 @@ public class QuanHeGiaDinhController {
     }
 
     @GetMapping("/quan-he-gia-dinh/{id}")
-    public ResponseEntity<ResQuanHeGiaDinh> getById(@PathVariable int id) {
+    public ResponseEntity<ResQuanHeGiaDinh> getById(@PathVariable(name = "id") int id) {
         ResQuanHeGiaDinh ls = mapper.mapToResQuanHeGiaDinh(quanHeGiaDinhService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/quan-he-gia-dinh/{id}")
     @Transactional
-    public ResponseEntity<ResQuanHeGiaDinh> add(@PathVariable UUID id, @RequestBody ReqQuanHeGiaDinh cu) {
+    public ResponseEntity<ResQuanHeGiaDinh> add(@PathVariable(name = "id") UUID id, @RequestBody ReqQuanHeGiaDinh cu) {
         ResQuanHeGiaDinh ls = mapper.mapToResQuanHeGiaDinh(quanHeGiaDinhService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/quan-he-gia-dinh/{id}")
-    public ResponseEntity<ResQuanHeGiaDinh> edit(@PathVariable int id, @RequestBody ReqQuanHeGiaDinh cu) {
+    public ResponseEntity<ResQuanHeGiaDinh> edit(@PathVariable(name = "id") int id, @RequestBody ReqQuanHeGiaDinh cu) {
         ResQuanHeGiaDinh ls = mapper.mapToResQuanHeGiaDinh(quanHeGiaDinhService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/quan-he-gia-dinh/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = quanHeGiaDinhService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -88,13 +88,13 @@ public class QuanHeGiaDinhController {
     }
 
     @PatchMapping("/ca-nhan/quan-he-gia-dinh/{id}")
-    public ResponseEntity<ResQuanHeGiaDinh> editCaNhan(@PathVariable int id, @RequestBody ReqQuanHeGiaDinh cu) {
+    public ResponseEntity<ResQuanHeGiaDinh> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqQuanHeGiaDinh cu) {
         ResQuanHeGiaDinh ls = mapper.mapToResQuanHeGiaDinh(quanHeGiaDinhService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/quan-he-gia-dinh/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = quanHeGiaDinhService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

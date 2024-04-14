@@ -38,7 +38,7 @@ public class KhenThuongController {
 
     @GetMapping("/{id}/khen-thuong")
     public ResponseEntity<List<ResKhenThuong>> getAllByHoSoId(
-            @PathVariable UUID id,
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
@@ -55,26 +55,26 @@ public class KhenThuongController {
     }
 
     @GetMapping("/khen-thuong/{id}")
-    public ResponseEntity<ResKhenThuong> getById(@PathVariable int id) {
+    public ResponseEntity<ResKhenThuong> getById(@PathVariable(name = "id") int id) {
         ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/khen-thuong/{id}")
     @Transactional
-    public ResponseEntity<ResKhenThuong> add(@PathVariable UUID id, @RequestBody ReqKhenThuong cu) {
+    public ResponseEntity<ResKhenThuong> add(@PathVariable(name = "id") UUID id, @RequestBody ReqKhenThuong cu) {
         ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/khen-thuong/{id}")
-    public ResponseEntity<ResKhenThuong> edit(@PathVariable int id, @RequestBody ReqKhenThuong cu) {
+    public ResponseEntity<ResKhenThuong> edit(@PathVariable(name = "id") int id, @RequestBody ReqKhenThuong cu) {
         ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/khen-thuong/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = khenThuongService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -98,13 +98,13 @@ public class KhenThuongController {
     }
 
     @PatchMapping("/ca-nhan/khen-thuong/{id}")
-    public ResponseEntity<ResKhenThuong> editCaNhan(@PathVariable int id, @RequestBody ReqKhenThuong cu) {
+    public ResponseEntity<ResKhenThuong> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqKhenThuong cu) {
         ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/khen-thuong/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = khenThuongService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

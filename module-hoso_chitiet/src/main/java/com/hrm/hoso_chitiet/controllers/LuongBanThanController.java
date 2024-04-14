@@ -33,7 +33,7 @@ public class LuongBanThanController {
 
     @GetMapping("/{id}/luong-ban-than")
     public ResponseEntity<List<ResLuongBanThan>> getAllByHoSoId(
-            @PathVariable UUID id,
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
@@ -50,26 +50,26 @@ public class LuongBanThanController {
     }
 
     @GetMapping("/luong-ban-than/{id}")
-    public ResponseEntity<ResLuongBanThan> getById(@PathVariable int id) {
+    public ResponseEntity<ResLuongBanThan> getById(@PathVariable(name = "id") int id) {
         ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/luong-ban-than/{id}")
     @Transactional
-    public ResponseEntity<ResLuongBanThan> add(@PathVariable UUID id, @RequestBody ReqLuongBanThan cu) {
+    public ResponseEntity<ResLuongBanThan> add(@PathVariable(name = "id") UUID id, @RequestBody ReqLuongBanThan cu) {
         ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/luong-ban-than/{id}")
-    public ResponseEntity<ResLuongBanThan> edit(@PathVariable int id, @RequestBody ReqLuongBanThan cu) {
+    public ResponseEntity<ResLuongBanThan> edit(@PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
         ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/luong-ban-than/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = luongBanThanService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -92,13 +92,13 @@ public class LuongBanThanController {
     }
 
     @PatchMapping("/ca-nhan/luong-ban-than/{id}")
-    public ResponseEntity<ResLuongBanThan> editCaNhan(@PathVariable int id, @RequestBody ReqLuongBanThan cu) {
+    public ResponseEntity<ResLuongBanThan> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
         ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/luong-ban-than/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = luongBanThanService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

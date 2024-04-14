@@ -33,7 +33,7 @@ public class KyLuatController {
 
     @GetMapping("/{id}/ky-luat")
     public ResponseEntity<List<ResKyLuat>> getAllByHoSoId(
-            @PathVariable UUID id,
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResKyLuat> ls = kyLuatService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResKyLuat).toList();
@@ -50,26 +50,26 @@ public class KyLuatController {
     }
 
     @GetMapping("/ky-luat/{id}")
-    public ResponseEntity<ResKyLuat> getById(@PathVariable int id) {
+    public ResponseEntity<ResKyLuat> getById(@PathVariable(name = "id") int id) {
         ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ky-luat/{id}")
     @Transactional
-    public ResponseEntity<ResKyLuat> add(@PathVariable UUID id, @RequestBody ReqKyLuat cu) {
+    public ResponseEntity<ResKyLuat> add(@PathVariable(name = "id") UUID id, @RequestBody ReqKyLuat cu) {
         ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/ky-luat/{id}")
-    public ResponseEntity<ResKyLuat> edit(@PathVariable int id, @RequestBody ReqKyLuat cu) {
+    public ResponseEntity<ResKyLuat> edit(@PathVariable(name = "id") int id, @RequestBody ReqKyLuat cu) {
         ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ky-luat/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = kyLuatService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -92,13 +92,13 @@ public class KyLuatController {
     }
 
     @PatchMapping("/ca-nhan/ky-luat/{id}")
-    public ResponseEntity<ResKyLuat> editCaNhan(@PathVariable int id, @RequestBody ReqKyLuat cu) {
+    public ResponseEntity<ResKyLuat> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqKyLuat cu) {
         ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/ky-luat/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = kyLuatService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

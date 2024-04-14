@@ -33,7 +33,7 @@ public class LamViecONuocNgoaiController {
 
     @GetMapping("/{id}/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAllByHoSoId(
-            @PathVariable UUID id,
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
@@ -50,26 +50,26 @@ public class LamViecONuocNgoaiController {
     }
 
     @GetMapping("/lam-viec-o-nuoc-ngoai/{id}")
-    public ResponseEntity<ResLamViecONuocNgoai> getById(@PathVariable int id) {
+    public ResponseEntity<ResLamViecONuocNgoai> getById(@PathVariable(name = "id") int id) {
         ResLamViecONuocNgoai ls = mapper.mapToResLamViecONuocNgoai(lamViecONuocNgoaiService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/lam-viec-o-nuoc-ngoai/{id}")
     @Transactional
-    public ResponseEntity<ResLamViecONuocNgoai> add(@PathVariable UUID id, @RequestBody ReqLamViecONuocNgoai cu) {
+    public ResponseEntity<ResLamViecONuocNgoai> add(@PathVariable(name = "id") UUID id, @RequestBody ReqLamViecONuocNgoai cu) {
         ResLamViecONuocNgoai ls = mapper.mapToResLamViecONuocNgoai(lamViecONuocNgoaiService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/lam-viec-o-nuoc-ngoai/{id}")
-    public ResponseEntity<ResLamViecONuocNgoai> edit(@PathVariable int id, @RequestBody ReqLamViecONuocNgoai cu) {
+    public ResponseEntity<ResLamViecONuocNgoai> edit(@PathVariable(name = "id") int id, @RequestBody ReqLamViecONuocNgoai cu) {
         ResLamViecONuocNgoai ls = mapper.mapToResLamViecONuocNgoai(lamViecONuocNgoaiService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/lam-viec-o-nuoc-ngoai/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = lamViecONuocNgoaiService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -92,13 +92,13 @@ public class LamViecONuocNgoaiController {
     }
 
     @PatchMapping("/ca-nhan/lam-viec-o-nuoc-ngoai/{id}")
-    public ResponseEntity<ResLamViecONuocNgoai> editCaNhan(@PathVariable int id, @RequestBody ReqLamViecONuocNgoai cu) {
+    public ResponseEntity<ResLamViecONuocNgoai> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqLamViecONuocNgoai cu) {
         ResLamViecONuocNgoai ls = mapper.mapToResLamViecONuocNgoai(lamViecONuocNgoaiService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/lam-viec-o-nuoc-ngoai/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = lamViecONuocNgoaiService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }

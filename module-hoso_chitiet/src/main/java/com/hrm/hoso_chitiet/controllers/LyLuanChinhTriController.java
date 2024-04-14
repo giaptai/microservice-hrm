@@ -32,7 +32,7 @@ public class LyLuanChinhTriController {
     private final MapperLyLuanChinhTri mapper;
 
     @GetMapping("/{id}/ly-luan-chinh-tri")
-    public ResponseEntity<List<ResLyLuanChinhTri>> getAllByHoSoId(@PathVariable UUID id,
+    public ResponseEntity<List<ResLyLuanChinhTri>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
                                                                   @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResLyLuanChinhTri).toList();
@@ -47,26 +47,26 @@ public class LyLuanChinhTriController {
     }
 
     @GetMapping("/ly-luan-chinh-tri/{id}")
-    public ResponseEntity<ResLyLuanChinhTri> getById(@PathVariable int id) {
+    public ResponseEntity<ResLyLuanChinhTri> getById(@PathVariable(name = "id") int id) {
         ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ly-luan-chinh-tri/{id}")
     @Transactional
-    public ResponseEntity<ResLyLuanChinhTri> add(@PathVariable UUID id, @RequestBody ReqLyLuanChinhTri cu) {
+    public ResponseEntity<ResLyLuanChinhTri> add(@PathVariable(name = "id") UUID id, @RequestBody ReqLyLuanChinhTri cu) {
         ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.them(id, cu));
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
     @PatchMapping("/ly-luan-chinh-tri/{id}")
-    public ResponseEntity<ResLyLuanChinhTri> edit(@PathVariable int id, @RequestBody ReqLyLuanChinhTri cu) {
+    public ResponseEntity<ResLyLuanChinhTri> edit(@PathVariable(name = "id") int id, @RequestBody ReqLyLuanChinhTri cu) {
         ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ly-luan-chinh-tri/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable int id) {
+    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
         boolean ls = lyLuanChinhTriService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
@@ -88,13 +88,13 @@ public class LyLuanChinhTriController {
     }
 
     @PatchMapping("/ca-nhan/ly-luan-chinh-tri/{id}")
-    public ResponseEntity<ResLyLuanChinhTri> editCaNhan(@PathVariable int id, @RequestBody ReqLyLuanChinhTri cu) {
+    public ResponseEntity<ResLyLuanChinhTri> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqLyLuanChinhTri cu) {
         ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.sua(id, cu));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/ly-luan-chinh-tri/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable int id) {
+    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
         boolean ls = lyLuanChinhTriService.xoa(id);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
