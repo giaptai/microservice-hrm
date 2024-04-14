@@ -36,19 +36,16 @@ import com.hrm.hoso.repository.SucKhoeRepository;
 import com.hrm.hoso.repository.ThongTinTuyenDungRepository;
 import com.hrm.hoso.repository.ViecLamRepository;
 
-import jakarta.ws.rs.NotFoundException;
+import com.hrm.hoso.response.ResEnum;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -75,7 +72,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public UUID layHoSoId(int taiKhoanId) {
-        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(NotFoundException::new);
+        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
     }
 
     @Override
@@ -98,8 +95,8 @@ public class HoSoService implements IHoSoService {
 
 
     @Override
-    public ResHoSo xemHoSoTheoSoCCCD(String q) {
-        HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(NotFoundException::new);
+    public ResHoSo xemHoSoTheoSoCCCD(String q){
+        HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
 //            Pattern UUID_REGEX = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 //            if (UUID_REGEX.matcher(q).matches()) {
 //                resHoSoId = hoSoRepository.findById(UUID.fromString(q)).orElse(null);
@@ -109,7 +106,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo req) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         mapToHoSo(hoSo, req);
         hoSoRepository.save(hoSo);
         return mapperHoSo.mapToResHoSo(hoSo);
@@ -117,7 +114,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
         if (reqChucVu != null) {
             if (chucVuHienTai != null) {
@@ -169,7 +166,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoTheoId(UUID id) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(NotFoundException::new);
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
@@ -192,14 +189,14 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoCaNhan(int taiKhoanId) {
-        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
 //        return xemHoSoTheoId(hoSo.getId());
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
     @Override
     public ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo) {
-        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
     }
 

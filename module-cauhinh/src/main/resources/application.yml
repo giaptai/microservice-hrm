@@ -1,7 +1,7 @@
 spring:
   profiles:
     default: cau-hinh2 #name profiles
-    active: gitpod_pho
+    active: cau-hinh2
   application: #this must same name at yml file in config-server
     name: cau--hinh
   config:
