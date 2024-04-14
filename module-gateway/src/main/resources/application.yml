@@ -10,7 +10,7 @@ eureka:
 spring:
   profiles:
     default: gateway
-    active: gateway
+    active: gateway-gitpod
   application:
     name: gateway
   cloud:
@@ -36,3 +36,9 @@ logging:
     org:
       springframework:
         security: debug
+
+gateway-port:
+  cau-hinh: http://localhost:8080
+  tai-khoan: http://localhost:8082
+  ho-so: http://localhost:8081
+  ho-so-chi-tiet: http://localhost:8083

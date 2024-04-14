@@ -25,12 +25,15 @@ public class Swagger {
                 .packagesToScan("com.hrm.hoso.controller")
                 .build();
     }
+
     @Bean
     public OpenAPI openAPI() {
         Server gatewayServer = new Server();
         gatewayServer.setUrl("http://localhost:8888/api/v1");
         Server internalServer = new Server();
         internalServer.setUrl("http://localhost:8081/api/v1");
-        return new OpenAPI().servers(List.of(gatewayServer, internalServer));
+        Server gitpodServer = new Server();
+        internalServer.setUrl("https://8888-giaptai-microservicehrm-dhv6yvngrm5.ws-us110.gitpod.io/api/v1");
+        return new OpenAPI().servers(List.of(gatewayServer, internalServer, gitpodServer));
     }
 }
