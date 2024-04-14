@@ -51,7 +51,7 @@ public class GatewayConfig {
     @Bean
     public WebFilter corsFilter() {
         // https://stackoverflow.com/questions/63144563/how-to-disable-global-cors-config-in-spring-cloud-gateway-yml-config-to-allow-r
-        final String ALLOWED_HEADERS = "x-requested-with, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN";
+        final String ALLOWED_HEADERS = "x-requested-with, authorization, Content-Type, Content-Length, Authorization, credential, X-XSRF-TOKEN";
         final String ALLOWED_METHODS = "GET, PUT, POST, DELETE, OPTIONS, PATCH";
         final String MAX_AGE = "7200";
         return (ServerWebExchange ctx, WebFilterChain chain) -> {
