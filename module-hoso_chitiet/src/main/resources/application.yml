@@ -7,3 +7,6 @@ spring:
   config:
     import: optional:configserver:http://localhost:1111
 
+gateway-port:
+  ho-so-chi-tiet: https://8888-giaptai-microservicehrm-dhv6yvngrm5.ws-us110.gitpod.io/api/v1
+

@@ -10,7 +10,7 @@ eureka:
 spring:
   profiles:
     default: gateway
-    active: gitpod
+    active: gitpod_pho
   application:
     name: gateway
   cloud:

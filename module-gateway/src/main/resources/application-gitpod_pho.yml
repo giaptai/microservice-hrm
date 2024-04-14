@@ -1,0 +1,31 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /api/v1
+
+eureka:
+  client:
+    register-with-eureka: true
+
+spring:
+  application:
+    name: gateway-gitpod
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+  config:
+    import: optional:configserver:http://localhost:1111
+
+logging:
+  level:
+    org:
+      springframework:
+        security: debug
+
+gateway-port:
+  cau-hinh: https://8080-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
+  tai-khoan: https://8082-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
+  ho-so: https://8081-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
+  ho-so-chi-tiet: https://8083-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io

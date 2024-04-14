@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +19,8 @@ import java.util.List;
         scheme = "bearer"
 )
 public class Swagger {
+    @Value("${gateway-port.ho-so}")
+    private String hoSoURL;
     @Bean
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
@@ -33,7 +36,7 @@ public class Swagger {
         Server internalServer = new Server();
         internalServer.setUrl("http://localhost:8081/api/v1");
         Server gitpodServer = new Server();
-        internalServer.setUrl("https://8888-giaptai-microservicehrm-dhv6yvngrm5.ws-us110.gitpod.io/api/v1");
+        internalServer.setUrl(hoSoURL);
         return new OpenAPI().servers(List.of(gatewayServer, internalServer, gitpodServer));
     }
 }

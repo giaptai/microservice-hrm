@@ -1,11 +1,8 @@
 spring:
-  profiles:
-    default: hoso
-    active: hoso
   application: #this must same name at yml file in config-server
     name: ho-so #name application in eureka
   config:
     import: optional:configserver:http://localhost:1111
 
 gateway-port:
-  ho-so: https://8888-giaptai-microservicehrm-dhv6yvngrm5.ws-us110.gitpod.io/api/v1
+  ho-so: https://8888-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io/api/v1

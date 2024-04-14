@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: ho-so_chi-tiet #name application in eureka
+  config:
+    import: optional:configserver:http://localhost:1111
+
+gateway-port:
+  ho-so-chi-tiet: https://8888-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io/api/v1
+
