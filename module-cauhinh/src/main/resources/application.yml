@@ -8,7 +8,7 @@ spring:
     import: optional:configserver:http://localhost:1111
 
 gateway-port:
-  cau-hinh: https://8080-giaptai-microservicehrm-dhv6yvngrm5.ws-us110.gitpod.io/api/v1
+  cau-hinh: https://8888-giaptai-microservicehrm-dhv6yvngrm5.ws-us110.gitpod.io/api/v1
 
 
 
