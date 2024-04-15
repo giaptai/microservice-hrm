@@ -9,18 +9,15 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
-public record ResChucVu(
-        int chucVuHienTaiId, //ChucVu chucVuHienTai
-        String chucVuHienTaiName,
+public record ResChucVuKiemNhiem(
+        int chucVuKiemNhiemId, //ChucVu chucVuHienTai
+        String chucVuKiemNhiemName,
         LocalDateTime ngayBoNhiem,
-        LocalDateTime ngayBoNhiemLai,
-        String duocQuyHoacChucDanh,
-        double phuCapChucVu,
-        int coQuanToChucDonViTuyenDungId,
-        String coQuanToChucDonViTuyenDungName,
+        double phuCapKiemNhiem,
+        double phuCapKhac,
         UUID hoSoId
 ) {
-    public static class ResChucVuSerializer implements Serializer<ResChucVu> {
+    public static class ResChucVuSerializer implements Serializer<ResChucVuKiemNhiem> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
         @Override
@@ -28,7 +25,7 @@ public record ResChucVu(
         }
 
         @Override
-        public byte[] serialize(String topic, ResChucVu data) {
+        public byte[] serialize(String topic, ResChucVuKiemNhiem data) {
             try {
 //                ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //                ObjectOutputStream oos = new ObjectOutputStream(bos);

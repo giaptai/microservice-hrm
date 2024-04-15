@@ -28,7 +28,8 @@ public record ReqHoSo(
         int doiTuongChinhSach, //DoiTuongChinhSach doiTuongChinhSach,
         ReqHocVan hocVan, //HocVan
         ReqChucVu chucVu,
-        int chucVuKiemNhiem, //ChucVu chucVuKiemNhiem
+        ReqChucVuKiemNhiem chucVuKiemNhiem,
+//        int chucVuKiemNhiem, //ChucVu chucVuKiemNhiem
         int chucVuDangHienTai, //ChucDanhDang chucVuDangHienTai;
         int chucVuDangKiemNhiem, // ChucDanhDang chucVuDangKiemNhiem;
         double tienLuong,

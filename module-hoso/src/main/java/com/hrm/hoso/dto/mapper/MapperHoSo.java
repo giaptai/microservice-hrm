@@ -7,10 +7,11 @@ import com.hrm.hoso.client.doi_tuong_chinh_sach.DoiTuongChinhSachClient;
 import com.hrm.hoso.client.thanh_phan_gia_dinh.ThanhPhanGiaDinhClient;
 import com.hrm.hoso.client.ton_giao.TonGiaoClient;
 import com.hrm.hoso.dto.response.ResChucVu;
+import com.hrm.hoso.dto.response.ResChucVuKiemNhiem;
 import com.hrm.hoso.dto.response.ResHoSo;
 
-import com.hrm.hoso.kakfka.KafkaConfig;
 import com.hrm.hoso.models.ChucVuHienTai;
+import com.hrm.hoso.models.ChucVuKiemNhiem;
 import com.hrm.hoso.models.HoSo;
 import com.hrm.hoso.models.HocVan;
 import com.hrm.hoso.models.NgachNhanVien;
@@ -33,6 +34,7 @@ public class MapperHoSo {
     final MapperQuanSu mapperQuanSu;
     final MapperHocVan mapperHocVan;
     final MapperChucVuHienTai mapperChucVuHienTai;
+    final MapperChucVuKiemNhiem mapperChucVuKiemNhiem;
     final MapperNgach mapperNgach;
     final MapperViecLam mapperViecLam;
     final MapperSucKhoe mapperSucKhoe;
@@ -41,7 +43,7 @@ public class MapperHoSo {
     final TonGiaoClient tonGiaoClient;
     final ThanhPhanGiaDinhClient thanhPhanGiaDinhClient;
     final DoiTuongChinhSachClient doiTuongChinhSachClient;
-    final ChucVuClient chucVuClient;
+//    final ChucVuClient chucVuClient;
     final ChucVuDangClient chucVuDangClient;
 
     public ResHoSo mapToResHoSo(HoSo hoSo) {
@@ -49,6 +51,7 @@ public class MapperHoSo {
         NghiaVuQuanSu quanSu = hoSo.getQuanSu();
         HocVan hocVan = hoSo.getHocVan();
         ChucVuHienTai chucVu = hoSo.getChucVuHienTai();
+        ChucVuKiemNhiem chucVuKiemNhiem = hoSo.getChucVuKiemNhiem();
         NgachNhanVien ngach = hoSo.getNgach();
         ViecLam viecLam = hoSo.getViecLam();
         SucKhoe sucKhoe = hoSo.getSucKhoe();
@@ -56,10 +59,11 @@ public class MapperHoSo {
         String tonGiaoName = tonGiaoClient.getName(hoSo.getTonGiaoId());
         String thanhPhanGiaDinhName = thanhPhanGiaDinhClient.getName(hoSo.getThanhPhanGiaDinhId());
         String doiTuongChinhSachName = doiTuongChinhSachClient.getName(hoSo.getDoiTuongChinhSachId());
-        String chucVuKiemNhiemName = chucVuClient.getName(hoSo.getChucVuKiemNhiemId());
+//        String chucVuKiemNhiemName = chucVuClient.getName(hoSo.getChucVuKiemNhiemId());
         String chucVuDangHienTaiName = chucVuDangClient.getName(hoSo.getChucVuDangHienTaiId());
         String chucVuDangKiemNhiemName = chucVuDangClient.getName(hoSo.getChucVuDangKiemNhiemId());
         ResChucVu chucVuHienTai = mapperChucVuHienTai.mapToResChucVu(chucVu);
+        ResChucVuKiemNhiem resChucVuKiemNhiem = mapperChucVuKiemNhiem.mapToResChucVuKiemNhiem(chucVuKiemNhiem);
         return new ResHoSo(
                 hoSo.getId(),
                 hoSo.getHoVaTen(),
@@ -86,17 +90,18 @@ public class MapperHoSo {
                 doiTuongChinhSachName,
                 mapperHocVan.mapToResHocVan(hocVan),
                 chucVuHienTai,
-                hoSo.getChucVuKiemNhiemId(),
-                chucVuKiemNhiemName,
+                resChucVuKiemNhiem,
+//                hoSo.getChucVuKiemNhiemId(),
+//                chucVuKiemNhiemName,
                 hoSo.getChucVuDangHienTaiId(),
                 chucVuDangHienTaiName,
                 hoSo.getChucVuDangKiemNhiemId(),
                 chucVuDangKiemNhiemName,
                 hoSo.getTienLuong(),
                 mapperNgach.mapToResNgachNhanVien(ngach),
-                hoSo.getPhuCapChucVu(),
-                hoSo.getPhuCapKiemNhiem(),
-                hoSo.getPhuCapKhac(),
+//                hoSo.getPhuCapChucVu(),
+//                hoSo.getPhuCapKiemNhiem(),
+//                hoSo.getPhuCapKhac(),
                 mapperViecLam.mapToResViecLam(viecLam),
                 mapperSucKhoe.mapToResSucKhoe(sucKhoe),
                 hoSo.getTaiKhoanId(),

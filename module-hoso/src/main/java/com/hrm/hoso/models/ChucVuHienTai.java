@@ -32,7 +32,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonIgnoreProperties({"hoSo"})
+//@JsonIgnoreProperties({"hoSoId"})
 public class ChucVuHienTai extends DateTimeObject {
     @Id
     @Column(name = "ho_so_id")
@@ -47,8 +47,11 @@ public class ChucVuHienTai extends DateTimeObject {
     @Column(name = "ngay_bo_nhiem_lai", columnDefinition = "datetime")
     LocalDateTime ngayBoNhiemLai;
 
-    @Column(name = "duoc_quy_hoach_chuc_danh", columnDefinition = "varchar(50) default ''")
+    @Column(name = "duoc_quy_hoach_chuc_danh", columnDefinition = "varchar(50) default 'Không'")
     String duocQuyHoacChucDanh;
+
+    @Column(name = "phu_cap_chuc_vu", columnDefinition = "double default 0.0")
+    double phuCapChucVu;
 
     @Column(name = "coquan_tochuc_donvi_id", columnDefinition = "INTEGER")
     int coQuanToChucDonViTuyenDungId;
@@ -58,12 +61,23 @@ public class ChucVuHienTai extends DateTimeObject {
     @JoinColumn(name = "ho_so_id")
     HoSo hoSoId;
 
-    public ChucVuHienTai(int chucVuId, LocalDateTime ngayBoNhiem, LocalDateTime ngayBoNhiemLai, String duocQuyHoacChucDanh, int coQuanToChucDonViTuyenDungId, HoSo hoSoId) {
+//    public ChucVuHienTai(int chucVuId, LocalDateTime ngayBoNhiem, LocalDateTime ngayBoNhiemLai, String duocQuyHoacChucDanh, int coQuanToChucDonViTuyenDungId, HoSo hoSoId) {
+//        super();
+//        this.chucVuId = chucVuId;
+//        this.ngayBoNhiem = ngayBoNhiem;
+//        this.ngayBoNhiemLai = ngayBoNhiemLai;
+//        this.duocQuyHoacChucDanh = duocQuyHoacChucDanh;
+//        this.coQuanToChucDonViTuyenDungId = coQuanToChucDonViTuyenDungId;
+//        this.hoSoId = hoSoId;
+//    }
+
+    public ChucVuHienTai(int chucVuId, LocalDateTime ngayBoNhiem, LocalDateTime ngayBoNhiemLai, String duocQuyHoacChucDanh, double phuCapChucVu, int coQuanToChucDonViTuyenDungId, HoSo hoSoId) {
         super();
         this.chucVuId = chucVuId;
         this.ngayBoNhiem = ngayBoNhiem;
         this.ngayBoNhiemLai = ngayBoNhiemLai;
         this.duocQuyHoacChucDanh = duocQuyHoacChucDanh;
+        this.phuCapChucVu = phuCapChucVu;
         this.coQuanToChucDonViTuyenDungId = coQuanToChucDonViTuyenDungId;
         this.hoSoId = hoSoId;
     }

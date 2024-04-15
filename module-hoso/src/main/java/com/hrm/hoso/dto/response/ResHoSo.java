@@ -43,17 +43,18 @@ public record ResHoSo(
         String doiTuongChinhSachName,
         ResHocVan hocVan, //HocVan
         ResChucVu chucVu,
-        int chucVuKiemNhiem, //ChucVu chucVuKiemNhiem
-        String chucVuKiemNhiemName,
+        ResChucVuKiemNhiem chucVuKiemNhiem,
+//        int chucVuKiemNhiem, //ChucVu chucVuKiemNhiem
+//        String chucVuKiemNhiemName,
         int chucVuDangHienTai, //ChucDanhDang chucVuDangHienTai;
         String chucVuDangHienTaiName,
         int chucVuDangKiemNhiem, // ChucDanhDang chucVuDangKiemNhiem;
         String chucVuDangKiemNhiemName,
         double tienLuong,
         ResNgachNhanVien ngach,
-        double phuCapChucVu,
-        double phuCapKiemNhiem,
-        double phuCapKhac,
+//        double phuCapChucVu,
+//        double phuCapKiemNhiem,
+//        double phuCapKhac,
         ResViecLam viecLam,
         ResSucKhoe sucKhoe,
         int taiKhoan,

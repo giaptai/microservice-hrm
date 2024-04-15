@@ -3,6 +3,7 @@ package com.hrm.hoso.services;
 import com.hrm.hoso.dto.mapper.MapperChucVuHienTai;
 import com.hrm.hoso.dto.mapper.MapperHoSo;
 import com.hrm.hoso.dto.request.ReqChucVu;
+import com.hrm.hoso.dto.request.ReqChucVuKiemNhiem;
 import com.hrm.hoso.dto.request.ReqHocVan;
 import com.hrm.hoso.dto.request.ReqNgachNhanVien;
 import com.hrm.hoso.dto.request.ReqQuanSu;
@@ -19,6 +20,7 @@ import com.hrm.hoso.dto.request.ReqHoSo;
 
 import com.hrm.hoso.kakfka.KafkaConfig;
 import com.hrm.hoso.models.ChucVuHienTai;
+import com.hrm.hoso.models.ChucVuKiemNhiem;
 import com.hrm.hoso.models.HoSo;
 import com.hrm.hoso.models.HocVan;
 import com.hrm.hoso.models.NgachNhanVien;
@@ -28,6 +30,7 @@ import com.hrm.hoso.models.ThongTinTuyenDung;
 import com.hrm.hoso.models.ViecLam;
 
 import com.hrm.hoso.repository.ChucVuHienTaiRepository;
+import com.hrm.hoso.repository.ChucVuKiemNhiemRepository;
 import com.hrm.hoso.repository.HocVanRepository;
 import com.hrm.hoso.repository.NgachRepository;
 import com.hrm.hoso.repository.NghiaVuQuanSuRepository;
@@ -59,6 +62,7 @@ import java.util.UUID;
 public class HoSoService implements IHoSoService {
     final HoSoRepository hoSoRepository;
     final ChucVuHienTaiRepository chucVuHienTaiRepository;
+    final ChucVuKiemNhiemRepository chucVuKiemNhiemRepository;
     final HocVanRepository hocVanRepository;
     final NgachRepository ngachRepository;
     final NghiaVuQuanSuRepository nghiaVuQuanSuRepository;
@@ -72,7 +76,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public UUID layHoSoId(int taiKhoanId) {
-        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
     }
 
     @Override
@@ -95,8 +99,8 @@ public class HoSoService implements IHoSoService {
 
 
     @Override
-    public ResHoSo xemHoSoTheoSoCCCD(String q){
-        HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+    public ResHoSo xemHoSoTheoSoCCCD(String q) {
+        HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
 //            Pattern UUID_REGEX = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 //            if (UUID_REGEX.matcher(q).matches()) {
 //                resHoSoId = hoSoRepository.findById(UUID.fromString(q)).orElse(null);
@@ -106,7 +110,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo req) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         mapToHoSo(hoSo, req);
         hoSoRepository.save(hoSo);
         return mapperHoSo.mapToResHoSo(hoSo);
@@ -114,7 +118,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
         if (reqChucVu != null) {
             if (chucVuHienTai != null) {
@@ -122,6 +126,7 @@ public class HoSoService implements IHoSoService {
                 chucVuHienTai.setNgayBoNhiem(reqChucVu.ngayBoNhiem());
                 chucVuHienTai.setNgayBoNhiemLai(reqChucVu.ngayBoNhiemLai());
                 chucVuHienTai.setDuocQuyHoacChucDanh(reqChucVu.duocQuyHoacChucDanh());
+                chucVuHienTai.setPhuCapChucVu(reqChucVu.phuCapChucVu());
                 chucVuHienTai.setCoQuanToChucDonViTuyenDungId(reqChucVu.coQuanToChucDonViTuyenDungId());
                 chucVuHienTai.setUpdate_at();
             } else {
@@ -130,6 +135,7 @@ public class HoSoService implements IHoSoService {
                         reqChucVu.ngayBoNhiem(),
                         reqChucVu.ngayBoNhiemLai(),
                         reqChucVu.duocQuyHoacChucDanh(),
+                        reqChucVu.phuCapChucVu(),
                         reqChucVu.coQuanToChucDonViTuyenDungId(),
                         hoSo);
             }
@@ -166,7 +172,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoTheoId(UUID id) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
@@ -189,14 +195,14 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoCaNhan(int taiKhoanId) {
-        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
 //        return xemHoSoTheoId(hoSo.getId());
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
     @Override
     public ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo) {
-        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
         return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
     }
 
@@ -205,6 +211,7 @@ public class HoSoService implements IHoSoService {
         ReqQuanSu reqQuanSu = req.quanSu();
         ReqHocVan reqHocVan = req.hocVan();
         ReqChucVu reqChucVu = req.chucVu();
+        ReqChucVuKiemNhiem reqChucVuKiemNhiem = req.chucVuKiemNhiem();
         ReqNgachNhanVien reqNgach = req.ngach();
         ReqViecLam reqViecLam = req.viecLam();
         ReqSucKhoe reqSucKhoe = req.sucKhoe();
@@ -267,6 +274,22 @@ public class HoSoService implements IHoSoService {
 //                        reqChucVu.coQuanToChucDonViTuyenDungId(),
 //                        hoSo);
 //        }
+        ChucVuKiemNhiem chucVuKiemNhiem = chucVuKiemNhiemRepository.findById(hoSo.getId()).orElse(null);
+        if (reqChucVuKiemNhiem != null) {
+            if (chucVuKiemNhiem != null) {
+                chucVuKiemNhiem.setChucVuId(reqChucVuKiemNhiem.chucVuKiemNhiemId());
+                chucVuKiemNhiem.setNgayBoNhiem(reqChucVuKiemNhiem.ngayBoNhiem());
+                chucVuKiemNhiem.setPhuCapKiemNhiem(reqChucVuKiemNhiem.phuCapKiemNhiem());
+                chucVuKiemNhiem.setPhuCapKhac(reqChucVuKiemNhiem.phuCapKhac());
+                chucVuKiemNhiem.setUpdate_at();
+            } else
+                chucVuKiemNhiem = new ChucVuKiemNhiem(
+                        reqChucVuKiemNhiem.chucVuKiemNhiemId(),
+                        reqChucVuKiemNhiem.ngayBoNhiem(),
+                        reqChucVuKiemNhiem.phuCapKiemNhiem(),
+                        reqChucVuKiemNhiem.phuCapKhac(),
+                        hoSo);
+        }
         NgachNhanVien ngach = ngachRepository.findById(hoSo.getId()).orElse(null);
         if (reqNgach != null) {
             if (ngach != null) {
@@ -324,14 +347,15 @@ public class HoSoService implements IHoSoService {
         hoSo.setDoiTuongChinhSachId(req.doiTuongChinhSach());
         hoSo.setHocVan(hocVan);
 //        hoSo.setChucVuHienTai(chucVuHienTai);
-        hoSo.setChucVuKiemNhiemId(req.chucVuKiemNhiem());
+//        hoSo.setChucVuKiemNhiemId(req.chucVuKiemNhiem());
+        hoSo.setChucVuKiemNhiem(chucVuKiemNhiem);
         hoSo.setChucVuDangHienTaiId(req.chucVuDangHienTai());
         hoSo.setChucVuDangKiemNhiemId(req.chucVuDangKiemNhiem());
         hoSo.setTienLuong(req.tienLuong());
         hoSo.setNgach(ngach);
-        hoSo.setPhuCapChucVu(req.phuCapChucVu());
-        hoSo.setPhuCapKiemNhiem(req.phuCapKiemNhiem());
-        hoSo.setPhuCapKhac(req.phuCapKhac());
+//        hoSo.setPhuCapChucVu(req.phuCapChucVu());
+//        hoSo.setPhuCapKiemNhiem(req.phuCapKiemNhiem());
+//        hoSo.setPhuCapKhac(req.phuCapKhac());
         hoSo.setViecLam(viecLam);
         hoSo.setSucKhoe(sucKhoe);
         hoSo.setPheDuyet(req.pheDuyet());

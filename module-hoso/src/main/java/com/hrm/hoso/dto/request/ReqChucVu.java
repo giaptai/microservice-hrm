@@ -7,6 +7,7 @@ public record ReqChucVu(
         LocalDateTime ngayBoNhiem,
         LocalDateTime ngayBoNhiemLai,
         String duocQuyHoacChucDanh,
+        double phuCapChucVu,
         int coQuanToChucDonViTuyenDungId
 ) {
 }

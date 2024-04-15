@@ -113,8 +113,12 @@ public class HoSo extends DateTimeObject {
     @PrimaryKeyJoinColumn
     ChucVuHienTai chucVuHienTai;
 
-    @Column(name = "chuc_vu_kiem_nhiem_id", columnDefinition = "integer")
-    int chucVuKiemNhiemId;
+    @OneToOne(mappedBy = "hoSoId", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    ChucVuKiemNhiem chucVuKiemNhiem;
+
+//    @Column(name = "chuc_vu_kiem_nhiem_id", columnDefinition = "integer")
+//    int chucVuKiemNhiemId;
 
     @Column(name = "chuc_vu_dang_hien_tai_id", columnDefinition = "integer")
     int chucVuDangHienTaiId;
@@ -129,14 +133,14 @@ public class HoSo extends DateTimeObject {
     @PrimaryKeyJoinColumn
     NgachNhanVien ngach;
 
-    @Column(name = "phu_cap_chuc_vu", columnDefinition = "double default 0.0")
-    double phuCapChucVu;
+//    @Column(name = "phu_cap_chuc_vu", columnDefinition = "double default 0.0") //ChucVuHienTai
+//    double phuCapChucVu;
 
-    @Column(name = "phu_cap_kiem_nhiem", columnDefinition = "double default 0.0")
-    double phuCapKiemNhiem;
+//    @Column(name = "phu_cap_kiem_nhiem", columnDefinition = "double default 0.0") //chuc vu kiem nhiem
+//    double phuCapKiemNhiem;
 
-    @Column(name = "phu_cap_khac", columnDefinition = "double default 0.0")
-    double phuCapKhac;
+//    @Column(name = "phu_cap_khac", columnDefinition = "double default 0.0") //chuc vu kiem nhiem
+//    double phuCapKhac;
 
     @OneToOne(mappedBy = "hoSoId", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
