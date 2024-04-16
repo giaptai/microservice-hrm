@@ -60,14 +60,18 @@ public class NgoaiNguController {
     }
 
     @PatchMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> edit(@PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu));
+    public ResponseEntity<ResNgoaiNgu> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
+        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = ngoaiNguService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = ngoaiNguService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 
@@ -88,14 +92,18 @@ public class NgoaiNguController {
     }
 
     @PatchMapping("/ca-nhan/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu));
+    public ResponseEntity<ResNgoaiNgu> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
+        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/ngoai-ngu/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = ngoaiNguService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = ngoaiNguService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

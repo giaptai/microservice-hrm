@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MapperTinHoc {
     final CoQuanToChucDonViClient coQuanToChucDonViClient;
+
     public ResTinHoc mapToResTinHoc(TinHoc hoc) {
         return hoc != null ? new ResTinHoc(
                 hoc.getId(),
@@ -21,6 +22,7 @@ public class MapperTinHoc {
                 hoc.getTenCoSoDaoTaoId(),
                 coQuanToChucDonViClient.getName(hoc.getTenCoSoDaoTaoId()),
                 hoc.getChungChiDuocCap(),
+                hoc.getXacNhan(),
                 hoc.getHoSoId(),
                 hoc.getCreate_at(),
                 hoc.getUpdate_at()

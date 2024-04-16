@@ -41,6 +41,7 @@ import com.hrm.hoso_chitiet.repositories.PhuCapKhacRepository;
 import com.hrm.hoso_chitiet.repositories.QuaTrinhCongTacRepository;
 import com.hrm.hoso_chitiet.repositories.QuanHeGiaDinhRepository;
 import com.hrm.hoso_chitiet.repositories.TinHocRepository;
+import com.hrm.hoso_chitiet.response.ResEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -111,43 +112,55 @@ public class HoSoChiTietServices {
             try {
                 return lamViecChoCheDoCuRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
         public LamViecChoCheDoCu them(UUID id, ReqLamViecChoCheDoCu req) {
             try {
-                return lamViecChoCheDoCuRepository.save(new LamViecChoCheDoCu(req.batDau(), req.ketThuc(), req.chucDanhDonViDiaDiem(), id));
+                return lamViecChoCheDoCuRepository.save(new LamViecChoCheDoCu(req.batDau(), req.ketThuc(), req.chucDanhDonViDiaDiem(), XacNhan.CHO_XAC_NHAN, id));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public LamViecChoCheDoCu sua(int id, ReqLamViecChoCheDoCu req) {
+        public LamViecChoCheDoCu sua(int id, ReqLamViecChoCheDoCu req, String role) {
             try {
                 return lamViecChoCheDoCuRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau() != null ? req.batDau() : c.getBatDau());
-                    c.setKetThuc(req.ketThuc() != null ? req.ketThuc() : c.getKetThuc());
-                    c.setChucDanhDonViDiaDiem(req.chucDanhDonViDiaDiem() != null ? req.chucDanhDonViDiaDiem() : c.getChucDanhDonViDiaDiem());
-                    c.setUpdate_at();
-                    return lamViecChoCheDoCuRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau() != null ? req.batDau() : c.getBatDau());
+                        c.setKetThuc(req.ketThuc() != null ? req.ketThuc() : c.getKetThuc());
+                        c.setChucDanhDonViDiaDiem(req.chucDanhDonViDiaDiem() != null ? req.chucDanhDonViDiaDiem() : c.getChucDanhDonViDiaDiem());
+                        c.setUpdate_at();
+                        return lamViecChoCheDoCuRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return lamViecChoCheDoCuRepository.findById(id).map(c -> {
-                    lamViecChoCheDoCuRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") || (role.equals("EMPLOYEE") && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        lamViecChoCheDoCuRepository.deleteById(id);
+                        return true;
+                    } else throw
+                            new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -181,7 +194,8 @@ public class HoSoChiTietServices {
             try {
                 return khenThuongRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -190,36 +204,49 @@ public class HoSoChiTietServices {
             try {
                 return khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuongId(), req.lyDo(), XacNhan.CHO_XAC_NHAN, id));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public KhenThuong sua(int id, ReqKhenThuong req) {
+        public KhenThuong sua(int id, ReqKhenThuong req, String role) {
             try {
                 return khenThuongRepository.findById(id).map(c -> {
-                    c.setNam(req.nam() != null ? req.nam() : c.getNam());
-                    c.setXepLoaiChuyenMon(req.xepLoaiChuyenMon());
-                    c.setXepLoaiThiDua(req.xepLoaiThiDua());
-                    c.setHinhThucKhenThuongId(req.hinhThucKhenThuongId());
-                    c.setLyDo(req.lyDo());
-                    c.setUpdate_at();
-                    return khenThuongRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setNam(req.nam() != null ? req.nam() : c.getNam());
+                        c.setXepLoaiChuyenMon(req.xepLoaiChuyenMon());
+                        c.setXepLoaiThiDua(req.xepLoaiThiDua());
+                        c.setHinhThucKhenThuongId(req.hinhThucKhenThuongId());
+                        c.setLyDo(req.lyDo());
+                        c.setUpdate_at();
+                        return khenThuongRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return khenThuongRepository.findById(id).map(c -> {
-                    khenThuongRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        khenThuongRepository.deleteById(id);
+                        return true;
+                    } else throw
+                            new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -253,7 +280,8 @@ public class HoSoChiTietServices {
             try {
                 return kienThucAnNinhQuocPhongRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -264,35 +292,49 @@ public class HoSoChiTietServices {
                         new KienThucAnNinhQuocPhong(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id)
                 );
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public KienThucAnNinhQuocPhong sua(int id, ReqKienThucAnNinhQuocPhong req) {
+        public KienThucAnNinhQuocPhong sua(int id, ReqKienThucAnNinhQuocPhong req, String role) {
             try {
                 return kienThucAnNinhQuocPhongRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
-                    c.setChungChiDuocCap(req.chungChiDuocCap());
-                    c.setUpdate_at();
-                    return kienThucAnNinhQuocPhongRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
+                        c.setChungChiDuocCap(req.chungChiDuocCap());
+                        c.setUpdate_at();
+                        return kienThucAnNinhQuocPhongRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return kienThucAnNinhQuocPhongRepository.findById(id).map(c -> {
-                    kienThucAnNinhQuocPhongRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        kienThucAnNinhQuocPhongRepository.deleteById(id);
+                        return true;
+                    } else throw
+                            new ResponseStatusException(
+                                    ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -326,7 +368,8 @@ public class HoSoChiTietServices {
             try {
                 return kyLuatRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -335,21 +378,28 @@ public class HoSoChiTietServices {
             try {
                 return kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_XAC_NHAN, id));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public KyLuat sua(int id, ReqKyLuat req) {
+        public KyLuat sua(int id, ReqKyLuat req, String role) {
             try {
                 return kyLuatRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setHinhThuc(req.hinhThuc());
-                    c.setHanhViViPhamChinh(req.hanhViViPhamChinh());
-                    c.setCoQuanQuyetDinhId(req.coQuanQuyetDinhId());
-                    c.setUpdate_at();
-                    return kyLuatRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setHinhThuc(req.hinhThuc());
+                        c.setHanhViViPhamChinh(req.hanhViViPhamChinh());
+                        c.setCoQuanQuyetDinhId(req.coQuanQuyetDinhId());
+                        c.setUpdate_at();
+                        return kyLuatRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -357,14 +407,21 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return kyLuatRepository.findById(id).map(c -> {
-                    kyLuatRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        kyLuatRepository.deleteById(id);
+                        return true;
+                    } else throw
+                            new ResponseStatusException(
+                                    ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -398,7 +455,8 @@ public class HoSoChiTietServices {
             try {
                 return lamViecONuocNgoaiRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -406,37 +464,52 @@ public class HoSoChiTietServices {
         public LamViecONuocNgoai them(UUID id, ReqLamViecONuocNgoai req) {
             try {
                 return lamViecONuocNgoaiRepository.save(
-                        new LamViecONuocNgoai(req.batDau(), req.ketThuc(), req.toChucDiaChiCongViec(), id)
+                        new LamViecONuocNgoai(req.batDau(), req.ketThuc(), req.toChucDiaChiCongViec(), XacNhan.CHO_XAC_NHAN, id)
                 );
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public LamViecONuocNgoai sua(int id, ReqLamViecONuocNgoai req) {
+        public LamViecONuocNgoai sua(int id, ReqLamViecONuocNgoai req, String role) {
             try {
                 return lamViecONuocNgoaiRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setToChucDiaChiCongViec(req.toChucDiaChiCongViec());
-                    c.setUpdate_at();
-                    return lamViecONuocNgoaiRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setToChucDiaChiCongViec(req.toChucDiaChiCongViec());
+                        c.setUpdate_at();
+                        return lamViecONuocNgoaiRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return lamViecONuocNgoaiRepository.findById(id).map(c -> {
-                    lamViecONuocNgoaiRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        lamViecONuocNgoaiRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -470,7 +543,8 @@ public class HoSoChiTietServices {
             try {
                 return luongBanThanRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -478,40 +552,55 @@ public class HoSoChiTietServices {
         public LuongBanThan them(UUID id, ReqLuongBanThan req) {
             try {
                 return luongBanThanRepository.save(
-                        new LuongBanThan(req.batDau(), req.ketThuc(), req.maSo(), req.bacLuong(), req.heSoLuong(), req.tienLuongTheoViTri(), id)
+                        new LuongBanThan(req.batDau(), req.ketThuc(), req.maSo(), req.bacLuong(), req.heSoLuong(), req.tienLuongTheoViTri(), XacNhan.CHO_XAC_NHAN, id)
                 );
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public LuongBanThan sua(int id, ReqLuongBanThan req) {
+        public LuongBanThan sua(int id, ReqLuongBanThan req, String role) {
             try {
                 return luongBanThanRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setMaSo(req.maSo());
-                    c.setBacLuong(req.bacLuong());
-                    c.setHeSoLuong(req.heSoLuong());
-                    c.setTienLuongTheoViTri(req.tienLuongTheoViTri());
-                    c.setUpdate_at();
-                    return luongBanThanRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setMaSo(req.maSo());
+                        c.setBacLuong(req.bacLuong());
+                        c.setHeSoLuong(req.heSoLuong());
+                        c.setTienLuongTheoViTri(req.tienLuongTheoViTri());
+                        c.setUpdate_at();
+                        return luongBanThanRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return luongBanThanRepository.findById(id).map(c -> {
-                    luongBanThanRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        luongBanThanRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -545,7 +634,8 @@ public class HoSoChiTietServices {
             try {
                 return lyLuanChinhTriRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -556,36 +646,51 @@ public class HoSoChiTietServices {
                 tri.setXacNhan(XacNhan.CHO_XAC_NHAN);
                 return lyLuanChinhTriRepository.save(tri);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public LyLuanChinhTri sua(int id, ReqLyLuanChinhTri req) {
+        public LyLuanChinhTri sua(int id, ReqLyLuanChinhTri req, String role) {
             try {
                 return lyLuanChinhTriRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
-                    c.setHinhThucDaoTao(req.hinhThucDaoTao());
-                    c.setVanBangDuocCap(req.vanBangDuocCap());
-                    c.setUpdate_at();
-                    return lyLuanChinhTriRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
+                        c.setHinhThucDaoTao(req.hinhThucDaoTao());
+                        c.setVanBangDuocCap(req.vanBangDuocCap());
+                        c.setUpdate_at();
+                        return lyLuanChinhTriRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return lyLuanChinhTriRepository.findById(id).map(c -> {
-                    lyLuanChinhTriRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        lyLuanChinhTriRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -619,7 +724,8 @@ public class HoSoChiTietServices {
             try {
                 return nghiepVuChuyenNganhRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -630,35 +736,50 @@ public class HoSoChiTietServices {
                 vu.setXacNhan(XacNhan.CHO_XAC_NHAN);
                 return nghiepVuChuyenNganhRepository.save(vu);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public NghiepVuChuyenNganh sua(int id, ReqNghiepVuChuyenNganh req) {
+        public NghiepVuChuyenNganh sua(int id, ReqNghiepVuChuyenNganh req, String role) {
             try {
                 return nghiepVuChuyenNganhRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
-                    c.setChungChiDuocCap(req.chungChiDuocCap());
-                    c.setUpdate_at();
-                    return nghiepVuChuyenNganhRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
+                        c.setChungChiDuocCap(req.chungChiDuocCap());
+                        c.setUpdate_at();
+                        return nghiepVuChuyenNganhRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return nghiepVuChuyenNganhRepository.findById(id).map(c -> {
-                    nghiepVuChuyenNganhRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        nghiepVuChuyenNganhRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -692,7 +813,8 @@ public class HoSoChiTietServices {
             try {
                 return ngoaiNguRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -703,37 +825,52 @@ public class HoSoChiTietServices {
                 ngu.setXacNhan(XacNhan.CHO_XAC_NHAN);
                 return ngoaiNguRepository.save(ngu);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public NgoaiNgu sua(int id, ReqNgoaiNgu req) {
+        public NgoaiNgu sua(int id, ReqNgoaiNgu req, String role) {
             try {
                 return ngoaiNguRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
-                    c.setTenNgoaiNgu(req.tenNgoaiNgu());
-                    c.setChungChiDuocCap(req.chungChiDuocCap());
-                    c.setDiemSo(req.diemSo());
-                    c.setUpdate_at();
-                    return ngoaiNguRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
+                        c.setTenNgoaiNgu(req.tenNgoaiNgu());
+                        c.setChungChiDuocCap(req.chungChiDuocCap());
+                        c.setDiemSo(req.diemSo());
+                        c.setUpdate_at();
+                        return ngoaiNguRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return ngoaiNguRepository.findById(id).map(c -> {
-                    ngoaiNguRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        ngoaiNguRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -767,44 +904,59 @@ public class HoSoChiTietServices {
             try {
                 return phuCapKhacRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
         public PhuCapKhac them(UUID id, ReqPhuCapKhac req) {
             return phuCapKhacRepository.save(new PhuCapKhac(
-                    req.batDau(), req.ketThuc(), req.loaiPhuCapId(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), id));
+                    req.batDau(), req.ketThuc(), req.loaiPhuCapId(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), XacNhan.CHO_XAC_NHAN, id));
         }
 
         @Override
-        public PhuCapKhac sua(int id, ReqPhuCapKhac req) {
+        public PhuCapKhac sua(int id, ReqPhuCapKhac req, String role) {
             try {
                 return phuCapKhacRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setLoaiPhuCapId(req.loaiPhuCapId());
-                    c.setPhanTramHuongPhuCap(req.phanTramHuongPhuCap());
-                    c.setHeSoPhuCap(req.heSoPhuCap());
-                    c.setHinhThucHuong(req.hinhThucThuong());
-                    c.setGiaTri(req.giaTri());
-                    c.setUpdate_at();
-                    return phuCapKhacRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setLoaiPhuCapId(req.loaiPhuCapId());
+                        c.setPhanTramHuongPhuCap(req.phanTramHuongPhuCap());
+                        c.setHeSoPhuCap(req.heSoPhuCap());
+                        c.setHinhThucHuong(req.hinhThucThuong());
+                        c.setGiaTri(req.giaTri());
+                        c.setUpdate_at();
+                        return phuCapKhacRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return phuCapKhacRepository.findById(id).map(c -> {
-                    phuCapKhacRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        phuCapKhacRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -838,45 +990,61 @@ public class HoSoChiTietServices {
             try {
                 return quanHeGiaDinhRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
         public QuanHeGiaDinh them(UUID id, ReqQuanHeGiaDinh req) {
             try {
-                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), id);
+                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), XacNhan.CHO_XAC_NHAN, id);
                 return quanHeGiaDinhRepository.save(dinh);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public QuanHeGiaDinh sua(int id, ReqQuanHeGiaDinh req) {
+        public QuanHeGiaDinh sua(int id, ReqQuanHeGiaDinh req, String role) {
             try {
                 return quanHeGiaDinhRepository.findById(id).map(c -> {
-                    c.setMoiQuanHeId(req.moiQuanHeId());
-                    c.setHoVaTen(req.hoVaTen());
-                    c.setNamSinh(req.namSinh());
-                    c.setThongTinThanNhan(req.thongTinThanNhan());
-                    c.setUpdate_at();
-                    return quanHeGiaDinhRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setMoiQuanHeId(req.moiQuanHeId());
+                        c.setHoVaTen(req.hoVaTen());
+                        c.setNamSinh(req.namSinh());
+                        c.setThongTinThanNhan(req.thongTinThanNhan());
+                        c.setUpdate_at();
+                        return quanHeGiaDinhRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return quanHeGiaDinhRepository.findById(id).map(c -> {
-                    quanHeGiaDinhRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        quanHeGiaDinhRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -910,44 +1078,60 @@ public class HoSoChiTietServices {
             try {
                 return quaTrinhCongTacRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
         public QuaTrinhCongTac them(UUID id, ReqQuaTrinhCongTac req) {
             try {
-                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), id));
+                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), XacNhan.CHO_XAC_NHAN, id));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public QuaTrinhCongTac sua(int id, ReqQuaTrinhCongTac req) {
+        public QuaTrinhCongTac sua(int id, ReqQuaTrinhCongTac req, String role) {
             try {
                 return quaTrinhCongTacRepository.findById(id).map(c -> {
-                    c.setBatDau(req.batDau());
-                    c.setKetThuc(req.ketThuc());
-                    c.setDonViCongTacId(req.donViCongTacId());
-                    c.setChucDanh(req.chucDanh());
-                    c.setUpdate_at();
-                    return quaTrinhCongTacRepository.save(c);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        c.setBatDau(req.batDau());
+                        c.setKetThuc(req.ketThuc());
+                        c.setDonViCongTacId(req.donViCongTacId());
+                        c.setChucDanh(req.chucDanh());
+                        c.setUpdate_at();
+                        return quaTrinhCongTacRepository.save(c);
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return quaTrinhCongTacRepository.findById(id).map(c -> {
-                    quaTrinhCongTacRepository.deleteById(id);
-                    return true;
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        quaTrinhCongTacRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(false);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
@@ -981,45 +1165,56 @@ public class HoSoChiTietServices {
             try {
                 return tinHocRepository.findById(id).orElse(null);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
         public TinHoc them(UUID id, ReqTinHoc req) {
             try {
-                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), id);
+                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id);
                 return tinHocRepository.save(tin);
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 
         @Override
-        public TinHoc sua(int id, ReqTinHoc req) {
-            try {
-                return tinHocRepository.findById(id).map(c -> {
+        public TinHoc sua(int id, ReqTinHoc req, String role) {
+            return tinHocRepository.findById(id).map(c -> {
+                if (role.equals("ADMIN") ||
+                        (role.equals("EMPLOYEE")
+                                && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
                     c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setChungChiDuocCap(req.chungChiDuocCap());
                     c.setUpdate_at();
                     return tinHocRepository.save(c);
-                }).orElse(null);
-            } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
-            }
+                } else throw new
+                        ResponseStatusException(
+                        ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
+            }).orElse(null);
         }
 
         @Override
-        public boolean xoa(int id) {
+        public boolean xoa(int id, String role) {
             try {
                 return tinHocRepository.findById(id).map(c -> {
-                    tinHocRepository.deleteById(id);
-                    return true;
-                }).orElse(false);
+                    if (role.equals("ADMIN") ||
+                            (role.equals("EMPLOYEE")
+                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                        tinHocRepository.deleteById(id);
+                        return true;
+                    } else throw new
+                            ResponseStatusException(
+                            ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
+                }).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
             } catch (RuntimeException e) {
-                throw new RuntimeException(e.getCause());
+                System.err.println(e.getMessage());
+                throw e;
             }
         }
 

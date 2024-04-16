@@ -62,14 +62,18 @@ public class TinHocController {
     }
 
     @PatchMapping("/tin-hoc/{id}")
-    public ResponseEntity<ResTinHoc> edit(@PathVariable(name = "id") int id, @RequestBody ReqTinHoc cu) {
-        ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.sua(id, cu));
+    public ResponseEntity<ResTinHoc> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqTinHoc cu) {
+        ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/tin-hoc/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = tinHocService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = tinHocService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 
@@ -90,14 +94,18 @@ public class TinHocController {
     }
 
     @PatchMapping("/ca-nhan/tin-hoc/{id}")
-    public ResponseEntity<ResTinHoc> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqTinHoc cu) {
-        ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.sua(id, cu));
+    public ResponseEntity<ResTinHoc> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqTinHoc cu) {
+        ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/tin-hoc/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = tinHocService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = tinHocService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

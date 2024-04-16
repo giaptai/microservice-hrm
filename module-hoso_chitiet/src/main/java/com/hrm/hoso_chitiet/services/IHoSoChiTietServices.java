@@ -48,9 +48,9 @@ public interface IHoSoChiTietServices<T, H> {
 
     T them(UUID id, H cu);
 
-    T sua(int id, H cu);
+    T sua(int id, H cu, String role);
 
-    boolean xoa(int id);
+    boolean xoa(int id, String role);
 
     //EMPLOYEE
     List<T> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize);

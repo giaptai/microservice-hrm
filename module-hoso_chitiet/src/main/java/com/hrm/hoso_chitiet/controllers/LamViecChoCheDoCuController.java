@@ -64,14 +64,18 @@ public class LamViecChoCheDoCuController {
     }
 
     @PatchMapping("/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<ResLamViecChoCheDoCu> edit(@PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu));
+    public ResponseEntity<ResLamViecChoCheDoCu> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
+        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = lamViecChoCheDoCuService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = lamViecChoCheDoCuService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 
@@ -93,14 +97,18 @@ public class LamViecChoCheDoCuController {
     }
 
     @PatchMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<ResLamViecChoCheDoCu> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu));
+    public ResponseEntity<ResLamViecChoCheDoCu> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
+        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = lamViecChoCheDoCuService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = lamViecChoCheDoCuService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

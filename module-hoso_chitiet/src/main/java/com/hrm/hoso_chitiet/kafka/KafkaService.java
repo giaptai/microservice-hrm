@@ -69,6 +69,7 @@ public class KafkaService {
                             record.value().ngayBoNhiemLai(),
                             record.value().coQuanToChucDonViTuyenDungId(),
                             record.value().duocQuyHoacChucDanh(),
+                            record.value().xacNhan(),
                             record.value().hoSoId());
                     quaTrinhCongTacRepository.save(tac);
                 }

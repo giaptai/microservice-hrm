@@ -1,7 +1,9 @@
 package com.hrm.hoso_chitiet.models;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "qua_trinh_cong_tac",indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "qua_trinh_cong_tac", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
 @Getter
 @Setter
 @SuperBuilder
@@ -46,15 +48,20 @@ public class QuaTrinhCongTac extends DateTimeObject {
     @Column(name = "chuc_danh", columnDefinition = "varchar(100)")
     String chucDanh;
 
+    @Enumerated
+    @Column(name = "xac_nhan")
+    XacNhan xacNhan;
+
     @Column(name = "ho_so_id", columnDefinition = "binary(16)")
     UUID hoSoId;
 
-    public QuaTrinhCongTac(LocalDateTime batDau, LocalDateTime ketThuc, int donViCongTacId, String chucDanh, UUID hoSoId) {
+    public QuaTrinhCongTac(LocalDateTime batDau, LocalDateTime ketThuc, int donViCongTacId, String chucDanh, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
         this.donViCongTacId = donViCongTacId;
         this.chucDanh = chucDanh;
+        this.xacNhan = xacNhan;
         this.hoSoId = hoSoId;
     }
 }

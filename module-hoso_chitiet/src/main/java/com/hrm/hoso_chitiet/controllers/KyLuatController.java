@@ -63,14 +63,18 @@ public class KyLuatController {
     }
 
     @PatchMapping("/ky-luat/{id}")
-    public ResponseEntity<ResKyLuat> edit(@PathVariable(name = "id") int id, @RequestBody ReqKyLuat cu) {
-        ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.sua(id, cu));
+    public ResponseEntity<ResKyLuat> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqKyLuat cu) {
+        ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ky-luat/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = kyLuatService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = kyLuatService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 
@@ -92,14 +96,18 @@ public class KyLuatController {
     }
 
     @PatchMapping("/ca-nhan/ky-luat/{id}")
-    public ResponseEntity<ResKyLuat> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqKyLuat cu) {
-        ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.sua(id, cu));
+    public ResponseEntity<ResKyLuat> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqKyLuat cu) {
+        ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/ky-luat/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = kyLuatService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = kyLuatService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

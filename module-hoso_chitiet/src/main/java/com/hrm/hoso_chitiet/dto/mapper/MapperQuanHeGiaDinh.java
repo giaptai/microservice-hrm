@@ -21,6 +21,7 @@ public class MapperQuanHeGiaDinh {
                 dinh.getHoVaTen(),
                 dinh.getNamSinh(),
                 dinh.getThongTinThanNhan(),
+                dinh.getXacNhan(),
                 dinh.getHoSoId(),
                 dinh.getCreate_at(),
                 dinh.getUpdate_at()

@@ -22,6 +22,7 @@ public class MapperLyLuanChinhTri {
                 tri.getHinhThucDaoTao(),
                 tri.getVanBangDuocCap(),
                 coQuanToChucDonViClient.getName(tri.getTenCoSoDaoTaoId()),
+                tri.getXacNhan(),
                 tri.getHoSoId(),
                 tri.getCreate_at(),
                 tri.getUpdate_at()

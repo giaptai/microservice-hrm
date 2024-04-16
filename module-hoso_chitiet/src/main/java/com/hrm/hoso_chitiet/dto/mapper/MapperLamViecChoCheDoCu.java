@@ -12,6 +12,7 @@ public class MapperLamViecChoCheDoCu {
                 cu.getBatDau(),
                 cu.getKetThuc(),
                 cu.getChucDanhDonViDiaDiem(),
+                cu.getXacNhan(),
                 cu.getHoSoId(),
                 cu.getCreate_at(),
                 cu.getUpdate_at()
