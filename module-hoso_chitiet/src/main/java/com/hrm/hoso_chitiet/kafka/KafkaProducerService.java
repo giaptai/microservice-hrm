@@ -35,7 +35,7 @@ public class KafkaProducerService {
     final MapperKhenThuong mapperKhenThuong;
 
     @Async
-    @Scheduled(fixedRate = 300_000)
+    @Scheduled(fixedRate = 3_600_000)
     protected void showKyLuat() {
         List<ResKyLuat> kyLuats = kyLuatRepository.getAllByHoSoInLast7Days().stream().map(mapperKyLuat::mapToResKyLuat).toList();
         System.out.println(kyLuats.size());
@@ -71,7 +71,7 @@ public class KafkaProducerService {
         producer.close();
     }
     @Async
-    @Scheduled(fixedRate = 300_000)
+    @Scheduled(fixedRate = 3_600_000)
     protected void showKhenThuong() {
         List<ResKhenThuong> khenThuongs = khenThuongRepository.getAllByHoSoInLast7Days().stream().map(mapperKhenThuong::maptoResKhenThuong).toList();
         System.out.println(khenThuongs.size());

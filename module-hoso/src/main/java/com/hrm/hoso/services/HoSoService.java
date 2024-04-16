@@ -41,6 +41,13 @@ import com.hrm.hoso.repository.ViecLamRepository;
 
 import com.hrm.hoso.response.ResEnum;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -72,6 +79,8 @@ public class HoSoService implements IHoSoService {
     //mapper
     final MapperHoSo mapperHoSo;
     final MapperChucVuHienTai mapperChucVuHienTai;
+    //criticizable
+    final EntityManager entityManager;
 
 
     @Override
@@ -106,6 +115,42 @@ public class HoSoService implements IHoSoService {
 //                resHoSoId = hoSoRepository.findById(UUID.fromString(q)).orElse(null);
 //            }
         return mapperHoSo.mapToResHoSo(hoSo);
+    }
+
+    @Override
+    public List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, int pageNumber, int pageSize) {
+        //JPA Criteria API
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
+        Root<HoSo> root = query.from(HoSo.class);
+        Predicate predicate = null;
+//        if (hoVaTen != null && !hoVaTen.isEmpty() || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1){
+        Join<HoSo, ChucVuHienTai> join = root.join("chucVuHienTai", JoinType.LEFT);
+        if (hoVaTen != null && !hoVaTen.isEmpty()) {
+            predicate = builder.like(builder.lower(root.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%");
+        }
+        if (danTocId > 0) {
+            Predicate danTocPredicate = builder.equal(root.get("danTocId"), danTocId);
+            predicate = (predicate != null) ? builder.and(predicate, danTocPredicate) : danTocPredicate;
+        }
+        if (chucVuHienTaiId > 0) {
+            Predicate chucVuPredicate = builder.equal(join.get("chucVuId"), chucVuHienTaiId);
+            predicate = (predicate != null) ? builder.and(predicate, chucVuPredicate) : chucVuPredicate;
+        }
+        if (coQuanToChucDonViId > 0) {
+            Predicate coQuanPredicate = builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
+            predicate = (predicate != null) ? builder.and(predicate, coQuanPredicate) : coQuanPredicate;
+        }
+//        }
+        // Apply the predicate to the query
+        if (predicate != null) {
+            query.where(predicate);
+        }
+        List<HoSo> hoSos = entityManager.createQuery(query)
+                .setFirstResult(pageNumber)
+                .setMaxResults(pageSize)
+                .getResultList();
+        return hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
     }
 
     @Override

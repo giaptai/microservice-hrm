@@ -79,6 +79,19 @@ public class HoSoController {
         return new ResponseEntity<>(hoSo, ResEnum.THANH_CONG.getStatusCode());
     }
 
+    @GetMapping("/nhan-vien/ho-so/loc")
+    public ResponseEntity<List<ResHoSo>> filterHoSo(
+            @RequestParam(name = "hoVaTen", required = false, defaultValue = "") String hoVaTen,
+            @RequestParam(name = "danTocId", required = false, defaultValue = "-1") String danTocId,
+            @RequestParam(name = "chucVuHienTaiId", required = false, defaultValue = "-1") String chucVuHienTaiId,
+            @RequestParam(name = "coQuanToChucDonViId", required = false, defaultValue = "-1") String coQuanToChucDonViId,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        List<ResHoSo> hoSos = hoSoService.locHoSo(hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pageNumber, pageSize);
+        return new ResponseEntity<>(hoSos, ResEnum.THANH_CONG.getStatusCode());
+    }
+
     //EMPLOYEE --- EMPLOYEE --- EMPLOYEE
     @GetMapping("/ca-nhan/ho-so")
     public ResponseEntity<ResHoSo> getHoSoCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id) {

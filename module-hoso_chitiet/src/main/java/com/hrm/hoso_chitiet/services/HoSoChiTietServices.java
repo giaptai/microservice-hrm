@@ -175,6 +175,7 @@ public class HoSoChiTietServices {
         public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
             return khenThuongRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
         }
+
         @Override
         public KhenThuong xemChiTiet(int id) {
             try {
@@ -197,7 +198,7 @@ public class HoSoChiTietServices {
         public KhenThuong sua(int id, ReqKhenThuong req) {
             try {
                 return khenThuongRepository.findById(id).map(c -> {
-                    c.setNam(req.nam());
+                    c.setNam(req.nam() != null ? req.nam() : c.getNam());
                     c.setXepLoaiChuyenMon(req.xepLoaiChuyenMon());
                     c.setXepLoaiThiDua(req.xepLoaiThiDua());
                     c.setHinhThucKhenThuongId(req.hinhThucKhenThuongId());

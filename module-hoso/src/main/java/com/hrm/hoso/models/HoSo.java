@@ -12,6 +12,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -34,7 +35,9 @@ import java.util.UUID;
  **/
 
 @Entity
-@Table(name = "ho_so")
+@Table(name = "ho_so",
+        indexes = {@Index(name = "danotc_idx", columnList = "dan_toc_id")}
+)
 @Getter
 @Setter
 @SuperBuilder

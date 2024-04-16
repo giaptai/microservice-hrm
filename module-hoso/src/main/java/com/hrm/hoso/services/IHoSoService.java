@@ -21,6 +21,8 @@ public interface IHoSoService {
 
     ResHoSo xemHoSoTheoSoCCCD(String q);
 
+    List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, int pageNumber, int pageSize);
+
     ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo reqHoSo);
 
     ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu);

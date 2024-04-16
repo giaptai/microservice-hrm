@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 @Component
 public class AdminRouterValid {
     public static final List<String> adminApiEndpoints = List.of(
+            "/api/v1/ca-nhan/tai-khoan",
             "/api/v1/nhan-vien/ho-so",
             "/api/v1/nhan-vien/tai-khoan",
             "/api/v1/khen-thuong",
