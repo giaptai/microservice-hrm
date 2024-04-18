@@ -4,11 +4,9 @@ import com.hrm.hoso.dto.request.ReqChucVu;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
-import com.hrm.hoso.models.HoSo;
-import com.hrm.hoso.dto.request.ReqDSHoSo;
+import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.dto.request.ReqHoSo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +19,7 @@ public interface IHoSoService {
 
     ResHoSo xemHoSoTheoSoCCCD(String q);
 
-    List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, int pageNumber, int pageSize);
+    List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, int pageNumber, int pageSize);
 
     ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo reqHoSo);
 
@@ -33,7 +31,7 @@ public interface IHoSoService {
 
     ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo);
 
-    default List<HoSo> pheDuyetHoSo(List<ReqDSHoSo> reqDSHoSos) {
-        return new ArrayList<>();
+    default boolean pheDuyetHoSo(PheDuyet pheDuyet, List<ResHoSo> resHoSos) {
+        return true;
     }
 }

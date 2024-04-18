@@ -3,7 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperTinHoc;
 import com.hrm.hoso_chitiet.dto.request.ReqTinHoc;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
-import com.hrm.hoso_chitiet.response.ResDTO;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -38,7 +38,6 @@ public class TinHocController {
                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
-//        return ResDTO.reply(ls, ResEnum.THANH_CONG);
     }
 
     @GetMapping("/tin-hoc")
@@ -76,7 +75,15 @@ public class TinHocController {
         boolean ls = tinHocService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
-
+    @PatchMapping("/tin-hoc/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResTinHoc> res
+    ) {
+        boolean ls = tinHocService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,

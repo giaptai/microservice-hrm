@@ -85,7 +85,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public UUID layHoSoId(int taiKhoanId) {
-        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoTheoSoCCCD(String q) {
-        HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
 //            Pattern UUID_REGEX = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 //            if (UUID_REGEX.matcher(q).matches()) {
 //                resHoSoId = hoSoRepository.findById(UUID.fromString(q)).orElse(null);
@@ -118,7 +118,7 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
-    public List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, int pageNumber, int pageSize) {
+    public List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, int pageNumber, int pageSize) {
         //JPA Criteria API
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
@@ -141,6 +141,10 @@ public class HoSoService implements IHoSoService {
             Predicate coQuanPredicate = builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
             predicate = (predicate != null) ? builder.and(predicate, coQuanPredicate) : coQuanPredicate;
         }
+        if (pheDuyet != null) {
+            Predicate pheDuyetPredicate = builder.equal(root.get("pheDuyet"), pheDuyet);
+            predicate = (predicate != null) ? builder.and(predicate, pheDuyetPredicate) : pheDuyetPredicate;
+        }
 //        }
         // Apply the predicate to the query
         if (predicate != null) {
@@ -155,7 +159,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo req) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
         mapToHoSo(hoSo, req);
         hoSoRepository.save(hoSo);
         return mapperHoSo.mapToResHoSo(hoSo);
@@ -163,7 +167,7 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
         ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
         if (reqChucVu != null) {
             if (chucVuHienTai != null) {
@@ -217,37 +221,35 @@ public class HoSoService implements IHoSoService {
 
     @Override
     public ResHoSo xemHoSoTheoId(UUID id) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
-//    @Override
-//    public List<HoSo> pheDuyetHoSo(List<ReqDSHoSo> reqDSHoSos) {
-//        try {
-//            List<HoSo> hoSos = reqDSHoSos.stream().flatMap(c -> c.soYeuLyLichs().stream().map(t -> {
-//                HoSo hoSo = hoSoRepository.findById(t).orElse(null);
-//                if (hoSo != null) {
-//                    hoSo.setPheDuyet(c.pheDuyet());
-//                    hoSo.setUpdate_at();
-//                }
-//                return hoSo;
-//            })).toList();
-//            return hoSoRepository.saveAll(hoSos);
-//        } catch (RuntimeException e) {
-//            throw new RuntimeException(e.getCause());
-//        }
-//    }
+    @Override
+    public boolean pheDuyetHoSo(PheDuyet pheDuyet, List<ResHoSo> resHoSos) {
+        try {
+            for (ResHoSo resHoSo : resHoSos) {
+                HoSo hoSo = hoSoRepository.findById(resHoSo.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+                hoSo.setPheDuyet(pheDuyet);
+                hoSo.setUpdate_at();
+            }
+            return true;
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
+    }
 
     @Override
     public ResHoSo xemHoSoCaNhan(int taiKhoanId) {
-        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
 //        return xemHoSoTheoId(hoSo.getId());
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
     @Override
     public ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo) {
-        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
         return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
     }
 

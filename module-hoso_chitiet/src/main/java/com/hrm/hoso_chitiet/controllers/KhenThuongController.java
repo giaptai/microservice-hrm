@@ -4,6 +4,7 @@ import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.response.ResKhenThuong;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -83,6 +84,16 @@ public class KhenThuongController {
     ) {
         boolean ls = khenThuongService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
+    }
+
+    @PatchMapping("/khen-thuong/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResKhenThuong> res
+    ) {
+        boolean ls = khenThuongService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     //EMPLOYEE

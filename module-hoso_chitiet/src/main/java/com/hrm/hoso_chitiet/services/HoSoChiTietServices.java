@@ -14,6 +14,19 @@ import com.hrm.hoso_chitiet.dto.request.ReqPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.request.ReqTinHoc;
+import com.hrm.hoso_chitiet.dto.response.ResKhenThuong;
+import com.hrm.hoso_chitiet.dto.response.ResKienThucAnNinhQuocPhong;
+import com.hrm.hoso_chitiet.dto.response.ResKyLuat;
+import com.hrm.hoso_chitiet.dto.response.ResLamViecChoCheDoCu;
+import com.hrm.hoso_chitiet.dto.response.ResLamViecONuocNgoai;
+import com.hrm.hoso_chitiet.dto.response.ResLuongBanThan;
+import com.hrm.hoso_chitiet.dto.response.ResLyLuanChinhTri;
+import com.hrm.hoso_chitiet.dto.response.ResNghiepVuChuyenNganh;
+import com.hrm.hoso_chitiet.dto.response.ResNgoaiNgu;
+import com.hrm.hoso_chitiet.dto.response.ResPhuCapKhac;
+import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
+import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
+import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.models.KhenThuong;
@@ -50,6 +63,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -175,6 +189,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResLamViecChoCheDoCu> res) {
+            List<LamViecChoCheDoCu> lamViecChoCheDoCus = new ArrayList<>();
+            for(ResLamViecChoCheDoCu c : res){
+                LamViecChoCheDoCu cu = lamViecChoCheDoCuRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                lamViecChoCheDoCus.add(cu);
+            }
+            lamViecChoCheDoCuRepository.saveAll(lamViecChoCheDoCus);
+            return true;
+        }
     }
 
     @Service
@@ -260,6 +287,18 @@ public class HoSoChiTietServices {
         public KhenThuong themCaNhan(int taiKhoanId, ReqKhenThuong cu) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
+        }
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResKhenThuong> res) {
+            List<KhenThuong> khenThuongs = new ArrayList<>();
+            for(ResKhenThuong c : res){
+                KhenThuong cu = khenThuongRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                khenThuongs.add(cu);
+            }
+            khenThuongRepository.saveAll(khenThuongs);
+            return true;
         }
     }
 
@@ -349,6 +388,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResKienThucAnNinhQuocPhong> res) {
+            List<KienThucAnNinhQuocPhong> phongs = new ArrayList<>();
+            for(ResKienThucAnNinhQuocPhong c : res){
+                KienThucAnNinhQuocPhong cu = kienThucAnNinhQuocPhongRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                phongs.add(cu);
+            }
+            kienThucAnNinhQuocPhongRepository.saveAll(phongs);
+            return true;
+        }
     }
 
     @Service
@@ -435,6 +487,18 @@ public class HoSoChiTietServices {
         public KyLuat themCaNhan(int taiKhoanId, ReqKyLuat cu) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
+        }
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResKyLuat> res) {
+            List<KyLuat> kyLuats = new ArrayList<>();
+            for(ResKyLuat c : res){
+                KyLuat cu = kyLuatRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                kyLuats.add(cu);
+            }
+            kyLuatRepository.saveAll(kyLuats);
+            return true;
         }
     }
 
@@ -523,6 +587,19 @@ public class HoSoChiTietServices {
         public LamViecONuocNgoai themCaNhan(int taiKhoanId, ReqLamViecONuocNgoai cu) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
+        }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResLamViecONuocNgoai> res) {
+            List<LamViecONuocNgoai> ngoais = new ArrayList<>();
+            for(ResLamViecONuocNgoai c : res){
+                LamViecONuocNgoai cu = lamViecONuocNgoaiRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                ngoais.add(cu);
+            }
+            lamViecONuocNgoaiRepository.saveAll(ngoais);
+            return true;
         }
     }
 
@@ -615,6 +692,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResLuongBanThan> res) {
+            List<LuongBanThan> luongs = new ArrayList<>();
+            for(ResLuongBanThan c : res){
+                LuongBanThan cu = luongBanThanRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                luongs.add(cu);
+            }
+            luongBanThanRepository.saveAll(luongs);
+            return true;
+        }
     }
 
     @Service
@@ -705,6 +795,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResLyLuanChinhTri> res) {
+            List<LyLuanChinhTri> tris = new ArrayList<>();
+            for(ResLyLuanChinhTri c : res){
+                LyLuanChinhTri cu = lyLuanChinhTriRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                tris.add(cu);
+            }
+            lyLuanChinhTriRepository.saveAll(tris);
+            return true;
+        }
     }
 
     @Service
@@ -793,6 +896,19 @@ public class HoSoChiTietServices {
         public NghiepVuChuyenNganh themCaNhan(int taiKhoanId, ReqNghiepVuChuyenNganh cu) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
+        }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResNghiepVuChuyenNganh> res) {
+            List<NghiepVuChuyenNganh> nganhs = new ArrayList<>();
+            for(ResNghiepVuChuyenNganh c : res){
+                NghiepVuChuyenNganh cu = nghiepVuChuyenNganhRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                nganhs.add(cu);
+            }
+            nghiepVuChuyenNganhRepository.saveAll(nganhs);
+            return true;
         }
     }
 
@@ -885,6 +1001,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResNgoaiNgu> res) {
+            List<NgoaiNgu> ngus = new ArrayList<>();
+            for(ResNgoaiNgu c : res){
+                NgoaiNgu cu = ngoaiNguRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                ngus.add(cu);
+            }
+            ngoaiNguRepository.saveAll(ngus);
+            return true;
+        }
     }
 
     @Service
@@ -970,6 +1099,19 @@ public class HoSoChiTietServices {
         public PhuCapKhac themCaNhan(int taiKhoanId, ReqPhuCapKhac cu) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
+        }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResPhuCapKhac> res) {
+            List<PhuCapKhac> khacs = new ArrayList<>();
+            for(ResPhuCapKhac c : res){
+                PhuCapKhac cu = phuCapKhacRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                khacs.add(cu);
+            }
+            phuCapKhacRepository.saveAll(khacs);
+            return true;
         }
     }
 
@@ -1059,6 +1201,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResQuanHeGiaDinh> res) {
+            List<QuanHeGiaDinh> giaDinhs = new ArrayList<>();
+            for(ResQuanHeGiaDinh c : res){
+                QuanHeGiaDinh cu = quanHeGiaDinhRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                giaDinhs.add(cu);
+            }
+            quanHeGiaDinhRepository.saveAll(giaDinhs);
+            return true;
+        }
     }
 
     @Service
@@ -1146,6 +1301,19 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResQuaTrinhCongTac> res) {
+            List<QuaTrinhCongTac> tacs = new ArrayList<>();
+            for(ResQuaTrinhCongTac c : res){
+                QuaTrinhCongTac cu = quaTrinhCongTacRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                tacs.add(cu);
+            }
+            quaTrinhCongTacRepository.saveAll(tacs);
+            return true;
+        }
     }
 
     @Service
@@ -1228,6 +1396,19 @@ public class HoSoChiTietServices {
         public TinHoc themCaNhan(int taiKhoanId, ReqTinHoc cu) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
+        }
+
+        @Override
+        public boolean xacNhan(XacNhan xacNhan, List<ResTinHoc> res) {
+            List<TinHoc> tinHocs = new ArrayList<>();
+            for(ResTinHoc c : res){
+                TinHoc cu = tinHocRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
+                cu.setXacNhan(xacNhan);
+                cu.setUpdate_at();
+                tinHocs.add(cu);
+            }
+            tinHocRepository.saveAll(tinHocs);
+            return true;
         }
     }
 }

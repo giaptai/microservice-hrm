@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.request.ReqQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -74,7 +75,15 @@ public class QuaTrinhCongTacController {
         boolean ls = quaTrinhCongTacService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
-
+    @PatchMapping("/qua-trinh-cong-tac/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResQuaTrinhCongTac> res
+    ) {
+        boolean ls = quaTrinhCongTacService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/qua-trinh-cong-tac")
     public ResponseEntity<List<ResQuaTrinhCongTac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,

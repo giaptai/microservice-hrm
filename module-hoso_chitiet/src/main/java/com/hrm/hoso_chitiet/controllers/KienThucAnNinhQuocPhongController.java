@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperKienThucAnNinhQuocPhong;
 import com.hrm.hoso_chitiet.dto.request.ReqKienThucAnNinhQuocPhong;
 import com.hrm.hoso_chitiet.dto.response.ResKienThucAnNinhQuocPhong;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -76,6 +77,15 @@ public class KienThucAnNinhQuocPhongController {
             @PathVariable(name = "id") int id) {
         boolean ls = kienThucAnNinhQuocPhongService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
+    }
+    @PatchMapping("/kien-thuc-an-ninh-quoc-phong/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResKienThucAnNinhQuocPhong> res
+    ) {
+        boolean ls = kienThucAnNinhQuocPhongService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     //EMPLOYEE

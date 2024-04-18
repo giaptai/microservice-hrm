@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.request.ReqQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -74,7 +75,15 @@ public class QuanHeGiaDinhController {
         boolean ls = quanHeGiaDinhService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
-
+    @PatchMapping("/quan-he-gia-dinh/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResQuanHeGiaDinh> res
+    ) {
+        boolean ls = quanHeGiaDinhService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/quan-he-gia-dinh")
     public ResponseEntity<List<ResQuanHeGiaDinh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,

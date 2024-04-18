@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperNghiepVuChuyenNganh;
 import com.hrm.hoso_chitiet.dto.request.ReqNghiepVuChuyenNganh;
 import com.hrm.hoso_chitiet.dto.response.ResNghiepVuChuyenNganh;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -76,7 +77,15 @@ public class NghiepVuChuyenNganhController {
         boolean ls = nghiepVuChuyenNganhService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
-
+    @PatchMapping("/nghiep-vu-chuyen-nganh/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResNghiepVuChuyenNganh> res
+    ) {
+        boolean ls = nghiepVuChuyenNganhService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/nghiep-vu-chuyen-nganh")
     public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
