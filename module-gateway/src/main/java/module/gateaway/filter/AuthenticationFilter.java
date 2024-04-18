@@ -43,6 +43,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
             }
             this.updateRequest(exchange, claims);
+            return chain.filter(exchange);
         }
         if (employeeRouterValid.isSecured.test(request)) {
             if (this.isAuthMissing(request)) {
@@ -54,6 +55,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
             }
             this.updateRequest(exchange, claims);
+            return chain.filter(exchange);
         }
         return chain.filter(exchange);
     }

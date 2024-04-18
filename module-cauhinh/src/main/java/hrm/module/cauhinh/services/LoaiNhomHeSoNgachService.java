@@ -311,8 +311,8 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public HeSoLuongCongChuc themHeSoLuongCongChuc(ReqHeSoLuong luong) {
             try {
-                NhomCongChuc nhom = nhomCongChucRepository.findById(luong.nhom()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
-                BacLuong bac = bacLuongRepository.findById(luong.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                NhomCongChuc nhom = nhomCongChucRepository.findById(luong.nhomId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                BacLuong bac = bacLuongRepository.findById(luong.bacLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return heSoLuongCongChucRepository.save(new HeSoLuongCongChuc(nhom, bac, luong.heSo()));
             } catch (RuntimeException e) {
                 throw ResDTO.error(ResEnum.KHONG_HOP_LE);
@@ -322,8 +322,8 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public HeSoLuongCongChuc suaHeSoLuongCongChuc(int id, ReqHeSoLuong luong) {
             try {
-                NhomCongChuc nhom = nhomCongChucRepository.findById(luong.nhom()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
-                BacLuong bac = bacLuongRepository.findById(luong.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                NhomCongChuc nhom = nhomCongChucRepository.findById(luong.nhomId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                BacLuong bac = bacLuongRepository.findById(luong.bacLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return heSoLuongCongChucRepository.findById(id).map(e -> {
                     e.setNhomCongChucId(nhom);
                     e.setBacLuongId(bac);
@@ -371,8 +371,8 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public HeSoLuongVienChuc themHeSoLuongVienChuc(ReqHeSoLuong luong) {
             try {
-                NhomVienChuc nhom = nhomVienChucRepository.findById(luong.nhom()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
-                BacLuong bac = bacLuongRepository.findById(luong.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                NhomVienChuc nhom = nhomVienChucRepository.findById(luong.nhomId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                BacLuong bac = bacLuongRepository.findById(luong.bacLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return heSoLuongVienChucRepository.save(new HeSoLuongVienChuc(nhom, bac, luong.heSo()));
             } catch (RuntimeException e) {
                 throw ResDTO.error(ResEnum.KHONG_HOP_LE);
@@ -382,8 +382,8 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public HeSoLuongVienChuc suaHeSoLuongVienChuc(int id, ReqHeSoLuong luong) {
             try {
-                NhomVienChuc nhom = nhomVienChucRepository.findById(luong.nhom()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
-                BacLuong bac = bacLuongRepository.findById(luong.bacLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                NhomVienChuc nhom = nhomVienChucRepository.findById(luong.nhomId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                BacLuong bac = bacLuongRepository.findById(luong.bacLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return heSoLuongVienChucRepository.findById(id).map(e -> {
                     e.setNhomVienChucId(nhom);
                     e.setBacLuongId(bac);
