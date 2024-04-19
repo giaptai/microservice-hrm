@@ -59,13 +59,13 @@ public class TaiKhoanController {
         return ResDTO.reply(taiKhoanService.xemTheoId(id), ResEnum.THANH_CONG);
     }
 
-    @GetMapping("/nhan-vien/tai-khoan/tim-kiem")
-    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getTaiKhoanBySoCCCD(
-            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize,
-            @RequestParam(name = "q") String username) {
-        return ResDTO.reply(taiKhoanService.xemTheoUsername(username, pageNumber, pageSize), ResEnum.THANH_CONG);
-    }
+//    @GetMapping("/nhan-vien/tai-khoan/tim-kiem")
+//    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getTaiKhoanBySoCCCD(
+//            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+//            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize,
+//            @RequestParam(name = "q") String username) {
+//        return ResDTO.reply(taiKhoanService.xemTheoUsername(username, pageNumber, pageSize), ResEnum.THANH_CONG);
+//    }
 
     @PostMapping("/nhan-vien/tai-khoan")
     @Transactional(Transactional.TxType.NEVER)
