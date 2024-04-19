@@ -17,6 +17,9 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     @Query(value = "SELECT c FROM TaiKhoan c WHERE c.roleTaiKhoan = ?1")
     List<TaiKhoan> findAllByRoleTaiKhoan(RoleTaiKhoan role, Pageable pageable);
 
+    @Query(value = "SELECT c FROM TaiKhoan c WHERE c.roleTaiKhoan = ?1 AND LOWER(c.username) LIKE %?2%")
+    List<TaiKhoan> findAllByRoleTaiKhoanAndUsername(RoleTaiKhoan role, String username, Pageable pageable);
+
     @Query
     TaiKhoan findByUsername(String username);
 

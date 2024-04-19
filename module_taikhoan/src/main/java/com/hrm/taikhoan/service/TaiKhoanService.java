@@ -31,10 +31,12 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.UUID;
@@ -57,10 +59,29 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     /* ADMIN - ADMIN - ADMIN*/
     @Override
-    public List<ResTaiKhoan> xemDanhSachTaiKhoan(int pageNumber, int pageSize) {
+    public List<ResTaiKhoan> xemDanhSachTaiKhoan(String username, RoleTaiKhoan role, int pageNumber, int pageSize) {
         try {
-            List<TaiKhoan> taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(RoleTaiKhoan.EMPLOYEE, PageRequest.of(pageNumber, pageSize));
+            List<TaiKhoan> taiKhoans = new ArrayList<>();
+            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            taiKhoans = taiKhoanRepository.findAll(pageable).stream().toList();
+            if (username != null && role == null) {
+                taiKhoans = xemByUsername(username, pageable);
+            }
+            if (username == null && role != null) {
+                taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(role, pageable);
+            }
+            if(username !=null && role !=null){
+                taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoanAndUsername(role, username.toLowerCase(), pageable);
+            }
             return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    private List<TaiKhoan> xemByUsername(String number, Pageable pageable) {
+        try {
+            return taiKhoanRepository.findByUsernameContaining(number, pageable);
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());
         }
