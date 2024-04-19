@@ -82,7 +82,7 @@ public class UtilitiesService {
         @Override
         public List<BacLuong> xemDanhSach(int pageNumber, int pageSize) {
             Page<BacLuong> concac = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
-            Slice<BacLuong> concac2 = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
+//            Slice<BacLuong> concac2 = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
             System.out.printf("s1: %d, s2: %d, s3: %d\n", concac.getNumber(), concac.getTotalElements(), concac.getTotalPages());
             return bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
         }
@@ -1073,7 +1073,7 @@ public class UtilitiesService {
 
         @Override
         public ViTriViecLam them(ReqUtilities req) {
-            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(APIExceptionCustom.NotFoundData::new);
+            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuongId()).orElseThrow(APIExceptionCustom.NotFoundData::new);
             try {
                 return viTriViecLamRepository.save(new ViTriViecLam(req.name(), bacLuong, req.tienLuong()));
             } catch (RuntimeException e) {
@@ -1083,7 +1083,7 @@ public class UtilitiesService {
 
         @Override
         public ViTriViecLam sua(int id, ReqUtilities req) {
-            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuong()).orElseThrow(APIExceptionCustom.NotFoundData::new);
+            BacLuong bacLuong = bacLuongRepository.findById(req.bacLuongId()).orElseThrow(APIExceptionCustom.NotFoundData::new);
             try {
                 return viTriViecLamRepository.findById(id).map(e -> {
                     e.setName(req.name());

@@ -189,7 +189,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NhomCongChuc themNhomCongChuc(ReqNhom nhom) {
             try {
-                LoaiCongChuc loai = loaiCongChucRepository.findById(nhom.loai()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                LoaiCongChuc loai = loaiCongChucRepository.findById(nhom.loaiId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 NhomCongChuc chuc = nhomCongChucRepository.findByName(nhom.name());
                 if (chuc == null) {
                     return nhomCongChucRepository.save(new NhomCongChuc(nhom.name(), loai));
@@ -202,7 +202,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NhomCongChuc suaNhomCongChuc(int id, ReqNhom nhom) {
             try {
-                LoaiCongChuc loai = loaiCongChucRepository.findById(nhom.loai()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                LoaiCongChuc loai = loaiCongChucRepository.findById(nhom.loaiId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return nhomCongChucRepository.findById(id).map(e -> {
                             e.setLoaiCongChucId(loai);
                             e.setName(nhom.name());
@@ -250,7 +250,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NhomVienChuc themNhomVienChuc(ReqNhom nhom) {
             try {
-                LoaiVienChuc loai = loaiVienChucRepository.findById(nhom.loai()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                LoaiVienChuc loai = loaiVienChucRepository.findById(nhom.loaiId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 NhomVienChuc vien = nhomVienChucRepository.findByName(nhom.name());
                 if (vien == null) {
                     return nhomVienChucRepository.save(new NhomVienChuc(nhom.name(), loai));
@@ -263,7 +263,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NhomVienChuc suaNhomVienChuc(int id, ReqNhom nhom) {
             try {
-                LoaiVienChuc loai = loaiVienChucRepository.findById(nhom.loai()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                LoaiVienChuc loai = loaiVienChucRepository.findById(nhom.loaiId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return nhomVienChucRepository.findById(id).map(e -> {
                             e.setLoaiVienChucId(loai);
                             e.setName(nhom.name());
@@ -431,7 +431,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NgachCongChuc themNgachCongChuc(ReqNgach req) {
             try {
-                HeSoLuongCongChuc heSo = heSoLuongCongChucRepository.findById(req.heSoLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                HeSoLuongCongChuc heSo = heSoLuongCongChucRepository.findById(req.heSoLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 NgachCongChuc ngach = ngachCongChucRepository.findByName(req.name());
                 if (ngach == null) {
                     return ngachCongChucRepository.save(new NgachCongChuc(req.ma(), req.name(), heSo));
@@ -444,7 +444,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NgachCongChuc suaNgachCongChuc(String id, ReqNgach req) {
             try {
-                HeSoLuongCongChuc heSo = heSoLuongCongChucRepository.findById(req.heSoLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                HeSoLuongCongChuc heSo = heSoLuongCongChucRepository.findById(req.heSoLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return ngachCongChucRepository.findById(id).map(e -> {
                     e.setMa(req.ma());
                     e.setName(req.name());
@@ -491,7 +491,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NgachVienChuc themNgachVienChuc(ReqNgach req) {
             try {
-                HeSoLuongVienChuc heSo = heSoLuongVienChucRepository.findById(req.heSoLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                HeSoLuongVienChuc heSo = heSoLuongVienChucRepository.findById(req.heSoLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 NgachVienChuc vien = ngachVienChucRepository.findByName(req.name());
                 if (vien == null) {
                     return ngachVienChucRepository.save(new NgachVienChuc(req.ma(), req.name(), heSo));
@@ -504,7 +504,7 @@ public class LoaiNhomHeSoNgachService {
         @Override
         public NgachVienChuc suaNgachVienChuc(String id, ReqNgach req) {
             try {
-                HeSoLuongVienChuc heSo = heSoLuongVienChucRepository.findById(req.heSoLuong()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
+                HeSoLuongVienChuc heSo = heSoLuongVienChucRepository.findById(req.heSoLuongId()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getStatusCode()));
                 return ngachVienChucRepository.findById(id).map(e -> {
                     e.setMa(req.ma());
                     e.setName(req.name());
