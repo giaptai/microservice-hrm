@@ -18,9 +18,9 @@ public interface ITaiKhoanService {
 
     boolean doiEmailTaiKhoanCaNhan(int id, String email);
 
-    List<ResTaiKhoan> xemDanhSachTaiKhoan(); //admin
+    List<ResTaiKhoan> xemDanhSachTaiKhoan(int pageNumber, int pageSize); //admin
 
-    List<ResTaiKhoan> xemTheoUsername(String username); //admin user
+    List<ResTaiKhoan> xemTheoUsername(String username, int pageNumber, int pageSize); //admin user
 
     ResTaiKhoan xemTheoId(int id); //admin user
 

@@ -2,7 +2,6 @@ package com.hrm.taikhoan.service;
 
 import com.hrm.taikhoan.client.auth_token.TokenClient;
 import com.hrm.taikhoan.client.ho_so.HoSoClient;
-import com.hrm.taikhoan.client.ho_so.HoSoDTO;
 
 import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
@@ -31,6 +30,7 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -57,9 +57,9 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     /* ADMIN - ADMIN - ADMIN*/
     @Override
-    public List<ResTaiKhoan> xemDanhSachTaiKhoan() {
+    public List<ResTaiKhoan> xemDanhSachTaiKhoan(int pageNumber, int pageSize) {
         try {
-            List<TaiKhoan> taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(RoleTaiKhoan.EMPLOYEE);
+            List<TaiKhoan> taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(RoleTaiKhoan.EMPLOYEE, PageRequest.of(pageNumber, pageSize));
             return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());
@@ -67,9 +67,9 @@ public class TaiKhoanService implements ITaiKhoanService {
     }
 
     @Override
-    public List<ResTaiKhoan> xemTheoUsername(String number) {
+    public List<ResTaiKhoan> xemTheoUsername(String number, int pageNumber, int pageSize) {
         try {
-            List<TaiKhoan> taiKhoans = taiKhoanRepository.findByUsernameContaining(number);
+            List<TaiKhoan> taiKhoans = taiKhoanRepository.findByUsernameContaining(number, PageRequest.of(pageNumber, pageSize));
             return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());

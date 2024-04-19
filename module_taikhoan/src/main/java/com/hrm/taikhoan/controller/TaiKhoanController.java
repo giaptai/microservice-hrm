@@ -44,8 +44,11 @@ public class TaiKhoanController {
     }
 
     @GetMapping("/nhan-vien/tai-khoan")
-    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan() {
-        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(), ResEnum.THANH_CONG);
+    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(pageNumber,  pageSize), ResEnum.THANH_CONG);
     }
 
     @GetMapping("/nhan-vien/tai-khoan/{id}")
@@ -54,8 +57,11 @@ public class TaiKhoanController {
     }
 
     @GetMapping("/nhan-vien/tai-khoan/tim-kiem")
-    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getTaiKhoanBySoCCCD(@RequestParam(name = "q") String number) {
-        return ResDTO.reply(taiKhoanService.xemTheoUsername(number), ResEnum.THANH_CONG);
+    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getTaiKhoanBySoCCCD(
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize,
+            @RequestParam(name = "q") String number) {
+        return ResDTO.reply(taiKhoanService.xemTheoUsername(number, pageNumber, pageSize), ResEnum.THANH_CONG);
     }
 
     @PostMapping("/nhan-vien/tai-khoan")
