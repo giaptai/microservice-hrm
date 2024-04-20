@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,10 +40,16 @@ public class HoSoController {
     //ADMIN - ADMIN - ADMIN
     @GetMapping("/nhan-vien/ho-so")
     public ResponseEntity<List<ResHoSo>> getAllHoSo(
+            @RequestParam(name = "soCCCD", required = false) String cccd,
+            @RequestParam(name = "hoVaTen", required = false) String hoVaTen,
+            @RequestParam(name = "danTocId", required = false, defaultValue = "-1") String danTocId,
+            @RequestParam(name = "chucVuHienTaiId", required = false, defaultValue = "-1") String chucVuHienTaiId,
+            @RequestParam(name = "coQuanToChucDonViId", required = false, defaultValue = "-1") String coQuanToChucDonViId,
+            @RequestParam(name = "pheDuyet", required = false) PheDuyet pheDuyet,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo(pageNumber, pageSize);
+        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo(cccd, hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet,pageNumber, pageSize);
         return new ResponseEntity<>(resHoSos, ResEnum.THANH_CONG.getCode());
     }
 
@@ -74,27 +81,27 @@ public class HoSoController {
         return new ResponseEntity<>(resHoSo, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
     }
 
-    @GetMapping("/nhan-vien/ho-so/tim-kiem")
-    public ResponseEntity<ResHoSo> findHoSoBySoCCCDO(@RequestParam(name = "q") String q) {
-        ResHoSo hoSo = hoSoService.xemHoSoTheoSoCCCD(q);
-        return new ResponseEntity<>(hoSo, ResEnum.THANH_CONG.getCode());
-    }
+//    @GetMapping("/nhan-vien/ho-so/tim-kiem")
+//    public ResponseEntity<ResHoSo> findHoSoBySoCCCDO(@RequestParam(name = "q") String q) {
+//        ResHoSo hoSo = hoSoService.xemHoSoTheoSoCCCD(q);
+//        return new ResponseEntity<>(hoSo, ResEnum.THANH_CONG.getCode());
+//    }
 
-    @GetMapping("/nhan-vien/ho-so/loc")
-    public ResponseEntity<List<ResHoSo>> filterHoSo(
-            @RequestParam(name = "hoVaTen", required = false, defaultValue = "") String hoVaTen,
-            @RequestParam(name = "danTocId", required = false, defaultValue = "-1") String danTocId,
-            @RequestParam(name = "chucVuHienTaiId", required = false, defaultValue = "-1") String chucVuHienTaiId,
-            @RequestParam(name = "coQuanToChucDonViId", required = false, defaultValue = "-1") String coQuanToChucDonViId,
-            @RequestParam(name = "pheDuyet", required = false, defaultValue = "-1") PheDuyet pheDuyet,
-            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
-    ) {
-        List<ResHoSo> hoSos = hoSoService.locHoSo(hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet, pageNumber, pageSize);
-        return new ResponseEntity<>(hoSos, ResEnum.THANH_CONG.getCode());
-    }
+//    @GetMapping("/nhan-vien/ho-so/loc")
+//    public ResponseEntity<List<ResHoSo>> filterHoSo(
+//            @RequestParam(name = "hoVaTen", required = false, defaultValue = "") String hoVaTen,
+//            @RequestParam(name = "danTocId", required = false, defaultValue = "-1") String danTocId,
+//            @RequestParam(name = "chucVuHienTaiId", required = false, defaultValue = "-1") String chucVuHienTaiId,
+//            @RequestParam(name = "coQuanToChucDonViId", required = false, defaultValue = "-1") String coQuanToChucDonViId,
+//            @RequestParam(name = "pheDuyet", required = false, defaultValue = "-1") PheDuyet pheDuyet,
+//            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+//            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+//    ) {
+//        List<ResHoSo> hoSos = hoSoService.locHoSo(hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet, pageNumber, pageSize);
+//        return new ResponseEntity<>(hoSos, ResEnum.THANH_CONG.getCode());
+//    }
 
-    @GetMapping("/nhan-vien/ho-so/phe-duyet")
+    @PutMapping("/nhan-vien/ho-so/phe-duyet")
     public ResponseEntity<Boolean> approveHoSo(@RequestParam(name = "pheDuyet") PheDuyet pheDuyet, @RequestBody List<ResHoSo> resHoSos) {
         boolean hoSos = hoSoService.pheDuyetHoSo(pheDuyet, resHoSos);
         return new ResponseEntity<>(hoSos, ResEnum.PHE_DUYET_HO_SO_THANH_CONG.getCode());

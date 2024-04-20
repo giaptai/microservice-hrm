@@ -51,7 +51,7 @@ public class TaiKhoanController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(username, role, pageNumber,  pageSize), ResEnum.THANH_CONG);
+        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(username, role, pageNumber, pageSize), ResEnum.THANH_CONG);
     }
 
     @GetMapping("/nhan-vien/tai-khoan/{id}")

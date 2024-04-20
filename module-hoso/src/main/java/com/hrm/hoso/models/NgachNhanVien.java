@@ -36,7 +36,7 @@ public class NgachNhanVien extends DateTimeObject {
     @Column(name = "ho_so_id")
     UUID id;
 
-    @Column(name = "ngach_id", columnDefinition = "VARCHAR(12) UNIQUE")
+    @Column(name = "ngach_id", columnDefinition = "VARCHAR(12)")
     String ngachId;
 
     @Column(name = "ngay_bo_nhiem_ngach", columnDefinition = "datetime")

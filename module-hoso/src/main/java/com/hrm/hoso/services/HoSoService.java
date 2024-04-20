@@ -60,6 +60,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -102,8 +104,14 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
-    public List<ResHoSo> xemDanhSachHoSo(int pageNumber, int pageSize) {
-        return hoSoRepository.findAll(PageRequest.of(pageNumber, pageSize)).stream().map(mapperHoSo::mapToResHoSo).toList();
+    public List<ResHoSo> xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, int pageNumber, int pageSize) {
+        if(soCCCD!=null && !soCCCD.isEmpty()){
+            ResHoSo hoSo = xemHoSoTheoSoCCCD(soCCCD);
+            return Collections.singletonList(hoSo);
+        }
+        if (hoVaTen != null || danTocId != -1 || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1 || pheDuyet != null) {
+            return locHoSo(hoVaTen, danTocId, chucVuHienTaiId, coQuanToChucDonViId, pheDuyet, pageNumber, pageSize);
+        } else return hoSoRepository.findAll(PageRequest.of(pageNumber, pageSize)).stream().map(mapperHoSo::mapToResHoSo).toList();
     }
 
 
@@ -151,7 +159,7 @@ public class HoSoService implements IHoSoService {
             query.where(predicate);
         }
         List<HoSo> hoSos = entityManager.createQuery(query)
-                .setFirstResult(pageNumber)
+                .setFirstResult(pageNumber*pageSize)
                 .setMaxResults(pageSize)
                 .getResultList();
         return hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
@@ -228,11 +236,14 @@ public class HoSoService implements IHoSoService {
     @Override
     public boolean pheDuyetHoSo(PheDuyet pheDuyet, List<ResHoSo> resHoSos) {
         try {
+            List<HoSo> hoSos = new ArrayList<>();
             for (ResHoSo resHoSo : resHoSos) {
                 HoSo hoSo = hoSoRepository.findById(resHoSo.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
                 hoSo.setPheDuyet(pheDuyet);
                 hoSo.setUpdate_at();
+                hoSos.add(hoSo);
             }
+            hoSoRepository.saveAll(hoSos);
             return true;
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());

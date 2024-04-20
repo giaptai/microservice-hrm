@@ -15,7 +15,7 @@ public interface IHoSoService {
 
     ResHoSo taoHoSo(ReqTaoHoSo req);
 
-    List<ResHoSo> xemDanhSachHoSo(int pageNumber, int pageSize);
+    List<ResHoSo> xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, int pageNumber, int pageSize);
 
     ResHoSo xemHoSoTheoSoCCCD(String q);
 
