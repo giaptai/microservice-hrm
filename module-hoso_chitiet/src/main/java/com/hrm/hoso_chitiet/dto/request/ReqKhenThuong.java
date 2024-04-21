@@ -1,5 +1,6 @@
 package com.hrm.hoso_chitiet.dto.request;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.enums.XepLoaiChuyenMon;
 import com.hrm.hoso_chitiet.enums.XepLoaiThiDua;
 import lombok.Builder;

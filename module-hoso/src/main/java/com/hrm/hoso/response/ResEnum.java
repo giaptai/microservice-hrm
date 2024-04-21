@@ -20,9 +20,9 @@ public enum ResEnum {
     TRUY_CAP_BI_CAM(HttpStatus.FORBIDDEN), //403 Forbidden: Client bị cấm truy cập tài nguyên.
     HONG_TIM_THAY(HttpStatus.NOT_FOUND), //404 Not Found: Tài nguyên không được tìm thấy.
     ;
-    private final HttpStatus statusCode;
+    private final HttpStatus code;
 
-    ResEnum(HttpStatus statusCode) {
-        this.statusCode = statusCode;
+    ResEnum(HttpStatus code) {
+        this.code = code;
     }
 }

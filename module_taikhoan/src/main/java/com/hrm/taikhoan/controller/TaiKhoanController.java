@@ -6,6 +6,7 @@ import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
+import com.hrm.taikhoan.enums.RoleTaiKhoan;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
 
@@ -44,8 +45,13 @@ public class TaiKhoanController {
     }
 
     @GetMapping("/nhan-vien/tai-khoan")
-    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan() {
-        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(), ResEnum.THANH_CONG);
+    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan(
+            @RequestParam(name = "username", required = false) String username,
+            @RequestParam(name = "role", required = false) RoleTaiKhoan role,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
+    ) {
+        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(username, role, pageNumber, pageSize), ResEnum.THANH_CONG);
     }
 
     @GetMapping("/nhan-vien/tai-khoan/{id}")
@@ -53,10 +59,13 @@ public class TaiKhoanController {
         return ResDTO.reply(taiKhoanService.xemTheoId(id), ResEnum.THANH_CONG);
     }
 
-    @GetMapping("/nhan-vien/tai-khoan/tim-kiem")
-    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getTaiKhoanBySoCCCD(@RequestParam(name = "q") String number) {
-        return ResDTO.reply(taiKhoanService.xemTheoUsername(number), ResEnum.THANH_CONG);
-    }
+//    @GetMapping("/nhan-vien/tai-khoan/tim-kiem")
+//    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getTaiKhoanBySoCCCD(
+//            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+//            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize,
+//            @RequestParam(name = "q") String username) {
+//        return ResDTO.reply(taiKhoanService.xemTheoUsername(username, pageNumber, pageSize), ResEnum.THANH_CONG);
+//    }
 
     @PostMapping("/nhan-vien/tai-khoan")
     @Transactional(Transactional.TxType.NEVER)

@@ -2,7 +2,6 @@ package com.hrm.taikhoan.service;
 
 import com.hrm.taikhoan.client.auth_token.TokenClient;
 import com.hrm.taikhoan.client.ho_so.HoSoClient;
-import com.hrm.taikhoan.client.ho_so.HoSoDTO;
 
 import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
@@ -31,10 +30,13 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.UUID;
@@ -57,19 +59,38 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     /* ADMIN - ADMIN - ADMIN*/
     @Override
-    public List<ResTaiKhoan> xemDanhSachTaiKhoan() {
+    public List<ResTaiKhoan> xemDanhSachTaiKhoan(String username, RoleTaiKhoan role, int pageNumber, int pageSize) {
         try {
-            List<TaiKhoan> taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(RoleTaiKhoan.EMPLOYEE);
+            List<TaiKhoan> taiKhoans = new ArrayList<>();
+            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            taiKhoans = taiKhoanRepository.findAll(pageable).stream().toList();
+            if (username != null && role == null) {
+                taiKhoans = xemByUsername(username, pageable);
+            }
+            if (username == null && role != null) {
+                taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(role, pageable);
+            }
+            if(username !=null && role !=null){
+                taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoanAndUsername(role, username.toLowerCase(), pageable);
+            }
             return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());
         }
     }
 
-    @Override
-    public List<ResTaiKhoan> xemTheoUsername(String number) {
+    private List<TaiKhoan> xemByUsername(String number, Pageable pageable) {
         try {
-            List<TaiKhoan> taiKhoans = taiKhoanRepository.findByUsernameContaining(number);
+            return taiKhoanRepository.findByUsernameContaining(number, pageable);
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e.getCause());
+        }
+    }
+
+    @Override
+    public List<ResTaiKhoan> xemTheoUsername(String number, int pageNumber, int pageSize) {
+        try {
+            List<TaiKhoan> taiKhoans = taiKhoanRepository.findByUsernameContaining(number, PageRequest.of(pageNumber, pageSize));
             return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());

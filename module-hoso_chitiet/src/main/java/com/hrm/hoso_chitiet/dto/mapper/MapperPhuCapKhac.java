@@ -24,6 +24,7 @@ public class MapperPhuCapKhac {
                 khac.getHeSoPhuCap(),
                 khac.getHinhThucHuong(),
                 khac.getGiaTri(),
+                khac.getXacNhan(),
                 khac.getHoSoId(),
                 khac.getCreate_at(),
                 khac.getUpdate_at()

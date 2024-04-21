@@ -21,6 +21,7 @@ public class MapperQuaTrinhCongTac {
                 tac.getDonViCongTacId(),
                 coQuanToChucDonViClient.getName(tac.getDonViCongTacId()),
                 tac.getChucDanh(),
+                tac.getXacNhan(),
                 tac.getHoSoId(),
                 tac.getCreate_at(),
                 tac.getUpdate_at()

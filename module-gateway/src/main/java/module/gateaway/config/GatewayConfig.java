@@ -123,7 +123,8 @@ public class GatewayConfig {
                 )
 //this route must be at last because the predicate path is "/api/v1/**" is match all the path above
                 .route("ho-so-chi-tiet-id",
-                        pred -> pred.path("/api/v1/{id}/**", "/api/v1/ca-nhan/**")
+                        pred -> pred.path("/api/v1/{id}/**",
+                                        "/api/v1/ca-nhan/**")
                                 .filters(f -> f.filter(filter))
                                 .uri(hoSoChiTietURL)
                 )

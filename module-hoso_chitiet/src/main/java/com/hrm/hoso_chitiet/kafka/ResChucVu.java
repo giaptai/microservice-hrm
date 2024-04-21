@@ -2,6 +2,7 @@ package com.hrm.hoso_chitiet.kafka;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
 
@@ -18,6 +19,7 @@ public record ResChucVu(
         String duocQuyHoacChucDanh,
         int coQuanToChucDonViTuyenDungId,
         String coQuanToChucDonViTuyenDungName,
+        XacNhan xacNhan,
         UUID hoSoId
 ) {
     public static class ResChucVuSoDeserializer implements Deserializer<ResChucVu> {

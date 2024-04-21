@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.request.ReqPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.response.ResPhuCapKhac;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -60,17 +61,29 @@ public class PhuCapKhacController {
     }
 
     @PatchMapping("/phu-cap-khac/{id}")
-    public ResponseEntity<ResPhuCapKhac> edit(@PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu));
+    public ResponseEntity<ResPhuCapKhac> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
+        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/phu-cap-khac/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = phuCapKhacService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = phuCapKhacService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
-
+    @PatchMapping("/phu-cap-khac/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResPhuCapKhac> res
+    ) {
+        boolean ls = phuCapKhacService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/phu-cap-khac")
     public ResponseEntity<List<ResPhuCapKhac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
@@ -88,14 +101,18 @@ public class PhuCapKhacController {
     }
 
     @PatchMapping("/ca-nhan/phu-cap-khac/{id}")
-    public ResponseEntity<ResPhuCapKhac> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu));
+    public ResponseEntity<ResPhuCapKhac> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
+        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/phu-cap-khac/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = phuCapKhacService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = phuCapKhacService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

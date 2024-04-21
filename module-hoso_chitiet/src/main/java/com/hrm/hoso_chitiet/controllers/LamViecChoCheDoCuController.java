@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.response.ResLamViecChoCheDoCu;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -46,7 +47,6 @@ public class LamViecChoCheDoCuController {
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
         List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
-        ;
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -64,15 +64,29 @@ public class LamViecChoCheDoCuController {
     }
 
     @PatchMapping("/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<ResLamViecChoCheDoCu> edit(@PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu));
+    public ResponseEntity<ResLamViecChoCheDoCu> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
+        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = lamViecChoCheDoCuService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = lamViecChoCheDoCuService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
+    }
+
+    @PatchMapping("/lam-viec-cho-che-do-cu/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResLamViecChoCheDoCu> res
+    ) {
+        boolean ls = lamViecChoCheDoCuService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     //EMPLOYEE
@@ -93,14 +107,18 @@ public class LamViecChoCheDoCuController {
     }
 
     @PatchMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<ResLamViecChoCheDoCu> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu));
+    public ResponseEntity<ResLamViecChoCheDoCu> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
+        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = lamViecChoCheDoCuService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = lamViecChoCheDoCuService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

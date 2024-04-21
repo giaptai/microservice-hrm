@@ -3,6 +3,7 @@ package module.gateaway.filter;
 import io.jsonwebtoken.Claims;
 import module.gateaway.jwt.JWTUtilities;
 import module.gateaway.router.AdminRouterValid;
+import module.gateaway.router.AuthRouterValid;
 import module.gateaway.router.EmployeeRouterValid;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -19,11 +20,13 @@ import reactor.core.publisher.Mono;
 @RefreshScope
 public class AuthenticationFilter implements GatewayFilter {
     private final JWTUtilities jwtUtilities;
+    private final AuthRouterValid authRouterValid;
     private final AdminRouterValid adminRouterValid;
     private final EmployeeRouterValid employeeRouterValid;
 
-    public AuthenticationFilter(JWTUtilities jwtUtilities, AdminRouterValid adminRouterValid, EmployeeRouterValid employeeRouterValid) {
+    public AuthenticationFilter(JWTUtilities jwtUtilities, AuthRouterValid authRouterValid, AdminRouterValid adminRouterValid, EmployeeRouterValid employeeRouterValid) {
         this.jwtUtilities = jwtUtilities;
+        this.authRouterValid = authRouterValid;
         this.adminRouterValid = adminRouterValid;
         this.employeeRouterValid = employeeRouterValid;
     }
@@ -31,18 +34,29 @@ public class AuthenticationFilter implements GatewayFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
+        if(authRouterValid.isSecured.test(request)){
+            if (this.isAuthMissing(request)) {
+                return this.onError(exchange, HttpStatus.UNAUTHORIZED);
+            }
+            final String token = this.getAuthHeader(request).substring(7);
+            Claims claims = jwtUtilities.extractAllClaims(token);
+            if (!jwtUtilities.isTokenValid(token) || (!claims.get("role").equals("ADMIN") && !claims.get("role").equals("EMPLOYEE"))) {
+                return this.onError(exchange, HttpStatus.FORBIDDEN);
+            }
+            this.updateRequest(exchange, claims);
+            return chain.filter(exchange);
+        }
         if (adminRouterValid.isSecured.test(request)) {
             if (this.isAuthMissing(request)) {
                 return this.onError(exchange, HttpStatus.UNAUTHORIZED);
             }
             final String token = this.getAuthHeader(request).substring(7);
             Claims claims = jwtUtilities.extractAllClaims(token);
-//            boolean role = claims.get("role").toString().equalsIgnoreCase("ADMIN");
-//            boolean tokenValid = jwtUtilities.isTokenValid(token);
             if (!jwtUtilities.isTokenValid(token) || !claims.get("role").equals("ADMIN")) {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
             }
             this.updateRequest(exchange, claims);
+            return chain.filter(exchange);
         }
         if (employeeRouterValid.isSecured.test(request)) {
             if (this.isAuthMissing(request)) {
@@ -54,6 +68,7 @@ public class AuthenticationFilter implements GatewayFilter {
                 return this.onError(exchange, HttpStatus.FORBIDDEN);
             }
             this.updateRequest(exchange, claims);
+            return chain.filter(exchange);
         }
         return chain.filter(exchange);
     }

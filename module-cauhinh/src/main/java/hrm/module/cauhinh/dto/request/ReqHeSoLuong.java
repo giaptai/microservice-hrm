@@ -1,8 +1,8 @@
 package hrm.module.cauhinh.dto.request;
 
 public record ReqHeSoLuong(
-        int nhom,
-        int bacLuong,
+        int nhomId,
+        int bacLuongId,
         float heSo
 ) {
 }

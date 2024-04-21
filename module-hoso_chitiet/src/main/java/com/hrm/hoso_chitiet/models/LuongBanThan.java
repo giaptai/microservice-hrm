@@ -1,7 +1,9 @@
 package com.hrm.hoso_chitiet.models;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -52,10 +54,14 @@ public class LuongBanThan extends DateTimeObject {
     @Column(name = "tien_luong_theo_vi_tri", columnDefinition = "double")
     float tienLuongTheoViTri;
 
+    @Enumerated
+    @Column(name = "xac_nhan")
+    XacNhan xacNhan;
+
     @Column(name = "ho_so_id", columnDefinition = "binary(16)")
     UUID hoSoId;
 
-    public LuongBanThan(LocalDateTime batDau, LocalDateTime ketThuc, String maSo, String bacLuong, float heSoLuong, float tienLuongTheoViTri, UUID hoSoId) {
+    public LuongBanThan(LocalDateTime batDau, LocalDateTime ketThuc, String maSo, String bacLuong, float heSoLuong, float tienLuongTheoViTri, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
@@ -63,6 +69,7 @@ public class LuongBanThan extends DateTimeObject {
         this.bacLuong = bacLuong;
         this.heSoLuong = heSoLuong;
         this.tienLuongTheoViTri = tienLuongTheoViTri;
+        this.xacNhan = xacNhan;
         this.hoSoId = hoSoId;
     }
 }

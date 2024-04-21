@@ -4,6 +4,7 @@ import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.response.ResKhenThuong;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -68,15 +69,31 @@ public class KhenThuongController {
     }
 
     @PatchMapping("/khen-thuong/{id}")
-    public ResponseEntity<ResKhenThuong> edit(@PathVariable(name = "id") int id, @RequestBody ReqKhenThuong cu) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu));
+    public ResponseEntity<ResKhenThuong> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id,
+            @RequestBody ReqKhenThuong cu) {
+        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/khen-thuong/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = khenThuongService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id
+    ) {
+        boolean ls = khenThuongService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
+    }
+
+    @PatchMapping("/khen-thuong/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResKhenThuong> res
+    ) {
+        boolean ls = khenThuongService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     //EMPLOYEE
@@ -98,14 +115,19 @@ public class KhenThuongController {
     }
 
     @PatchMapping("/ca-nhan/khen-thuong/{id}")
-    public ResponseEntity<ResKhenThuong> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqKhenThuong cu) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu));
+    public ResponseEntity<ResKhenThuong> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id,
+            @RequestBody ReqKhenThuong cu) {
+        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/khen-thuong/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = khenThuongService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = khenThuongService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

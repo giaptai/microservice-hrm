@@ -1,7 +1,9 @@
 package com.hrm.hoso_chitiet.models;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tin_hoc",indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "tin_hoc", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
 @Getter
 @Setter
 @SuperBuilder
@@ -46,6 +48,10 @@ public class TinHoc extends DateTimeObject {
     @Column(name = "chung_chi_duoc_cap", columnDefinition = "varchar(50)")
     String chungChiDuocCap;
 
+    @Enumerated
+    @Column(name = "xac_nhan")
+    XacNhan xacNhan;
+
     @Column(name = "ho_so_id", columnDefinition = "binary(16)")
     UUID hoSoId;
 
@@ -54,12 +60,13 @@ public class TinHoc extends DateTimeObject {
         super.setUpdate_at();
     }
 
-    public TinHoc(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String chungChiDuocCap, UUID hoSoId) {
+    public TinHoc(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String chungChiDuocCap, XacNhan xacNhan, UUID hoSoId) {
         super();
         this.batDau = batDau;
         this.ketThuc = ketThuc;
         this.tenCoSoDaoTaoId = tenCoSoDaoTaoId;
         this.chungChiDuocCap = chungChiDuocCap;
+        this.xacNhan = xacNhan;
         this.hoSoId = hoSoId;
     }
 }

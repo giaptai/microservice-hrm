@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperNgoaiNgu;
 import com.hrm.hoso_chitiet.dto.request.ReqNgoaiNgu;
 import com.hrm.hoso_chitiet.dto.response.ResNgoaiNgu;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -60,17 +61,29 @@ public class NgoaiNguController {
     }
 
     @PatchMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> edit(@PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu));
+    public ResponseEntity<ResNgoaiNgu> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
+        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ngoai-ngu/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = ngoaiNguService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = ngoaiNguService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
-
+    @PatchMapping("/ngoai-ngu/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResNgoaiNgu> res
+    ) {
+        boolean ls = ngoaiNguService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/ngoai-ngu")
     public ResponseEntity<List<ResNgoaiNgu>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
@@ -88,14 +101,18 @@ public class NgoaiNguController {
     }
 
     @PatchMapping("/ca-nhan/ngoai-ngu/{id}")
-    public ResponseEntity<ResNgoaiNgu> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu));
+    public ResponseEntity<ResNgoaiNgu> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
+        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/ngoai-ngu/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = ngoaiNguService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = ngoaiNguService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }

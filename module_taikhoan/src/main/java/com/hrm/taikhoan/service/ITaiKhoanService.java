@@ -4,6 +4,7 @@ import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
+import com.hrm.taikhoan.enums.RoleTaiKhoan;
 import com.hrm.taikhoan.models.TaiKhoan;
 
 import java.text.Normalizer;
@@ -18,9 +19,9 @@ public interface ITaiKhoanService {
 
     boolean doiEmailTaiKhoanCaNhan(int id, String email);
 
-    List<ResTaiKhoan> xemDanhSachTaiKhoan(); //admin
+    List<ResTaiKhoan> xemDanhSachTaiKhoan(String username, RoleTaiKhoan role, int pageNumber, int pageSize); //admin
 
-    List<ResTaiKhoan> xemTheoUsername(String username); //admin user
+    List<ResTaiKhoan> xemTheoUsername(String username, int pageNumber, int pageSize); //admin user
 
     ResTaiKhoan xemTheoId(int id); //admin user
 

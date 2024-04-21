@@ -3,6 +3,7 @@ package com.hrm.hoso_chitiet.controllers;
 import com.hrm.hoso_chitiet.dto.mapper.MapperLuongBanThan;
 import com.hrm.hoso_chitiet.dto.request.ReqLuongBanThan;
 import com.hrm.hoso_chitiet.dto.response.ResLuongBanThan;
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -63,17 +64,30 @@ public class LuongBanThanController {
     }
 
     @PatchMapping("/luong-ban-than/{id}")
-    public ResponseEntity<ResLuongBanThan> edit(@PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu));
+    public ResponseEntity<ResLuongBanThan> edit(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
+        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/luong-ban-than/{id}")
-    public ResponseEntity<Boolean> del(@PathVariable(name = "id") int id) {
-        boolean ls = luongBanThanService.xoa(id);
+    public ResponseEntity<Boolean> del(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = luongBanThanService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 
+    @PatchMapping("/luong-ban-than/phe-duyet")
+    public ResponseEntity<Boolean> approve(
+            @RequestHeader(name = "role", required = false) String role,
+            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestBody List<ResLuongBanThan> res
+    ) {
+        boolean ls = luongBanThanService.xacNhan(xacNhan, res);
+        return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
+    }
     //EMPLOYEE
     @GetMapping("/ca-nhan/luong-ban-than")
     public ResponseEntity<List<ResLuongBanThan>> getAllCaNhan(
@@ -92,14 +106,18 @@ public class LuongBanThanController {
     }
 
     @PatchMapping("/ca-nhan/luong-ban-than/{id}")
-    public ResponseEntity<ResLuongBanThan> editCaNhan(@PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu));
+    public ResponseEntity<ResLuongBanThan> editCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
+        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu, role));
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
     @DeleteMapping("/ca-nhan/luong-ban-than/{id}")
-    public ResponseEntity<Boolean> delCaNhan(@PathVariable(name = "id") int id) {
-        boolean ls = luongBanThanService.xoa(id);
+    public ResponseEntity<Boolean> delCaNhan(
+            @RequestHeader(name = "role", required = false) String role,
+            @PathVariable(name = "id") int id) {
+        boolean ls = luongBanThanService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
 }
