@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 public class EmployeeRouterValid {
     public static final List<String> adminApiEndpoints = List.of(
             "/api/v1/ca-nhan/ho-so",
-            "/api/v1/ca-nhan/tai-khoan",
             "/api/v1/ca-nhan/khen-thuong",
             "/api/v1/ca-nhan/kien-thuc-an-ninh-quoc-phong",
             "/api/v1/ca-nhan/ky-luat",
