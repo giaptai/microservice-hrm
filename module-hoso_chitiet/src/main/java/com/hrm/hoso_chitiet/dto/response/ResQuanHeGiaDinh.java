@@ -9,11 +9,13 @@ public record ResQuanHeGiaDinh(
         int id,
         int moiQuanHeId,
         String moiQuanHeName,
-        String hoVaTen,
+        String tenNhanThan,
         short namSinh,
         String thongTinThanNhan,
         XacNhan xacNhan,
         UUID hoSoId,
+        String hoVaTen,
+        String soCCCD,
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {

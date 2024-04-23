@@ -5,6 +5,7 @@ import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
+import com.hrm.hoso.dto.response.ResHoSoTomTat;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.response.ResEnum;
 import com.hrm.hoso.services.IHoSoService;
@@ -33,9 +34,14 @@ public class HoSoController {
 
     //CLIENT
     @GetMapping(path = "/ho-so-id")
-    public ResponseEntity<UUID> getHoSoId(@RequestHeader(name = "taiKhoanId") int id) {
+    public ResponseEntity<ResHoSoTomTat> getHoSoId(@RequestHeader(name = "taiKhoanId") int id) {
         return new ResponseEntity<>(hoSoService.layHoSoId(id), ResEnum.THANH_CONG.getCode());
     }
+
+//    @GetMapping(path = "/ho-so-tom-tat-id/{id}")
+//    public ResponseEntity<ResHoSoTomTat> getHoSoTomTatId(@PathVariable(name = "taiKhoanId") int id) {
+//        return new ResponseEntity<>(hoSoService.layHoSoId(id), ResEnum.THANH_CONG.getCode());
+//    }
 
     //ADMIN - ADMIN - ADMIN
     @GetMapping("/nhan-vien/ho-so")

@@ -18,6 +18,8 @@ public record ResQuaTrinhCongTac(
         String chucDanh,
         XacNhan xacNhan,
         UUID hoSoId,
+        String hoVaTen,
+        String soCCCD,
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {

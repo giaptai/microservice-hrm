@@ -1,6 +1,7 @@
 package com.hrm.hoso_chitiet.services;
 
 import com.hrm.hoso_chitiet.client.ho_so.HoSoClient;
+import com.hrm.hoso_chitiet.client.ho_so.ResHoSoTomTatClient;
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKienThucAnNinhQuocPhong;
@@ -184,13 +185,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public LamViecChoCheDoCu themCaNhan(int taiKhoanId, ReqLamViecChoCheDoCu cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -256,8 +259,7 @@ public class HoSoChiTietServices {
                         c.setLyDo(req.lyDo());
                         c.setUpdateAt();
                         return khenThuongRepository.save(c);
-                    } else throw new
-                            ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
+                    } else throw new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -285,13 +287,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public KhenThuong themCaNhan(int taiKhoanId, ReqKhenThuong cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -388,13 +392,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public KienThucAnNinhQuocPhong themCaNhan(int taiKhoanId, ReqKienThucAnNinhQuocPhong cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -490,13 +496,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public KyLuat themCaNhan(int taiKhoanId, ReqKyLuat cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -593,13 +601,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public LamViecONuocNgoai themCaNhan(int taiKhoanId, ReqLamViecONuocNgoai cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -699,13 +709,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public LuongBanThan themCaNhan(int taiKhoanId, ReqLuongBanThan cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -804,13 +816,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public LyLuanChinhTri themCaNhan(int taiKhoanId, ReqLyLuanChinhTri cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -908,13 +922,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public NghiepVuChuyenNganh themCaNhan(int taiKhoanId, ReqNghiepVuChuyenNganh cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -1014,13 +1030,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public NgoaiNgu themCaNhan(int taiKhoanId, ReqNgoaiNgu cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -1115,13 +1133,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public PhuCapKhac themCaNhan(int taiKhoanId, ReqPhuCapKhac cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -1218,13 +1238,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public QuanHeGiaDinh themCaNhan(int taiKhoanId, ReqQuanHeGiaDinh cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -1320,13 +1342,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public QuaTrinhCongTac themCaNhan(int taiKhoanId, ReqQuaTrinhCongTac cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
@@ -1418,13 +1442,15 @@ public class HoSoChiTietServices {
 
         @Override
         public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
         public TinHoc themCaNhan(int taiKhoanId, ReqTinHoc cu) {
-            UUID id = hoSoClient.getHoSoId(taiKhoanId);
+            ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
+            UUID id = client.hoSoId();
             return them(id, cu);
         }
 
