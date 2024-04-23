@@ -4,6 +4,7 @@ import com.hrm.hoso.dto.request.ReqChucVu;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
+import com.hrm.hoso.dto.response.ResHoSoTomTat;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.dto.request.ReqHoSo;
 
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IHoSoService {
-    UUID layHoSoId(int taiKhoanId);
+    ResHoSoTomTat layHoSoId(int taiKhoanId);
 
     ResHoSo taoHoSo(ReqTaoHoSo req);
 

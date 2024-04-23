@@ -29,6 +29,8 @@ public record ResKhenThuong(
         String lyDo,
         XacNhan xacNhan,
         UUID hoSoId,
+        String hoVaTen,
+        String soCCCD,
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime create_at,

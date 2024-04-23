@@ -16,6 +16,8 @@ public record ResLamViecONuocNgoai(
         String toChucDiaChiCongViec,
         XacNhan xacNhan,
         UUID hoSoId,
+        String hoVaTen,
+        String soCCCD,
         LocalDateTime create_at,
         LocalDateTime update_at
 ) {

@@ -1,6 +1,8 @@
 package com.hrm.hoso_chitiet.dto.mapper;
 
 import com.hrm.hoso_chitiet.client.coquan_tochuc_donvi.CoQuanToChucDonViClient;
+import com.hrm.hoso_chitiet.client.ho_so.HoSoClient;
+import com.hrm.hoso_chitiet.client.ho_so.ResHoSoTomTatClient;
 import com.hrm.hoso_chitiet.dto.response.ResKienThucAnNinhQuocPhong;
 import com.hrm.hoso_chitiet.models.KienThucAnNinhQuocPhong;
 import lombok.AccessLevel;
@@ -13,18 +15,24 @@ import org.springframework.context.annotation.Configuration;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MapperKienThucAnNinhQuocPhong {
     final CoQuanToChucDonViClient coQuanToChucDonViClient;
+    final HoSoClient hoSoClient;
     public ResKienThucAnNinhQuocPhong mapToResKienThucAnNinhQuocPhong(KienThucAnNinhQuocPhong phong) {
-        return phong != null ? new ResKienThucAnNinhQuocPhong(
-                phong.getId(),
-                phong.getBatDau(),
-                phong.getKetThuc(),
-                phong.getTenCoSoDaoTaoId(),
-                coQuanToChucDonViClient.getName(phong.getTenCoSoDaoTaoId()),
-                phong.getChungChiDuocCap(),
-                phong.getXacNhan(),
-                phong.getHoSoId(),
-                phong.getCreateAt(),
-                phong.getUpdateAt()
-        ) : null;
+        if( phong != null ){
+            ResHoSoTomTatClient tomTatClient = hoSoClient.getHoSoNhanVienId(phong.getHoSoId());
+            new ResKienThucAnNinhQuocPhong(
+                    phong.getId(),
+                    phong.getBatDau(),
+                    phong.getKetThuc(),
+                    phong.getTenCoSoDaoTaoId(),
+                    coQuanToChucDonViClient.getName(phong.getTenCoSoDaoTaoId()),
+                    phong.getChungChiDuocCap(),
+                    phong.getXacNhan(),
+                    phong.getHoSoId(),
+                    tomTatClient.hoVaTen(),
+                    tomTatClient.soCCCD(),
+                    phong.getCreateAt(),
+                    phong.getUpdateAt()
+            );
+        } return null;
     }
 }

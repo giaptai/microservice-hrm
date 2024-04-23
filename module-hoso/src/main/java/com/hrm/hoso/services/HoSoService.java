@@ -2,6 +2,7 @@ package com.hrm.hoso.services;
 
 import com.hrm.hoso.dto.mapper.MapperChucVuHienTai;
 import com.hrm.hoso.dto.mapper.MapperHoSo;
+import com.hrm.hoso.dto.mapper.MapperHoSoTomTat;
 import com.hrm.hoso.dto.request.ReqChucVu;
 import com.hrm.hoso.dto.request.ReqChucVuKiemNhiem;
 import com.hrm.hoso.dto.request.ReqHocVan;
@@ -14,6 +15,7 @@ import com.hrm.hoso.dto.request.ReqViecLam;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 
+import com.hrm.hoso.dto.response.ResHoSoTomTat;
 import com.hrm.hoso.enums.PheDuyet;
 
 import com.hrm.hoso.dto.request.ReqHoSo;
@@ -83,13 +85,15 @@ public class HoSoService implements IHoSoService {
     //mapper
     final MapperHoSo mapperHoSo;
     final MapperChucVuHienTai mapperChucVuHienTai;
+    final MapperHoSoTomTat mapperHoSoTomTat;
     //criticizable
     final EntityManager entityManager;
 
 
     @Override
-    public UUID layHoSoId(int taiKhoanId) {
-        return hoSoRepository.findByTaiKhoanId(taiKhoanId).map(HoSo::getId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+    public ResHoSoTomTat layHoSoId(int taiKhoanId) {
+        HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+        return mapperHoSoTomTat.mapToResHoSoTomTat(hoSo);
     }
 
     @Override

@@ -19,6 +19,8 @@ public record ResLyLuanChinhTri(
         String vanBangDuocCap,
         XacNhan xacNhan,
         UUID hoSoId,
+        String hoVaTen,
+        String soCCCD,
         LocalDateTime create_at,
         LocalDateTime update_at
 
