@@ -1,6 +1,8 @@
 package com.hrm.hoso_chitiet.repositories;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.models.LyLuanChinhTri;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,12 +17,13 @@ import java.util.UUID;
 
 @Repository
 public interface LyLuanChinhTriRepository extends JpaRepository<LyLuanChinhTri, Integer> {
-    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.hoSoId = ?1")
-    List<LyLuanChinhTri> getAllByHoSo(UUID id, Pageable pageable);
+    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.hoSoId = ?1 AND (?2 is null OR c.xacNhan = ?2)")
+    List<LyLuanChinhTri> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
 
     @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LyLuanChinhTri> findByIdAndHoSo(int id, UUID id1);
-
+    @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE (?1 is null OR c.xacNhan = ?1)")
+    Page<LyLuanChinhTri> getAllByXacNhan(XacNhan xacNhan, Pageable pageable);
     @Transactional
     @Modifying
     @Query(value = "UPDATE LyLuanChinhTri c SET c.batDau = ?1, c.ketThuc = ?2, c.tenCoSoDaoTaoId =?3, c.hinhThucDaoTao =?4, c.vanBangDuocCap =?5 WHERE c.id = ?6 AND c.hoSoId = ?7")
