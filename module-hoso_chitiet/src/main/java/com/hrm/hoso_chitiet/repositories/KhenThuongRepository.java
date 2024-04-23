@@ -24,7 +24,19 @@ public interface KhenThuongRepository extends JpaRepository<KhenThuong, Integer>
     //READ SPECIFIC
     @Query(value = "SELECT c FROM KhenThuong c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<KhenThuong> findByIdAndHoSo(int id, UUID uuid);
-    @Query(value = "SELECT * FROM khen_thuong WHERE nam BETWEEN NOW() AND DATE_ADD(NOW(),INTERVAL 7 DAY) ORDER BY nam", nativeQuery = true)
+    @Query(value = "SELECT " +
+            "hinh_thuc_khen_thuong_id, " +
+            "id, " +
+            "trang_thai, " +
+            "xac_nhan, " +
+            "create_at, " +
+            "nam, " +
+            "update_at, " +
+            "ho_so_id, " +
+            "ly_do, " +
+            "xep_loai_chuyen_mon, " +
+            "xep_loai_thi_dua " +
+            "FROM khen_thuong WHERE nam BETWEEN NOW() AND DATE_ADD(NOW(),INTERVAL 7 DAY) ORDER BY nam", nativeQuery = true)
     List<KhenThuong> getAllByHoSoInLast7Days();
     //UPDATE
     @Transactional

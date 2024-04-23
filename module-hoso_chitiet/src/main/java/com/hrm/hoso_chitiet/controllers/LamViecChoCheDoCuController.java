@@ -35,18 +35,20 @@ public class LamViecChoCheDoCuController {
     @GetMapping("/{id}/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAll(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSach(byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -93,9 +95,10 @@ public class LamViecChoCheDoCuController {
     @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachCaNhan(id, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

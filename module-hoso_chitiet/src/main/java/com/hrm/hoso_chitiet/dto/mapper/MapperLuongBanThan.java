@@ -17,8 +17,8 @@ public class MapperLuongBanThan {
                 than.getTienLuongTheoViTri(),
                 than.getXacNhan(),
                 than.getHoSoId(),
-                than.getCreate_at(),
-                than.getUpdate_at()
+                than.getCreateAt(),
+                than.getUpdateAt()
         ) : null;
     }
 }

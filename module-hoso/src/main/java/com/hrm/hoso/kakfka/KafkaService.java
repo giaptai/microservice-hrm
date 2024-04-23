@@ -70,7 +70,7 @@ public class KafkaService {
                             .soCCCD(record.value().soCCCD())
                             .taiKhoanId(record.value().taiKhoan())
                             .pheDuyet(PheDuyet.CHO_PHE_DUYET)
-                            .create_at(LocalDateTime.now())
+                            .createAt(LocalDateTime.now())
                             .build();
                     hoSoRepository.save(hoSo);
                 }

@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "taikhoan")
+@Table(name = "taikhoan", indexes = {@Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt")})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,7 +33,7 @@ import java.util.UUID;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class TaiKhoan extends DateTimeObject{
+public class TaiKhoan extends DateTimeObject {
     @Id
     @Column(columnDefinition = "INTEGER AUTO_INCREMENT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 public class MapperChucVuHienTai {
     final ChucVuClient chucVuClient;
     final CoQuanToChucDonViClient coQuanClient;
+
     public ResChucVu mapToResChucVu(ChucVuHienTai chucVu) {
         if (chucVu == null) {
             return null;
@@ -30,6 +31,7 @@ public class MapperChucVuHienTai {
                 chucVu.getPhuCapChucVu(),
                 chucVu.getCoQuanToChucDonViTuyenDungId(),
                 coQuanName,
+                "DA_XAC_NHAN",
                 chucVu.getId()
         );
     }

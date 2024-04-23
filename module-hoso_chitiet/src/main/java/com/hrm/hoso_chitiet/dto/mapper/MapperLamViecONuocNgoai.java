@@ -14,8 +14,8 @@ public class MapperLamViecONuocNgoai {
                 ngoai.getToChucDiaChiCongViec(),
                 ngoai.getXacNhan(),
                 ngoai.getHoSoId(),
-                ngoai.getCreate_at(),
-                ngoai.getUpdate_at()
+                ngoai.getCreateAt(),
+                ngoai.getUpdateAt()
         ) : null;
     }
 }

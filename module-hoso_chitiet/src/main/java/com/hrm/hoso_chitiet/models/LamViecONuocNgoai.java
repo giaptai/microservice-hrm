@@ -22,7 +22,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "lam_viec_o_nuoc_ngoai", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "lam_viec_o_nuoc_ngoai", indexes = {
+        @Index(name = "ho_so_idx", columnList = "ho_so_id"),
+        @Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt")
+})
 @Getter
 @Setter
 @SuperBuilder

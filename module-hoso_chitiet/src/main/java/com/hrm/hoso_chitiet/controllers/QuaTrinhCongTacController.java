@@ -34,16 +34,19 @@ public class QuaTrinhCongTacController {
 
     @GetMapping("/{id}/qua-trinh-cong-tac")
     public ResponseEntity<List<ResQuaTrinhCongTac>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
+                                                                   @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                    @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                    @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
+        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSachTheoHoSoId(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/qua-trinh-cong-tac")
-    public ResponseEntity<List<ResQuaTrinhCongTac>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
+    public ResponseEntity<List<ResQuaTrinhCongTac>> getAll(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSach(byDate,pageNumber, pageSize).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -75,6 +78,7 @@ public class QuaTrinhCongTacController {
         boolean ls = quaTrinhCongTacService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/qua-trinh-cong-tac/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
@@ -84,12 +88,14 @@ public class QuaTrinhCongTacController {
         boolean ls = quaTrinhCongTacService.xacNhan(xacNhan, res);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/qua-trinh-cong-tac")
     public ResponseEntity<List<ResQuaTrinhCongTac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                                 @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
+        List<ResQuaTrinhCongTac> ls = quaTrinhCongTacService.xemDanhSachCaNhan(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResQuaTrinhCongTac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

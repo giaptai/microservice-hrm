@@ -54,8 +54,7 @@ public class KafkaService {
             consumer.subscribe(List.of("qua-trinh-cong-tac"));
             // poll for new data
             while (true) {
-                ConsumerRecords<String, ResChucVu> records =
-                        consumer.poll(Duration.ofMillis(1000));
+                ConsumerRecords<String, ResChucVu> records = consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, ResChucVu> record : records) {
                     System.out.printf("""
                                     Key: %s

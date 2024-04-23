@@ -54,9 +54,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IHoSoChiTietServices<T, H> {
-    List<T> xemDanhSach(int pageNumber, int pageSize);
+    List<T> xemDanhSach(String byDate, int pageNumber, int pageSize);
 
-    List<T> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize);
+    List<T> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize);
 
     T xemChiTiet(int id);
 
@@ -67,7 +67,7 @@ public interface IHoSoChiTietServices<T, H> {
     boolean xoa(int id, String role);
 
     //EMPLOYEE
-    List<T> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize);
+    List<T> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize);
 
     T themCaNhan(int taiKhoanId, H cu);
 
@@ -76,75 +76,108 @@ public interface IHoSoChiTietServices<T, H> {
     }
 
     interface ILamViecChoCheDoCuServiceChiTiet extends IHoSoChiTietServices<LamViecChoCheDoCu, ReqLamViecChoCheDoCu> {
-        default boolean xacNhan(XacNhan xacNhan, List<ResLamViecChoCheDoCu> res){return true;}
+        default boolean xacNhan(XacNhan xacNhan, List<ResLamViecChoCheDoCu> res) {
+            return true;
+        }
     }
 
     interface IHoKhenThuongServiceChiTiet extends IHoSoChiTietServices<KhenThuong, ReqKhenThuong> {
         default List<KhenThuong> khenThuongNhanVien(List<ReqKhenThuongNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResKhenThuong> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResKhenThuong> res) {
+            return true;
+        }
     }
 
     interface IHoKienThucAnNinhQuocPhongServiceChiTiet extends IHoSoChiTietServices<KienThucAnNinhQuocPhong, ReqKienThucAnNinhQuocPhong> {
-        default boolean xacNhan(XacNhan xacNhan, List<ResKienThucAnNinhQuocPhong> res){return true;}
+        default boolean xacNhan(XacNhan xacNhan, List<ResKienThucAnNinhQuocPhong> res) {
+            return true;
+        }
     }
 
     interface IHoKyLuatServiceChiTiet extends IHoSoChiTietServices<KyLuat, ReqKyLuat> {
         default List<KyLuat> kyLuatNhanVien(List<ReqKyLuatNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResKyLuat> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResKyLuat> res) {
+            return true;
+        }
     }
 
     interface IHoLamViecONuocNgoaiServiceChiTiet extends IHoSoChiTietServices<LamViecONuocNgoai, ReqLamViecONuocNgoai> {
         default List<LamViecONuocNgoai> lamViecONUocNgoaiNhanVien(List<ReqLamViecONuocNgoaiNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResLamViecONuocNgoai> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResLamViecONuocNgoai> res) {
+            return true;
+        }
     }
 
     interface IHoLuongBanThanServiceChiTiet extends IHoSoChiTietServices<LuongBanThan, ReqLuongBanThan> {
-        default boolean xacNhan(XacNhan xacNhan, List<ResLuongBanThan> res){return true;}
+        default boolean xacNhan(XacNhan xacNhan, List<ResLuongBanThan> res) {
+            return true;
+        }
     }
 
     interface IHoLyLuanChinhTriServiceChiTiet extends IHoSoChiTietServices<LyLuanChinhTri, ReqLyLuanChinhTri> {
         default List<LyLuanChinhTri> lyLuanChinhTriNhanVien(List<ReqLyLuanChinhTriNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResLyLuanChinhTri> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResLyLuanChinhTri> res) {
+            return true;
+        }
     }
 
     interface IHoNghiepVuChuyenNganhServiceChiTiet extends IHoSoChiTietServices<NghiepVuChuyenNganh, ReqNghiepVuChuyenNganh> {
         default List<NghiepVuChuyenNganh> nghiepVuChuyenNganhNhanVien(List<ReqNghiepVuChuyenNganhNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResNghiepVuChuyenNganh> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResNghiepVuChuyenNganh> res) {
+            return true;
+        }
     }
 
     interface IHoNgoaiNguServiceChiTiet extends IHoSoChiTietServices<NgoaiNgu, ReqNgoaiNgu> {
         default List<NgoaiNgu> ngoaiNguNhanVien(List<ReqNgoaiNguNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResNgoaiNgu> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResNgoaiNgu> res) {
+            return true;
+        }
     }
 
     interface IHoPhuCapKhacServiceChiTiet extends IHoSoChiTietServices<PhuCapKhac, ReqPhuCapKhac> {
-        default boolean xacNhan(XacNhan xacNhan, List<ResPhuCapKhac> res){return true;}
+        default boolean xacNhan(XacNhan xacNhan, List<ResPhuCapKhac> res) {
+            return true;
+        }
     }
 
     interface IHoQuanHeGiaDinhServiceChiTiet extends IHoSoChiTietServices<QuanHeGiaDinh, ReqQuanHeGiaDinh> {
-        default boolean xacNhan(XacNhan xacNhan, List<ResQuanHeGiaDinh> res){return true;}
+        default boolean xacNhan(XacNhan xacNhan, List<ResQuanHeGiaDinh> res) {
+            return true;
+        }
     }
 
     interface IHoQuaTrinhCongTacServiceChiTiet extends IHoSoChiTietServices<QuaTrinhCongTac, ReqQuaTrinhCongTac> {
         default List<QuaTrinhCongTac> chuyenCongTacNhanVien(List<ReqQuaTrinhCongTacNhanVien> vien) {
             return new ArrayList<>();
         }
-        default boolean xacNhan(XacNhan xacNhan, List<ResQuaTrinhCongTac> res){return true;}
+
+        default boolean xacNhan(XacNhan xacNhan, List<ResQuaTrinhCongTac> res) {
+            return true;
+        }
     }
 
     interface IHoTinHocServiceChiTiet extends IHoSoChiTietServices<TinHoc, ReqTinHoc> {
-        default boolean xacNhan(XacNhan xacNhan, List<ResTinHoc> res){return true;}
+        default boolean xacNhan(XacNhan xacNhan, List<ResTinHoc> res) {
+            return true;
+        }
     }
 }

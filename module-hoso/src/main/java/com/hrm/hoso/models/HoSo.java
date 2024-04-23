@@ -35,9 +35,11 @@ import java.util.UUID;
  **/
 
 @Entity
-@Table(name = "ho_so",
-        indexes = {@Index(name = "danotc_idx", columnList = "dan_toc_id")}
-)
+@Table(name = "ho_so", indexes = {
+        @Index(name = "danotc_idx", columnList = "dan_toc_id"),
+        @Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt"),
+})
 @Getter
 @Setter
 @SuperBuilder

@@ -30,7 +30,11 @@ import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ngoai_ngu",indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "ngoai_ngu",indexes = {
+        @Index(name = "ho_so_idx", columnList = "ho_so_id"),
+        @Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt")
+})
 @Getter
 @Setter
 @SuperBuilder
@@ -68,11 +72,6 @@ public class NgoaiNgu extends DateTimeObject {
 
     @Column(name = "ho_so_id", columnDefinition = "binary(16)")
     UUID hoSoId;
-
-    @Override
-    public void setUpdate_at() {
-        super.setUpdate_at();
-    }
 
     public NgoaiNgu(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String tenNgoaiNgu, String chungChiDuocCap, float diemSo, XacNhan xacNhan, UUID hoSoId) {
         super();

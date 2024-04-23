@@ -24,8 +24,8 @@ public class MapperKyLuat {
                 coQuanToChucDonViClient.getName(luat.getCoQuanQuyetDinhId()),
                 luat.getXacNhan(),
                 luat.getHoSoId(),
-                luat.getCreate_at(),
-                luat.getUpdate_at()
+                luat.getCreateAt(),
+                luat.getUpdateAt()
         ) : null;
     }
 }

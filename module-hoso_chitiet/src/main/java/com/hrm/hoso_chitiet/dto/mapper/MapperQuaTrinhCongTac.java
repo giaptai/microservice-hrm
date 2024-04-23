@@ -23,8 +23,8 @@ public class MapperQuaTrinhCongTac {
                 tac.getChucDanh(),
                 tac.getXacNhan(),
                 tac.getHoSoId(),
-                tac.getCreate_at(),
-                tac.getUpdate_at()
+                tac.getCreateAt(),
+                tac.getUpdateAt()
         ) : null;
     }
 }

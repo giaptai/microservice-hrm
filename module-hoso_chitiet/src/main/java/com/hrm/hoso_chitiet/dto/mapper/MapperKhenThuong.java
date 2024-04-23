@@ -26,8 +26,8 @@ public class MapperKhenThuong {
                         thuong.getLyDo(),
                         thuong.getXacNhan(),
                         thuong.getHoSoId(),
-                        thuong.getCreate_at(),
-                        thuong.getUpdate_at()
+                        thuong.getCreateAt(),
+                        thuong.getUpdateAt()
                 ) : null;
     }
 }

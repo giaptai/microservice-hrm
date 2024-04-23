@@ -32,11 +32,11 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.UUID;
@@ -46,9 +46,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class TaiKhoanService implements ITaiKhoanService {
     final JWTUtilities jwtUtilities;
-    final TokenClient client;
     final TaiKhoanRepository taiKhoanRepository;
-    final HoSoClient hoSoClient;
     //    final JavaMailSender javaMailSender;
 //    final IAuthenticationFacade facade;
 //    final KafkaProducers producers;
@@ -59,10 +57,11 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     /* ADMIN - ADMIN - ADMIN*/
     @Override
-    public List<ResTaiKhoan> xemDanhSachTaiKhoan(String username, RoleTaiKhoan role, int pageNumber, int pageSize) {
+    public List<ResTaiKhoan> xemDanhSachTaiKhoan(String byDate, String username, RoleTaiKhoan role, int pageNumber, int pageSize) {
         try {
-            List<TaiKhoan> taiKhoans = new ArrayList<>();
-            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            List<TaiKhoan> taiKhoans;
+            Sort sort = Sort.by(Sort.Direction.DESC, byDate);
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
             taiKhoans = taiKhoanRepository.findAll(pageable).stream().toList();
             if (username != null && role == null) {
                 taiKhoans = xemByUsername(username, pageable);
@@ -70,7 +69,7 @@ public class TaiKhoanService implements ITaiKhoanService {
             if (username == null && role != null) {
                 taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoan(role, pageable);
             }
-            if(username !=null && role !=null){
+            if (username != null && role != null) {
                 taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoanAndUsername(role, username.toLowerCase(), pageable);
             }
             return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
@@ -100,10 +99,11 @@ public class TaiKhoanService implements ITaiKhoanService {
     @Override
     public ResTaiKhoan xemTheoId(int id) {
         try {
-            TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(NotFoundException::new);
+            TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
             return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
         } catch (RuntimeException e) {
-            throw new RuntimeException(e.getCause());
+            System.err.println(e.getMessage());
+            throw e;
         }
     }
 
@@ -123,7 +123,7 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .email(reqTaiKhoan.email())
                     .roleTaiKhoan(RoleTaiKhoan.EMPLOYEE)
                     .trangThai(true)
-                    .create_at(LocalDateTime.now())
+                    .createAt(LocalDateTime.now())
                     .build();
             taiKhoanRepository.save(taiKhoan);
             ReqHoSo reqHoSo = new ReqHoSo(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
@@ -162,7 +162,8 @@ public class TaiKhoanService implements ITaiKhoanService {
 //                return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
 //            } else return null;
         } catch (RuntimeException e) {
-            throw new RuntimeException(e.getCause());
+            System.err.println(e.getMessage());
+            throw e;
         }
     }
 
@@ -173,21 +174,21 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     @Override
     public boolean doiMatKhauTaiKhoanCaNhan(int id, String matkhau) {
-        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(NotFoundException::new);
+        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
         if (!ITaiKhoanService.checkMatKhau(matkhau)) {
             throw new InputMismatchException("Sai mật khẩu");
         }
         taiKhoan.setPassword(matkhau);
-        taiKhoan.setUpdate_at();
+        taiKhoan.setUpdateAt();
         taiKhoanRepository.save(taiKhoan);
         return true;
     }
 
     @Override
     public boolean doiEmailTaiKhoanCaNhan(int id, String email) {
-        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(NotFoundException::new);
+        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
         taiKhoan.setEmail(email);
-        taiKhoan.setUpdate_at();
+        taiKhoan.setUpdateAt();
         taiKhoanRepository.save(taiKhoan);
         return true;
     }
@@ -196,7 +197,7 @@ public class TaiKhoanService implements ITaiKhoanService {
     public ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin login) {
         TaiKhoan taiKhoan = taiKhoanRepository.findByUsernameAndPassword(login.username(), login.password());
         if (taiKhoan != null) {
-            ResAuth auth = mapperAuth.mapToResAuth(taiKhoan);
+//            ResAuth auth = mapperAuth.mapToResAuth(taiKhoan);
             String token = jwtUtilities.generationToken(taiKhoan);
 //            String token = client.taoToken(auth);
             return new ResTaiKhoanLogin(taiKhoan.getUsername(), taiKhoan.getRoleTaiKhoan().name(), token);
