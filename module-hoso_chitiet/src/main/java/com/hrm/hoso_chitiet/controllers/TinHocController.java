@@ -34,19 +34,21 @@ public class TinHocController {
 
     @GetMapping("/{id}/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
+                                                          @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
                                                           @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                           @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
+        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAll(
+            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSach(byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
+        List<ResTinHoc> ls = tinHocService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -92,10 +94,11 @@ public class TinHocController {
     //EMPLOYEE
     @GetMapping("/ca-nhan/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                        @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
                                                         @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                         @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachCaNhan(id, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
+        List<ResTinHoc> ls = tinHocService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

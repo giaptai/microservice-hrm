@@ -115,15 +115,15 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecChoCheDoCuService implements IHoSoChiTietServices.ILamViecChoCheDoCuServiceChiTiet {
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<LamViecChoCheDoCu> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return lamViecChoCheDoCuRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lamViecChoCheDoCuRepository.getAllByHoSo(id, pageable);
+            return lamViecChoCheDoCuRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -184,10 +184,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -214,15 +214,15 @@ public class HoSoChiTietServices {
     @Service
     public class KhenThuongService implements IHoSoChiTietServices.IHoKhenThuongServiceChiTiet {
         @Override
-        public List<KhenThuong> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<KhenThuong> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return khenThuongRepository.findAll(pageable).getContent();
+            return khenThuongRepository.getAllByXacNhan(xacNhan, pageable).getContent();
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return khenThuongRepository.getAllByHoSo(id, pageable);
+            return khenThuongRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -286,10 +286,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -316,15 +316,15 @@ public class HoSoChiTietServices {
     @Service
     public class KienThucAnNinhQuocPhongService implements IHoSoChiTietServices.IHoKienThucAnNinhQuocPhongServiceChiTiet {
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<KienThucAnNinhQuocPhong> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return kienThucAnNinhQuocPhongRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, pageable);
+            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -391,10 +391,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -421,15 +421,15 @@ public class HoSoChiTietServices {
     @Service
     public class KyLuatService implements IHoSoChiTietServices.IHoKyLuatServiceChiTiet {
         @Override
-        public List<KyLuat> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<KyLuat> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return kyLuatRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return kyLuatRepository.getAllByHoSo(id, pageable);
+            return kyLuatRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -495,10 +495,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -525,15 +525,15 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecONuocNgoaiServcie implements IHoSoChiTietServices.IHoLamViecONuocNgoaiServiceChiTiet {
         @Override
-        public List<LamViecONuocNgoai> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<LamViecONuocNgoai> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return lamViecONuocNgoaiRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lamViecONuocNgoaiRepository.getAllByHoSo(id, pageable);
+            return lamViecONuocNgoaiRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -600,10 +600,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -630,15 +630,15 @@ public class HoSoChiTietServices {
     @Service
     public class LuongBanThanService implements IHoSoChiTietServices.IHoLuongBanThanServiceChiTiet {
         @Override
-        public List<LuongBanThan> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<LuongBanThan> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return luongBanThanRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return luongBanThanRepository.getAllByHoSo(id, pageable);
+            return luongBanThanRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -708,10 +708,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -738,15 +738,15 @@ public class HoSoChiTietServices {
     @Service
     public class LyHoLuanChinhTriServiceChiTiet implements IHoSoChiTietServices.IHoLyLuanChinhTriServiceChiTiet {
         @Override
-        public List<LyLuanChinhTri> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<LyLuanChinhTri> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return lyLuanChinhTriRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lyLuanChinhTriRepository.getAllByHoSo(id, pageable);
+            return lyLuanChinhTriRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -815,10 +815,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -845,15 +845,15 @@ public class HoSoChiTietServices {
     @Service
     public class NghiepVuChuyenNganhService implements IHoSoChiTietServices.IHoNghiepVuChuyenNganhServiceChiTiet {
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<NghiepVuChuyenNganh> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return nghiepVuChuyenNganhRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return nghiepVuChuyenNganhRepository.getAllByHoSo(id, pageable);
+            return nghiepVuChuyenNganhRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -921,10 +921,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -951,15 +951,15 @@ public class HoSoChiTietServices {
     @Service
     public class NgoaiNguService implements IHoSoChiTietServices.IHoNgoaiNguServiceChiTiet {
         @Override
-        public List<NgoaiNgu> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<NgoaiNgu> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return ngoaiNguRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return ngoaiNguRepository.getAllByHoSo(id, pageable);
+            return ngoaiNguRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -1029,10 +1029,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1059,15 +1059,15 @@ public class HoSoChiTietServices {
     @Service
     public class PhuCapKhacService implements IHoSoChiTietServices.IHoPhuCapKhacServiceChiTiet {
         @Override
-        public List<PhuCapKhac> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<PhuCapKhac> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return phuCapKhacRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return phuCapKhacRepository.getAllByHoSo(id, pageable);
+            return phuCapKhacRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -1132,10 +1132,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1162,15 +1162,15 @@ public class HoSoChiTietServices {
     @Service
     public class QuanHeGiaDinhService implements IHoSoChiTietServices.IHoQuanHeGiaDinhServiceChiTiet {
         @Override
-        public List<QuanHeGiaDinh> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<QuanHeGiaDinh> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return quanHeGiaDinhRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return quanHeGiaDinhRepository.getAllByHoSo(id, pageable);
+            return quanHeGiaDinhRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -1237,10 +1237,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1267,15 +1267,15 @@ public class HoSoChiTietServices {
     @Service
     public class QuaTrinhCongTacService implements IHoSoChiTietServices.IHoQuaTrinhCongTacServiceChiTiet {
         @Override
-        public List<QuaTrinhCongTac> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<QuaTrinhCongTac> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return quaTrinhCongTacRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return quaTrinhCongTacRepository.getAllByHoSo(id, pageable);
+            return quaTrinhCongTacRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -1341,10 +1341,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1371,15 +1371,15 @@ public class HoSoChiTietServices {
     @Service
     public class TinHocService implements IHoSoChiTietServices.IHoTinHocServiceChiTiet {
         @Override
-        public List<TinHoc> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+        public List<TinHoc> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             return tinHocRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return tinHocRepository.getAllByHoSo(id, pageable);
+            return tinHocRepository.getAllByHoSo(id, xacNhan, pageable);
         }
 
         @Override
@@ -1441,10 +1441,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
+        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
-            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override

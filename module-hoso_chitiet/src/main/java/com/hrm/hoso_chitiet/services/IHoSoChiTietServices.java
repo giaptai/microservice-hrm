@@ -54,9 +54,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IHoSoChiTietServices<T, H> {
-    List<T> xemDanhSach(String byDate, int pageNumber, int pageSize);
+    List<T> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
 
-    List<T> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize);
+    List<T> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
 
     T xemChiTiet(int id);
 
@@ -67,7 +67,7 @@ public interface IHoSoChiTietServices<T, H> {
     boolean xoa(int id, String role);
 
     //EMPLOYEE
-    List<T> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize);
+    List<T> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
 
     T themCaNhan(int taiKhoanId, H cu);
 
