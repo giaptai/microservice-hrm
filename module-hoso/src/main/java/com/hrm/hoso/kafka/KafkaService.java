@@ -1,7 +1,9 @@
-package com.hrm.hoso_chitiet.kafka;
+package com.hrm.hoso.kafka;
 
-import com.hrm.hoso_chitiet.models.QuaTrinhCongTac;
-import com.hrm.hoso_chitiet.repositories.QuaTrinhCongTacRepository;
+import com.hrm.hoso.dto.request.ReqTaoHoSo;
+import com.hrm.hoso.enums.PheDuyet;
+import com.hrm.hoso.models.HoSo;
+import com.hrm.hoso.repository.HoSoRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +11,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -17,6 +18,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,15 +26,14 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EnableAsync
 public class KafkaService {
-    final QuaTrinhCongTacRepository quaTrinhCongTacRepository;
-
+    final HoSoRepository hoSoRepository;
+    final HoSoConsumer hoSoConsumer;
     @Async
     @EventListener(value = ApplicationReadyEvent.class)
-    protected void QuaTrinhCongTacListener() {
-        KafkaConsumerConfig config = new KafkaConsumerConfig("my-quatrinhcongtac-app", StringDeserializer.class.getName(), ResChucVu.ResChucVuSoDeserializer.class.getName());
+    protected void HoSoListener() {
         System.out.println("crush em t");
         // create consumer
-        KafkaConsumer<String, ResChucVu> consumer = new KafkaConsumer<>(config.getProperties());
+        KafkaConsumer<String, ReqTaoHoSo> consumer = new KafkaConsumer<>(hoSoConsumer.getProperties());
         // get a reference to the current thread
         final Thread mainThread = Thread.currentThread();
         // adding the shutdown hook
@@ -51,11 +52,12 @@ public class KafkaService {
         });
         try {
             // subscribe consumer to our topic(s)
-            consumer.subscribe(List.of("qua-trinh-cong-tac"));
+            consumer.subscribe(List.of("hoso_create"));
             // poll for new data
             while (true) {
-                ConsumerRecords<String, ResChucVu> records = consumer.poll(Duration.ofMillis(1000));
-                for (ConsumerRecord<String, ResChucVu> record : records) {
+                ConsumerRecords<String, ReqTaoHoSo> records =
+                        consumer.poll(Duration.ofMillis(1000));
+                for (ConsumerRecord<String, ReqTaoHoSo> record : records) {
                     System.out.printf("""
                                     Key: %s
                                     Value: %s
@@ -63,14 +65,14 @@ public class KafkaService {
                                     Offset: %d
                                     """,
                             record.key(), record.value(), record.partition(), record.offset());
-                    QuaTrinhCongTac tac = new QuaTrinhCongTac(
-                            record.value().ngayBoNhiem(),
-                            record.value().ngayBoNhiemLai(),
-                            record.value().coQuanToChucDonViTuyenDungId(),
-                            record.value().duocQuyHoacChucDanh(),
-                            record.value().xacNhan(),
-                            record.value().hoSoId());
-                    quaTrinhCongTacRepository.save(tac);
+                    HoSo hoSo = HoSo.builder()
+                            .hoVaTen(record.value().hoVaTen())
+                            .soCCCD(record.value().soCCCD())
+                            .taiKhoanId(record.value().taiKhoan())
+                            .pheDuyet(PheDuyet.CHO_PHE_DUYET)
+                            .createAt(LocalDateTime.now())
+                            .build();
+                    hoSoRepository.save(hoSo);
                 }
             }
         } catch (WakeupException e) {

@@ -1,9 +1,8 @@
-package com.hrm.hoso.kakfka;
+package com.hrm.hoso.kafka;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;

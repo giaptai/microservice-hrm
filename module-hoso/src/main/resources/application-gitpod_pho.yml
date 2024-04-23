@@ -5,4 +5,4 @@ spring:
     import: optional:configserver:http://localhost:1111
 
 gateway-port:
-  ho-so: https://8888-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io/api/v1
+  ho-so: https://8888-giaptai-microservicehrm-neez1b8nx7s.ws-us110.gitpod.io/api/v1

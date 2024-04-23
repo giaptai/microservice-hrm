@@ -8,10 +8,9 @@ import java.util.stream.Stream;
 
 @Getter
 public enum XacNhan {
-    CHO_XAC_NHAN(0, "CHỜ XÁC NHẬN"),
-    XAC_NHAN(1, "ĐÃ XÁC NHÂN"),
-    TU_CHOI(2, "TỪ CHỐI"),
-    QUA_HAN(3, "QUÁ HẠN"),
+    CHO_PHE_DUYET(0, "CHỜ PHÊ DUYỆT"),
+    DA_PHE_DUYET(1, "ĐÃ PHÊ DUYỆT"),
+    TU_CHOI(2, "TỪ CHỐI")
     ;
     private int id;
     private String name;

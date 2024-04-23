@@ -1,10 +1,9 @@
-package com.hrm.hoso.kakfka;
+package com.hrm.hoso.kafka;
 
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import lombok.Getter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
