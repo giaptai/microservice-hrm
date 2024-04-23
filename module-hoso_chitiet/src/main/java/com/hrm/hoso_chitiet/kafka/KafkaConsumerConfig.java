@@ -2,9 +2,6 @@ package com.hrm.hoso_chitiet.kafka;
 
 import lombok.Getter;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.context.annotation.Configuration;
-
 import java.util.Properties;
 
 @Getter

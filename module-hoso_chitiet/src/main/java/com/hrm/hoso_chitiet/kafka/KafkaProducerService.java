@@ -15,7 +15,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -26,20 +25,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EnableScheduling
-@EnableAsync
 public class KafkaProducerService {
     final KyLuatRepository kyLuatRepository;
     final KhenThuongRepository khenThuongRepository;
     //mapper
     final MapperKyLuat mapperKyLuat;
     final MapperKhenThuong mapperKhenThuong;
+    //producer kafka
+    private KafkaProducerConfig kafkaProducerConfig;
 
     @Async
     @Scheduled(fixedRate = 3_600_000)
     protected void showKyLuat() {
         List<ResKyLuat> kyLuats = kyLuatRepository.getAllByHoSoInLast7Days().stream().map(mapperKyLuat::mapToResKyLuat).toList();
         System.out.println(kyLuats.size());
-        KafkaProducerConfig kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKyLuat.ResKyLuatSerializer.class.getName());
+        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKyLuat.ResKyLuatSerializer.class.getName());
         // create the producer
         KafkaProducer<String, List<ResKyLuat>> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
         // create a producer record
@@ -75,7 +75,7 @@ public class KafkaProducerService {
     protected void showKhenThuong() {
         List<ResKhenThuong> khenThuongs = khenThuongRepository.getAllByHoSoInLast7Days().stream().map(mapperKhenThuong::maptoResKhenThuong).toList();
         System.out.println(khenThuongs.size());
-        KafkaProducerConfig kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKhenThuong.ResKhenThuongSerializer.class.getName());
+        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKhenThuong.ResKhenThuongSerializer.class.getName());
         // create the producer
         KafkaProducer<String, List<ResKhenThuong>> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
         // create a producer record

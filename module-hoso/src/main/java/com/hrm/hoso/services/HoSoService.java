@@ -18,7 +18,7 @@ import com.hrm.hoso.enums.PheDuyet;
 
 import com.hrm.hoso.dto.request.ReqHoSo;
 
-import com.hrm.hoso.kakfka.KafkaConfig;
+import com.hrm.hoso.kafka.KafkaConfig;
 import com.hrm.hoso.models.ChucVuHienTai;
 import com.hrm.hoso.models.ChucVuKiemNhiem;
 import com.hrm.hoso.models.HoSo;

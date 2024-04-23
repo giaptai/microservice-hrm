@@ -138,7 +138,7 @@ public class HoSoChiTietServices {
         @Override
         public LamViecChoCheDoCu them(UUID id, ReqLamViecChoCheDoCu req) {
             try {
-                return lamViecChoCheDoCuRepository.save(new LamViecChoCheDoCu(req.batDau(), req.ketThuc(), req.chucDanhDonViDiaDiem(), XacNhan.CHO_XAC_NHAN, id));
+                return lamViecChoCheDoCuRepository.save(new LamViecChoCheDoCu(req.batDau(), req.ketThuc(), req.chucDanhDonViDiaDiem(), XacNhan.CHO_PHE_DUYET, id));
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -151,7 +151,7 @@ public class HoSoChiTietServices {
                 return lamViecChoCheDoCuRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau() != null ? req.batDau() : c.getBatDau());
                         c.setKetThuc(req.ketThuc() != null ? req.ketThuc() : c.getKetThuc());
                         c.setChucDanhDonViDiaDiem(req.chucDanhDonViDiaDiem() != null ? req.chucDanhDonViDiaDiem() : c.getChucDanhDonViDiaDiem());
@@ -170,7 +170,7 @@ public class HoSoChiTietServices {
         public boolean xoa(int id, String role) {
             try {
                 return lamViecChoCheDoCuRepository.findById(id).map(c -> {
-                    if (role.equals("ADMIN") || (role.equals("EMPLOYEE") && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                    if (role.equals("ADMIN") || (role.equals("EMPLOYEE") && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         lamViecChoCheDoCuRepository.deleteById(id);
                         return true;
                     } else throw
@@ -235,7 +235,7 @@ public class HoSoChiTietServices {
         @Override
         public KhenThuong them(UUID id, ReqKhenThuong req) {
             try {
-                return khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuongId(), req.lyDo(), XacNhan.CHO_XAC_NHAN, id));
+                return khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuongId(), req.lyDo(), XacNhan.CHO_PHE_DUYET, id));
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -248,7 +248,7 @@ public class HoSoChiTietServices {
                 return khenThuongRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setNam(req.nam() != null ? req.nam() : c.getNam());
                         c.setXepLoaiChuyenMon(req.xepLoaiChuyenMon());
                         c.setXepLoaiThiDua(req.xepLoaiThiDua());
@@ -271,7 +271,7 @@ public class HoSoChiTietServices {
                 return khenThuongRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         khenThuongRepository.deleteById(id);
                         return true;
                     } else throw
@@ -337,7 +337,7 @@ public class HoSoChiTietServices {
         public KienThucAnNinhQuocPhong them(UUID id, ReqKienThucAnNinhQuocPhong req) {
             try {
                 return kienThucAnNinhQuocPhongRepository.save(
-                        new KienThucAnNinhQuocPhong(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id)
+                        new KienThucAnNinhQuocPhong(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id)
                 );
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -351,7 +351,7 @@ public class HoSoChiTietServices {
                 return kienThucAnNinhQuocPhongRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
@@ -373,7 +373,7 @@ public class HoSoChiTietServices {
                 return kienThucAnNinhQuocPhongRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         kienThucAnNinhQuocPhongRepository.deleteById(id);
                         return true;
                     } else throw
@@ -439,7 +439,7 @@ public class HoSoChiTietServices {
         @Override
         public KyLuat them(UUID id, ReqKyLuat req) {
             try {
-                return kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_XAC_NHAN, id));
+                return kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id));
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -452,7 +452,7 @@ public class HoSoChiTietServices {
                 return kyLuatRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setHinhThuc(req.hinhThuc());
@@ -475,7 +475,7 @@ public class HoSoChiTietServices {
                 return kyLuatRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         kyLuatRepository.deleteById(id);
                         return true;
                     } else throw
@@ -542,7 +542,7 @@ public class HoSoChiTietServices {
         public LamViecONuocNgoai them(UUID id, ReqLamViecONuocNgoai req) {
             try {
                 return lamViecONuocNgoaiRepository.save(
-                        new LamViecONuocNgoai(req.batDau(), req.ketThuc(), req.toChucDiaChiCongViec(), XacNhan.CHO_XAC_NHAN, id)
+                        new LamViecONuocNgoai(req.batDau(), req.ketThuc(), req.toChucDiaChiCongViec(), XacNhan.CHO_PHE_DUYET, id)
                 );
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -556,7 +556,7 @@ public class HoSoChiTietServices {
                 return lamViecONuocNgoaiRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setToChucDiaChiCongViec(req.toChucDiaChiCongViec());
@@ -578,7 +578,7 @@ public class HoSoChiTietServices {
                 return lamViecONuocNgoaiRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         lamViecONuocNgoaiRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -645,7 +645,7 @@ public class HoSoChiTietServices {
         public LuongBanThan them(UUID id, ReqLuongBanThan req) {
             try {
                 return luongBanThanRepository.save(
-                        new LuongBanThan(req.batDau(), req.ketThuc(), req.maSo(), req.bacLuong(), req.heSoLuong(), req.tienLuongTheoViTri(), XacNhan.CHO_XAC_NHAN, id)
+                        new LuongBanThan(req.batDau(), req.ketThuc(), req.maSo(), req.bacLuong(), req.heSoLuong(), req.tienLuongTheoViTri(), XacNhan.CHO_PHE_DUYET, id)
                 );
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -659,7 +659,7 @@ public class HoSoChiTietServices {
                 return luongBanThanRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setMaSo(req.maSo());
@@ -684,7 +684,7 @@ public class HoSoChiTietServices {
                 return luongBanThanRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         luongBanThanRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -750,8 +750,8 @@ public class HoSoChiTietServices {
         @Override
         public LyLuanChinhTri them(UUID id, ReqLyLuanChinhTri req) {
             try {
-                LyLuanChinhTri tri = new LyLuanChinhTri(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.hinhThucDaoTao(), req.vanBangDuocCap(), XacNhan.CHO_XAC_NHAN, id);
-                tri.setXacNhan(XacNhan.CHO_XAC_NHAN);
+                LyLuanChinhTri tri = new LyLuanChinhTri(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.hinhThucDaoTao(), req.vanBangDuocCap(), XacNhan.CHO_PHE_DUYET, id);
+                tri.setXacNhan(XacNhan.CHO_PHE_DUYET);
                 return lyLuanChinhTriRepository.save(tri);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -765,7 +765,7 @@ public class HoSoChiTietServices {
                 return lyLuanChinhTriRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
@@ -789,7 +789,7 @@ public class HoSoChiTietServices {
                 return lyLuanChinhTriRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         lyLuanChinhTriRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -855,8 +855,8 @@ public class HoSoChiTietServices {
         @Override
         public NghiepVuChuyenNganh them(UUID id, ReqNghiepVuChuyenNganh req) {
             try {
-                NghiepVuChuyenNganh vu = new NghiepVuChuyenNganh(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id);
-                vu.setXacNhan(XacNhan.CHO_XAC_NHAN);
+                NghiepVuChuyenNganh vu = new NghiepVuChuyenNganh(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id);
+                vu.setXacNhan(XacNhan.CHO_PHE_DUYET);
                 return nghiepVuChuyenNganhRepository.save(vu);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -870,7 +870,7 @@ public class HoSoChiTietServices {
                 return nghiepVuChuyenNganhRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
@@ -893,7 +893,7 @@ public class HoSoChiTietServices {
                 return nghiepVuChuyenNganhRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         nghiepVuChuyenNganhRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -959,8 +959,8 @@ public class HoSoChiTietServices {
         @Override
         public NgoaiNgu them(UUID id, ReqNgoaiNgu req) {
             try {
-                NgoaiNgu ngu = new NgoaiNgu(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.tenNgoaiNgu(), req.chungChiDuocCap(), req.diemSo(), XacNhan.CHO_XAC_NHAN, id);
-                ngu.setXacNhan(XacNhan.CHO_XAC_NHAN);
+                NgoaiNgu ngu = new NgoaiNgu(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.tenNgoaiNgu(), req.chungChiDuocCap(), req.diemSo(), XacNhan.CHO_PHE_DUYET, id);
+                ngu.setXacNhan(XacNhan.CHO_PHE_DUYET);
                 return ngoaiNguRepository.save(ngu);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -974,7 +974,7 @@ public class HoSoChiTietServices {
                 return ngoaiNguRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
@@ -999,7 +999,7 @@ public class HoSoChiTietServices {
                 return ngoaiNguRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         ngoaiNguRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -1065,7 +1065,7 @@ public class HoSoChiTietServices {
         @Override
         public PhuCapKhac them(UUID id, ReqPhuCapKhac req) {
             return phuCapKhacRepository.save(new PhuCapKhac(
-                    req.batDau(), req.ketThuc(), req.loaiPhuCapId(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), XacNhan.CHO_XAC_NHAN, id));
+                    req.batDau(), req.ketThuc(), req.loaiPhuCapId(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), XacNhan.CHO_PHE_DUYET, id));
         }
 
         @Override
@@ -1074,7 +1074,7 @@ public class HoSoChiTietServices {
                 return phuCapKhacRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setLoaiPhuCapId(req.loaiPhuCapId());
@@ -1100,7 +1100,7 @@ public class HoSoChiTietServices {
                 return phuCapKhacRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         phuCapKhacRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -1166,7 +1166,7 @@ public class HoSoChiTietServices {
         @Override
         public QuanHeGiaDinh them(UUID id, ReqQuanHeGiaDinh req) {
             try {
-                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), XacNhan.CHO_XAC_NHAN, id);
+                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), XacNhan.CHO_PHE_DUYET, id);
                 return quanHeGiaDinhRepository.save(dinh);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -1180,7 +1180,7 @@ public class HoSoChiTietServices {
                 return quanHeGiaDinhRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setMoiQuanHeId(req.moiQuanHeId());
                         c.setHoVaTen(req.hoVaTen());
                         c.setNamSinh(req.namSinh());
@@ -1203,7 +1203,7 @@ public class HoSoChiTietServices {
                 return quanHeGiaDinhRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         quanHeGiaDinhRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -1269,7 +1269,7 @@ public class HoSoChiTietServices {
         @Override
         public QuaTrinhCongTac them(UUID id, ReqQuaTrinhCongTac req) {
             try {
-                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), XacNhan.CHO_XAC_NHAN, id));
+                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), XacNhan.CHO_PHE_DUYET, id));
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1282,7 +1282,7 @@ public class HoSoChiTietServices {
                 return quaTrinhCongTacRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setDonViCongTacId(req.donViCongTacId());
@@ -1305,7 +1305,7 @@ public class HoSoChiTietServices {
                 return quaTrinhCongTacRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         quaTrinhCongTacRepository.deleteById(id);
                         return true;
                     } else throw new
@@ -1371,7 +1371,7 @@ public class HoSoChiTietServices {
         @Override
         public TinHoc them(UUID id, ReqTinHoc req) {
             try {
-                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_XAC_NHAN, id);
+                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id);
                 return tinHocRepository.save(tin);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -1384,7 +1384,7 @@ public class HoSoChiTietServices {
             return tinHocRepository.findById(id).map(c -> {
                 if (role.equals("ADMIN") ||
                         (role.equals("EMPLOYEE")
-                                && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                     c.setBatDau(req.batDau());
                     c.setKetThuc(req.ketThuc());
                     c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
@@ -1403,7 +1403,7 @@ public class HoSoChiTietServices {
                 return tinHocRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
                             (role.equals("EMPLOYEE")
-                                    && c.getXacNhan().equals(XacNhan.CHO_XAC_NHAN))) {
+                                    && c.getXacNhan().equals(XacNhan.CHO_PHE_DUYET))) {
                         tinHocRepository.deleteById(id);
                         return true;
                     } else throw new

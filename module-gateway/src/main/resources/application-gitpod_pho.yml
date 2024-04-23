@@ -25,7 +25,7 @@ logging:
         security: debug
 
 gateway-port:
-  cau-hinh: https://8080-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
-  tai-khoan: https://8082-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
-  ho-so: https://8081-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
-  ho-so-chi-tiet: https://8083-giaptai-microservicehrm-9gkik3hfxs2.ws-us110.gitpod.io
+  cau-hinh: https://8080-giaptai-microservicehrm-neez1b8nx7s.ws-us110.gitpod.io
+  tai-khoan: https://8082-giaptai-microservicehrm-neez1b8nx7s.ws-us110.gitpod.io
+  ho-so: https://8081-giaptai-microservicehrm-neez1b8nx7s.ws-us110.gitpod.io
+  ho-so-chi-tiet: https://8083-giaptai-microservicehrm-neez1b8nx7s.ws-us110.gitpod.io
