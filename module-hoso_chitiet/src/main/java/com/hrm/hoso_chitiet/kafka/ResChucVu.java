@@ -17,6 +17,7 @@ public record ResChucVu(
         LocalDateTime ngayBoNhiem,
         LocalDateTime ngayBoNhiemLai,
         String duocQuyHoacChucDanh,
+        double phuCapChucVu,
         int coQuanToChucDonViTuyenDungId,
         String coQuanToChucDonViTuyenDungName,
         XacNhan xacNhan,

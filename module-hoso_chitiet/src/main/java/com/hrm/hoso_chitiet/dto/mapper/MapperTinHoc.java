@@ -24,8 +24,8 @@ public class MapperTinHoc {
                 hoc.getChungChiDuocCap(),
                 hoc.getXacNhan(),
                 hoc.getHoSoId(),
-                hoc.getCreate_at(),
-                hoc.getUpdate_at()
+                hoc.getCreateAt(),
+                hoc.getUpdateAt()
         ) : null;
     }
 }

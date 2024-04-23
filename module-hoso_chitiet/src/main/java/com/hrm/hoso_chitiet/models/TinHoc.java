@@ -22,7 +22,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tin_hoc", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "tin_hoc", indexes = {
+        @Index(name = "ho_so_idx", columnList = "ho_so_id"),
+        @Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt")
+})
 @Getter
 @Setter
 @SuperBuilder
@@ -54,11 +58,6 @@ public class TinHoc extends DateTimeObject {
 
     @Column(name = "ho_so_id", columnDefinition = "binary(16)")
     UUID hoSoId;
-
-    @Override
-    public void setUpdate_at() {
-        super.setUpdate_at();
-    }
 
     public TinHoc(LocalDateTime batDau, LocalDateTime ketThuc, int tenCoSoDaoTaoId, String chungChiDuocCap, XacNhan xacNhan, UUID hoSoId) {
         super();

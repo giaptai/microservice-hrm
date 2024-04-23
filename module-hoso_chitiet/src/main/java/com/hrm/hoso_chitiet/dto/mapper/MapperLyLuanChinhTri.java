@@ -24,8 +24,8 @@ public class MapperLyLuanChinhTri {
                 coQuanToChucDonViClient.getName(tri.getTenCoSoDaoTaoId()),
                 tri.getXacNhan(),
                 tri.getHoSoId(),
-                tri.getCreate_at(),
-                tri.getUpdate_at()
+                tri.getCreateAt(),
+                tri.getUpdateAt()
         ) : null;
     }
 }

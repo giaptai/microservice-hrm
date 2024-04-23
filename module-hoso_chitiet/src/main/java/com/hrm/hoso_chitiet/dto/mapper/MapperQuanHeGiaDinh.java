@@ -23,8 +23,8 @@ public class MapperQuanHeGiaDinh {
                 dinh.getThongTinThanNhan(),
                 dinh.getXacNhan(),
                 dinh.getHoSoId(),
-                dinh.getCreate_at(),
-                dinh.getUpdate_at()
+                dinh.getCreateAt(),
+                dinh.getUpdateAt()
         ) : null;
     }
 }

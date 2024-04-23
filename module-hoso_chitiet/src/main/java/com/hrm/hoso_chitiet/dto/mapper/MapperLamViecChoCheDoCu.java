@@ -14,8 +14,8 @@ public class MapperLamViecChoCheDoCu {
                 cu.getChucDanhDonViDiaDiem(),
                 cu.getXacNhan(),
                 cu.getHoSoId(),
-                cu.getCreate_at(),
-                cu.getUpdate_at()
+                cu.getCreateAt(),
+                cu.getUpdateAt()
         ) : null;
     }
 }

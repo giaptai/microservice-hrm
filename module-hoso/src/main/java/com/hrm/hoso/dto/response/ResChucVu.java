@@ -18,6 +18,7 @@ public record ResChucVu(
         double phuCapChucVu,
         int coQuanToChucDonViTuyenDungId,
         String coQuanToChucDonViTuyenDungName,
+        String xacNhan,
         UUID hoSoId
 ) {
     public static class ResChucVuSerializer implements Serializer<ResChucVu> {

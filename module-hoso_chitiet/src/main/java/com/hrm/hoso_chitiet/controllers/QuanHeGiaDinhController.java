@@ -34,16 +34,19 @@ public class QuanHeGiaDinhController {
 
     @GetMapping("/{id}/quan-he-gia-dinh")
     public ResponseEntity<List<ResQuanHeGiaDinh>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
+                                                                 @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
+        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachTheoHoSoId(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/quan-he-gia-dinh")
-    public ResponseEntity<List<ResQuanHeGiaDinh>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
+    public ResponseEntity<List<ResQuanHeGiaDinh>> getAll(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSach(byDate,pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -75,6 +78,7 @@ public class QuanHeGiaDinhController {
         boolean ls = quanHeGiaDinhService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/quan-he-gia-dinh/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
@@ -84,12 +88,14 @@ public class QuanHeGiaDinhController {
         boolean ls = quanHeGiaDinhService.xacNhan(xacNhan, res);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/quan-he-gia-dinh")
     public ResponseEntity<List<ResQuanHeGiaDinh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                               @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
+        List<ResQuanHeGiaDinh> ls = quanHeGiaDinhService.xemDanhSachCaNhan(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResQuanHeGiaDinh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

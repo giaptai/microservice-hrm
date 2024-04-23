@@ -46,10 +46,11 @@ public class HoSoController {
             @RequestParam(name = "chucVuHienTaiId", required = false, defaultValue = "-1") String chucVuHienTaiId,
             @RequestParam(name = "coQuanToChucDonViId", required = false, defaultValue = "-1") String coQuanToChucDonViId,
             @RequestParam(name = "pheDuyet", required = false) PheDuyet pheDuyet,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo(cccd, hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet,pageNumber, pageSize);
+        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo(cccd, hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(resHoSos, ResEnum.THANH_CONG.getCode());
     }
 

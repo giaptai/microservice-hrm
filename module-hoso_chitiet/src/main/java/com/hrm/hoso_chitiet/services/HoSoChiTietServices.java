@@ -59,6 +59,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -112,13 +114,15 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecChoCheDoCuService implements IHoSoChiTietServices.ILamViecChoCheDoCuServiceChiTiet {
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSach(int pageNumber, int pageSize) {
-            return lamViecChoCheDoCuRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<LamViecChoCheDoCu> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return lamViecChoCheDoCuRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return lamViecChoCheDoCuRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return lamViecChoCheDoCuRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -151,7 +155,7 @@ public class HoSoChiTietServices {
                         c.setBatDau(req.batDau() != null ? req.batDau() : c.getBatDau());
                         c.setKetThuc(req.ketThuc() != null ? req.ketThuc() : c.getKetThuc());
                         c.setChucDanhDonViDiaDiem(req.chucDanhDonViDiaDiem() != null ? req.chucDanhDonViDiaDiem() : c.getChucDanhDonViDiaDiem());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return lamViecChoCheDoCuRepository.save(c);
                     } else throw new
                             ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -179,9 +183,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -193,10 +197,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResLamViecChoCheDoCu> res) {
             List<LamViecChoCheDoCu> lamViecChoCheDoCus = new ArrayList<>();
-            for(ResLamViecChoCheDoCu c : res){
+            for (ResLamViecChoCheDoCu c : res) {
                 LamViecChoCheDoCu cu = lamViecChoCheDoCuRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 lamViecChoCheDoCus.add(cu);
             }
             lamViecChoCheDoCuRepository.saveAll(lamViecChoCheDoCus);
@@ -207,13 +211,15 @@ public class HoSoChiTietServices {
     @Service
     public class KhenThuongService implements IHoSoChiTietServices.IHoKhenThuongServiceChiTiet {
         @Override
-        public List<KhenThuong> xemDanhSach(int pageNumber, int pageSize) {
-            return khenThuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<KhenThuong> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return khenThuongRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return khenThuongRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return khenThuongRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -248,7 +254,7 @@ public class HoSoChiTietServices {
                         c.setXepLoaiThiDua(req.xepLoaiThiDua());
                         c.setHinhThucKhenThuongId(req.hinhThucKhenThuongId());
                         c.setLyDo(req.lyDo());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return khenThuongRepository.save(c);
                     } else throw new
                             ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -278,9 +284,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -288,13 +294,14 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResKhenThuong> res) {
             List<KhenThuong> khenThuongs = new ArrayList<>();
-            for(ResKhenThuong c : res){
+            for (ResKhenThuong c : res) {
                 KhenThuong cu = khenThuongRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 khenThuongs.add(cu);
             }
             khenThuongRepository.saveAll(khenThuongs);
@@ -305,13 +312,15 @@ public class HoSoChiTietServices {
     @Service
     public class KienThucAnNinhQuocPhongService implements IHoSoChiTietServices.IHoKienThucAnNinhQuocPhongServiceChiTiet {
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSach(int pageNumber, int pageSize) {
-            return kienThucAnNinhQuocPhongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<KienThucAnNinhQuocPhong> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return kienThucAnNinhQuocPhongRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -347,7 +356,7 @@ public class HoSoChiTietServices {
                         c.setKetThuc(req.ketThuc());
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
                         c.setChungChiDuocCap(req.chungChiDuocCap());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return kienThucAnNinhQuocPhongRepository.save(c);
                     } else throw new
                             ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -378,9 +387,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -392,10 +401,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResKienThucAnNinhQuocPhong> res) {
             List<KienThucAnNinhQuocPhong> phongs = new ArrayList<>();
-            for(ResKienThucAnNinhQuocPhong c : res){
+            for (ResKienThucAnNinhQuocPhong c : res) {
                 KienThucAnNinhQuocPhong cu = kienThucAnNinhQuocPhongRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 phongs.add(cu);
             }
             kienThucAnNinhQuocPhongRepository.saveAll(phongs);
@@ -406,13 +415,15 @@ public class HoSoChiTietServices {
     @Service
     public class KyLuatService implements IHoSoChiTietServices.IHoKyLuatServiceChiTiet {
         @Override
-        public List<KyLuat> xemDanhSach(int pageNumber, int pageSize) {
-            return kyLuatRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<KyLuat> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return kyLuatRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return kyLuatRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return kyLuatRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -447,7 +458,7 @@ public class HoSoChiTietServices {
                         c.setHinhThuc(req.hinhThuc());
                         c.setHanhViViPhamChinh(req.hanhViViPhamChinh());
                         c.setCoQuanQuyetDinhId(req.coQuanQuyetDinhId());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return kyLuatRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -478,9 +489,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -488,13 +499,14 @@ public class HoSoChiTietServices {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
             return them(id, cu);
         }
+
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResKyLuat> res) {
             List<KyLuat> kyLuats = new ArrayList<>();
-            for(ResKyLuat c : res){
+            for (ResKyLuat c : res) {
                 KyLuat cu = kyLuatRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 kyLuats.add(cu);
             }
             kyLuatRepository.saveAll(kyLuats);
@@ -505,13 +517,15 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecONuocNgoaiServcie implements IHoSoChiTietServices.IHoLamViecONuocNgoaiServiceChiTiet {
         @Override
-        public List<LamViecONuocNgoai> xemDanhSach(int pageNumber, int pageSize) {
-            return lamViecONuocNgoaiRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<LamViecONuocNgoai> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return lamViecONuocNgoaiRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return lamViecONuocNgoaiRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return lamViecONuocNgoaiRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -546,7 +560,7 @@ public class HoSoChiTietServices {
                         c.setBatDau(req.batDau());
                         c.setKetThuc(req.ketThuc());
                         c.setToChucDiaChiCongViec(req.toChucDiaChiCongViec());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return lamViecONuocNgoaiRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -578,9 +592,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -592,10 +606,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResLamViecONuocNgoai> res) {
             List<LamViecONuocNgoai> ngoais = new ArrayList<>();
-            for(ResLamViecONuocNgoai c : res){
+            for (ResLamViecONuocNgoai c : res) {
                 LamViecONuocNgoai cu = lamViecONuocNgoaiRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 ngoais.add(cu);
             }
             lamViecONuocNgoaiRepository.saveAll(ngoais);
@@ -606,13 +620,15 @@ public class HoSoChiTietServices {
     @Service
     public class LuongBanThanService implements IHoSoChiTietServices.IHoLuongBanThanServiceChiTiet {
         @Override
-        public List<LuongBanThan> xemDanhSach(int pageNumber, int pageSize) {
-            return luongBanThanRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<LuongBanThan> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return luongBanThanRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return luongBanThanRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return luongBanThanRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -650,7 +666,7 @@ public class HoSoChiTietServices {
                         c.setBacLuong(req.bacLuong());
                         c.setHeSoLuong(req.heSoLuong());
                         c.setTienLuongTheoViTri(req.tienLuongTheoViTri());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return luongBanThanRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -682,9 +698,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -696,10 +712,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResLuongBanThan> res) {
             List<LuongBanThan> luongs = new ArrayList<>();
-            for(ResLuongBanThan c : res){
+            for (ResLuongBanThan c : res) {
                 LuongBanThan cu = luongBanThanRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 luongs.add(cu);
             }
             luongBanThanRepository.saveAll(luongs);
@@ -710,13 +726,15 @@ public class HoSoChiTietServices {
     @Service
     public class LyHoLuanChinhTriServiceChiTiet implements IHoSoChiTietServices.IHoLyLuanChinhTriServiceChiTiet {
         @Override
-        public List<LyLuanChinhTri> xemDanhSach(int pageNumber, int pageSize) {
-            return lyLuanChinhTriRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<LyLuanChinhTri> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return lyLuanChinhTriRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return lyLuanChinhTriRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return lyLuanChinhTriRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -753,7 +771,7 @@ public class HoSoChiTietServices {
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                         c.setHinhThucDaoTao(req.hinhThucDaoTao());
                         c.setVanBangDuocCap(req.vanBangDuocCap());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return lyLuanChinhTriRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -785,9 +803,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -799,10 +817,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResLyLuanChinhTri> res) {
             List<LyLuanChinhTri> tris = new ArrayList<>();
-            for(ResLyLuanChinhTri c : res){
+            for (ResLyLuanChinhTri c : res) {
                 LyLuanChinhTri cu = lyLuanChinhTriRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 tris.add(cu);
             }
             lyLuanChinhTriRepository.saveAll(tris);
@@ -813,13 +831,15 @@ public class HoSoChiTietServices {
     @Service
     public class NghiepVuChuyenNganhService implements IHoSoChiTietServices.IHoNghiepVuChuyenNganhServiceChiTiet {
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSach(int pageNumber, int pageSize) {
-            return nghiepVuChuyenNganhRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<NghiepVuChuyenNganh> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return nghiepVuChuyenNganhRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return nghiepVuChuyenNganhRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return nghiepVuChuyenNganhRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -855,7 +875,7 @@ public class HoSoChiTietServices {
                         c.setKetThuc(req.ketThuc());
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                         c.setChungChiDuocCap(req.chungChiDuocCap());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return nghiepVuChuyenNganhRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -887,9 +907,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -901,10 +921,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResNghiepVuChuyenNganh> res) {
             List<NghiepVuChuyenNganh> nganhs = new ArrayList<>();
-            for(ResNghiepVuChuyenNganh c : res){
+            for (ResNghiepVuChuyenNganh c : res) {
                 NghiepVuChuyenNganh cu = nghiepVuChuyenNganhRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 nganhs.add(cu);
             }
             nghiepVuChuyenNganhRepository.saveAll(nganhs);
@@ -915,13 +935,15 @@ public class HoSoChiTietServices {
     @Service
     public class NgoaiNguService implements IHoSoChiTietServices.IHoNgoaiNguServiceChiTiet {
         @Override
-        public List<NgoaiNgu> xemDanhSach(int pageNumber, int pageSize) {
-            return ngoaiNguRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<NgoaiNgu> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return ngoaiNguRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return ngoaiNguRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return ngoaiNguRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -959,7 +981,7 @@ public class HoSoChiTietServices {
                         c.setTenNgoaiNgu(req.tenNgoaiNgu());
                         c.setChungChiDuocCap(req.chungChiDuocCap());
                         c.setDiemSo(req.diemSo());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return ngoaiNguRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -991,9 +1013,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1005,10 +1027,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResNgoaiNgu> res) {
             List<NgoaiNgu> ngus = new ArrayList<>();
-            for(ResNgoaiNgu c : res){
+            for (ResNgoaiNgu c : res) {
                 NgoaiNgu cu = ngoaiNguRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 ngus.add(cu);
             }
             ngoaiNguRepository.saveAll(ngus);
@@ -1019,13 +1041,15 @@ public class HoSoChiTietServices {
     @Service
     public class PhuCapKhacService implements IHoSoChiTietServices.IHoPhuCapKhacServiceChiTiet {
         @Override
-        public List<PhuCapKhac> xemDanhSach(int pageNumber, int pageSize) {
-            return phuCapKhacRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<PhuCapKhac> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return phuCapKhacRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return phuCapKhacRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return phuCapKhacRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -1058,7 +1082,7 @@ public class HoSoChiTietServices {
                         c.setHeSoPhuCap(req.heSoPhuCap());
                         c.setHinhThucHuong(req.hinhThucThuong());
                         c.setGiaTri(req.giaTri());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return phuCapKhacRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -1090,9 +1114,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1104,10 +1128,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResPhuCapKhac> res) {
             List<PhuCapKhac> khacs = new ArrayList<>();
-            for(ResPhuCapKhac c : res){
+            for (ResPhuCapKhac c : res) {
                 PhuCapKhac cu = phuCapKhacRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 khacs.add(cu);
             }
             phuCapKhacRepository.saveAll(khacs);
@@ -1118,13 +1142,15 @@ public class HoSoChiTietServices {
     @Service
     public class QuanHeGiaDinhService implements IHoSoChiTietServices.IHoQuanHeGiaDinhServiceChiTiet {
         @Override
-        public List<QuanHeGiaDinh> xemDanhSach(int pageNumber, int pageSize) {
-            return quanHeGiaDinhRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<QuanHeGiaDinh> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return quanHeGiaDinhRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return quanHeGiaDinhRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return quanHeGiaDinhRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -1159,7 +1185,7 @@ public class HoSoChiTietServices {
                         c.setHoVaTen(req.hoVaTen());
                         c.setNamSinh(req.namSinh());
                         c.setThongTinThanNhan(req.thongTinThanNhan());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return quanHeGiaDinhRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -1191,9 +1217,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1205,10 +1231,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResQuanHeGiaDinh> res) {
             List<QuanHeGiaDinh> giaDinhs = new ArrayList<>();
-            for(ResQuanHeGiaDinh c : res){
+            for (ResQuanHeGiaDinh c : res) {
                 QuanHeGiaDinh cu = quanHeGiaDinhRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 giaDinhs.add(cu);
             }
             quanHeGiaDinhRepository.saveAll(giaDinhs);
@@ -1219,13 +1245,15 @@ public class HoSoChiTietServices {
     @Service
     public class QuaTrinhCongTacService implements IHoSoChiTietServices.IHoQuaTrinhCongTacServiceChiTiet {
         @Override
-        public List<QuaTrinhCongTac> xemDanhSach(int pageNumber, int pageSize) {
-            return quaTrinhCongTacRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<QuaTrinhCongTac> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return quaTrinhCongTacRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return quaTrinhCongTacRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return quaTrinhCongTacRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -1259,7 +1287,7 @@ public class HoSoChiTietServices {
                         c.setKetThuc(req.ketThuc());
                         c.setDonViCongTacId(req.donViCongTacId());
                         c.setChucDanh(req.chucDanh());
-                        c.setUpdate_at();
+                        c.setUpdateAt();
                         return quaTrinhCongTacRepository.save(c);
                     } else throw new
                             ResponseStatusException(
@@ -1291,9 +1319,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1305,10 +1333,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResQuaTrinhCongTac> res) {
             List<QuaTrinhCongTac> tacs = new ArrayList<>();
-            for(ResQuaTrinhCongTac c : res){
+            for (ResQuaTrinhCongTac c : res) {
                 QuaTrinhCongTac cu = quaTrinhCongTacRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 tacs.add(cu);
             }
             quaTrinhCongTacRepository.saveAll(tacs);
@@ -1319,13 +1347,15 @@ public class HoSoChiTietServices {
     @Service
     public class TinHocService implements IHoSoChiTietServices.IHoTinHocServiceChiTiet {
         @Override
-        public List<TinHoc> xemDanhSach(int pageNumber, int pageSize) {
-            return tinHocRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public List<TinHoc> xemDanhSach(String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return tinHocRepository.findAll(pageable).getContent();
         }
 
         @Override
-        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id, int pageNumber, int pageSize) {
-            return tinHocRepository.getAllByHoSo(id, PageRequest.of(pageNumber, pageSize));
+        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id, String byDate, int pageNumber, int pageSize) {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return tinHocRepository.getAllByHoSo(id, pageable);
         }
 
         @Override
@@ -1359,7 +1389,7 @@ public class HoSoChiTietServices {
                     c.setKetThuc(req.ketThuc());
                     c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setChungChiDuocCap(req.chungChiDuocCap());
-                    c.setUpdate_at();
+                    c.setUpdateAt();
                     return tinHocRepository.save(c);
                 } else throw new
                         ResponseStatusException(
@@ -1387,9 +1417,9 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, int pageNumber, int pageSize) {
+        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, String byDate, int pageNumber, int pageSize) {
             UUID id = hoSoClient.getHoSoId(taiKhoanId);
-            return xemDanhSachTheoHoSoId(id, pageNumber, pageSize);
+            return xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize);
         }
 
         @Override
@@ -1401,10 +1431,10 @@ public class HoSoChiTietServices {
         @Override
         public boolean xacNhan(XacNhan xacNhan, List<ResTinHoc> res) {
             List<TinHoc> tinHocs = new ArrayList<>();
-            for(ResTinHoc c : res){
+            for (ResTinHoc c : res) {
                 TinHoc cu = tinHocRepository.findById(c.id()).orElseThrow(() -> new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode()));
                 cu.setXacNhan(xacNhan);
-                cu.setUpdate_at();
+                cu.setUpdateAt();
                 tinHocs.add(cu);
             }
             tinHocRepository.saveAll(tinHocs);

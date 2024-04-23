@@ -46,12 +46,13 @@ public class TaiKhoanController {
 
     @GetMapping("/nhan-vien/tai-khoan")
     public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "username", required = false) String username,
             @RequestParam(name = "role", required = false) RoleTaiKhoan role,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(username, role, pageNumber, pageSize), ResEnum.THANH_CONG);
+        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(byDate, username, role, pageNumber, pageSize), ResEnum.THANH_CONG);
     }
 
     @GetMapping("/nhan-vien/tai-khoan/{id}")

@@ -23,8 +23,8 @@ public class MapperKienThucAnNinhQuocPhong {
                 phong.getChungChiDuocCap(),
                 phong.getXacNhan(),
                 phong.getHoSoId(),
-                phong.getCreate_at(),
-                phong.getUpdate_at()
+                phong.getCreateAt(),
+                phong.getUpdateAt()
         ) : null;
     }
 }

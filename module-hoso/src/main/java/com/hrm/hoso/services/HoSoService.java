@@ -56,6 +56,8 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -97,26 +99,27 @@ public class HoSoService implements IHoSoService {
                 .soCCCD(req.soCCCD())
                 .taiKhoanId(req.taiKhoan())
                 .pheDuyet(PheDuyet.CHO_PHE_DUYET)
-                .create_at(LocalDateTime.now())
+                .createAt(LocalDateTime.now())
                 .build();
         hoSoRepository.save(hoSo);
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
     @Override
-    public List<ResHoSo> xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, int pageNumber, int pageSize) {
-        if(soCCCD!=null && !soCCCD.isEmpty()){
+    public List<ResHoSo> xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
+        if (soCCCD != null && !soCCCD.isEmpty()) {
             ResHoSo hoSo = xemHoSoTheoSoCCCD(soCCCD);
             return Collections.singletonList(hoSo);
         }
         if (hoVaTen != null || danTocId != -1 || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1 || pheDuyet != null) {
-            return locHoSo(hoVaTen, danTocId, chucVuHienTaiId, coQuanToChucDonViId, pheDuyet, pageNumber, pageSize);
-        } else return hoSoRepository.findAll(PageRequest.of(pageNumber, pageSize)).stream().map(mapperHoSo::mapToResHoSo).toList();
+            return locHoSo(hoVaTen, danTocId, chucVuHienTaiId, coQuanToChucDonViId, pheDuyet, byDate, pageNumber, pageSize);
+        } else {
+            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+            return hoSoRepository.findAll(pageable).stream().map(mapperHoSo::mapToResHoSo).toList();
+        }
     }
 
-
-    @Override
-    public ResHoSo xemHoSoTheoSoCCCD(String q) {
+    private ResHoSo xemHoSoTheoSoCCCD(String q) {
         HoSo hoSo = hoSoRepository.findFirstBySoCCCD(q).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
 //            Pattern UUID_REGEX = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 //            if (UUID_REGEX.matcher(q).matches()) {
@@ -125,8 +128,7 @@ public class HoSoService implements IHoSoService {
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
-    @Override
-    public List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, int pageNumber, int pageSize) {
+    private List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
         //JPA Criteria API
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
@@ -156,10 +158,10 @@ public class HoSoService implements IHoSoService {
 //        }
         // Apply the predicate to the query
         if (predicate != null) {
-            query.where(predicate);
+            query.orderBy(builder.desc(root.get(byDate))).where(predicate);
         }
         List<HoSo> hoSos = entityManager.createQuery(query)
-                .setFirstResult(pageNumber*pageSize)
+                .setFirstResult(pageNumber * pageSize)
                 .setMaxResults(pageSize)
                 .getResultList();
         return hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();

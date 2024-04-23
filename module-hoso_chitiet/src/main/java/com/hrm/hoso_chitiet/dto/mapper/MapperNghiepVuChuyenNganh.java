@@ -23,8 +23,8 @@ public class MapperNghiepVuChuyenNganh {
                 nganh.getChungChiDuocCap(),
                 nganh.getXacNhan(),
                 nganh.getHoSoId(),
-                nganh.getCreate_at(),
-                nganh.getUpdate_at()
+                nganh.getCreateAt(),
+                nganh.getUpdateAt()
         ) : null;
     }
 }

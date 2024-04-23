@@ -34,16 +34,19 @@ public class TinHocController {
 
     @GetMapping("/{id}/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
+                                                          @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                           @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
+        List<ResTinHoc> ls = tinHocService.xemDanhSachTheoHoSoId(id, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/tin-hoc")
-    public ResponseEntity<List<ResTinHoc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
+    public ResponseEntity<List<ResTinHoc>> getAll(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResTinHoc> ls = tinHocService.xemDanhSach(byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -75,6 +78,7 @@ public class TinHocController {
         boolean ls = tinHocService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/tin-hoc/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
@@ -84,12 +88,14 @@ public class TinHocController {
         boolean ls = tinHocService.xacNhan(xacNhan, res);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                        @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                         @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResTinHoc> ls = tinHocService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
+        List<ResTinHoc> ls = tinHocService.xemDanhSachCaNhan(id, byDate, pageNumber, pageSize).stream().map(mapper::mapToResTinHoc).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

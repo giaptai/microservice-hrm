@@ -27,7 +27,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "khen_thuong", indexes = {
         @Index(name = "ho_so_idx", columnList = "ho_so_id"),
-        @Index(name = "nam_idx", columnList = "nam")
+        @Index(name = "nam_idx", columnList = "nam"),
+        @Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt")
 })
 @Getter
 @Setter

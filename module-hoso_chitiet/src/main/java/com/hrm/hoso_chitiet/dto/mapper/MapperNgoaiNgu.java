@@ -25,8 +25,8 @@ public class MapperNgoaiNgu {
                 ngu.getDiemSo(),
                 ngu.getXacNhan(),
                 ngu.getHoSoId(),
-                ngu.getCreate_at(),
-                ngu.getUpdate_at()
+                ngu.getCreateAt(),
+                ngu.getUpdateAt()
         ) : null;
     }
 }

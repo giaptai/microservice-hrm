@@ -17,8 +17,8 @@ public class MapperTaiKhoan {
                 Optional.of(taiKhoan).map(TaiKhoan::getHoSoId).orElse(null),
                 taiKhoan.getRoleTaiKhoan().name(),
                 taiKhoan.isTrangThai(),
-                taiKhoan.getCreate_at(),
-                taiKhoan.getUpdate_at()
+                taiKhoan.getCreateAt(),
+                taiKhoan.getUpdateAt()
         );
     }
 }

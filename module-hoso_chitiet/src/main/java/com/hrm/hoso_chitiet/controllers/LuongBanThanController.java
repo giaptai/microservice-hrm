@@ -35,18 +35,20 @@ public class LuongBanThanController {
     @GetMapping("/{id}/luong-ban-than")
     public ResponseEntity<List<ResLuongBanThan>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
+        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachTheoHoSoId(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/luong-ban-than")
     public ResponseEntity<List<ResLuongBanThan>> getAll(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
+        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSach(byDate,pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -92,9 +94,10 @@ public class LuongBanThanController {
     @GetMapping("/ca-nhan/luong-ban-than")
     public ResponseEntity<List<ResLuongBanThan>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
+        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachCaNhan(id, byDate, pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

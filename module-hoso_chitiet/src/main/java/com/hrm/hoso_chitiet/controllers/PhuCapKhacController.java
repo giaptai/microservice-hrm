@@ -34,16 +34,19 @@ public class PhuCapKhacController {
 
     @GetMapping("/{id}/phu-cap-khac")
     public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
+                                                              @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                               @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                               @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
+        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSach(pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
+    public ResponseEntity<List<ResPhuCapKhac>> getAll(
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSach(byDate,pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -75,6 +78,7 @@ public class PhuCapKhacController {
         boolean ls = phuCapKhacService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/phu-cap-khac/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
@@ -84,12 +88,14 @@ public class PhuCapKhacController {
         boolean ls = phuCapKhacService.xacNhan(xacNhan, res);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/phu-cap-khac")
     public ResponseEntity<List<ResPhuCapKhac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
+                                                            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachCaNhan(id, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
+        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachCaNhan(id, byDate,pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

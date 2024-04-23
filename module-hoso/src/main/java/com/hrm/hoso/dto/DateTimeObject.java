@@ -17,21 +17,21 @@ import java.time.format.DateTimeFormatter;
 @MappedSuperclass //class cha không phải là entity
 public class DateTimeObject {
     @Column(columnDefinition = "datetime DEFAULT CURRENT_TIMESTAMP")
-    private LocalDateTime create_at;
+    private LocalDateTime createAt;
 
     @Column(columnDefinition = "DATETIME ON UPDATE CURRENT_TIMESTAMP")
-    private LocalDateTime update_at;
+    private LocalDateTime updateAt;
 
     @Column(columnDefinition = "boolean default 1")
     private boolean trangThai;
 
     public DateTimeObject() {
-        this.create_at = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        this.createAt = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         this.trangThai = true;
     }
 
 
     public void setUpdate_at() {
-        this.update_at = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        this.updateAt = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
     }
 }

@@ -1,6 +1,5 @@
 package com.hrm.hoso_chitiet.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +24,11 @@ import java.util.UUID;
  * gia dinh bao gom ruot va ben vo hoac chong luon
  **/
 @Entity
-@Table(name = "quan_he_gia_dinh", indexes = @Index(name = "ho_so_idx", columnList = "ho_so_id"))
+@Table(name = "quan_he_gia_dinh", indexes = {
+        @Index(name = "ho_so_idx", columnList = "ho_so_id"),
+        @Index(name = "create_at_idx", columnList = "createAt"),
+        @Index(name = "update_at_idx", columnList = "updateAt")
+})
 @Getter
 @Setter
 @SuperBuilder
@@ -57,11 +60,6 @@ public class QuanHeGiaDinh extends DateTimeObject {
 
     @Column(name = "ho_so_id", columnDefinition = "binary(16)")
     UUID hoSoId;
-
-    @Override
-    public void setUpdate_at() {
-        super.setUpdate_at();
-    }
 
     public QuanHeGiaDinh(int moiQuanHeId, String hoVaTen, short namSinh, String thongTinThanNhan, XacNhan xacNhan, UUID hoSoId) {
         super();

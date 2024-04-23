@@ -1,6 +1,5 @@
 package com.hrm.hoso.dto.mapper;
 
-import com.hrm.hoso.client.chuc_vu.ChucVuClient;
 import com.hrm.hoso.client.chuc_vu_dang.ChucVuDangClient;
 import com.hrm.hoso.client.dan_toc.DanTocClient;
 import com.hrm.hoso.client.doi_tuong_chinh_sach.DoiTuongChinhSachClient;
@@ -106,8 +105,8 @@ public class MapperHoSo {
                 mapperSucKhoe.mapToResSucKhoe(sucKhoe),
                 hoSo.getTaiKhoanId(),
                 hoSo.getPheDuyet(),
-                hoSo.getCreate_at(),
-                hoSo.getUpdate_at()
+                hoSo.getCreateAt(),
+                hoSo.getUpdateAt()
         );
     }
 }
