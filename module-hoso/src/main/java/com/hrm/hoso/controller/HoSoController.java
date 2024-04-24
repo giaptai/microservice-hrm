@@ -6,6 +6,7 @@ import com.hrm.hoso.dto.request.ReqHoSo;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 import com.hrm.hoso.dto.response.ResHoSoTomTat;
+import com.hrm.hoso.dto.response.ResListHoSo;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.response.ResEnum;
 import com.hrm.hoso.services.IHoSoService;
@@ -45,7 +46,7 @@ public class HoSoController {
 
     //ADMIN - ADMIN - ADMIN
     @GetMapping("/nhan-vien/ho-so")
-    public ResponseEntity<List<ResHoSo>> getAllHoSo(
+    public ResponseEntity<ResListHoSo> getAllHoSo(
             @RequestParam(name = "soCCCD", required = false) String cccd,
             @RequestParam(name = "hoVaTen", required = false) String hoVaTen,
             @RequestParam(name = "danTocId", required = false, defaultValue = "-1") String danTocId,
@@ -56,7 +57,7 @@ public class HoSoController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResHoSo> resHoSos = hoSoService.xemDanhSachHoSo(cccd, hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet, byDate, pageNumber, pageSize);
+        ResListHoSo resHoSos = hoSoService.xemDanhSachHoSo(cccd, hoVaTen, Integer.parseInt(danTocId), Integer.parseInt(chucVuHienTaiId), Integer.parseInt(coQuanToChucDonViId), pheDuyet, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(resHoSos, ResEnum.THANH_CONG.getCode());
     }
 
