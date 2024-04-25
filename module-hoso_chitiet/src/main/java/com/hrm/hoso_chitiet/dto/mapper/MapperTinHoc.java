@@ -32,8 +32,7 @@ public class MapperTinHoc {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     hoc.getCreateAt(),
-                    hoc.getUpdateAt()
-            );
+                    hoc.getUpdateAt());
         } else return null;
     }
 }

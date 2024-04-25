@@ -28,8 +28,7 @@ public class MapperLamViecONuocNgoai {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     ngoai.getCreateAt(),
-                    ngoai.getUpdateAt()
-            );
+                    ngoai.getUpdateAt());
         } else return null;
     }
 }

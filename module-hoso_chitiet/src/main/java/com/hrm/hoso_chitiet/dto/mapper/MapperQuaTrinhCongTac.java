@@ -32,9 +32,7 @@ public class MapperQuaTrinhCongTac {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     tac.getCreateAt(),
-                    tac.getUpdateAt()
-            );
-        }
-        return null;
+                    tac.getUpdateAt());
+        } else return null;
     }
 }
