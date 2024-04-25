@@ -32,8 +32,7 @@ public class MapperNghiepVuChuyenNganh {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     nganh.getCreateAt(),
-                    nganh.getUpdateAt()
-            );
+                    nganh.getUpdateAt());
         } else return null;
     }
 }

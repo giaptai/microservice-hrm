@@ -34,8 +34,7 @@ public class MapperNgoaiNgu {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     ngu.getCreateAt(),
-                    ngu.getUpdateAt()
-            );
+                    ngu.getUpdateAt());
         } else return null;
     }
 }

@@ -20,7 +20,7 @@ public class MapperKyLuat {
     public ResKyLuat mapToResKyLuat(KyLuat luat) {
         if (luat != null) {
             ResHoSoTomTatClient tomTatClient = hoSoClient.getHoSoNhanVienId(luat.getHoSoId());
-            new ResKyLuat(
+            return new ResKyLuat(
                     luat.getId(),
                     luat.getBatDau(),
                     luat.getKetThuc(),
@@ -33,9 +33,7 @@ public class MapperKyLuat {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     luat.getCreateAt(),
-                    luat.getUpdateAt()
-            );
-        }
-        return null;
+                    luat.getUpdateAt());
+        } else return null;
     }
 }

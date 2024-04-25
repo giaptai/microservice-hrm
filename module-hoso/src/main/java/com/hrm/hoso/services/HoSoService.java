@@ -118,7 +118,6 @@ public class HoSoService implements IHoSoService {
         }
         if (hoVaTen != null || danTocId != -1 || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1 || pheDuyet != null) {
             return locHoSo(hoVaTen, danTocId, chucVuHienTaiId, coQuanToChucDonViId, pheDuyet, byDate, pageNumber, pageSize);
-
         } else {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
             List<ResHoSo> resHoSos = hoSoRepository.findAll(pageable).stream().map(mapperHoSo::mapToResHoSo).toList();

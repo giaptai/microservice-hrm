@@ -19,7 +19,7 @@ public class MapperKienThucAnNinhQuocPhong {
     public ResKienThucAnNinhQuocPhong mapToResKienThucAnNinhQuocPhong(KienThucAnNinhQuocPhong phong) {
         if( phong != null ){
             ResHoSoTomTatClient tomTatClient = hoSoClient.getHoSoNhanVienId(phong.getHoSoId());
-            new ResKienThucAnNinhQuocPhong(
+            return new ResKienThucAnNinhQuocPhong(
                     phong.getId(),
                     phong.getBatDau(),
                     phong.getKetThuc(),
@@ -31,8 +31,7 @@ public class MapperKienThucAnNinhQuocPhong {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     phong.getCreateAt(),
-                    phong.getUpdateAt()
-            );
-        } return null;
+                    phong.getUpdateAt());
+        } else return null;
     }
 }

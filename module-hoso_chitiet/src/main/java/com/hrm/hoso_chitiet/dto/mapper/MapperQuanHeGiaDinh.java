@@ -32,8 +32,7 @@ public class MapperQuanHeGiaDinh {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     dinh.getCreateAt(),
-                    dinh.getUpdateAt()
-            );
+                    dinh.getUpdateAt());
         } return null;
     }
 }

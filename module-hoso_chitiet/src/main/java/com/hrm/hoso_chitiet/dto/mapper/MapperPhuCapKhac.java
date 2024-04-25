@@ -35,8 +35,7 @@ public class MapperPhuCapKhac {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     khac.getCreateAt(),
-                    khac.getUpdateAt()
-            );
+                    khac.getUpdateAt());
         } else return null;
     }
 }

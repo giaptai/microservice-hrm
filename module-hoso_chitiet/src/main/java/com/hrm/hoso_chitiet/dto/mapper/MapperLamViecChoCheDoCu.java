@@ -18,7 +18,7 @@ public class MapperLamViecChoCheDoCu {
     public ResLamViecChoCheDoCu maptoResLamViecChoCheDoCu(LamViecChoCheDoCu cu) {
         if (cu != null) {
             ResHoSoTomTatClient tomTatClient = hoSoClient.getHoSoNhanVienId(cu.getHoSoId());
-            new ResLamViecChoCheDoCu(
+            return new ResLamViecChoCheDoCu(
                     cu.getId(),
                     cu.getBatDau(),
                     cu.getKetThuc(),
@@ -28,9 +28,7 @@ public class MapperLamViecChoCheDoCu {
                     tomTatClient.hoVaTen(),
                     tomTatClient.soCCCD(),
                     cu.getCreateAt(),
-                    cu.getUpdateAt()
-            );
-        }
-        return null;
+                    cu.getUpdateAt());
+        }else return null;
     }
 }
