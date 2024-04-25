@@ -1,6 +1,6 @@
 package hrm.module.cauhinh.services;
 
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface IUtilitiesService<T, R> {

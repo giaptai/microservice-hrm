@@ -41,6 +41,7 @@ import hrm.module.cauhinh.models.TrinhDoChuyenMon;
 import hrm.module.cauhinh.models.TrinhDoGiaoDucPhoThong;
 import hrm.module.cauhinh.models.ViTriViecLam;
 
+import hrm.module.cauhinh.response.ResDTO;
 import hrm.module.cauhinh.response.ResEnum;
 
 import hrm.module.cauhinh.services.ILoaiNhomHeSoNgachService;
@@ -113,6 +114,10 @@ public class UtilitiesController {
                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
         ) {
             return new ResponseEntity<>(bacLuongService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
+//            return ResDTO.res(bacLuongService.xemDanhSach(pageNumber, pageSize).getContent(),
+//                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalElements(),
+//                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalPages(),
+//                    ResEnum.THANH_CONG);
         }
 
         @GetMapping("/bac-luong/{id}")
@@ -149,6 +154,10 @@ public class UtilitiesController {
         public ResponseEntity<List<CapBacLoaiQuanHamQuanDoi>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
+//            return ResDTO.res(capBacLoaiQuanHamQuanDoiService.xemDanhSach(pageNumber, pageSize).getContent(),
+//                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalElements(),
+//                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalPages(),
+//                    ResEnum.THANH_CONG);
         }
 
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi/{id}")
@@ -184,6 +193,10 @@ public class UtilitiesController {
         public ResponseEntity<List<ChucDanhDang>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                          @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(chucDanhDangService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
+//            return ResDTO.res(chucDanhDangService.xemDanhSach(pageNumber, pageSize).getContent(),
+//                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalElements(),
+//                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalPages(),
+//                    ResEnum.THANH_CONG);
         }
 
         @GetMapping("/chuc-danh-dang/{id}")

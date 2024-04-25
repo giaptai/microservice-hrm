@@ -5,6 +5,7 @@ import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 import com.hrm.hoso.dto.response.ResHoSoTomTat;
+import com.hrm.hoso.dto.response.ResListHoSo;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.dto.request.ReqHoSo;
 
@@ -16,7 +17,7 @@ public interface IHoSoService {
 
     ResHoSo taoHoSo(ReqTaoHoSo req);
 
-    List<ResHoSo> xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize);
+    ResListHoSo xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize);
 
     ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo reqHoSo);
 

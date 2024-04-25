@@ -16,6 +16,7 @@ import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResHoSo;
 
 import com.hrm.hoso.dto.response.ResHoSoTomTat;
+import com.hrm.hoso.dto.response.ResListHoSo;
 import com.hrm.hoso.enums.PheDuyet;
 
 import com.hrm.hoso.dto.request.ReqHoSo;
@@ -110,16 +111,20 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
-    public List<ResHoSo> xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
+    public ResListHoSo xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
         if (soCCCD != null && !soCCCD.isEmpty()) {
             ResHoSo hoSo = xemHoSoTheoSoCCCD(soCCCD);
-            return Collections.singletonList(hoSo);
+            return new ResListHoSo(Collections.singletonList(hoSo), 1, 1);
         }
         if (hoVaTen != null || danTocId != -1 || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1 || pheDuyet != null) {
             return locHoSo(hoVaTen, danTocId, chucVuHienTaiId, coQuanToChucDonViId, pheDuyet, byDate, pageNumber, pageSize);
+
         } else {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return hoSoRepository.findAll(pageable).stream().map(mapperHoSo::mapToResHoSo).toList();
+            List<ResHoSo> resHoSos = hoSoRepository.findAll(pageable).stream().map(mapperHoSo::mapToResHoSo).toList();
+            long totalRecord = hoSoRepository.findAll(pageable).getTotalElements();
+            int totalPage = hoSoRepository.findAll(pageable).getTotalPages();
+            return new ResListHoSo(resHoSos, totalRecord, totalPage);
         }
     }
 
@@ -132,7 +137,7 @@ public class HoSoService implements IHoSoService {
         return mapperHoSo.mapToResHoSo(hoSo);
     }
 
-    private List<ResHoSo> locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
+    private ResListHoSo locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
         //JPA Criteria API
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
@@ -161,14 +166,26 @@ public class HoSoService implements IHoSoService {
         }
 //        }
         // Apply the predicate to the query
+//        if (predicate != null) {
+//            query.orderBy(builder.desc(root.get(byDate))).where(predicate);
+//        }
         if (predicate != null) {
-            query.orderBy(builder.desc(root.get(byDate))).where(predicate);
+            query.where(predicate);
+        }
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+        countQuery.select(builder.count(countQuery.from(HoSo.class))).where(predicate);
+        long totalRecord = entityManager.createQuery(countQuery).getSingleResult();
+        int totalPage = Math.round(((float) totalRecord / pageSize));
+        // Apply order by
+        if (byDate != null) {
+            query.orderBy(builder.desc(root.get(byDate)));
         }
         List<HoSo> hoSos = entityManager.createQuery(query)
                 .setFirstResult(pageNumber * pageSize)
                 .setMaxResults(pageSize)
                 .getResultList();
-        return hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
+        List<ResHoSo> resHoSos = hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
+        return new ResListHoSo(resHoSos, totalRecord, totalPage);
     }
 
     @Override
