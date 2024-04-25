@@ -35,7 +35,7 @@ public class KienThucAnNinhQuocPhongController {
     @GetMapping("/{id}/kien-thuc-an-ninh-quoc-phong")
     public ResponseEntity<List<ResKienThucAnNinhQuocPhong>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
-            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -45,7 +45,7 @@ public class KienThucAnNinhQuocPhongController {
 
     @GetMapping("/kien-thuc-an-ninh-quoc-phong")
     public ResponseEntity<List<ResKienThucAnNinhQuocPhong>> getAll(
-            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
@@ -96,7 +96,7 @@ public class KienThucAnNinhQuocPhongController {
     @GetMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong")
     public ResponseEntity<List<ResKienThucAnNinhQuocPhong>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
-            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {

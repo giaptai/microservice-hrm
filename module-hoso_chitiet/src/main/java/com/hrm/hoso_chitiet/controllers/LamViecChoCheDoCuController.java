@@ -35,7 +35,7 @@ public class LamViecChoCheDoCuController {
     @GetMapping("/{id}/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
-            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -45,7 +45,7 @@ public class LamViecChoCheDoCuController {
 
     @GetMapping("/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAll(
-            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
@@ -97,7 +97,7 @@ public class LamViecChoCheDoCuController {
     @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
-            @RequestParam(name = "xacNhan", required = false, defaultValue = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
