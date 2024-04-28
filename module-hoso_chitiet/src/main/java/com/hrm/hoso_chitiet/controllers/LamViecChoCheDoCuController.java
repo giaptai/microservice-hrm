@@ -104,7 +104,11 @@ public class LamViecChoCheDoCuController {
         List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
-
+    @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
+    public ResponseEntity<ResLamViecChoCheDoCu> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.xemChiTiet(id));
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
     @PostMapping("/ca-nhan/lam-viec-cho-che-do-cu")
     @Transactional
     public ResponseEntity<ResLamViecChoCheDoCu> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLamViecChoCheDoCu cu) {

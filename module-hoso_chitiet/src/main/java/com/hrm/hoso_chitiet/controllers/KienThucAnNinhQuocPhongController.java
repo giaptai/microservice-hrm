@@ -82,6 +82,7 @@ public class KienThucAnNinhQuocPhongController {
         boolean ls = kienThucAnNinhQuocPhongService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/kien-thuc-an-ninh-quoc-phong/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
@@ -101,6 +102,12 @@ public class KienThucAnNinhQuocPhongController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResKienThucAnNinhQuocPhong> ls = kienThucAnNinhQuocPhongService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResKienThucAnNinhQuocPhong).toList();
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @GetMapping("/ca-nhan/kien-thuc-an-ninh-quoc-phong/{id}")
+    public ResponseEntity<ResKienThucAnNinhQuocPhong> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResKienThucAnNinhQuocPhong ls = mapper.mapToResKienThucAnNinhQuocPhong(kienThucAnNinhQuocPhongService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

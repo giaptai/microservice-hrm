@@ -102,6 +102,11 @@ public class QuaTrinhCongTacController {
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
+    @GetMapping("/ca-nhan/qua-trinh-cong-tac/{id}")
+    public ResponseEntity<ResQuaTrinhCongTac> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResQuaTrinhCongTac ls = mapper.mapToResQuaTrinhCongTac(quaTrinhCongTacService.xemChiTiet(id));
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
     @PostMapping("/ca-nhan/qua-trinh-cong-tac")
     @Transactional
     public ResponseEntity<ResQuaTrinhCongTac> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqQuaTrinhCongTac cu) {

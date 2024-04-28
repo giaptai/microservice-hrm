@@ -102,6 +102,11 @@ public class LyLuanChinhTriController {
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
+    @GetMapping("/ca-nhan/ly-luan-chinh-tri/{id}")
+    public ResponseEntity<ResLyLuanChinhTri> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.xemChiTiet(id));
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
     @PostMapping("/ca-nhan/ly-luan-chinh-tri")
     @Transactional
     public ResponseEntity<ResLyLuanChinhTri> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLyLuanChinhTri cu) {

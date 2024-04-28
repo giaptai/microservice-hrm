@@ -38,7 +38,7 @@ public class NgoaiNguController {
                                                             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSoId(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
+        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -48,7 +48,7 @@ public class NgoaiNguController {
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSach(xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
+        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -98,7 +98,13 @@ public class NgoaiNguController {
                                                           @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                           @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachCaNhan(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
+        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @GetMapping("/ca-nhan/ngoai-ngu/{id}")
+    public ResponseEntity<ResNgoaiNgu> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
