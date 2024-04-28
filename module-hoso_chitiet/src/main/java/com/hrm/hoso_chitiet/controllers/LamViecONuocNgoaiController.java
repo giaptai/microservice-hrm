@@ -50,7 +50,7 @@ public class LamViecONuocNgoaiController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSach(xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
+        List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -92,6 +92,7 @@ public class LamViecONuocNgoaiController {
         boolean ls = lamViecONuocNgoaiService.xacNhan(xacNhan, res);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAllCaNhan(
@@ -101,6 +102,12 @@ public class LamViecONuocNgoaiController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResLamViecONuocNgoai> ls = lamViecONuocNgoaiService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResLamViecONuocNgoai).toList();
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @GetMapping("/ca-nhan/lam-viec-o-nuoc-ngoai/{id}")
+    public ResponseEntity<ResLamViecONuocNgoai> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResLamViecONuocNgoai ls = mapper.mapToResLamViecONuocNgoai(lamViecONuocNgoaiService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 

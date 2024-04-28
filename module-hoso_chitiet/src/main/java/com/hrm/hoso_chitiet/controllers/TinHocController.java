@@ -102,6 +102,11 @@ public class TinHocController {
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
+    @GetMapping("/ca-nhan/tin-hoc/{id}")
+    public ResponseEntity<ResTinHoc> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResTinHoc ls = mapper.mapToResTinHoc(tinHocService.xemChiTiet(id));
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
     @PostMapping("/ca-nhan/tin-hoc")
     @Transactional
     public ResponseEntity<ResTinHoc> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqTinHoc cu) {

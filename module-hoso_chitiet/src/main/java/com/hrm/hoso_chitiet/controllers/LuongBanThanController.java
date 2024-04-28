@@ -104,6 +104,11 @@ public class LuongBanThanController {
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
+    @GetMapping("/ca-nhan/luong-ban-than/{id}")
+    public ResponseEntity<ResLuongBanThan> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.xemChiTiet(id));
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
     @PostMapping("/ca-nhan/luong-ban-than")
     @Transactional
     public ResponseEntity<ResLuongBanThan> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLuongBanThan cu) {

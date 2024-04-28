@@ -105,6 +105,12 @@ public class KyLuatController {
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
+    @GetMapping("/ca-nhan/ky-luat/{id}")
+    public ResponseEntity<ResKyLuat> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResKyLuat ls = mapper.mapToResKyLuat(kyLuatService.xemChiTiet(id));
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
     @PostMapping("/ca-nhan/ky-luat")
     @Transactional
     public ResponseEntity<ResKyLuat> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqKyLuat cu) {

@@ -1,7 +1,7 @@
 spring:
   profiles:
     default: ho-so_chi-tiet
-    active: ho-so_chi-tiet
+    active: gitpod_pho
   application:
     name: ho-so_chi-tiet #name application in eureka
   config:

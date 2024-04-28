@@ -38,7 +38,7 @@ public class NghiepVuChuyenNganhController {
                                                                        @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                        @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                        @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSoId(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -49,7 +49,7 @@ public class NghiepVuChuyenNganhController {
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSach(xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
@@ -81,6 +81,7 @@ public class NghiepVuChuyenNganhController {
         boolean ls = nghiepVuChuyenNganhService.xoa(id, role);
         return new ResponseEntity<>(ls, ResEnum.XOA_THANH_CONG.getStatusCode());
     }
+
     @PatchMapping("/nghiep-vu-chuyen-nganh/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
@@ -90,6 +91,7 @@ public class NghiepVuChuyenNganhController {
         boolean ls = nghiepVuChuyenNganhService.xacNhan(xacNhan, res);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
+
     //EMPLOYEE
     @GetMapping("/ca-nhan/nghiep-vu-chuyen-nganh")
     public ResponseEntity<List<ResNghiepVuChuyenNganh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
@@ -97,7 +99,13 @@ public class NghiepVuChuyenNganhController {
                                                                      @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                      @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachCaNhan(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+        List<ResNghiepVuChuyenNganh> ls = nghiepVuChuyenNganhService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNghiepVuChuyenNganh).toList();
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @GetMapping("/ca-nhan/nghiep-vu-chuyen-nganh/{id}")
+    public ResponseEntity<ResNghiepVuChuyenNganh> getByIdCaNhan(@PathVariable(name = "id") int id) {
+        ResNghiepVuChuyenNganh ls = mapper.mapToResNghiepVuChuyenNganh(nghiepVuChuyenNganhService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
