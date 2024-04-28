@@ -34,7 +34,7 @@ public class QuanHeGiaDinhController {
 
     @GetMapping("/{id}/quan-he-gia-dinh")
     public ResponseEntity<List<ResQuanHeGiaDinh>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
-                                                                 @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+                                                                 @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
                                                                  @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -44,7 +44,7 @@ public class QuanHeGiaDinhController {
 
     @GetMapping("/quan-he-gia-dinh")
     public ResponseEntity<List<ResQuanHeGiaDinh>> getAll(
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -84,7 +84,7 @@ public class QuanHeGiaDinhController {
     @PatchMapping("/quan-he-gia-dinh/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
-            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet") XacNhan xacNhan,
             @RequestBody List<ResQuanHeGiaDinh> res
     ) {
         boolean ls = quanHeGiaDinhService.xacNhan(xacNhan, res);
@@ -94,7 +94,7 @@ public class QuanHeGiaDinhController {
     //EMPLOYEE
     @GetMapping("/ca-nhan/quan-he-gia-dinh")
     public ResponseEntity<List<ResQuanHeGiaDinh>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
-                                                               @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+                                                               @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
                                                                @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {

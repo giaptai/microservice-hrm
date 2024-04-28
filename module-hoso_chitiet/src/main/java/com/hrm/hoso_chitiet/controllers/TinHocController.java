@@ -34,7 +34,7 @@ public class TinHocController {
 
     @GetMapping("/{id}/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
-                                                          @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+                                                          @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
                                                           @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                           @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -44,7 +44,7 @@ public class TinHocController {
 
     @GetMapping("/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAll(
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -84,7 +84,7 @@ public class TinHocController {
     @PatchMapping("/tin-hoc/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
-            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet") XacNhan xacNhan,
             @RequestBody List<ResTinHoc> res
     ) {
         boolean ls = tinHocService.xacNhan(xacNhan, res);
@@ -94,7 +94,7 @@ public class TinHocController {
     //EMPLOYEE
     @GetMapping("/ca-nhan/tin-hoc")
     public ResponseEntity<List<ResTinHoc>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
-                                                        @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+                                                        @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
                                                         @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                         @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
