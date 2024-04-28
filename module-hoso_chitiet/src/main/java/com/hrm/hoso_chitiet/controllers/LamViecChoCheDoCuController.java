@@ -35,7 +35,7 @@ public class LamViecChoCheDoCuController {
     @GetMapping("/{id}/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -45,7 +45,7 @@ public class LamViecChoCheDoCuController {
 
     @GetMapping("/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAll(
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
@@ -86,7 +86,7 @@ public class LamViecChoCheDoCuController {
     @PatchMapping("/lam-viec-cho-che-do-cu/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
-            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet") XacNhan xacNhan,
             @RequestBody List<ResLamViecChoCheDoCu> res
     ) {
         boolean ls = lamViecChoCheDoCuService.xacNhan(xacNhan, res);
@@ -97,18 +97,20 @@ public class LamViecChoCheDoCuController {
     @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu")
     public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
         List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
     public ResponseEntity<ResLamViecChoCheDoCu> getByIdCaNhan(@PathVariable(name = "id") int id) {
         ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.xemChiTiet(id));
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @PostMapping("/ca-nhan/lam-viec-cho-che-do-cu")
     @Transactional
     public ResponseEntity<ResLamViecChoCheDoCu> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLamViecChoCheDoCu cu) {

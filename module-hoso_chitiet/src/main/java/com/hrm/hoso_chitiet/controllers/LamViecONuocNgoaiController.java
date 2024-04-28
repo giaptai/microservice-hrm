@@ -35,7 +35,7 @@ public class LamViecONuocNgoaiController {
     @GetMapping("/{id}/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -45,7 +45,7 @@ public class LamViecONuocNgoaiController {
 
     @GetMapping("/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAll(
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
@@ -86,7 +86,7 @@ public class LamViecONuocNgoaiController {
     @PatchMapping("/lam-viec-o-nuoc-ngoai/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
-            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet") XacNhan xacNhan,
             @RequestBody List<ResLamViecONuocNgoai> res
     ) {
         boolean ls = lamViecONuocNgoaiService.xacNhan(xacNhan, res);
@@ -97,7 +97,7 @@ public class LamViecONuocNgoaiController {
     @GetMapping("/ca-nhan/lam-viec-o-nuoc-ngoai")
     public ResponseEntity<List<ResLamViecONuocNgoai>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {

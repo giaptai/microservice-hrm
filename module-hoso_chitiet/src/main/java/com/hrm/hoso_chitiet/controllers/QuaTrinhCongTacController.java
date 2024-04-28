@@ -34,7 +34,7 @@ public class QuaTrinhCongTacController {
 
     @GetMapping("/{id}/qua-trinh-cong-tac")
     public ResponseEntity<List<ResQuaTrinhCongTac>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
-                                                                   @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+                                                                   @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
                                                                    @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                    @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                    @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -44,7 +44,7 @@ public class QuaTrinhCongTacController {
 
     @GetMapping("/qua-trinh-cong-tac")
     public ResponseEntity<List<ResQuaTrinhCongTac>> getAll(
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -84,7 +84,7 @@ public class QuaTrinhCongTacController {
     @PatchMapping("/qua-trinh-cong-tac/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
-            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet") XacNhan xacNhan,
             @RequestBody List<ResQuaTrinhCongTac> res
     ) {
         boolean ls = quaTrinhCongTacService.xacNhan(xacNhan, res);
@@ -94,7 +94,7 @@ public class QuaTrinhCongTacController {
     //EMPLOYEE
     @GetMapping("/ca-nhan/qua-trinh-cong-tac")
     public ResponseEntity<List<ResQuaTrinhCongTac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
-                                                                 @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+                                                                 @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
                                                                  @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {

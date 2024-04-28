@@ -35,7 +35,7 @@ public class KyLuatController {
     @GetMapping("/{id}/ky-luat")
     public ResponseEntity<List<ResKyLuat>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
@@ -45,7 +45,7 @@ public class KyLuatController {
 
     @GetMapping("/ky-luat")
     public ResponseEntity<List<ResKyLuat>> getAll(
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
@@ -86,7 +86,7 @@ public class KyLuatController {
     @PatchMapping("/ky-luat/phe-duyet")
     public ResponseEntity<Boolean> approve(
             @RequestHeader(name = "role", required = false) String role,
-            @RequestParam(name = "xacNhan") XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet") XacNhan xacNhan,
             @RequestBody List<ResKyLuat> res
     ) {
         boolean ls = kyLuatService.xacNhan(xacNhan, res);
@@ -97,7 +97,7 @@ public class KyLuatController {
     @GetMapping("/ca-nhan/ky-luat")
     public ResponseEntity<List<ResKyLuat>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
-            @RequestParam(name = "xacNhan", required = false) XacNhan xacNhan,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
