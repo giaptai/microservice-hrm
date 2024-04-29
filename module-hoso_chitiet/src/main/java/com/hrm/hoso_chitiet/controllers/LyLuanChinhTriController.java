@@ -1,8 +1,8 @@
 package com.hrm.hoso_chitiet.controllers;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperLyLuanChinhTri;
 import com.hrm.hoso_chitiet.dto.request.ReqLyLuanChinhTri;
 import com.hrm.hoso_chitiet.dto.response.ResLyLuanChinhTri;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -30,38 +30,37 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LyLuanChinhTriController {
     private final IHoSoChiTietServices.IHoLyLuanChinhTriServiceChiTiet lyLuanChinhTriService;
-    private final MapperLyLuanChinhTri mapper;
 
     @GetMapping("/{id}/ly-luan-chinh-tri")
-    public ResponseEntity<List<ResLyLuanChinhTri>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
-                                                                  @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
-                                                                  @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
-                                                                  @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSachTheoHoSoId(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLyLuanChinhTri).toList();
+    public ResponseEntity<ResTheDTO<ResLyLuanChinhTri>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
+                                                                       @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
+                                                                       @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+                                                                       @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                       @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        ResTheDTO<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ly-luan-chinh-tri")
-    public ResponseEntity<List<ResLyLuanChinhTri>> getAll(
+    public ResponseEntity<ResTheDTO<ResLyLuanChinhTri>> getAll(
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSach(xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLyLuanChinhTri).toList();
+        ResTheDTO<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ly-luan-chinh-tri/{id}")
     public ResponseEntity<ResLyLuanChinhTri> getById(@PathVariable(name = "id") int id) {
-        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.xemChiTiet(id));
+        ResLyLuanChinhTri ls = lyLuanChinhTriService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ly-luan-chinh-tri/{id}")
     @Transactional
     public ResponseEntity<ResLyLuanChinhTri> add(@PathVariable(name = "id") UUID id, @RequestBody ReqLyLuanChinhTri cu) {
-        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.them(id, cu));
+        ResLyLuanChinhTri ls = lyLuanChinhTriService.them(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -69,7 +68,7 @@ public class LyLuanChinhTriController {
     public ResponseEntity<ResLyLuanChinhTri> edit(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqLyLuanChinhTri cu) {
-        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.sua(id, cu, role));
+        ResLyLuanChinhTri ls = lyLuanChinhTriService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
@@ -93,24 +92,26 @@ public class LyLuanChinhTriController {
 
     //EMPLOYEE
     @GetMapping("/ca-nhan/ly-luan-chinh-tri")
-    public ResponseEntity<List<ResLyLuanChinhTri>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
-                                                                @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
-                                                                @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
-                                                                @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                                @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSachCaNhan(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLyLuanChinhTri).toList();
+    public ResponseEntity<ResTheDTO<ResLyLuanChinhTri>> getAllCaNhan(
+            @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        ResTheDTO<ResLyLuanChinhTri> ls = lyLuanChinhTriService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ca-nhan/ly-luan-chinh-tri/{id}")
     public ResponseEntity<ResLyLuanChinhTri> getByIdCaNhan(@PathVariable(name = "id") int id) {
-        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.xemChiTiet(id));
+        ResLyLuanChinhTri ls = lyLuanChinhTriService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
+
     @PostMapping("/ca-nhan/ly-luan-chinh-tri")
     @Transactional
     public ResponseEntity<ResLyLuanChinhTri> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLyLuanChinhTri cu) {
-        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.themCaNhan(id, cu));
+        ResLyLuanChinhTri ls = lyLuanChinhTriService.themCaNhan(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -118,7 +119,7 @@ public class LyLuanChinhTriController {
     public ResponseEntity<ResLyLuanChinhTri> editCaNhan(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqLyLuanChinhTri cu) {
-        ResLyLuanChinhTri ls = mapper.mapToResLyLuanChinhTri(lyLuanChinhTriService.sua(id, cu, role));
+        ResLyLuanChinhTri ls = lyLuanChinhTriService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 

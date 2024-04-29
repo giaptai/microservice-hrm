@@ -1,8 +1,8 @@
 package com.hrm.hoso_chitiet.controllers;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.request.ReqPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.response.ResPhuCapKhac;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -30,38 +30,38 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PhuCapKhacController {
     private final IHoSoChiTietServices.IHoPhuCapKhacServiceChiTiet phuCapKhacService;
-    private final MapperPhuCapKhac mapper;
 
     @GetMapping("/{id}/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
-                                                              @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
-                                                              @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
-                                                              @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
-        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
-    }
-
-    @GetMapping("/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAll(
+    public ResponseEntity<ResTheDTO<ResPhuCapKhac>> getAllByHoSoId(
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
+        ResTheDTO<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @GetMapping("/phu-cap-khac")
+    public ResponseEntity<ResTheDTO<ResPhuCapKhac>> getAll(
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        ResTheDTO<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/phu-cap-khac/{id}")
     public ResponseEntity<ResPhuCapKhac> getById(@PathVariable(name = "id") int id) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.xemChiTiet(id));
+        ResPhuCapKhac ls = phuCapKhacService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/phu-cap-khac/{id}")
     @Transactional
     public ResponseEntity<ResPhuCapKhac> add(@PathVariable(name = "id") UUID id, @RequestBody ReqPhuCapKhac cu) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.them(id, cu));
+        ResPhuCapKhac ls = phuCapKhacService.them(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -69,7 +69,7 @@ public class PhuCapKhacController {
     public ResponseEntity<ResPhuCapKhac> edit(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu, role));
+        ResPhuCapKhac ls = phuCapKhacService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
@@ -93,25 +93,26 @@ public class PhuCapKhacController {
 
     //EMPLOYEE
     @GetMapping("/ca-nhan/phu-cap-khac")
-    public ResponseEntity<List<ResPhuCapKhac>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
-                                                            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
-                                                            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
-                                                            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResPhuCapKhac).toList();
+    public ResponseEntity<ResTheDTO<ResPhuCapKhac>> getAllCaNhan(
+            @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        ResTheDTO<ResPhuCapKhac> ls = phuCapKhacService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ca-nhan/phu-cap-khac/{id}")
     public ResponseEntity<ResPhuCapKhac> getByIdCaNhan(@PathVariable(name = "id") int id) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.xemChiTiet(id));
+        ResPhuCapKhac ls = phuCapKhacService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/phu-cap-khac")
     @Transactional
     public ResponseEntity<ResPhuCapKhac> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqPhuCapKhac cu) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.themCaNhan(id, cu));
+        ResPhuCapKhac ls = phuCapKhacService.themCaNhan(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -119,7 +120,7 @@ public class PhuCapKhacController {
     public ResponseEntity<ResPhuCapKhac> editCaNhan(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqPhuCapKhac cu) {
-        ResPhuCapKhac ls = mapper.mapToResPhuCapKhac(phuCapKhacService.sua(id, cu, role));
+        ResPhuCapKhac ls = phuCapKhacService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 

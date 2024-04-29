@@ -22,7 +22,7 @@ public interface KhenThuongRepository extends JpaRepository<KhenThuong, Integer>
     //EMPLOYEE
     //READ ALL
     @Query(value = "SELECT c FROM KhenThuong c WHERE c.hoSoId = ?1 AND (?2 is null OR c.xacNhan = ?2)")
-    List<KhenThuong> getAllByHoSo(UUID uuid, XacNhan xacNhan, Pageable pageable);
+    Page<KhenThuong> getAllByHoSo(UUID uuid, XacNhan xacNhan, Pageable pageable);
 
     @Query(value = "SELECT c FROM KhenThuong c WHERE (?1 is null OR c.xacNhan = ?1)")
     Page<KhenThuong> getAllByXacNhan(XacNhan xacNhan, Pageable pageable);

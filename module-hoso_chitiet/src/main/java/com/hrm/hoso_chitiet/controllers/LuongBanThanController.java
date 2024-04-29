@@ -1,8 +1,8 @@
 package com.hrm.hoso_chitiet.controllers;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperLuongBanThan;
 import com.hrm.hoso_chitiet.dto.request.ReqLuongBanThan;
 import com.hrm.hoso_chitiet.dto.response.ResLuongBanThan;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -30,40 +30,39 @@ import java.util.UUID;
 @RequiredArgsConstructor // create constructor if field set final or @not null
 public class LuongBanThanController {
     private final IHoSoChiTietServices.IHoLuongBanThanServiceChiTiet luongBanThanService;
-    private final MapperLuongBanThan mapper;
 
     @GetMapping("/{id}/luong-ban-than")
-    public ResponseEntity<List<ResLuongBanThan>> getAllByHoSoId(
+    public ResponseEntity<ResTheDTO<ResLuongBanThan>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachTheoHoSoId(id, xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
+        ResTheDTO<ResLuongBanThan> ls = luongBanThanService.xemDanhSachTheoHoSoId(id, xacNhan, byDate,pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/luong-ban-than")
-    public ResponseEntity<List<ResLuongBanThan>> getAll(
+    public ResponseEntity<ResTheDTO<ResLuongBanThan>> getAll(
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSach(xacNhan, byDate,pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
+        ResTheDTO<ResLuongBanThan> ls = luongBanThanService.xemDanhSach(xacNhan, byDate,pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/luong-ban-than/{id}")
     public ResponseEntity<ResLuongBanThan> getById(@PathVariable(name = "id") int id) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.xemChiTiet(id));
+        ResLuongBanThan ls = luongBanThanService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/luong-ban-than/{id}")
     @Transactional
     public ResponseEntity<ResLuongBanThan> add(@PathVariable(name = "id") UUID id, @RequestBody ReqLuongBanThan cu) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.them(id, cu));
+        ResLuongBanThan ls = luongBanThanService.them(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -71,7 +70,7 @@ public class LuongBanThanController {
     public ResponseEntity<ResLuongBanThan> edit(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu, role));
+        ResLuongBanThan ls = luongBanThanService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
@@ -94,25 +93,25 @@ public class LuongBanThanController {
     }
     //EMPLOYEE
     @GetMapping("/ca-nhan/luong-ban-than")
-    public ResponseEntity<List<ResLuongBanThan>> getAllCaNhan(
+    public ResponseEntity<ResTheDTO<ResLuongBanThan>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLuongBanThan> ls = luongBanThanService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResLuongBanThan).toList();
+        ResTheDTO<ResLuongBanThan> ls = luongBanThanService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ca-nhan/luong-ban-than/{id}")
     public ResponseEntity<ResLuongBanThan> getByIdCaNhan(@PathVariable(name = "id") int id) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.xemChiTiet(id));
+        ResLuongBanThan ls = luongBanThanService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
     @PostMapping("/ca-nhan/luong-ban-than")
     @Transactional
     public ResponseEntity<ResLuongBanThan> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLuongBanThan cu) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.themCaNhan(id, cu));
+        ResLuongBanThan ls = luongBanThanService.themCaNhan(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -120,7 +119,7 @@ public class LuongBanThanController {
     public ResponseEntity<ResLuongBanThan> editCaNhan(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqLuongBanThan cu) {
-        ResLuongBanThan ls = mapper.mapToResLuongBanThan(luongBanThanService.sua(id, cu, role));
+        ResLuongBanThan ls = luongBanThanService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 

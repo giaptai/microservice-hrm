@@ -1,10 +1,23 @@
 package hrm.module.cauhinh.services;
 
+import hrm.module.cauhinh.dto.mapper.MapperHeSoLuongCongChuc;
+import hrm.module.cauhinh.dto.mapper.MapperHeSoLuongVienChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNgachCongChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNgachVienChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNhomCongChuc;
+import hrm.module.cauhinh.dto.mapper.MapperNhomVienChuc;
 import hrm.module.cauhinh.dto.request.ReqHeSoLuong;
 import hrm.module.cauhinh.dto.request.ReqLoai;
 import hrm.module.cauhinh.dto.request.ReqNgach;
 import hrm.module.cauhinh.dto.request.ReqNhom;
 
+import hrm.module.cauhinh.dto.response.ResHeSoLuongCongChuc;
+import hrm.module.cauhinh.dto.response.ResHeSoLuongVienChuc;
+import hrm.module.cauhinh.dto.response.ResNgachCongChuc;
+import hrm.module.cauhinh.dto.response.ResNgachVienChuc;
+import hrm.module.cauhinh.dto.response.ResNhomCongChuc;
+import hrm.module.cauhinh.dto.response.ResNhomVienChuc;
+import hrm.module.cauhinh.dto.response.ResTheDTO;
 import hrm.module.cauhinh.models.BacLuong;
 import hrm.module.cauhinh.models.HeSoLuongCongChuc;
 import hrm.module.cauhinh.models.HeSoLuongVienChuc;
@@ -30,6 +43,7 @@ import hrm.module.cauhinh.response.ResEnum;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -49,18 +63,23 @@ public class LoaiNhomHeSoNgachService {
     private final HeSoLuongVienChucRepository heSoLuongVienChucRepository;
     private final NgachCongChucRepository ngachCongChucRepository;
     private final NgachVienChucRepository ngachVienChucRepository;
+    //mapper
+    final MapperNhomCongChuc mapperNhomCongChuc;
+    final MapperNhomVienChuc mapperNhomVienChuc;
+    final MapperNgachCongChuc mapperNgachCongChuc;
+    final MapperNgachVienChuc mapperNgachVienChuc;
+    final MapperHeSoLuongCongChuc mapperHeSoLuongCongChuc;
+    final MapperHeSoLuongVienChuc mapperHeSoLuongVienChuc;
 
     @Service
     public class LoaiCongChucService implements ILoaiNhomHeSoNgachService.ILoaiCongChucService {
 
         @Override
-        public List<LoaiCongChuc> xemLoaiCongChuc() {
-            return loaiCongChucRepository.findAll();
-        }
-
-        @Override
-        public List<LoaiCongChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return loaiCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<LoaiCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<LoaiCongChuc> res = loaiCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = res.getTotalElements();
+            int totalPage = res.getTotalPages();
+            return new ResTheDTO<>(res.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -111,15 +130,12 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class LoaiVienChucService implements ILoaiNhomHeSoNgachService.ILoaiVienChucService {
-
         @Override
-        public List<LoaiVienChuc> xemLoaiVienChuc() {
-            return loaiVienChucRepository.findAll();
-        }
-
-        @Override
-        public List<LoaiVienChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return loaiVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<LoaiVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<LoaiVienChuc> res = loaiVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = res.getTotalElements();
+            int totalPage = res.getTotalPages();
+            return new ResTheDTO<>(res.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -170,15 +186,13 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class NhomCongChucService implements ILoaiNhomHeSoNgachService.INhomCongChucService {
-
         @Override
-        public List<NhomCongChuc> xemNhomCongChuc() {
-            return nhomCongChucRepository.findAll();
-        }
-
-        @Override
-        public List<NhomCongChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return nhomCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<ResNhomCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<NhomCongChuc> page = nhomCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResNhomCongChuc> res = page.getContent().stream().map(mapperNhomCongChuc::mapToResNhomCongChuc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override
@@ -231,15 +245,13 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class NhomVienChucService implements ILoaiNhomHeSoNgachService.INhomVienChucService {
-
         @Override
-        public List<NhomVienChuc> xemNhomVienChuc() {
-            return nhomVienChucRepository.findAll();
-        }
-
-        @Override
-        public List<NhomVienChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return nhomVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<ResNhomVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<NhomVienChuc> page = nhomVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResNhomVienChuc> res = page.getContent().stream().map(mapperNhomVienChuc::mapToResNhomVienChuc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override
@@ -292,15 +304,13 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class HeSoLuongCongChucService implements ILoaiNhomHeSoNgachService.IHeSoLuongCongChucService {
-
         @Override
-        public List<HeSoLuongCongChuc> xemHeSoLuongCongChuc() {
-            return heSoLuongCongChucRepository.findAll();
-        }
-
-        @Override
-        public List<HeSoLuongCongChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return heSoLuongCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<ResHeSoLuongCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<HeSoLuongCongChuc> page = heSoLuongCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResHeSoLuongCongChuc> res = page.getContent().stream().map(mapperHeSoLuongCongChuc::mapToResHeSoLuongCongChuc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override
@@ -352,15 +362,13 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class HeSoLuongVienChucService implements ILoaiNhomHeSoNgachService.IHeSoLuongVienChucService {
-
         @Override
-        public List<HeSoLuongVienChuc> xemHeSoLuongVienChuc() {
-            return heSoLuongVienChucRepository.findAll();
-        }
-
-        @Override
-        public List<HeSoLuongVienChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return heSoLuongVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<ResHeSoLuongVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<HeSoLuongVienChuc> page = heSoLuongVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResHeSoLuongVienChuc> res = page.getContent().stream().map(mapperHeSoLuongVienChuc::mapToResHeSoLuongVienChuc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override
@@ -412,15 +420,13 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class NgachCongChucService implements ILoaiNhomHeSoNgachService.INgachCongChucService {
-
         @Override
-        public List<NgachCongChuc> xemNgachCongChuc() {
-            return ngachCongChucRepository.findAll();
-        }
-
-        @Override
-        public List<NgachCongChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return ngachCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<ResNgachCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<NgachCongChuc> page = ngachCongChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResNgachCongChuc> res = page.getContent().stream().map(mapperNgachCongChuc::mapToResNgachCongChuc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override
@@ -472,15 +478,13 @@ public class LoaiNhomHeSoNgachService {
 
     @Service
     public class NgachVienChucService implements ILoaiNhomHeSoNgachService.INgachVienChucService {
-
         @Override
-        public List<NgachVienChuc> xemNgachVienChuc() {
-            return ngachVienChucRepository.findAll();
-        }
-
-        @Override
-        public List<NgachVienChuc> xemDanhSach(int pageNumber, int pageSize) {
-            return ngachVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize)).toList();
+        public ResTheDTO<ResNgachVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<NgachVienChuc> page = ngachVienChucRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResNgachVienChuc> res = page.getContent().stream().map(mapperNgachVienChuc::mapToResNgachVienChuc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override

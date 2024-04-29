@@ -18,7 +18,7 @@ import java.util.UUID;
 @Repository
 public interface LamViecONuocNgoaiRepository extends JpaRepository<LamViecONuocNgoai, Integer> {
     @Query(value = "SELECT c FROM LamViecONuocNgoai c WHERE c.hoSoId = ?1 AND (?2 is null OR c.xacNhan = ?2)")
-    List<LamViecONuocNgoai> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
+    Page<LamViecONuocNgoai> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
 
     @Query(value = "SELECT c FROM LamViecONuocNgoai c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LamViecONuocNgoai> findByIdAndHoSo(int id, UUID id1);
