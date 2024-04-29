@@ -1,13 +1,17 @@
 package hrm.module.cauhinh.services;
 
-import org.springframework.data.domain.Page;
+import hrm.module.cauhinh.dto.response.ResTheDTO;
+import hrm.module.cauhinh.dto.response.ResViTriViecLam;
+
 import java.util.List;
 
 public interface IUtilitiesService<T, R> {
-    default List<T> xemDanhSach(int pageNumber, int pageSize) {
+    default ResTheDTO<T> xemDanhSach(int pageNumber, int pageSize) {
         return null;
     }
-
+    default ResTheDTO<ResViTriViecLam> xemDsViTriViecLam(int pageNumber, int pageSize) {
+        return null;
+    }
     List<T> xemDS();
 
     T xemTheoId(int id);

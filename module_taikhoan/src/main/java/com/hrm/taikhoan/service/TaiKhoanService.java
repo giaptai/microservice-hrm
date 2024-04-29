@@ -1,14 +1,11 @@
 package com.hrm.taikhoan.service;
 
-import com.hrm.taikhoan.client.auth_token.TokenClient;
-import com.hrm.taikhoan.client.ho_so.HoSoClient;
-
 import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqHoSo;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
-import com.hrm.taikhoan.dto.resopnse.ResAuth;
+import com.hrm.taikhoan.dto.resopnse.ResTheDTO;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
 
@@ -21,7 +18,6 @@ import com.hrm.taikhoan.models.TaiKhoan;
 import com.hrm.taikhoan.repository.TaiKhoanRepository;
 import com.hrm.taikhoan.response.ResEnum;
 
-import jakarta.ws.rs.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +26,7 @@ import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -57,12 +54,16 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     /* ADMIN - ADMIN - ADMIN*/
     @Override
-    public List<ResTaiKhoan> xemDanhSachTaiKhoan(String byDate, String username, RoleTaiKhoan role, int pageNumber, int pageSize) {
+    public ResTheDTO xemDanhSachTaiKhoan(String byDate, String username, RoleTaiKhoan role, int pageNumber, int pageSize) {
         try {
-            List<TaiKhoan> taiKhoans;
+            Page<TaiKhoan> taiKhoans = null;
             Sort sort = Sort.by(Sort.Direction.DESC, byDate);
             Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-            taiKhoans = taiKhoanRepository.findAll(pageable).stream().toList();
+            long totalRecord;
+            int totalPage;
+            if (username == null && role == null) {
+                taiKhoans = taiKhoanRepository.findAll(pageable);
+            }
             if (username != null && role == null) {
                 taiKhoans = xemByUsername(username, pageable);
             }
@@ -72,13 +73,16 @@ public class TaiKhoanService implements ITaiKhoanService {
             if (username != null && role != null) {
                 taiKhoans = taiKhoanRepository.findAllByRoleTaiKhoanAndUsername(role, username.toLowerCase(), pageable);
             }
-            return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
+            totalRecord = taiKhoans.getTotalElements();
+            totalPage = taiKhoans.getTotalPages();
+            List<ResTaiKhoan> resTaiKhoans = taiKhoans.getContent().stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
+            return new ResTheDTO(resTaiKhoans, totalRecord, totalPage);
         } catch (RuntimeException e) {
             throw new RuntimeException(e.getCause());
         }
     }
 
-    private List<TaiKhoan> xemByUsername(String number, Pageable pageable) {
+    private Page<TaiKhoan> xemByUsername(String number, Pageable pageable) {
         try {
             return taiKhoanRepository.findByUsernameContaining(number, pageable);
         } catch (RuntimeException e) {
@@ -86,20 +90,20 @@ public class TaiKhoanService implements ITaiKhoanService {
         }
     }
 
-    @Override
-    public List<ResTaiKhoan> xemTheoUsername(String number, int pageNumber, int pageSize) {
-        try {
-            List<TaiKhoan> taiKhoans = taiKhoanRepository.findByUsernameContaining(number, PageRequest.of(pageNumber, pageSize));
-            return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e.getCause());
-        }
-    }
+//    @Override
+//    public Page<ResTaiKhoan> xemTheoUsername(String number, int pageNumber, int pageSize) {
+//        try {
+//            Page<TaiKhoan> taiKhoans = taiKhoanRepository.findByUsernameContaining(number, PageRequest.of(pageNumber, pageSize));
+//            return taiKhoans.stream().map(mapperTaiKhoan::mapToResTaiKhoan).toList();
+//        } catch (RuntimeException e) {
+//            throw new RuntimeException(e.getCause());
+//        }
+//    }
 
     @Override
     public ResTaiKhoan xemTheoId(int id) {
         try {
-            TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
+            TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
             return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
@@ -174,7 +178,7 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     @Override
     public boolean doiMatKhauTaiKhoanCaNhan(int id, String matkhau) {
-        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
+        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
         if (!ITaiKhoanService.checkMatKhau(matkhau)) {
             throw new InputMismatchException("Sai mật khẩu");
         }
@@ -186,7 +190,7 @@ public class TaiKhoanService implements ITaiKhoanService {
 
     @Override
     public boolean doiEmailTaiKhoanCaNhan(int id, String email) {
-        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(()->new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
+        TaiKhoan taiKhoan = taiKhoanRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY_TAI_KHOAN.getStatusCode()));
         taiKhoan.setEmail(email);
         taiKhoan.setUpdateAt();
         taiKhoanRepository.save(taiKhoan);

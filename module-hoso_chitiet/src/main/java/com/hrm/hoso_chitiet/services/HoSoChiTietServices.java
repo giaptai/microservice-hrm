@@ -2,6 +2,19 @@ package com.hrm.hoso_chitiet.services;
 
 import com.hrm.hoso_chitiet.client.ho_so.HoSoClient;
 import com.hrm.hoso_chitiet.client.ho_so.ResHoSoTomTatClient;
+import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
+import com.hrm.hoso_chitiet.dto.mapper.MapperKienThucAnNinhQuocPhong;
+import com.hrm.hoso_chitiet.dto.mapper.MapperKyLuat;
+import com.hrm.hoso_chitiet.dto.mapper.MapperLamViecChoCheDoCu;
+import com.hrm.hoso_chitiet.dto.mapper.MapperLamViecONuocNgoai;
+import com.hrm.hoso_chitiet.dto.mapper.MapperLuongBanThan;
+import com.hrm.hoso_chitiet.dto.mapper.MapperLyLuanChinhTri;
+import com.hrm.hoso_chitiet.dto.mapper.MapperNghiepVuChuyenNganh;
+import com.hrm.hoso_chitiet.dto.mapper.MapperNgoaiNgu;
+import com.hrm.hoso_chitiet.dto.mapper.MapperPhuCapKhac;
+import com.hrm.hoso_chitiet.dto.mapper.MapperQuaTrinhCongTac;
+import com.hrm.hoso_chitiet.dto.mapper.MapperQuanHeGiaDinh;
+import com.hrm.hoso_chitiet.dto.mapper.MapperTinHoc;
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKienThucAnNinhQuocPhong;
@@ -27,6 +40,7 @@ import com.hrm.hoso_chitiet.dto.response.ResNgoaiNgu;
 import com.hrm.hoso_chitiet.dto.response.ResPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
@@ -59,6 +73,7 @@ import com.hrm.hoso_chitiet.response.ResEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -90,6 +105,21 @@ public class HoSoChiTietServices {
     final TinHocRepository tinHocRepository;
     //clients
     final HoSoClient hoSoClient;
+    //mapper
+    private final MapperKhenThuong mapperKhenThuong;
+    private final MapperKienThucAnNinhQuocPhong mapperKienThucAnNinhQuocPhong;
+    private final MapperKyLuat mapperKyLuat;
+    private final MapperLamViecChoCheDoCu mapperLamViecChoCheDoCu;
+    private final MapperLamViecONuocNgoai mapperLamViecONuocNgoai;
+    private final MapperLuongBanThan mapperLuongBanThan;
+    private final MapperLyLuanChinhTri mapperLyLuanChinhTri;
+    private final MapperNghiepVuChuyenNganh mapperNghiepVuChuyenNganh;
+    private final MapperNgoaiNgu mapperNgoaiNgu;
+    private final MapperPhuCapKhac mapperPhuCapKhac;
+    private final MapperQuanHeGiaDinh mapperQuanHeGiaDinh;
+    private final MapperQuaTrinhCongTac mapperQuaTrinhCongTac;
+    private final MapperTinHoc mapperTinHoc;
+
 
 //    public ResHoSoChiTiet getAllByHoSoId(UUID id) {
 //        List<LamViecChoCheDoCu> cheDoCus = lamViecChoCheDoCuRepository.getAllByHoSo(id);
@@ -115,21 +145,29 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecChoCheDoCuService implements IHoSoChiTietServices.ILamViecChoCheDoCuServiceChiTiet {
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLamViecChoCheDoCu> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lamViecChoCheDoCuRepository.findAll(pageable).getContent();
+            Page<LamViecChoCheDoCu> page = lamViecChoCheDoCuRepository.findAll(pageable);
+            List<ResLamViecChoCheDoCu> list = page.getContent().stream().map(mapperLamViecChoCheDoCu::maptoResLamViecChoCheDoCu).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLamViecChoCheDoCu> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lamViecChoCheDoCuRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<LamViecChoCheDoCu> page = lamViecChoCheDoCuRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResLamViecChoCheDoCu> list = page.getContent().stream().map(mapperLamViecChoCheDoCu::maptoResLamViecChoCheDoCu).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public LamViecChoCheDoCu xemChiTiet(int id) {
+        public ResLamViecChoCheDoCu xemChiTiet(int id) {
             try {
-                return lamViecChoCheDoCuRepository.findById(id).orElse(null);
+                return lamViecChoCheDoCuRepository.findById(id).map(mapperLamViecChoCheDoCu::maptoResLamViecChoCheDoCu).orElse(null);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -137,9 +175,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LamViecChoCheDoCu them(UUID id, ReqLamViecChoCheDoCu req) {
+        public ResLamViecChoCheDoCu them(UUID id, ReqLamViecChoCheDoCu req) {
             try {
-                return lamViecChoCheDoCuRepository.save(new LamViecChoCheDoCu(req.batDau(), req.ketThuc(), req.chucDanhDonViDiaDiem(), XacNhan.CHO_PHE_DUYET, id));
+                LamViecChoCheDoCu cu = lamViecChoCheDoCuRepository.save(new LamViecChoCheDoCu(req.batDau(), req.ketThuc(), req.chucDanhDonViDiaDiem(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperLamViecChoCheDoCu.maptoResLamViecChoCheDoCu(cu);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -147,7 +186,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LamViecChoCheDoCu sua(int id, ReqLamViecChoCheDoCu req, String role) {
+        public ResLamViecChoCheDoCu sua(int id, ReqLamViecChoCheDoCu req, String role) {
             try {
                 return lamViecChoCheDoCuRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -157,9 +196,9 @@ public class HoSoChiTietServices {
                         c.setKetThuc(req.ketThuc() != null ? req.ketThuc() : c.getKetThuc());
                         c.setChucDanhDonViDiaDiem(req.chucDanhDonViDiaDiem() != null ? req.chucDanhDonViDiaDiem() : c.getChucDanhDonViDiaDiem());
                         c.setUpdateAt();
-                        return lamViecChoCheDoCuRepository.save(c);
-                    } else throw new
-                            ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
+                        LamViecChoCheDoCu cu = lamViecChoCheDoCuRepository.save(c);
+                        return mapperLamViecChoCheDoCu.maptoResLamViecChoCheDoCu(cu);
+                    } else throw new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
@@ -184,14 +223,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLamViecChoCheDoCu> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public LamViecChoCheDoCu themCaNhan(int taiKhoanId, ReqLamViecChoCheDoCu cu) {
+        public ResLamViecChoCheDoCu themCaNhan(int taiKhoanId, ReqLamViecChoCheDoCu cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -214,21 +253,30 @@ public class HoSoChiTietServices {
     @Service
     public class KhenThuongService implements IHoSoChiTietServices.IHoKhenThuongServiceChiTiet {
         @Override
-        public List<KhenThuong> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKhenThuong> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return khenThuongRepository.getAllByXacNhan(xacNhan, pageable).getContent();
+            Page<KhenThuong> page = khenThuongRepository.findAll(pageable);
+            List<ResKhenThuong> list = page.getContent().stream().map(mapperKhenThuong::maptoResKhenThuong).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKhenThuong> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return khenThuongRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<KhenThuong> page = khenThuongRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResKhenThuong> list = page.getContent().stream().map(mapperKhenThuong::maptoResKhenThuong).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public KhenThuong xemChiTiet(int id) {
+        public ResKhenThuong xemChiTiet(int id) {
             try {
-                return khenThuongRepository.findById(id).orElse(null);
+                KhenThuong thuong = khenThuongRepository.findById(id).orElse(null);
+                return mapperKhenThuong.maptoResKhenThuong(thuong);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -236,9 +284,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public KhenThuong them(UUID id, ReqKhenThuong req) {
+        public ResKhenThuong them(UUID id, ReqKhenThuong req) {
             try {
-                return khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuongId(), req.lyDo(), XacNhan.CHO_PHE_DUYET, id));
+                KhenThuong thuong = khenThuongRepository.save(new KhenThuong(req.nam(), req.xepLoaiChuyenMon(), req.xepLoaiThiDua(), req.hinhThucKhenThuongId(), req.lyDo(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperKhenThuong.maptoResKhenThuong(thuong);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -246,7 +295,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public KhenThuong sua(int id, ReqKhenThuong req, String role) {
+        public ResKhenThuong sua(int id, ReqKhenThuong req, String role) {
             try {
                 return khenThuongRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -258,7 +307,8 @@ public class HoSoChiTietServices {
                         c.setHinhThucKhenThuongId(req.hinhThucKhenThuongId());
                         c.setLyDo(req.lyDo());
                         c.setUpdateAt();
-                        return khenThuongRepository.save(c);
+                        KhenThuong thuong = khenThuongRepository.save(c);
+                        return mapperKhenThuong.maptoResKhenThuong(thuong);
                     } else throw new ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
             } catch (RuntimeException e) {
@@ -286,14 +336,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KhenThuong> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKhenThuong> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public KhenThuong themCaNhan(int taiKhoanId, ReqKhenThuong cu) {
+        public ResKhenThuong themCaNhan(int taiKhoanId, ReqKhenThuong cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -316,21 +366,30 @@ public class HoSoChiTietServices {
     @Service
     public class KienThucAnNinhQuocPhongService implements IHoSoChiTietServices.IHoKienThucAnNinhQuocPhongServiceChiTiet {
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKienThucAnNinhQuocPhong> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return kienThucAnNinhQuocPhongRepository.findAll(pageable).getContent();
+            Page<KienThucAnNinhQuocPhong> page = kienThucAnNinhQuocPhongRepository.findAll(pageable);
+            List<ResKienThucAnNinhQuocPhong> list = page.getContent().stream().map(mapperKienThucAnNinhQuocPhong::mapToResKienThucAnNinhQuocPhong).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKienThucAnNinhQuocPhong> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<KienThucAnNinhQuocPhong> page = kienThucAnNinhQuocPhongRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResKienThucAnNinhQuocPhong> list = page.getContent().stream().map(mapperKienThucAnNinhQuocPhong::mapToResKienThucAnNinhQuocPhong).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public KienThucAnNinhQuocPhong xemChiTiet(int id) {
+        public ResKienThucAnNinhQuocPhong xemChiTiet(int id) {
             try {
-                return kienThucAnNinhQuocPhongRepository.findById(id).orElse(null);
+                KienThucAnNinhQuocPhong phong = kienThucAnNinhQuocPhongRepository.findById(id).orElse(null);
+                return mapperKienThucAnNinhQuocPhong.mapToResKienThucAnNinhQuocPhong(phong);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -338,11 +397,12 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public KienThucAnNinhQuocPhong them(UUID id, ReqKienThucAnNinhQuocPhong req) {
+        public ResKienThucAnNinhQuocPhong them(UUID id, ReqKienThucAnNinhQuocPhong req) {
             try {
-                return kienThucAnNinhQuocPhongRepository.save(
+                KienThucAnNinhQuocPhong phong = kienThucAnNinhQuocPhongRepository.save(
                         new KienThucAnNinhQuocPhong(req.batDau(), req.ketThuc(), req.tenCoSoDaoTao(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id)
                 );
+                return mapperKienThucAnNinhQuocPhong.mapToResKienThucAnNinhQuocPhong(phong);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -350,7 +410,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public KienThucAnNinhQuocPhong sua(int id, ReqKienThucAnNinhQuocPhong req, String role) {
+        public ResKienThucAnNinhQuocPhong sua(int id, ReqKienThucAnNinhQuocPhong req, String role) {
             try {
                 return kienThucAnNinhQuocPhongRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -361,7 +421,8 @@ public class HoSoChiTietServices {
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTao());
                         c.setChungChiDuocCap(req.chungChiDuocCap());
                         c.setUpdateAt();
-                        return kienThucAnNinhQuocPhongRepository.save(c);
+                        KienThucAnNinhQuocPhong phong = kienThucAnNinhQuocPhongRepository.save(c);
+                        return mapperKienThucAnNinhQuocPhong.mapToResKienThucAnNinhQuocPhong(phong);
                     } else throw new
                             ResponseStatusException(ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
                 }).orElse(null);
@@ -391,14 +452,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKienThucAnNinhQuocPhong> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public KienThucAnNinhQuocPhong themCaNhan(int taiKhoanId, ReqKienThucAnNinhQuocPhong cu) {
+        public ResKienThucAnNinhQuocPhong themCaNhan(int taiKhoanId, ReqKienThucAnNinhQuocPhong cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -421,21 +482,30 @@ public class HoSoChiTietServices {
     @Service
     public class KyLuatService implements IHoSoChiTietServices.IHoKyLuatServiceChiTiet {
         @Override
-        public List<KyLuat> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKyLuat> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return kyLuatRepository.findAll(pageable).getContent();
+            Page<KyLuat> page = kyLuatRepository.findAll(pageable);
+            List<ResKyLuat> list = page.getContent().stream().map(mapperKyLuat::mapToResKyLuat).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<KyLuat> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKyLuat> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return kyLuatRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<KyLuat> page = kyLuatRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResKyLuat> list = page.getContent().stream().map(mapperKyLuat::mapToResKyLuat).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public KyLuat xemChiTiet(int id) {
+        public ResKyLuat xemChiTiet(int id) {
             try {
-                return kyLuatRepository.findById(id).orElse(null);
+                KyLuat luat = kyLuatRepository.findById(id).orElse(null);
+                return mapperKyLuat.mapToResKyLuat(luat);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -443,9 +513,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public KyLuat them(UUID id, ReqKyLuat req) {
+        public ResKyLuat them(UUID id, ReqKyLuat req) {
             try {
-                return kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id));
+                KyLuat luat = kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperKyLuat.mapToResKyLuat(luat);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -453,7 +524,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public KyLuat sua(int id, ReqKyLuat req, String role) {
+        public ResKyLuat sua(int id, ReqKyLuat req, String role) {
             try {
                 return kyLuatRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -465,7 +536,8 @@ public class HoSoChiTietServices {
                         c.setHanhViViPhamChinh(req.hanhViViPhamChinh());
                         c.setCoQuanQuyetDinhId(req.coQuanQuyetDinhId());
                         c.setUpdateAt();
-                        return kyLuatRepository.save(c);
+                        KyLuat luat = kyLuatRepository.save(c);
+                        return mapperKyLuat.mapToResKyLuat(luat);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -495,14 +567,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<KyLuat> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResKyLuat> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public KyLuat themCaNhan(int taiKhoanId, ReqKyLuat cu) {
+        public ResKyLuat themCaNhan(int taiKhoanId, ReqKyLuat cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -525,21 +597,30 @@ public class HoSoChiTietServices {
     @Service
     public class LamViecONuocNgoaiServcie implements IHoSoChiTietServices.IHoLamViecONuocNgoaiServiceChiTiet {
         @Override
-        public List<LamViecONuocNgoai> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLamViecONuocNgoai> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lamViecONuocNgoaiRepository.findAll(pageable).getContent();
+            Page<LamViecONuocNgoai> page = lamViecONuocNgoaiRepository.findAll(pageable);
+            List<ResLamViecONuocNgoai> list = page.getContent().stream().map(mapperLamViecONuocNgoai::mapToResLamViecONuocNgoai).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLamViecONuocNgoai> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lamViecONuocNgoaiRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<LamViecONuocNgoai> page = lamViecONuocNgoaiRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResLamViecONuocNgoai> list = page.getContent().stream().map(mapperLamViecONuocNgoai::mapToResLamViecONuocNgoai).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public LamViecONuocNgoai xemChiTiet(int id) {
+        public ResLamViecONuocNgoai xemChiTiet(int id) {
             try {
-                return lamViecONuocNgoaiRepository.findById(id).orElse(null);
+                LamViecONuocNgoai ngoai = lamViecONuocNgoaiRepository.findById(id).orElse(null);
+                return mapperLamViecONuocNgoai.mapToResLamViecONuocNgoai(ngoai);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -547,11 +628,12 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LamViecONuocNgoai them(UUID id, ReqLamViecONuocNgoai req) {
+        public ResLamViecONuocNgoai them(UUID id, ReqLamViecONuocNgoai req) {
             try {
-                return lamViecONuocNgoaiRepository.save(
+                LamViecONuocNgoai ngoai = lamViecONuocNgoaiRepository.save(
                         new LamViecONuocNgoai(req.batDau(), req.ketThuc(), req.toChucDiaChiCongViec(), XacNhan.CHO_PHE_DUYET, id)
                 );
+                return mapperLamViecONuocNgoai.mapToResLamViecONuocNgoai(ngoai);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -559,7 +641,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LamViecONuocNgoai sua(int id, ReqLamViecONuocNgoai req, String role) {
+        public ResLamViecONuocNgoai sua(int id, ReqLamViecONuocNgoai req, String role) {
             try {
                 return lamViecONuocNgoaiRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -569,7 +651,8 @@ public class HoSoChiTietServices {
                         c.setKetThuc(req.ketThuc());
                         c.setToChucDiaChiCongViec(req.toChucDiaChiCongViec());
                         c.setUpdateAt();
-                        return lamViecONuocNgoaiRepository.save(c);
+                        LamViecONuocNgoai ngoai = lamViecONuocNgoaiRepository.save(c);
+                        return mapperLamViecONuocNgoai.mapToResLamViecONuocNgoai(ngoai);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -600,14 +683,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLamViecONuocNgoai> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public LamViecONuocNgoai themCaNhan(int taiKhoanId, ReqLamViecONuocNgoai cu) {
+        public ResLamViecONuocNgoai themCaNhan(int taiKhoanId, ReqLamViecONuocNgoai cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -630,21 +713,30 @@ public class HoSoChiTietServices {
     @Service
     public class LuongBanThanService implements IHoSoChiTietServices.IHoLuongBanThanServiceChiTiet {
         @Override
-        public List<LuongBanThan> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLuongBanThan> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return luongBanThanRepository.findAll(pageable).getContent();
+            Page<LuongBanThan> page = luongBanThanRepository.findAll(pageable);
+            List<ResLuongBanThan> list = page.getContent().stream().map(mapperLuongBanThan::mapToResLuongBanThan).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLuongBanThan> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return luongBanThanRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<LuongBanThan> page = luongBanThanRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResLuongBanThan> list = page.getContent().stream().map(mapperLuongBanThan::mapToResLuongBanThan).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public LuongBanThan xemChiTiet(int id) {
+        public ResLuongBanThan xemChiTiet(int id) {
             try {
-                return luongBanThanRepository.findById(id).orElse(null);
+                LuongBanThan than = luongBanThanRepository.findById(id).orElse(null);
+                return mapperLuongBanThan.mapToResLuongBanThan(than);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -652,11 +744,12 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LuongBanThan them(UUID id, ReqLuongBanThan req) {
+        public ResLuongBanThan them(UUID id, ReqLuongBanThan req) {
             try {
-                return luongBanThanRepository.save(
+                LuongBanThan than = luongBanThanRepository.save(
                         new LuongBanThan(req.batDau(), req.ketThuc(), req.maSo(), req.bacLuong(), req.heSoLuong(), req.tienLuongTheoViTri(), XacNhan.CHO_PHE_DUYET, id)
                 );
+                return mapperLuongBanThan.mapToResLuongBanThan(than);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -664,7 +757,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LuongBanThan sua(int id, ReqLuongBanThan req, String role) {
+        public ResLuongBanThan sua(int id, ReqLuongBanThan req, String role) {
             try {
                 return luongBanThanRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -677,7 +770,8 @@ public class HoSoChiTietServices {
                         c.setHeSoLuong(req.heSoLuong());
                         c.setTienLuongTheoViTri(req.tienLuongTheoViTri());
                         c.setUpdateAt();
-                        return luongBanThanRepository.save(c);
+                        LuongBanThan than = luongBanThanRepository.save(c);
+                        return mapperLuongBanThan.mapToResLuongBanThan(than);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -708,14 +802,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LuongBanThan> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLuongBanThan> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public LuongBanThan themCaNhan(int taiKhoanId, ReqLuongBanThan cu) {
+        public ResLuongBanThan themCaNhan(int taiKhoanId, ReqLuongBanThan cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -738,21 +832,30 @@ public class HoSoChiTietServices {
     @Service
     public class LyHoLuanChinhTriServiceChiTiet implements IHoSoChiTietServices.IHoLyLuanChinhTriServiceChiTiet {
         @Override
-        public List<LyLuanChinhTri> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLyLuanChinhTri> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lyLuanChinhTriRepository.findAll(pageable).getContent();
+            Page<LyLuanChinhTri> page = lyLuanChinhTriRepository.findAll(pageable);
+            List<ResLyLuanChinhTri> list = page.getContent().stream().map(mapperLyLuanChinhTri::mapToResLyLuanChinhTri).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLyLuanChinhTri> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return lyLuanChinhTriRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<LyLuanChinhTri> page = lyLuanChinhTriRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResLyLuanChinhTri> list = page.getContent().stream().map(mapperLyLuanChinhTri::mapToResLyLuanChinhTri).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public LyLuanChinhTri xemChiTiet(int id) {
+        public ResLyLuanChinhTri xemChiTiet(int id) {
             try {
-                return lyLuanChinhTriRepository.findById(id).orElse(null);
+                LyLuanChinhTri tri = lyLuanChinhTriRepository.findById(id).orElse(null);
+                return mapperLyLuanChinhTri.mapToResLyLuanChinhTri(tri);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -760,11 +863,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LyLuanChinhTri them(UUID id, ReqLyLuanChinhTri req) {
+        public ResLyLuanChinhTri them(UUID id, ReqLyLuanChinhTri req) {
             try {
-                LyLuanChinhTri tri = new LyLuanChinhTri(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.hinhThucDaoTao(), req.vanBangDuocCap(), XacNhan.CHO_PHE_DUYET, id);
-                tri.setXacNhan(XacNhan.CHO_PHE_DUYET);
-                return lyLuanChinhTriRepository.save(tri);
+                LyLuanChinhTri tri = lyLuanChinhTriRepository.save(new LyLuanChinhTri(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.hinhThucDaoTao(), req.vanBangDuocCap(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperLyLuanChinhTri.mapToResLyLuanChinhTri(tri);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -772,7 +874,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public LyLuanChinhTri sua(int id, ReqLyLuanChinhTri req, String role) {
+        public ResLyLuanChinhTri sua(int id, ReqLyLuanChinhTri req, String role) {
             try {
                 return lyLuanChinhTriRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -784,7 +886,8 @@ public class HoSoChiTietServices {
                         c.setHinhThucDaoTao(req.hinhThucDaoTao());
                         c.setVanBangDuocCap(req.vanBangDuocCap());
                         c.setUpdateAt();
-                        return lyLuanChinhTriRepository.save(c);
+                        LyLuanChinhTri tri = lyLuanChinhTriRepository.save(c);
+                        return mapperLyLuanChinhTri.mapToResLyLuanChinhTri(tri);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -815,14 +918,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<LyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResLyLuanChinhTri> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public LyLuanChinhTri themCaNhan(int taiKhoanId, ReqLyLuanChinhTri cu) {
+        public ResLyLuanChinhTri themCaNhan(int taiKhoanId, ReqLyLuanChinhTri cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -845,21 +948,30 @@ public class HoSoChiTietServices {
     @Service
     public class NghiepVuChuyenNganhService implements IHoSoChiTietServices.IHoNghiepVuChuyenNganhServiceChiTiet {
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResNghiepVuChuyenNganh> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return nghiepVuChuyenNganhRepository.findAll(pageable).getContent();
+            Page<NghiepVuChuyenNganh> page = nghiepVuChuyenNganhRepository.findAll(pageable);
+            List<ResNghiepVuChuyenNganh> list = page.getContent().stream().map(mapperNghiepVuChuyenNganh::mapToResNghiepVuChuyenNganh).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResNghiepVuChuyenNganh> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return nghiepVuChuyenNganhRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<NghiepVuChuyenNganh> page = nghiepVuChuyenNganhRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResNghiepVuChuyenNganh> list = page.getContent().stream().map(mapperNghiepVuChuyenNganh::mapToResNghiepVuChuyenNganh).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public NghiepVuChuyenNganh xemChiTiet(int id) {
+        public ResNghiepVuChuyenNganh xemChiTiet(int id) {
             try {
-                return nghiepVuChuyenNganhRepository.findById(id).orElse(null);
+                NghiepVuChuyenNganh nganh = nghiepVuChuyenNganhRepository.findById(id).orElse(null);
+                return mapperNghiepVuChuyenNganh.mapToResNghiepVuChuyenNganh(nganh);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -867,11 +979,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public NghiepVuChuyenNganh them(UUID id, ReqNghiepVuChuyenNganh req) {
+        public ResNghiepVuChuyenNganh them(UUID id, ReqNghiepVuChuyenNganh req) {
             try {
-                NghiepVuChuyenNganh vu = new NghiepVuChuyenNganh(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id);
-                vu.setXacNhan(XacNhan.CHO_PHE_DUYET);
-                return nghiepVuChuyenNganhRepository.save(vu);
+                NghiepVuChuyenNganh nganh = nghiepVuChuyenNganhRepository.save(new NghiepVuChuyenNganh(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperNghiepVuChuyenNganh.mapToResNghiepVuChuyenNganh(nganh);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -879,7 +990,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public NghiepVuChuyenNganh sua(int id, ReqNghiepVuChuyenNganh req, String role) {
+        public ResNghiepVuChuyenNganh sua(int id, ReqNghiepVuChuyenNganh req, String role) {
             try {
                 return nghiepVuChuyenNganhRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -890,7 +1001,8 @@ public class HoSoChiTietServices {
                         c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                         c.setChungChiDuocCap(req.chungChiDuocCap());
                         c.setUpdateAt();
-                        return nghiepVuChuyenNganhRepository.save(c);
+                        NghiepVuChuyenNganh nganh = nghiepVuChuyenNganhRepository.save(c);
+                        return mapperNghiepVuChuyenNganh.mapToResNghiepVuChuyenNganh(nganh);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -921,14 +1033,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResNghiepVuChuyenNganh> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public NghiepVuChuyenNganh themCaNhan(int taiKhoanId, ReqNghiepVuChuyenNganh cu) {
+        public ResNghiepVuChuyenNganh themCaNhan(int taiKhoanId, ReqNghiepVuChuyenNganh cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -951,21 +1063,30 @@ public class HoSoChiTietServices {
     @Service
     public class NgoaiNguService implements IHoSoChiTietServices.IHoNgoaiNguServiceChiTiet {
         @Override
-        public List<NgoaiNgu> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResNgoaiNgu> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return ngoaiNguRepository.findAll(pageable).getContent();
+            Page<NgoaiNgu> page = ngoaiNguRepository.findAll(pageable);
+            List<ResNgoaiNgu> list = page.getContent().stream().map(mapperNgoaiNgu::mapToResNgoaiNgu).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResNgoaiNgu> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return ngoaiNguRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<NgoaiNgu> page = ngoaiNguRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResNgoaiNgu> list = page.getContent().stream().map(mapperNgoaiNgu::mapToResNgoaiNgu).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public NgoaiNgu xemChiTiet(int id) {
+        public ResNgoaiNgu xemChiTiet(int id) {
             try {
-                return ngoaiNguRepository.findById(id).orElse(null);
+                NgoaiNgu ngu = ngoaiNguRepository.findById(id).orElse(null);
+                return mapperNgoaiNgu.mapToResNgoaiNgu(ngu);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -973,11 +1094,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public NgoaiNgu them(UUID id, ReqNgoaiNgu req) {
+        public ResNgoaiNgu them(UUID id, ReqNgoaiNgu req) {
             try {
-                NgoaiNgu ngu = new NgoaiNgu(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.tenNgoaiNgu(), req.chungChiDuocCap(), req.diemSo(), XacNhan.CHO_PHE_DUYET, id);
-                ngu.setXacNhan(XacNhan.CHO_PHE_DUYET);
-                return ngoaiNguRepository.save(ngu);
+                NgoaiNgu ngu = ngoaiNguRepository.save(new NgoaiNgu(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.tenNgoaiNgu(), req.chungChiDuocCap(), req.diemSo(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperNgoaiNgu.mapToResNgoaiNgu(ngu);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -985,7 +1105,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public NgoaiNgu sua(int id, ReqNgoaiNgu req, String role) {
+        public ResNgoaiNgu sua(int id, ReqNgoaiNgu req, String role) {
             try {
                 return ngoaiNguRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -998,7 +1118,8 @@ public class HoSoChiTietServices {
                         c.setChungChiDuocCap(req.chungChiDuocCap());
                         c.setDiemSo(req.diemSo());
                         c.setUpdateAt();
-                        return ngoaiNguRepository.save(c);
+                        NgoaiNgu ngu = ngoaiNguRepository.save(c);
+                        return mapperNgoaiNgu.mapToResNgoaiNgu(ngu);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -1029,14 +1150,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<NgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResNgoaiNgu> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public NgoaiNgu themCaNhan(int taiKhoanId, ReqNgoaiNgu cu) {
+        public ResNgoaiNgu themCaNhan(int taiKhoanId, ReqNgoaiNgu cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -1059,21 +1180,30 @@ public class HoSoChiTietServices {
     @Service
     public class PhuCapKhacService implements IHoSoChiTietServices.IHoPhuCapKhacServiceChiTiet {
         @Override
-        public List<PhuCapKhac> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResPhuCapKhac> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return phuCapKhacRepository.findAll(pageable).getContent();
+            Page<PhuCapKhac> page = phuCapKhacRepository.findAll(pageable);
+            List<ResPhuCapKhac> list = page.getContent().stream().map(mapperPhuCapKhac::mapToResPhuCapKhac).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResPhuCapKhac> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return phuCapKhacRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<PhuCapKhac> page = phuCapKhacRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResPhuCapKhac> list = page.getContent().stream().map(mapperPhuCapKhac::mapToResPhuCapKhac).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public PhuCapKhac xemChiTiet(int id) {
+        public ResPhuCapKhac xemChiTiet(int id) {
             try {
-                return phuCapKhacRepository.findById(id).orElse(null);
+                PhuCapKhac khac = phuCapKhacRepository.findById(id).orElse(null);
+                return mapperPhuCapKhac.mapToResPhuCapKhac(khac);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1081,13 +1211,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public PhuCapKhac them(UUID id, ReqPhuCapKhac req) {
-            return phuCapKhacRepository.save(new PhuCapKhac(
+        public ResPhuCapKhac them(UUID id, ReqPhuCapKhac req) {
+            PhuCapKhac khac = phuCapKhacRepository.save(new PhuCapKhac(
                     req.batDau(), req.ketThuc(), req.loaiPhuCapId(), req.phanTramHuongPhuCap(), req.heSoPhuCap(), req.hinhThucThuong(), req.giaTri(), XacNhan.CHO_PHE_DUYET, id));
+            return mapperPhuCapKhac.mapToResPhuCapKhac(khac);
         }
 
         @Override
-        public PhuCapKhac sua(int id, ReqPhuCapKhac req, String role) {
+        public ResPhuCapKhac sua(int id, ReqPhuCapKhac req, String role) {
             try {
                 return phuCapKhacRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -1101,7 +1232,8 @@ public class HoSoChiTietServices {
                         c.setHinhThucHuong(req.hinhThucThuong());
                         c.setGiaTri(req.giaTri());
                         c.setUpdateAt();
-                        return phuCapKhacRepository.save(c);
+                        PhuCapKhac khac = phuCapKhacRepository.save(c);
+                        return mapperPhuCapKhac.mapToResPhuCapKhac(khac);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -1132,14 +1264,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<PhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResPhuCapKhac> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public PhuCapKhac themCaNhan(int taiKhoanId, ReqPhuCapKhac cu) {
+        public ResPhuCapKhac themCaNhan(int taiKhoanId, ReqPhuCapKhac cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -1162,21 +1294,30 @@ public class HoSoChiTietServices {
     @Service
     public class QuanHeGiaDinhService implements IHoSoChiTietServices.IHoQuanHeGiaDinhServiceChiTiet {
         @Override
-        public List<QuanHeGiaDinh> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResQuanHeGiaDinh> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return quanHeGiaDinhRepository.findAll(pageable).getContent();
+            Page<QuanHeGiaDinh> page = quanHeGiaDinhRepository.findAll(pageable);
+            List<ResQuanHeGiaDinh> list = page.getContent().stream().map(mapperQuanHeGiaDinh::mapToResQuanHeGiaDinh).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResQuanHeGiaDinh> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return quanHeGiaDinhRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<QuanHeGiaDinh> page = quanHeGiaDinhRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResQuanHeGiaDinh> list = page.getContent().stream().map(mapperQuanHeGiaDinh::mapToResQuanHeGiaDinh).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public QuanHeGiaDinh xemChiTiet(int id) {
+        public ResQuanHeGiaDinh xemChiTiet(int id) {
             try {
-                return quanHeGiaDinhRepository.findById(id).orElse(null);
+                QuanHeGiaDinh dinh = quanHeGiaDinhRepository.findById(id).orElse(null);
+                return mapperQuanHeGiaDinh.mapToResQuanHeGiaDinh(dinh);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1184,10 +1325,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public QuanHeGiaDinh them(UUID id, ReqQuanHeGiaDinh req) {
+        public ResQuanHeGiaDinh them(UUID id, ReqQuanHeGiaDinh req) {
             try {
-                QuanHeGiaDinh dinh = new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), XacNhan.CHO_PHE_DUYET, id);
-                return quanHeGiaDinhRepository.save(dinh);
+                QuanHeGiaDinh dinh = quanHeGiaDinhRepository.save(new QuanHeGiaDinh(req.moiQuanHeId(), req.hoVaTen(), req.namSinh(), req.thongTinThanNhan(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperQuanHeGiaDinh.mapToResQuanHeGiaDinh(dinh);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1195,7 +1336,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public QuanHeGiaDinh sua(int id, ReqQuanHeGiaDinh req, String role) {
+        public ResQuanHeGiaDinh sua(int id, ReqQuanHeGiaDinh req, String role) {
             try {
                 return quanHeGiaDinhRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -1206,7 +1347,8 @@ public class HoSoChiTietServices {
                         c.setNamSinh(req.namSinh());
                         c.setThongTinThanNhan(req.thongTinThanNhan());
                         c.setUpdateAt();
-                        return quanHeGiaDinhRepository.save(c);
+                        QuanHeGiaDinh dinh = quanHeGiaDinhRepository.save(c);
+                        return mapperQuanHeGiaDinh.mapToResQuanHeGiaDinh(dinh);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -1237,14 +1379,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResQuanHeGiaDinh> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public QuanHeGiaDinh themCaNhan(int taiKhoanId, ReqQuanHeGiaDinh cu) {
+        public ResQuanHeGiaDinh themCaNhan(int taiKhoanId, ReqQuanHeGiaDinh cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -1267,21 +1409,30 @@ public class HoSoChiTietServices {
     @Service
     public class QuaTrinhCongTacService implements IHoSoChiTietServices.IHoQuaTrinhCongTacServiceChiTiet {
         @Override
-        public List<QuaTrinhCongTac> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResQuaTrinhCongTac> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return quaTrinhCongTacRepository.findAll(pageable).getContent();
+            Page<QuaTrinhCongTac> page = quaTrinhCongTacRepository.findAll(pageable);
+            List<ResQuaTrinhCongTac> list = page.getContent().stream().map(mapperQuaTrinhCongTac::mapToResQuaTrinhCongTac).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResQuaTrinhCongTac> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return quaTrinhCongTacRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<QuaTrinhCongTac> page = quaTrinhCongTacRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResQuaTrinhCongTac> list = page.getContent().stream().map(mapperQuaTrinhCongTac::mapToResQuaTrinhCongTac).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public QuaTrinhCongTac xemChiTiet(int id) {
+        public ResQuaTrinhCongTac xemChiTiet(int id) {
             try {
-                return quaTrinhCongTacRepository.findById(id).orElse(null);
+                QuaTrinhCongTac tac = quaTrinhCongTacRepository.findById(id).orElse(null);
+                return mapperQuaTrinhCongTac.mapToResQuaTrinhCongTac(tac);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1289,9 +1440,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public QuaTrinhCongTac them(UUID id, ReqQuaTrinhCongTac req) {
+        public ResQuaTrinhCongTac them(UUID id, ReqQuaTrinhCongTac req) {
             try {
-                return quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), XacNhan.CHO_PHE_DUYET, id));
+                QuaTrinhCongTac tac = quaTrinhCongTacRepository.save(new QuaTrinhCongTac(req.batDau(), req.ketThuc(), req.donViCongTacId(), req.chucDanh(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperQuaTrinhCongTac.mapToResQuaTrinhCongTac(tac);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1299,7 +1451,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public QuaTrinhCongTac sua(int id, ReqQuaTrinhCongTac req, String role) {
+        public ResQuaTrinhCongTac sua(int id, ReqQuaTrinhCongTac req, String role) {
             try {
                 return quaTrinhCongTacRepository.findById(id).map(c -> {
                     if (role.equals("ADMIN") ||
@@ -1310,7 +1462,8 @@ public class HoSoChiTietServices {
                         c.setDonViCongTacId(req.donViCongTacId());
                         c.setChucDanh(req.chucDanh());
                         c.setUpdateAt();
-                        return quaTrinhCongTacRepository.save(c);
+                        QuaTrinhCongTac tac = quaTrinhCongTacRepository.save(c);
+                        return mapperQuaTrinhCongTac.mapToResQuaTrinhCongTac(tac);
                     } else throw new
                             ResponseStatusException(
                             ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -1341,14 +1494,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<QuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResQuaTrinhCongTac> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public QuaTrinhCongTac themCaNhan(int taiKhoanId, ReqQuaTrinhCongTac cu) {
+        public ResQuaTrinhCongTac themCaNhan(int taiKhoanId, ReqQuaTrinhCongTac cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);
@@ -1371,21 +1524,30 @@ public class HoSoChiTietServices {
     @Service
     public class TinHocService implements IHoSoChiTietServices.IHoTinHocServiceChiTiet {
         @Override
-        public List<TinHoc> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResTinHoc> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return tinHocRepository.findAll(pageable).getContent();
+            Page<TinHoc> page = tinHocRepository.findAll(pageable);
+            List<ResTinHoc> list = page.getContent().stream().map(mapperTinHoc::mapToResTinHoc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public List<TinHoc> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResTinHoc> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            return tinHocRepository.getAllByHoSo(id, xacNhan, pageable);
+            Page<TinHoc> page = tinHocRepository.getAllByHoSo(id, xacNhan, pageable);
+            List<ResTinHoc> list = page.getContent().stream().map(mapperTinHoc::mapToResTinHoc).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(list, totalRecord, totalPage);
         }
 
         @Override
-        public TinHoc xemChiTiet(int id) {
+        public ResTinHoc xemChiTiet(int id) {
             try {
-                return tinHocRepository.findById(id).orElse(null);
+                TinHoc hoc = tinHocRepository.findById(id).orElse(null);
+                return mapperTinHoc.mapToResTinHoc(hoc);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1393,10 +1555,10 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public TinHoc them(UUID id, ReqTinHoc req) {
+        public ResTinHoc them(UUID id, ReqTinHoc req) {
             try {
-                TinHoc tin = new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id);
-                return tinHocRepository.save(tin);
+                TinHoc hoc = tinHocRepository.save(new TinHoc(req.batDau(), req.ketThuc(), req.tenCoSoDaoTaoId(), req.chungChiDuocCap(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperTinHoc.mapToResTinHoc(hoc);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
                 throw e;
@@ -1404,7 +1566,7 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public TinHoc sua(int id, ReqTinHoc req, String role) {
+        public ResTinHoc sua(int id, ReqTinHoc req, String role) {
             return tinHocRepository.findById(id).map(c -> {
                 if (role.equals("ADMIN") ||
                         (role.equals("EMPLOYEE")
@@ -1414,7 +1576,8 @@ public class HoSoChiTietServices {
                     c.setTenCoSoDaoTaoId(req.tenCoSoDaoTaoId());
                     c.setChungChiDuocCap(req.chungChiDuocCap());
                     c.setUpdateAt();
-                    return tinHocRepository.save(c);
+                    TinHoc hoc = tinHocRepository.save(c);
+                    return mapperTinHoc.mapToResTinHoc(hoc);
                 } else throw new
                         ResponseStatusException(
                         ResEnum.KHONG_DUOC_UY_QUYEN.getStatusCode());
@@ -1441,14 +1604,14 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public List<TinHoc> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
+        public ResTheDTO<ResTinHoc> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         }
 
         @Override
-        public TinHoc themCaNhan(int taiKhoanId, ReqTinHoc cu) {
+        public ResTinHoc themCaNhan(int taiKhoanId, ReqTinHoc cu) {
             ResHoSoTomTatClient client = hoSoClient.getHoSoId(taiKhoanId);
             UUID id = client.hoSoId();
             return them(id, cu);

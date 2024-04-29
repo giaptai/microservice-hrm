@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MapperHeSoLuongVienChuc {
-    public ResHeSoLuongVienChuc mapToResNhomVienChuc(HeSoLuongVienChuc lam) {
+    public ResHeSoLuongVienChuc mapToResHeSoLuongVienChuc(HeSoLuongVienChuc lam) {
         return lam != null ? new ResHeSoLuongVienChuc(
                 lam.getId(),
                 lam.getHeSo(),

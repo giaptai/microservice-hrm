@@ -20,7 +20,7 @@ public interface KyLuatRepository extends JpaRepository<KyLuat, Integer> {
     //EMPLOYEE
     //READ ALL
     @Query(value = "SELECT c FROM KyLuat c WHERE c.hoSoId = ?1 AND (?2 is null OR c.xacNhan = ?2)")
-    List<KyLuat> getAllByHoSo(UUID uuid, XacNhan xacNhan, Pageable pageable);
+    Page<KyLuat> getAllByHoSo(UUID uuid, XacNhan xacNhan, Pageable pageable);
 
     //READ SPECIFIC
     @Query(value = "SELECT c FROM KyLuat c WHERE c.id = ?1 AND c.hoSoId = ?2")

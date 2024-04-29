@@ -1,7 +1,10 @@
 package hrm.module.cauhinh.services;
 
+import hrm.module.cauhinh.dto.mapper.MapperViTriViecLam;
 import hrm.module.cauhinh.dto.request.ReqUtilities;
 
+import hrm.module.cauhinh.dto.response.ResTheDTO;
+import hrm.module.cauhinh.dto.response.ResViTriViecLam;
 import hrm.module.cauhinh.models.BacLuong;
 import hrm.module.cauhinh.models.CapBacLoaiQuanHamQuanDoi;
 import hrm.module.cauhinh.models.ChucDanhDang;
@@ -70,6 +73,8 @@ public class UtilitiesService {
     private final TrinhDoChuyenMonRepository trinhDoChuyenMonRepository;
     private final TrinhDoGiaoDucPhoThongRepository trinhDoGiaoDucPhoThongRepository;
     private final ViTriViecLamRepository viTriViecLamRepository;
+    //mapper
+    final MapperViTriViecLam mapperViTriViecLam;
 
     @Service
     public class BacLuongService implements IUtilitiesService<BacLuong, ReqUtilities> {
@@ -79,11 +84,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<BacLuong> xemDanhSach(int pageNumber, int pageSize) {
-            Page<BacLuong> concac = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
-//            Slice<BacLuong> concac2 = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
-            System.out.printf("s1: %d, s2: %d, s3: %d\n", concac.getNumber(), concac.getTotalElements(), concac.getTotalPages());
-            return bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<BacLuong> xemDanhSach(int pageNumber, int pageSize) {
+            Page<BacLuong> luongs = bacLuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = luongs.getTotalElements();
+            int totalPage = luongs.getTotalPages();
+            return new ResTheDTO<>(luongs.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -136,8 +141,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<CapBacLoaiQuanHamQuanDoi> xemDanhSach(int pageNumber, int pageSize) {
-            return capBacLoaiQuanHamQuanDoiRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<CapBacLoaiQuanHamQuanDoi> xemDanhSach(int pageNumber, int pageSize) {
+            Page<CapBacLoaiQuanHamQuanDoi> dois = capBacLoaiQuanHamQuanDoiRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = dois.getTotalElements();
+            int totalPage = dois.getTotalPages();
+            return new ResTheDTO<>(dois.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -190,8 +198,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<ChucDanhDang> xemDanhSach(int pageNumber, int pageSize) {
-            return chucDanhDangRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<ChucDanhDang> xemDanhSach(int pageNumber, int pageSize) {
+            Page<ChucDanhDang> page = chucDanhDangRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -244,8 +255,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<ChucVu> xemDanhSach(int pageNumber, int pageSize) {
-            return chucVuRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<ChucVu> xemDanhSach(int pageNumber, int pageSize) {
+            Page<ChucVu> page = chucVuRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -298,8 +312,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<CoQuanToChucDonVi> xemDanhSach(int pageNumber, int pageSize) {
-            return coQuanToChucDonViRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<CoQuanToChucDonVi> xemDanhSach(int pageNumber, int pageSize) {
+            Page<CoQuanToChucDonVi> page = coQuanToChucDonViRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -356,8 +373,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<DanhHieuNhaNuoc> xemDanhSach(int pageNumber, int pageSize) {
-            return danhHieuNhaNuocRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<DanhHieuNhaNuoc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<DanhHieuNhaNuoc> page = danhHieuNhaNuocRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -410,8 +430,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<DanToc> xemDanhSach(int pageNumber, int pageSize) {
-            return danTocRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<DanToc> xemDanhSach(int pageNumber, int pageSize) {
+            Page<DanToc> page = danTocRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -468,8 +491,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<DoiTuongChinhSach> xemDanhSach(int pageNumber, int pageSize) {
-            return doiTuongChinhSachRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<DoiTuongChinhSach> xemDanhSach(int pageNumber, int pageSize) {
+            Page<DoiTuongChinhSach> page = doiTuongChinhSachRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -526,8 +552,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<HinhThucKhenThuong> xemDanhSach(int pageNumber, int pageSize) {
-            return hinhThucKhenThuongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<HinhThucKhenThuong> xemDanhSach(int pageNumber, int pageSize) {
+            Page<HinhThucKhenThuong> page = hinhThucKhenThuongRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -585,8 +614,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<HocHam> xemDanhSach(int pageNumber, int pageSize) {
-            return hocHamRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<HocHam> xemDanhSach(int pageNumber, int pageSize) {
+            Page<HocHam> page = hocHamRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -644,8 +676,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<LoaiPhuCap> xemDanhSach(int pageNumber, int pageSize) {
-            return loaiPhuCapRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<LoaiPhuCap> xemDanhSach(int pageNumber, int pageSize) {
+            Page<LoaiPhuCap> page = loaiPhuCapRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -702,8 +737,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<MoiQuanHe> xemDanhSach(int pageNumber, int pageSize) {
-            return moiQuanHeRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<MoiQuanHe> xemDanhSach(int pageNumber, int pageSize) {
+            Page<MoiQuanHe> page = moiQuanHeRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -761,8 +799,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<NhomMau> xemDanhSach(int pageNumber, int pageSize) {
-            return nhomMauRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<NhomMau> xemDanhSach(int pageNumber, int pageSize) {
+            Page<NhomMau> page = nhomMauRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -820,8 +861,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<ThanhPhanGiaDinh> xemDanhSach(int pageNumber, int pageSize) {
-            return thanhPhanGiaDinhRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<ThanhPhanGiaDinh> xemDanhSach(int pageNumber, int pageSize) {
+            Page<ThanhPhanGiaDinh> page = thanhPhanGiaDinhRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -879,8 +923,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<TonGiao> xemDanhSach(int pageNumber, int pageSize) {
-            return tonGiaoRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<TonGiao> xemDanhSach(int pageNumber, int pageSize) {
+            Page<TonGiao> page = tonGiaoRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -938,8 +985,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<TrinhDoChuyenMon> xemDanhSach(int pageNumber, int pageSize) {
-            return trinhDoChuyenMonRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<TrinhDoChuyenMon> xemDanhSach(int pageNumber, int pageSize) {
+            Page<TrinhDoChuyenMon> page = trinhDoChuyenMonRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -997,8 +1047,11 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<TrinhDoGiaoDucPhoThong> xemDanhSach(int pageNumber, int pageSize) {
-            return trinhDoGiaoDucPhoThongRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<TrinhDoGiaoDucPhoThong> xemDanhSach(int pageNumber, int pageSize) {
+            Page<TrinhDoGiaoDucPhoThong> page = trinhDoGiaoDucPhoThongRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
         }
 
         @Override
@@ -1056,8 +1109,20 @@ public class UtilitiesService {
         }
 
         @Override
-        public List<ViTriViecLam> xemDanhSach(int pageNumber, int pageSize) {
-            return viTriViecLamRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+        public ResTheDTO<ViTriViecLam> xemDanhSach(int pageNumber, int pageSize) {
+            Page<ViTriViecLam> page = viTriViecLamRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(page.getContent(), totalRecord, totalPage);
+        }
+
+        @Override
+        public ResTheDTO<ResViTriViecLam> xemDsViTriViecLam(int pageNumber, int pageSize) {
+            Page<ViTriViecLam> page = viTriViecLamRepository.findAll(PageRequest.of(pageNumber, pageSize));
+            List<ResViTriViecLam> res = page.getContent().stream().map(mapperViTriViecLam::mapToResViTriViecLam).toList();
+            long totalRecord = page.getTotalElements();
+            int totalPage = page.getTotalPages();
+            return new ResTheDTO<>(res, totalRecord, totalPage);
         }
 
         @Override

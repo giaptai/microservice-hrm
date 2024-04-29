@@ -5,6 +5,13 @@ import hrm.module.cauhinh.dto.request.ReqLoai;
 import hrm.module.cauhinh.dto.request.ReqNgach;
 import hrm.module.cauhinh.dto.request.ReqNhom;
 
+import hrm.module.cauhinh.dto.response.ResHeSoLuongCongChuc;
+import hrm.module.cauhinh.dto.response.ResHeSoLuongVienChuc;
+import hrm.module.cauhinh.dto.response.ResNgachCongChuc;
+import hrm.module.cauhinh.dto.response.ResNgachVienChuc;
+import hrm.module.cauhinh.dto.response.ResNhomCongChuc;
+import hrm.module.cauhinh.dto.response.ResNhomVienChuc;
+import hrm.module.cauhinh.dto.response.ResTheDTO;
 import hrm.module.cauhinh.models.HeSoLuongCongChuc;
 import hrm.module.cauhinh.models.HeSoLuongVienChuc;
 import hrm.module.cauhinh.models.LoaiCongChuc;
@@ -14,12 +21,9 @@ import hrm.module.cauhinh.models.NgachVienChuc;
 import hrm.module.cauhinh.models.NhomCongChuc;
 import hrm.module.cauhinh.models.NhomVienChuc;
 
-import java.util.List;
-
 public interface ILoaiNhomHeSoNgachService {
     interface ILoaiCongChucService {
-        List<LoaiCongChuc> xemLoaiCongChuc();
-        default List<LoaiCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<LoaiCongChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         LoaiCongChuc xemTheoId(int id);
@@ -29,8 +33,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface ILoaiVienChucService {
-        List<LoaiVienChuc> xemLoaiVienChuc();
-        default List<LoaiVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<LoaiVienChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         LoaiVienChuc xemTheoId(int id);
@@ -40,8 +43,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface INhomCongChucService {
-        List<NhomCongChuc> xemNhomCongChuc();
-        default List<NhomCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<ResNhomCongChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         NhomCongChuc xemTheoId(int id);
@@ -52,8 +54,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface INhomVienChucService {
-        List<NhomVienChuc> xemNhomVienChuc();
-        default List<NhomVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<ResNhomVienChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         NhomVienChuc xemTheoId(int id);
@@ -63,8 +64,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface IHeSoLuongCongChucService {
-        List<HeSoLuongCongChuc> xemHeSoLuongCongChuc();
-        default List<HeSoLuongCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<ResHeSoLuongCongChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         HeSoLuongCongChuc xemTheoId(int id);
@@ -74,8 +74,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface IHeSoLuongVienChucService {
-        List<HeSoLuongVienChuc> xemHeSoLuongVienChuc();
-        default List<HeSoLuongVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<ResHeSoLuongVienChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         HeSoLuongVienChuc xemTheoId(int id);
@@ -85,8 +84,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface INgachVienChucService {
-        List<NgachVienChuc> xemNgachVienChuc();
-        default List<NgachVienChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<ResNgachVienChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         NgachVienChuc xemTheoId(String id);
@@ -96,8 +94,7 @@ public interface ILoaiNhomHeSoNgachService {
     }
 
     interface INgachCongChucService {
-        List<NgachCongChuc> xemNgachCongChuc();
-        default List<NgachCongChuc> xemDanhSach(int pageNumber, int pageSize) {
+        default ResTheDTO<ResNgachCongChuc> xemDanhSach(int pageNumber, int pageSize) {
             return null;
         }
         NgachCongChuc xemTheoId(String id);

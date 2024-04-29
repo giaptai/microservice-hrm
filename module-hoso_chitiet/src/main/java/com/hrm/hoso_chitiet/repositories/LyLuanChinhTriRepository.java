@@ -18,7 +18,7 @@ import java.util.UUID;
 @Repository
 public interface LyLuanChinhTriRepository extends JpaRepository<LyLuanChinhTri, Integer> {
     @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.hoSoId = ?1 AND (?2 is null OR c.xacNhan = ?2)")
-    List<LyLuanChinhTri> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
+    Page<LyLuanChinhTri> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
 
     @Query(value = "SELECT c FROM LyLuanChinhTri c WHERE c.id = ?1 AND c.hoSoId = ?2")
     Optional<LyLuanChinhTri> findByIdAndHoSo(int id, UUID id1);

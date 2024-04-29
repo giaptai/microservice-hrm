@@ -6,6 +6,7 @@ import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
+import com.hrm.taikhoan.dto.resopnse.ResTheDTO;
 import com.hrm.taikhoan.enums.RoleTaiKhoan;
 import com.hrm.taikhoan.response.ResDTO;
 import com.hrm.taikhoan.response.ResEnum;
@@ -29,8 +30,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -45,14 +44,15 @@ public class TaiKhoanController {
     }
 
     @GetMapping("/nhan-vien/tai-khoan")
-    public ResponseEntity<ResDTO<List<ResTaiKhoan>>> getAllTaiKhoan(
+    public ResponseEntity<ResTheDTO> getAllTaiKhoan(
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "username", required = false) String username,
             @RequestParam(name = "role", required = false) RoleTaiKhoan role,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(byDate, username, role, pageNumber, pageSize), ResEnum.THANH_CONG);
+//        return ResDTO.reply(taiKhoanService.xemDanhSachTaiKhoan(byDate, username, role, pageNumber, pageSize), ResEnum.THANH_CONG);
+        return new ResponseEntity<>(taiKhoanService.xemDanhSachTaiKhoan(byDate, username, role, pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/nhan-vien/tai-khoan/{id}")

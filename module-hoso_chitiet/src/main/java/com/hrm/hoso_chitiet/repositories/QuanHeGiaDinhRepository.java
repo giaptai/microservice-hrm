@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository
 public interface QuanHeGiaDinhRepository extends JpaRepository<QuanHeGiaDinh, Integer> {
     @Query(value = "SELECT c FROM QuanHeGiaDinh c WHERE c.hoSoId = ?1 AND (?2 is null OR c.xacNhan = ?2)")
-    List<QuanHeGiaDinh> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
+    Page<QuanHeGiaDinh> getAllByHoSo(UUID id, XacNhan xacNhan, Pageable pageable);
 
     @Query(value = "SELECT c FROM QuanHeGiaDinh c WHERE (?1 is null OR c.xacNhan = ?1)")
     Page<QuanHeGiaDinh> getAllByXacNhan(XacNhan xacNhan, Pageable pageable);

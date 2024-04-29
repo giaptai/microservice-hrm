@@ -13,25 +13,21 @@ public class ResDTO<T> {
     final int status_code;
     final String message;
     final T data;
-    long totalRecord;
-    int totalPage;
     final LocalDateTime time_stamp;
 
-    private ResDTO(ResEnum resEnum, T data, long totalRecord, int totalPage) {
+    private ResDTO(ResEnum resEnum, T data) {
         this.status_code = resEnum.getStatusCode().value();
         this.message = resEnum.name();
         this.data = data;
-        this.totalRecord = totalRecord;
-        this.totalPage = totalPage;
         this.time_stamp = LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
     }
 
-    public static <T> ResponseEntity<ResDTO<T>> res(T data, long totalRecord, int totalPage, ResEnum resEnum) {
-        return new ResponseEntity<>(new ResDTO<>(resEnum, data, totalRecord, totalPage), resEnum.getStatusCode());
+    public static <T> ResponseEntity<ResDTO<T>> res(T data, ResEnum resEnum) {
+        return new ResponseEntity<>(new ResDTO<>(resEnum, data), resEnum.getStatusCode());
     }
 
-    public static <T> ResDTO<T> response(ResEnum resEnum, T data, int totalRecord, int totalPage) {
-        return new ResDTO<>(resEnum, data, totalRecord, totalPage);
+    public static <T> ResDTO<T> response(ResEnum resEnum, T data) {
+        return new ResDTO<>(resEnum, data);
     }
 
     @Bean

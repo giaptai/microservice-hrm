@@ -1,9 +1,9 @@
 package com.hrm.hoso_chitiet.controllers;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.response.ResKhenThuong;
 
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 
@@ -35,40 +35,39 @@ import java.util.UUID;
 @RequiredArgsConstructor // create constructor if field set final or @not null
 public class KhenThuongController {
     private final IHoSoChiTietServices.IHoKhenThuongServiceChiTiet khenThuongService;
-    private final MapperKhenThuong mapper;
 
     @GetMapping("/{id}/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAllByHoSoId(
+    public ResponseEntity<ResTheDTO<ResKhenThuong>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
+        ResTheDTO<ResKhenThuong> ls = khenThuongService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAll(
+    public ResponseEntity<ResTheDTO<ResKhenThuong>> getAll(
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
+        ResTheDTO<ResKhenThuong> ls = khenThuongService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/khen-thuong/{id}")
     public ResponseEntity<ResKhenThuong> getById(@PathVariable(name = "id") int id) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.xemChiTiet(id));
+        ResKhenThuong ls = khenThuongService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/khen-thuong/{id}")
     @Transactional
     public ResponseEntity<ResKhenThuong> add(@PathVariable(name = "id") UUID id, @RequestBody ReqKhenThuong cu) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.them(id, cu));
+        ResKhenThuong ls = khenThuongService.them(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -77,7 +76,7 @@ public class KhenThuongController {
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id,
             @RequestBody ReqKhenThuong cu) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu, role));
+        ResKhenThuong ls = khenThuongService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
@@ -102,27 +101,27 @@ public class KhenThuongController {
 
     //EMPLOYEE
     @GetMapping("/ca-nhan/khen-thuong")
-    public ResponseEntity<List<ResKhenThuong>> getAllCaNhan(
+    public ResponseEntity<ResTheDTO<ResKhenThuong>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResKhenThuong> ls = khenThuongService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResKhenThuong).toList();
+        ResTheDTO<ResKhenThuong> ls = khenThuongService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ca-nhan/khen-thuong/{id}")
     public ResponseEntity<ResKhenThuong> getByIdCaNhan(@PathVariable(name = "id") int id) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.xemChiTiet(id));
+        ResKhenThuong ls = khenThuongService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/khen-thuong")
     @Transactional
     public ResponseEntity<ResKhenThuong> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqKhenThuong cu) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.themCaNhan(id, cu));
+        ResKhenThuong ls = khenThuongService.themCaNhan(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -131,7 +130,7 @@ public class KhenThuongController {
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id,
             @RequestBody ReqKhenThuong cu) {
-        ResKhenThuong ls = mapper.maptoResKhenThuong(khenThuongService.sua(id, cu, role));
+        ResKhenThuong ls = khenThuongService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 

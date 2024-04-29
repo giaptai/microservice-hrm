@@ -1,8 +1,8 @@
 package com.hrm.hoso_chitiet.controllers;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperNgoaiNgu;
 import com.hrm.hoso_chitiet.dto.request.ReqNgoaiNgu;
 import com.hrm.hoso_chitiet.dto.response.ResNgoaiNgu;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -30,38 +30,38 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class NgoaiNguController {
     private final IHoSoChiTietServices.IHoNgoaiNguServiceChiTiet ngoaiNguService;
-    private final MapperNgoaiNgu mapper;
 
     @GetMapping("/{id}/ngoai-ngu")
-    public ResponseEntity<List<ResNgoaiNgu>> getAllByHoSoId(@PathVariable(name = "id") UUID id,
-                                                            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
-                                                            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
-                                                            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
-        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
-    }
-
-    @GetMapping("/ngoai-ngu")
-    public ResponseEntity<List<ResNgoaiNgu>> getAll(
+    public ResponseEntity<ResTheDTO<ResNgoaiNgu>> getAllByHoSoId(
+            @PathVariable(name = "id") UUID id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
+        ResTheDTO<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
+        return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
+    }
+
+    @GetMapping("/ngoai-ngu")
+    public ResponseEntity<ResTheDTO<ResNgoaiNgu>> getAll(
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        ResTheDTO<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ngoai-ngu/{id}")
     public ResponseEntity<ResNgoaiNgu> getById(@PathVariable(name = "id") int id) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.xemChiTiet(id));
+        ResNgoaiNgu ls = ngoaiNguService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ngoai-ngu/{id}")
     @Transactional
     public ResponseEntity<ResNgoaiNgu> add(@PathVariable(name = "id") UUID id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.them(id, cu));
+        ResNgoaiNgu ls = ngoaiNguService.them(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -69,7 +69,7 @@ public class NgoaiNguController {
     public ResponseEntity<ResNgoaiNgu> edit(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu, role));
+        ResNgoaiNgu ls = ngoaiNguService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
@@ -93,25 +93,26 @@ public class NgoaiNguController {
 
     //EMPLOYEE
     @GetMapping("/ca-nhan/ngoai-ngu")
-    public ResponseEntity<List<ResNgoaiNgu>> getAllCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id,
-                                                          @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
-                                                          @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
-                                                          @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                          @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::mapToResNgoaiNgu).toList();
+    public ResponseEntity<ResTheDTO<ResNgoaiNgu>> getAllCaNhan(
+            @RequestHeader(name = "taiKhoanId", required = false) int id,
+            @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
+            @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
+            @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        ResTheDTO<ResNgoaiNgu> ls = ngoaiNguService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ca-nhan/ngoai-ngu/{id}")
     public ResponseEntity<ResNgoaiNgu> getByIdCaNhan(@PathVariable(name = "id") int id) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.xemChiTiet(id));
+        ResNgoaiNgu ls = ngoaiNguService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/ngoai-ngu")
     @Transactional
     public ResponseEntity<ResNgoaiNgu> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.themCaNhan(id, cu));
+        ResNgoaiNgu ls = ngoaiNguService.themCaNhan(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -119,7 +120,7 @@ public class NgoaiNguController {
     public ResponseEntity<ResNgoaiNgu> editCaNhan(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqNgoaiNgu cu) {
-        ResNgoaiNgu ls = mapper.mapToResNgoaiNgu(ngoaiNguService.sua(id, cu, role));
+        ResNgoaiNgu ls = ngoaiNguService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 

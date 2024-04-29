@@ -33,30 +33,27 @@ import com.hrm.hoso_chitiet.dto.response.ResNgoaiNgu;
 import com.hrm.hoso_chitiet.dto.response.ResPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
+
 import com.hrm.hoso_chitiet.enums.XacNhan;
-import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
+
 import com.hrm.hoso_chitiet.models.KhenThuong;
-import com.hrm.hoso_chitiet.models.KienThucAnNinhQuocPhong;
 import com.hrm.hoso_chitiet.models.KyLuat;
 import com.hrm.hoso_chitiet.models.LamViecONuocNgoai;
-import com.hrm.hoso_chitiet.models.LuongBanThan;
 import com.hrm.hoso_chitiet.models.LyLuanChinhTri;
 import com.hrm.hoso_chitiet.models.NghiepVuChuyenNganh;
 import com.hrm.hoso_chitiet.models.NgoaiNgu;
-import com.hrm.hoso_chitiet.models.PhuCapKhac;
 import com.hrm.hoso_chitiet.models.QuaTrinhCongTac;
-import com.hrm.hoso_chitiet.models.QuanHeGiaDinh;
-import com.hrm.hoso_chitiet.models.TinHoc;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public interface IHoSoChiTietServices<T, H> {
-    List<T> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
+    ResTheDTO<T> xemDanhSach(XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
 
-    List<T> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
+    ResTheDTO<T> xemDanhSachTheoHoSoId(UUID id, XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
 
     T xemChiTiet(int id);
 
@@ -67,7 +64,7 @@ public interface IHoSoChiTietServices<T, H> {
     boolean xoa(int id, String role);
 
     //EMPLOYEE
-    List<T> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
+    ResTheDTO<T> xemDanhSachCaNhan(int taiKhoanId, XacNhan xacNhan, String byDate, int pageNumber, int pageSize);
 
     T themCaNhan(int taiKhoanId, H cu);
 
@@ -75,13 +72,13 @@ public interface IHoSoChiTietServices<T, H> {
         return new ArrayList<>();
     }
 
-    interface ILamViecChoCheDoCuServiceChiTiet extends IHoSoChiTietServices<LamViecChoCheDoCu, ReqLamViecChoCheDoCu> {
+    interface ILamViecChoCheDoCuServiceChiTiet extends IHoSoChiTietServices<ResLamViecChoCheDoCu, ReqLamViecChoCheDoCu> {
         default boolean xacNhan(XacNhan xacNhan, List<ResLamViecChoCheDoCu> res) {
             return true;
         }
     }
 
-    interface IHoKhenThuongServiceChiTiet extends IHoSoChiTietServices<KhenThuong, ReqKhenThuong> {
+    interface IHoKhenThuongServiceChiTiet extends IHoSoChiTietServices<ResKhenThuong, ReqKhenThuong> {
         default List<KhenThuong> khenThuongNhanVien(List<ReqKhenThuongNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -91,13 +88,13 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoKienThucAnNinhQuocPhongServiceChiTiet extends IHoSoChiTietServices<KienThucAnNinhQuocPhong, ReqKienThucAnNinhQuocPhong> {
+    interface IHoKienThucAnNinhQuocPhongServiceChiTiet extends IHoSoChiTietServices<ResKienThucAnNinhQuocPhong, ReqKienThucAnNinhQuocPhong> {
         default boolean xacNhan(XacNhan xacNhan, List<ResKienThucAnNinhQuocPhong> res) {
             return true;
         }
     }
 
-    interface IHoKyLuatServiceChiTiet extends IHoSoChiTietServices<KyLuat, ReqKyLuat> {
+    interface IHoKyLuatServiceChiTiet extends IHoSoChiTietServices<ResKyLuat, ReqKyLuat> {
         default List<KyLuat> kyLuatNhanVien(List<ReqKyLuatNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -107,7 +104,7 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoLamViecONuocNgoaiServiceChiTiet extends IHoSoChiTietServices<LamViecONuocNgoai, ReqLamViecONuocNgoai> {
+    interface IHoLamViecONuocNgoaiServiceChiTiet extends IHoSoChiTietServices<ResLamViecONuocNgoai, ReqLamViecONuocNgoai> {
         default List<LamViecONuocNgoai> lamViecONUocNgoaiNhanVien(List<ReqLamViecONuocNgoaiNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -117,13 +114,13 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoLuongBanThanServiceChiTiet extends IHoSoChiTietServices<LuongBanThan, ReqLuongBanThan> {
+    interface IHoLuongBanThanServiceChiTiet extends IHoSoChiTietServices<ResLuongBanThan, ReqLuongBanThan> {
         default boolean xacNhan(XacNhan xacNhan, List<ResLuongBanThan> res) {
             return true;
         }
     }
 
-    interface IHoLyLuanChinhTriServiceChiTiet extends IHoSoChiTietServices<LyLuanChinhTri, ReqLyLuanChinhTri> {
+    interface IHoLyLuanChinhTriServiceChiTiet extends IHoSoChiTietServices<ResLyLuanChinhTri, ReqLyLuanChinhTri> {
         default List<LyLuanChinhTri> lyLuanChinhTriNhanVien(List<ReqLyLuanChinhTriNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -133,7 +130,7 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoNghiepVuChuyenNganhServiceChiTiet extends IHoSoChiTietServices<NghiepVuChuyenNganh, ReqNghiepVuChuyenNganh> {
+    interface IHoNghiepVuChuyenNganhServiceChiTiet extends IHoSoChiTietServices<ResNghiepVuChuyenNganh, ReqNghiepVuChuyenNganh> {
         default List<NghiepVuChuyenNganh> nghiepVuChuyenNganhNhanVien(List<ReqNghiepVuChuyenNganhNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -143,7 +140,7 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoNgoaiNguServiceChiTiet extends IHoSoChiTietServices<NgoaiNgu, ReqNgoaiNgu> {
+    interface IHoNgoaiNguServiceChiTiet extends IHoSoChiTietServices<ResNgoaiNgu, ReqNgoaiNgu> {
         default List<NgoaiNgu> ngoaiNguNhanVien(List<ReqNgoaiNguNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -153,19 +150,19 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoPhuCapKhacServiceChiTiet extends IHoSoChiTietServices<PhuCapKhac, ReqPhuCapKhac> {
+    interface IHoPhuCapKhacServiceChiTiet extends IHoSoChiTietServices<ResPhuCapKhac, ReqPhuCapKhac> {
         default boolean xacNhan(XacNhan xacNhan, List<ResPhuCapKhac> res) {
             return true;
         }
     }
 
-    interface IHoQuanHeGiaDinhServiceChiTiet extends IHoSoChiTietServices<QuanHeGiaDinh, ReqQuanHeGiaDinh> {
+    interface IHoQuanHeGiaDinhServiceChiTiet extends IHoSoChiTietServices<ResQuanHeGiaDinh, ReqQuanHeGiaDinh> {
         default boolean xacNhan(XacNhan xacNhan, List<ResQuanHeGiaDinh> res) {
             return true;
         }
     }
 
-    interface IHoQuaTrinhCongTacServiceChiTiet extends IHoSoChiTietServices<QuaTrinhCongTac, ReqQuaTrinhCongTac> {
+    interface IHoQuaTrinhCongTacServiceChiTiet extends IHoSoChiTietServices<ResQuaTrinhCongTac, ReqQuaTrinhCongTac> {
         default List<QuaTrinhCongTac> chuyenCongTacNhanVien(List<ReqQuaTrinhCongTacNhanVien> vien) {
             return new ArrayList<>();
         }
@@ -175,7 +172,7 @@ public interface IHoSoChiTietServices<T, H> {
         }
     }
 
-    interface IHoTinHocServiceChiTiet extends IHoSoChiTietServices<TinHoc, ReqTinHoc> {
+    interface IHoTinHocServiceChiTiet extends IHoSoChiTietServices<ResTinHoc, ReqTinHoc> {
         default boolean xacNhan(XacNhan xacNhan, List<ResTinHoc> res) {
             return true;
         }

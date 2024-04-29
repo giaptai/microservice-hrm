@@ -19,6 +19,7 @@ import hrm.module.cauhinh.dto.response.ResNgachCongChuc;
 import hrm.module.cauhinh.dto.response.ResNgachVienChuc;
 import hrm.module.cauhinh.dto.response.ResNhomCongChuc;
 import hrm.module.cauhinh.dto.response.ResNhomVienChuc;
+import hrm.module.cauhinh.dto.response.ResTheDTO;
 import hrm.module.cauhinh.dto.response.ResViTriViecLam;
 import hrm.module.cauhinh.models.BacLuong;
 import hrm.module.cauhinh.models.CapBacLoaiQuanHamQuanDoi;
@@ -41,7 +42,6 @@ import hrm.module.cauhinh.models.TrinhDoChuyenMon;
 import hrm.module.cauhinh.models.TrinhDoGiaoDucPhoThong;
 import hrm.module.cauhinh.models.ViTriViecLam;
 
-import hrm.module.cauhinh.response.ResDTO;
 import hrm.module.cauhinh.response.ResEnum;
 
 import hrm.module.cauhinh.services.ILoaiNhomHeSoNgachService;
@@ -109,7 +109,7 @@ public class UtilitiesController {
     @Tag(name = "Bậc lương ", description = "Cấu hình")
     class BacLuongController {
         @GetMapping("/bac-luong")
-        public ResponseEntity<List<BacLuong>> getAll(
+        public ResponseEntity<ResTheDTO<BacLuong>> getAll(
                 @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
         ) {
@@ -151,8 +151,8 @@ public class UtilitiesController {
     @Tag(name = "Loại quân hàm quân đội ", description = "Cấu hình")
     class CapBacLoaiQuanHamQuanDoiController {
         @GetMapping("/cap-bac-loai-quan-ham-quan-doi")
-        public ResponseEntity<List<CapBacLoaiQuanHamQuanDoi>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                                     @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<CapBacLoaiQuanHamQuanDoi>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                          @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(capBacLoaiQuanHamQuanDoiService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
 //            return ResDTO.res(capBacLoaiQuanHamQuanDoiService.xemDanhSach(pageNumber, pageSize).getContent(),
 //                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalElements(),
@@ -190,8 +190,8 @@ public class UtilitiesController {
     @Tag(name = "Chức danh đảng ", description = "Cấu hình")
     class ChucDanhDangController {
         @GetMapping("/chuc-danh-dang")
-        public ResponseEntity<List<ChucDanhDang>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<ChucDanhDang>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(chucDanhDangService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
 //            return ResDTO.res(chucDanhDangService.xemDanhSach(pageNumber, pageSize).getContent(),
 //                    bacLuongService.xemDanhSach(pageNumber, pageSize).getTotalElements(),
@@ -229,8 +229,8 @@ public class UtilitiesController {
     @Tag(name = "Chức vụ ", description = "Cấu hình")
     class ChucVuController {
         @GetMapping("/chuc-vu")
-        public ResponseEntity<List<ChucVu>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<ChucVu>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                        @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(chucVuService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -264,8 +264,8 @@ public class UtilitiesController {
     @Tag(name = "Cơ quản tổ chức đơn vị ", description = "Cấu hình")
     class CoQuanToChucDonViController {
         @GetMapping("/coquan-tochuc-donvi")
-        public ResponseEntity<List<CoQuanToChucDonVi>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<CoQuanToChucDonVi>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(coQuanToChucDonViService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -299,8 +299,8 @@ public class UtilitiesController {
     @Tag(name = "Danh hiệu nhà nước ", description = "Cấu hình")
     class DanhHieuNhaNuocPhongTangController {
         @GetMapping("/danh-hieu-nha-nuoc-phong")
-        public ResponseEntity<List<DanhHieuNhaNuoc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<DanhHieuNhaNuoc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(danhHieuNhaNuocPhongTangService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -335,8 +335,8 @@ public class UtilitiesController {
     @Tag(name = "Dân tộc ", description = "Cấu hình")
     class DanTocController {
         @GetMapping("/dan-toc")
-        public ResponseEntity<List<DanToc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<DanToc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                        @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(danTocService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -370,8 +370,8 @@ public class UtilitiesController {
     @Tag(name = "Đối tượng chính sách ", description = "Cấu hình")
     class DoiTuongChinhSachController {
         @GetMapping("/doi-tuong-chinh-sach")
-        public ResponseEntity<List<DoiTuongChinhSach>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<DoiTuongChinhSach>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(doiTuongChinhSachService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -405,8 +405,8 @@ public class UtilitiesController {
     @Tag(name = "Hình thức khen thưởng ", description = "Cấu hình")
     class HinhThucKhenThuongController {
         @GetMapping("/hinh-thuc-khen-thuong")
-        public ResponseEntity<List<HinhThucKhenThuong>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                               @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<HinhThucKhenThuong>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                    @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(hinhThucKhenThuongService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -440,8 +440,8 @@ public class UtilitiesController {
     @Tag(name = "Học hàm ", description = "Cấu hình")
     class HocHamController {
         @GetMapping("/hoc-ham")
-        public ResponseEntity<List<HocHam>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<HocHam>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                        @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(hocHamService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -475,8 +475,8 @@ public class UtilitiesController {
     @Tag(name = "Loại phụ cấp ", description = "Cấu hình")
     class LoaiPhuCapController {
         @GetMapping("/loai-phu-cap")
-        public ResponseEntity<List<LoaiPhuCap>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                       @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<LoaiPhuCap>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(loaiPhuCapService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -510,8 +510,8 @@ public class UtilitiesController {
     @Tag(name = "Mối quan hệ ", description = "Cấu hình")
     class MoiQuanHeController {
         @GetMapping("/moi-quan-he")
-        public ResponseEntity<List<MoiQuanHe>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<MoiQuanHe>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                           @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(moiQuanHeService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -545,8 +545,8 @@ public class UtilitiesController {
     @Tag(name = "Nhóm máu ", description = "Cấu hình")
     class NhomMauController {
         @GetMapping("/nhom-mau")
-        public ResponseEntity<List<NhomMau>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                    @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<NhomMau>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(nhomMauService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -580,8 +580,8 @@ public class UtilitiesController {
     @Tag(name = "Thành phần gia đình ", description = "Cấu hình")
     class ThanhPhanGiaDinhController {
         @GetMapping("/thanh-phan-gia-dinh")
-        public ResponseEntity<List<ThanhPhanGiaDinh>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<ThanhPhanGiaDinh>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(thanhPhanGiaDinhService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -615,8 +615,8 @@ public class UtilitiesController {
     @Tag(name = "Tôn giáo ", description = "Cấu hình")
     class TonGiaoController {
         @GetMapping("/ton-giao")
-        public ResponseEntity<List<TonGiao>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                    @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<TonGiao>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(tonGiaoService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -650,8 +650,8 @@ public class UtilitiesController {
     @Tag(name = "Trình độ chuyên môn ", description = "Cấu hình")
     class TrinhDoChuyenMonController {
         @GetMapping("/trinh-do-chuyen-mon")
-        public ResponseEntity<List<TrinhDoChuyenMon>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<TrinhDoChuyenMon>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(trinhDoChuyenMonService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -685,8 +685,8 @@ public class UtilitiesController {
     @Tag(name = "Trình độ giáo dục phổ thông ", description = "Cấu hình")
     class TrinhDoGiaoDucPhoThongController {
         @GetMapping("/trinh-do-giao-duc-pho-thong")
-        public ResponseEntity<List<TrinhDoGiaoDucPhoThong>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                                   @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<TrinhDoGiaoDucPhoThong>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                        @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(trinhDoGiaoDucPhoThongService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -720,10 +720,14 @@ public class UtilitiesController {
     @Tag(name = "Vị trí việc làm ", description = "Cấu hình")
     class ViTriViecLamController {
         @GetMapping("/vi-tri-viec-lam")
-        public ResponseEntity<List<ResViTriViecLam>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResViTriViecLam> resViTriViecLams = viTriViecLamService.xemDanhSach(pageNumber, pageSize).stream().map(mapperViTriViecLam::mapToResViTriViecLam).toList();
-            return new ResponseEntity<>(resViTriViecLams, ResEnum.THANH_CONG.getStatusCode());
+        public ResponseEntity<ResTheDTO<ResViTriViecLam>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+//            List<ResViTriViecLam> resViTriViecLams = viTriViecLamService.xemDanhSach(pageNumber, pageSize).data().stream().map(mapperViTriViecLam::mapToResViTriViecLam).toList();
+//            long totalRecord = viTriViecLamService.xemDanhSach(pageNumber, pageSize).totalRecord();
+//            int totalPage = viTriViecLamService.xemDanhSach(pageNumber, pageSize).totalPage();
+//            ResTheDTO<ResViTriViecLam> dto = new ResTheDTO<>(resViTriViecLams, totalRecord, totalPage);
+//            return new ResponseEntity<>(dto, ResEnum.THANH_CONG.getStatusCode());
+            return new ResponseEntity<>(viTriViecLamService.xemDsViTriViecLam(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/vi-tri-viec-lam/{id}")
@@ -754,8 +758,8 @@ public class UtilitiesController {
     @Tag(name = "Loại công chức ", description = "Cấu hình")
     class LoaiCongChucController {
         @GetMapping("/loai-cong-chuc")
-        public ResponseEntity<List<LoaiCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<LoaiCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(congChucService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -784,8 +788,8 @@ public class UtilitiesController {
     @Tag(name = "Loại viên chức ", description = "Cấu hình")
     class LoaiVienChucController {
         @GetMapping("/loai-vien-chuc")
-        public ResponseEntity<List<LoaiVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                         @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+        public ResponseEntity<ResTheDTO<LoaiVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                              @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
             return new ResponseEntity<>(vienChucService.xemDanhSach(pageNumber, pageSize), ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -814,9 +818,9 @@ public class UtilitiesController {
     @Tag(name = "Nhóm công chức ", description = "Cấu hình")
     class NhomCongChucController {
         @GetMapping("/nhom-cong-chuc")
-        public ResponseEntity<List<ResNhomCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResNhomCongChuc> nhomCongChucs = nhomCongChucService.xemDanhSach(pageNumber, pageSize).stream().map(mapperNhomCongChuc::mapToResNhomCongChuc).toList();
+        public ResponseEntity<ResTheDTO<ResNhomCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+            ResTheDTO<ResNhomCongChuc> nhomCongChucs = nhomCongChucService.xemDanhSach(pageNumber, pageSize);
             return new ResponseEntity<>(nhomCongChucs, ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -848,9 +852,9 @@ public class UtilitiesController {
     @Tag(name = "Nhóm viên chức ", description = "Cấu hình")
     class NhomVienChucController {
         @GetMapping("/nhom-vien-chuc")
-        public ResponseEntity<List<ResNhomVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                            @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResNhomVienChuc> resNhomVienChucs = nhomVienChucService.xemDanhSach(pageNumber, pageSize).stream().map(mapperNhomVienChuc::mapToResNhomVienChuc).toList();
+        public ResponseEntity<ResTheDTO<ResNhomVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+            ResTheDTO<ResNhomVienChuc> resNhomVienChucs = nhomVienChucService.xemDanhSach(pageNumber, pageSize);
             return new ResponseEntity<>(resNhomVienChucs, ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -882,9 +886,9 @@ public class UtilitiesController {
     @Tag(name = "Hệ số lương công chức ", description = "Cấu hình")
     class HeSoLuongCongChucController {
         @GetMapping("/he-so-luong-cong-chuc")
-        public ResponseEntity<List<ResHeSoLuongCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResHeSoLuongCongChuc> res = heSoLuongCongChucService.xemDanhSach(pageNumber, pageSize).stream().map(mapperHeSoLuongCongChuc::mapToResHeSoLuongCongChuc).toList();
+        public ResponseEntity<ResTheDTO<ResHeSoLuongCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+            ResTheDTO<ResHeSoLuongCongChuc> res = heSoLuongCongChucService.xemDanhSach(pageNumber, pageSize);
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -916,27 +920,27 @@ public class UtilitiesController {
     @Tag(name = "Hệ số lương viên chức ", description = "Cấu hình")
     class HeSoLuongVienChucController {
         @GetMapping("/he-so-luong-vien-chuc")
-        public ResponseEntity<List<ResHeSoLuongVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                                 @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResHeSoLuongVienChuc> res = heSoLuongVienChucService.xemDanhSach(pageNumber, pageSize).stream().map(mapperHeSoLuongVienChuc::mapToResNhomVienChuc).toList();
+        public ResponseEntity<ResTheDTO<ResHeSoLuongVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                      @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+            ResTheDTO<ResHeSoLuongVienChuc> res = heSoLuongVienChucService.xemDanhSach(pageNumber, pageSize);
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @GetMapping("/he-so-luong-vien-chuc/{id}")
         public ResponseEntity<ResHeSoLuongVienChuc> getById(@PathVariable(name = "id") int id) {
-            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.xemTheoId(id));
+            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResHeSoLuongVienChuc(heSoLuongVienChucService.xemTheoId(id));
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
         @PostMapping("/he-so-luong-vien-chuc")
         public ResponseEntity<ResHeSoLuongVienChuc> add(@RequestBody ReqHeSoLuong loai) {
-            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.themHeSoLuongVienChuc(loai));
+            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResHeSoLuongVienChuc(heSoLuongVienChucService.themHeSoLuongVienChuc(loai));
             return new ResponseEntity<>(res, ResEnum.TAO_THANH_CONG.getStatusCode());
         }
 
         @PatchMapping("/he-so-luong-vien-chuc/{id}")
         public ResponseEntity<ResHeSoLuongVienChuc> edit(@PathVariable(name = "id") int id, @RequestBody ReqHeSoLuong loai) {
-            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResNhomVienChuc(heSoLuongVienChucService.suaHeSoLuongVienChuc(id, loai));
+            ResHeSoLuongVienChuc res = mapperHeSoLuongVienChuc.mapToResHeSoLuongVienChuc(heSoLuongVienChucService.suaHeSoLuongVienChuc(id, loai));
             return new ResponseEntity<>(res, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
         }
 
@@ -950,9 +954,9 @@ public class UtilitiesController {
     @Tag(name = "Ngạch công chức ", description = "Cấu hình")
     class NgachCongChucController {
         @GetMapping("/ngach-cong-chuc")
-        public ResponseEntity<List<ResNgachCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResNgachCongChuc> res = ngachCongChucService.xemDanhSach(pageNumber, pageSize).stream().map(mapperNgachCongChuc::mapToResNgachCongChuc).toList();
+        public ResponseEntity<ResTheDTO<ResNgachCongChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+            ResTheDTO<ResNgachCongChuc> res = ngachCongChucService.xemDanhSach(pageNumber, pageSize);
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 
@@ -984,9 +988,9 @@ public class UtilitiesController {
     @Tag(name = "Ngạch viên chức ", description = "Cấu hình")
     class NgachVienChucController {
         @GetMapping("/ngach-vien-chuc")
-        public ResponseEntity<List<ResNgachVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
-                                                             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-            List<ResNgachVienChuc> res = ngachVienChucService.xemDanhSach(pageNumber, pageSize).stream().map(mapperNgachVienChuc::mapToResNgachVienChuc).toList();
+        public ResponseEntity<ResTheDTO<ResNgachVienChuc>> getAll(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
+                                                                  @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
+            ResTheDTO<ResNgachVienChuc> res = ngachVienChucService.xemDanhSach(pageNumber, pageSize);
             return new ResponseEntity<>(res, ResEnum.THANH_CONG.getStatusCode());
         }
 

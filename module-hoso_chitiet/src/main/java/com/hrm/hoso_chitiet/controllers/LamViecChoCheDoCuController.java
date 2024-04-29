@@ -1,8 +1,8 @@
 package com.hrm.hoso_chitiet.controllers;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.response.ResLamViecChoCheDoCu;
+import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
@@ -30,40 +30,39 @@ import java.util.UUID;
 @RequiredArgsConstructor // create constructor if field set final or @not null
 public class LamViecChoCheDoCuController {
     private final IHoSoChiTietServices.ILamViecChoCheDoCuServiceChiTiet lamViecChoCheDoCuService;
-    private final MapperLamViecChoCheDoCu mapper;
 
     @GetMapping("/{id}/lam-viec-cho-che-do-cu")
-    public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllByHoSoId(
+    public ResponseEntity<ResTheDTO<ResLamViecChoCheDoCu>> getAllByHoSoId(
             @PathVariable(name = "id") UUID id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        ResTheDTO<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachTheoHoSoId(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/lam-viec-cho-che-do-cu")
-    public ResponseEntity<List<ResLamViecChoCheDoCu>> getAll(
+    public ResponseEntity<ResTheDTO<ResLamViecChoCheDoCu>> getAll(
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize
     ) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        ResTheDTO<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSach(xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/lam-viec-cho-che-do-cu/{id}")
     public ResponseEntity<ResLamViecChoCheDoCu> getById(@PathVariable(name = "id") int id) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.xemChiTiet(id));
+        ResLamViecChoCheDoCu ls = lamViecChoCheDoCuService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/lam-viec-cho-che-do-cu/{id}")
     @Transactional
     public ResponseEntity<ResLamViecChoCheDoCu> add(@PathVariable(name = "id") UUID id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.them(id, cu));
+        ResLamViecChoCheDoCu ls = lamViecChoCheDoCuService.them(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -71,7 +70,7 @@ public class LamViecChoCheDoCuController {
     public ResponseEntity<ResLamViecChoCheDoCu> edit(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu, role));
+        ResLamViecChoCheDoCu ls = lamViecChoCheDoCuService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
@@ -95,26 +94,26 @@ public class LamViecChoCheDoCuController {
 
     //EMPLOYEE
     @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu")
-    public ResponseEntity<List<ResLamViecChoCheDoCu>> getAllCaNhan(
+    public ResponseEntity<ResTheDTO<ResLamViecChoCheDoCu>> getAllCaNhan(
             @RequestHeader(name = "taiKhoanId", required = false) int id,
             @RequestParam(name = "pheDuyet", required = false) XacNhan xacNhan,
             @RequestParam(name = "sort", required = false, defaultValue = "createAt") String byDate,
             @RequestParam(name = "page", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(name = "size", required = false, defaultValue = "10") int pageSize) {
-        List<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize).stream().map(mapper::maptoResLamViecChoCheDoCu).toList();
+        ResTheDTO<ResLamViecChoCheDoCu> ls = lamViecChoCheDoCuService.xemDanhSachCaNhan(id, xacNhan, byDate, pageNumber, pageSize);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/ca-nhan/lam-viec-cho-che-do-cu/{id}")
     public ResponseEntity<ResLamViecChoCheDoCu> getByIdCaNhan(@PathVariable(name = "id") int id) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.xemChiTiet(id));
+        ResLamViecChoCheDoCu ls = lamViecChoCheDoCuService.xemChiTiet(id);
         return new ResponseEntity<>(ls, ResEnum.THANH_CONG.getStatusCode());
     }
 
     @PostMapping("/ca-nhan/lam-viec-cho-che-do-cu")
     @Transactional
     public ResponseEntity<ResLamViecChoCheDoCu> addCaNhan(@RequestHeader(name = "taiKhoanId", required = false) int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.themCaNhan(id, cu));
+        ResLamViecChoCheDoCu ls = lamViecChoCheDoCuService.themCaNhan(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 
@@ -122,7 +121,7 @@ public class LamViecChoCheDoCuController {
     public ResponseEntity<ResLamViecChoCheDoCu> editCaNhan(
             @RequestHeader(name = "role", required = false) String role,
             @PathVariable(name = "id") int id, @RequestBody ReqLamViecChoCheDoCu cu) {
-        ResLamViecChoCheDoCu ls = mapper.maptoResLamViecChoCheDoCu(lamViecChoCheDoCuService.sua(id, cu, role));
+        ResLamViecChoCheDoCu ls = lamViecChoCheDoCuService.sua(id, cu, role);
         return new ResponseEntity<>(ls, ResEnum.CAP_NHAT_THANH_CONG.getStatusCode());
     }
 
