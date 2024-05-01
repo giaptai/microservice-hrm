@@ -152,6 +152,13 @@ public class TaiKhoanService implements ITaiKhoanService {
                                 metadata.partition(),
                                 metadata.offset(),
                                 metadata.timestamp());
+                    } else {
+                        try {
+                            System.err.println(e.getMessage());
+                            throw e;
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
                     }
                 }
             });
