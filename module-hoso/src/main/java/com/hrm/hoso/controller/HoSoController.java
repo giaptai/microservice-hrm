@@ -109,7 +109,7 @@ public class HoSoController {
 //        return new ResponseEntity<>(hoSos, ResEnum.THANH_CONG.getCode());
 //    }
 
-    @PutMapping("/nhan-vien/ho-so/phe-duyet")
+    @PatchMapping("/nhan-vien/ho-so/phe-duyet")
     public ResponseEntity<Boolean> approveHoSo(@RequestParam(name = "pheDuyet") PheDuyet pheDuyet, @RequestBody List<ResHoSo> resHoSos) {
         boolean hoSos = hoSoService.pheDuyetHoSo(pheDuyet, resHoSos);
         return new ResponseEntity<>(hoSos, ResEnum.PHE_DUYET_HO_SO_THANH_CONG.getCode());

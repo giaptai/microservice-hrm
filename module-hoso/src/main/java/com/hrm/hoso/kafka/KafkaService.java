@@ -28,6 +28,7 @@ import java.util.List;
 public class KafkaService {
     final HoSoRepository hoSoRepository;
     final HoSoConsumer hoSoConsumer;
+
     @Async
     @EventListener(value = ApplicationReadyEvent.class)
     protected void HoSoListener() {
@@ -54,9 +55,9 @@ public class KafkaService {
             // subscribe consumer to our topic(s)
             consumer.subscribe(List.of("hoso_create"));
             // poll for new data
+//            boolean flag = true;
             while (true) {
-                ConsumerRecords<String, ReqTaoHoSo> records =
-                        consumer.poll(Duration.ofMillis(1000));
+                ConsumerRecords<String, ReqTaoHoSo> records = consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, ReqTaoHoSo> record : records) {
                     System.out.printf("""
                                     Key: %s
@@ -73,6 +74,10 @@ public class KafkaService {
                             .createAt(LocalDateTime.now())
                             .build();
                     hoSoRepository.save(hoSo);
+//                    if(record.offset() > 0){
+//                        flag = false;
+//                        consumer.close();
+//                    }
                 }
             }
         } catch (WakeupException e) {

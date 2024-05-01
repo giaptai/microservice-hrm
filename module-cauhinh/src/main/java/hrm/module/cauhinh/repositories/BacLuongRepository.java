@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-
 @Repository
 public interface BacLuongRepository extends JpaRepository<BacLuong, Integer> {
     @Query

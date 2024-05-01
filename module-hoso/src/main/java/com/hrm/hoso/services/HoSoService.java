@@ -13,10 +13,13 @@ import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqThongTinTuyenDung;
 import com.hrm.hoso.dto.request.ReqViecLam;
 import com.hrm.hoso.dto.response.ResChucVu;
+import com.hrm.hoso.dto.response.ResChucVuKiemNhiem;
 import com.hrm.hoso.dto.response.ResHoSo;
 
 import com.hrm.hoso.dto.response.ResHoSoTomTat;
 import com.hrm.hoso.dto.response.ResListHoSo;
+import com.hrm.hoso.dto.response.ResNgachNhanVien;
+import com.hrm.hoso.dto.response.ResViecLam;
 import com.hrm.hoso.enums.PheDuyet;
 
 import com.hrm.hoso.dto.request.ReqHoSo;
@@ -284,6 +287,27 @@ public class HoSoService implements IHoSoService {
     public ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo) {
         HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
         return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
+    }
+
+    private double tinhLuong(ResHoSo hoSo) {
+        ResChucVu chucVu = hoSo.chucVu();
+        ResChucVuKiemNhiem kiemNhiem = hoSo.chucVuKiemNhiem();
+        ResNgachNhanVien ngach = hoSo.ngach();
+        ResViecLam viecLam = hoSo.viecLam();
+        double phuCapChucVu = chucVu.phuCapChucVu();
+        double phuCapKiemNhiem = kiemNhiem.phuCapKiemNhiem();
+        double phuCapKhac = kiemNhiem.phuCapKhac();
+        float heSoNgach = ngach.heSo();
+        float phanTramNgach = ngach.phanTramHuongLuongNgach();
+        double phuCapNgach = ngach.phuCapThamNienVuotKhungNgach();
+        double luongCoBan = 1_800_000;
+        float phanTramViecLam = viecLam.phamTramHuongLuong();
+        double phuCapViecLam = viecLam.phuCapThamNienVuotKhung();
+        double luongViecLam = viecLam.tienLuong();
+        double tienLuongNhan = (phuCapChucVu + phuCapKiemNhiem + phuCapKhac) +
+                (heSoNgach * phanTramNgach * luongCoBan + phuCapNgach) +
+                (phanTramViecLam * luongViecLam + phuCapViecLam);
+        return tienLuongNhan;
     }
 
     private void mapToHoSo(HoSo hoSo, ReqHoSo req) {
