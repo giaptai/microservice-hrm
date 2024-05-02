@@ -55,8 +55,8 @@ public class KafkaService {
             // subscribe consumer to our topic(s)
             consumer.subscribe(List.of("hoso_create"));
             // poll for new data
-//            boolean flag = true;
-            while (true) {
+            boolean flag = true;
+            while (flag) {
                 ConsumerRecords<String, ReqTaoHoSo> records = consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, ReqTaoHoSo> record : records) {
                     System.out.printf("""
@@ -74,10 +74,9 @@ public class KafkaService {
                             .createAt(LocalDateTime.now())
                             .build();
                     hoSoRepository.save(hoSo);
-//                    if(record.offset() > 0){
-//                        flag = false;
-//                        consumer.close();
-//                    }
+                    if(record.offset() > 0){
+                        flag = false;
+                    }
                 }
             }
         } catch (WakeupException e) {

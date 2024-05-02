@@ -4,25 +4,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.Map;
-import java.util.UUID;
 
-public record ReqHoSo(
+public record ReqTaoHoSoClient(
 //        UUID uuid,
         String hoVaTen,
         String soCCCD,
         int taiKhoan
 ) {
-    public static class ReqHoSoSerializer implements Serializer<ReqHoSo> {
+    public static class ReqHoSoSerializer implements Serializer<ReqTaoHoSoClient> {
         private final ObjectMapper objectMapper = new ObjectMapper();
         @Override
         public void configure(Map<String, ?> configs, boolean isKey) {
         }
         @Override
-        public byte[] serialize(String topic, ReqHoSo data) {
+        public byte[] serialize(String topic, ReqTaoHoSoClient data) {
             try {
 //                ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //                ObjectOutputStream oos = new ObjectOutputStream(bos);
