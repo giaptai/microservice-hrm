@@ -2,7 +2,7 @@ package com.hrm.taikhoan.service;
 
 import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
-import com.hrm.taikhoan.dto.request.ReqHoSo;
+import com.hrm.taikhoan.dto.request.ReqTaoHoSoClient;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
 import com.hrm.taikhoan.dto.resopnse.ResTheDTO;
@@ -130,12 +130,12 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .createAt(LocalDateTime.now())
                     .build();
             taiKhoanRepository.save(taiKhoan);
-            ReqHoSo reqHoSo = new ReqHoSo(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
+            ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
 //            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqHoSo);
             // create the producer
-            KafkaProducer<String, ReqHoSo> producer = new KafkaProducer<>(hoSoProducer.getProperties());
+            KafkaProducer<String, ReqTaoHoSoClient> producer = new KafkaProducer<>(hoSoProducer.getProperties());
             // create a producer record
-            ProducerRecord<String, ReqHoSo> producerRecord = new ProducerRecord<>("hoso_create", reqHoSo);
+            ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", reqTaoHoSoClient);
             // send data - asynchronous
             producer.send(producerRecord, new Callback() {
                 @Override

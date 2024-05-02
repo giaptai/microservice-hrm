@@ -140,44 +140,67 @@ public class HoSoService implements IHoSoService {
     }
 
     private ResListHoSo locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
+        long totalRecord;
+        int totalPage;
         //JPA Criteria API
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder countBuilder = entityManager.getCriteriaBuilder();
+
         CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
+        CriteriaQuery<Long> countQuery = countBuilder.createQuery(Long.class);
+
+
         Root<HoSo> root = query.from(HoSo.class);
+        Root<HoSo> countRoot = countQuery.from(HoSo.class);
+
         Predicate predicate = null;
-//        if (hoVaTen != null && !hoVaTen.isEmpty() || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1){
+        Predicate countPredicate = null;
+
         Join<HoSo, ChucVuHienTai> join = root.join("chucVuHienTai", JoinType.LEFT);
+        Join<HoSo, ChucVuHienTai> countJoin = countRoot.join("chucVuHienTai", JoinType.LEFT);
+
         if (hoVaTen != null && !hoVaTen.isEmpty()) {
             predicate = builder.like(builder.lower(root.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%");
+            countPredicate = builder.like(builder.lower(countJoin.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%");
         }
         if (danTocId > 0) {
             Predicate danTocPredicate = builder.equal(root.get("danTocId"), danTocId);
+            Predicate danTocCountPredicate = builder.equal(countJoin.get("danTocId"), danTocId);
+
             predicate = (predicate != null) ? builder.and(predicate, danTocPredicate) : danTocPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, danTocCountPredicate) : danTocCountPredicate;
         }
         if (chucVuHienTaiId > 0) {
             Predicate chucVuPredicate = builder.equal(join.get("chucVuId"), chucVuHienTaiId);
+            Predicate chucVuCountPredicate = builder.equal(countJoin.get("chucVuId"), chucVuHienTaiId);
+
             predicate = (predicate != null) ? builder.and(predicate, chucVuPredicate) : chucVuPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, chucVuCountPredicate) : chucVuCountPredicate;
         }
         if (coQuanToChucDonViId > 0) {
             Predicate coQuanPredicate = builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
+            Predicate coQuanCountPredicate = builder.equal(countJoin.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
+
+
             predicate = (predicate != null) ? builder.and(predicate, coQuanPredicate) : coQuanPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, coQuanCountPredicate) : coQuanCountPredicate;
         }
         if (pheDuyet != null) {
             Predicate pheDuyetPredicate = builder.equal(root.get("pheDuyet"), pheDuyet);
+            Predicate pheDuyetCountPredicate = builder.equal(countRoot.get("pheDuyet"), pheDuyet);
+
+
             predicate = (predicate != null) ? builder.and(predicate, pheDuyetPredicate) : pheDuyetPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, pheDuyetCountPredicate) : pheDuyetCountPredicate;
         }
-//        }
-        // Apply the predicate to the query
-//        if (predicate != null) {
-//            query.orderBy(builder.desc(root.get(byDate))).where(predicate);
-//        }
         if (predicate != null) {
             query.where(predicate);
         }
-        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
-        countQuery.select(builder.count(countQuery.from(HoSo.class))).where(predicate);
-        long totalRecord = entityManager.createQuery(countQuery).getSingleResult();
-        int totalPage = Math.round(((float) totalRecord / pageSize));
+        if (countPredicate != null) {
+            countQuery.select(countBuilder.count(countRoot)).where(countPredicate);
+        }
+        totalRecord = entityManager.createQuery(countQuery).getSingleResult();
+        totalPage = Math.round(((float) totalRecord / pageSize));
         // Apply order by
         if (byDate != null) {
             query.orderBy(builder.desc(root.get(byDate)));
