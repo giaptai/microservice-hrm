@@ -80,6 +80,13 @@ public class HoSoController {
         return new ResponseEntity<>(chucVu, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
     }
 
+    @PatchMapping("/nhan-vien/ho-so/{id}/chuc-vu-api")
+    @Transactional
+    public ResponseEntity<ResChucVu> editChucVuApi(@PathVariable(name = "id") UUID id, @RequestBody ReqChucVu req) {
+        ResChucVu chucVu = hoSoService.capNhatChucVuHienTaiApi(id, req);
+        return new ResponseEntity<>(chucVu, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
+    }
+
     @PatchMapping("/nhan-vien/ho-so/{id}")
     @Transactional
     public ResponseEntity<ResHoSo> editHoSo(@PathVariable(name = "id", required = false) UUID id,

@@ -14,6 +14,7 @@ public class HoSoConsumer {
     Properties properties;
     final String BOOTSTRAP_SERVER = "localhost:9092";
     String GROUP_ID = "my-hoso-app";
+
     public HoSoConsumer() {
         this.properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
@@ -22,5 +23,6 @@ public class HoSoConsumer {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, GROUP_ID);
         //Auto Offset Reset is set to "earliest", which means on the first run of the application we will be reading all historical data in our topic.
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        properties.put("auto.offset.reset", "latest");
     }
 }

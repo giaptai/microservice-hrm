@@ -23,6 +23,8 @@ public interface IHoSoService {
 
     ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu);
 
+    ResChucVu capNhatChucVuHienTaiApi(UUID id, ReqChucVu reqChucVu);
+
     ResHoSo xemHoSoTheoId(UUID id);
 
     ResHoSo xemHoSoCaNhan(int taiKhoanId);

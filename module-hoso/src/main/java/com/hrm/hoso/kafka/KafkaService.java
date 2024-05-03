@@ -10,21 +10,21 @@ import lombok.experimental.FieldDefaults;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EnableAsync
 public class KafkaService {
     final HoSoRepository hoSoRepository;
     final HoSoConsumer hoSoConsumer;
@@ -54,10 +54,11 @@ public class KafkaService {
         try {
             // subscribe consumer to our topic(s)
             consumer.subscribe(List.of("hoso_create"));
+//            Collection<TopicPartition> partitions = consumer.partitionsFor("hoso_create").stream();
             // poll for new data
-            boolean flag = true;
-            while (flag) {
-                ConsumerRecords<String, ReqTaoHoSo> records = consumer.poll(Duration.ofMillis(1000));
+//            boolean flag = true;
+            while (true) {
+                ConsumerRecords<String, ReqTaoHoSo> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, ReqTaoHoSo> record : records) {
                     System.out.printf("""
                                     Key: %s
@@ -74,9 +75,9 @@ public class KafkaService {
                             .createAt(LocalDateTime.now())
                             .build();
                     hoSoRepository.save(hoSo);
-                    if(record.offset() > 0){
-                        flag = false;
-                    }
+//                    if(record.offset() > 0){
+//                        flag = false;
+//                    }
                 }
             }
         } catch (WakeupException e) {

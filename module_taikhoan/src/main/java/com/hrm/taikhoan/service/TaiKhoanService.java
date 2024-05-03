@@ -1,5 +1,7 @@
 package com.hrm.taikhoan.service;
 
+import com.hrm.taikhoan.client.ho_so.HoSoClient;
+import com.hrm.taikhoan.client.ho_so.HoSoDTO;
 import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaoHoSoClient;
@@ -44,6 +46,7 @@ import java.util.UUID;
 public class TaiKhoanService implements ITaiKhoanService {
     final JWTUtilities jwtUtilities;
     final TaiKhoanRepository taiKhoanRepository;
+    final HoSoClient hoSoClient;
     //    final JavaMailSender javaMailSender;
 //    final IAuthenticationFacade facade;
 //    final KafkaProducers producers;
@@ -172,6 +175,35 @@ public class TaiKhoanService implements ITaiKhoanService {
 //                taiKhoanRepository.save(taiKhoan);
 //                return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
 //            } else return null;
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
+    }
+
+    @Override
+    public ResTaiKhoan themApi(ReqTaiKhoan reqTaiKhoan) {
+        try {
+            TaiKhoan taiKhoan;
+            List<TaiKhoan> listUsername = taiKhoanRepository.findAll();
+            //tạo username
+            String hoVaTen = reqTaiKhoan.hoVaTen();
+            String newUsername = ITaiKhoanService.createUsername(hoVaTen, listUsername);
+            taiKhoan = TaiKhoan.builder()
+                    .hoVaTen(reqTaiKhoan.hoVaTen())
+                    .username(newUsername)
+                    .password(reqTaiKhoan.soCCCD())
+                    .email(reqTaiKhoan.email())
+                    .roleTaiKhoan(RoleTaiKhoan.EMPLOYEE)
+                    .trangThai(true)
+                    .createAt(LocalDateTime.now())
+                    .build();
+            taiKhoanRepository.save(taiKhoan);
+            ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
+            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqTaoHoSoClient);
+            if (hoSoDTO != null) {
+                return mapperTaiKhoan.mapToResTaiKhoan(taiKhoan);
+            } else return null;
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             throw e;

@@ -48,7 +48,7 @@ public class TaiKhoan extends DateTimeObject {
     @Column(columnDefinition = "varchar(20)")
     String password;
 
-    @Column(columnDefinition = "varchar(250) not null default ''")
+    @Column(columnDefinition = "varchar(250) unique")
     String email;
 
     @Column(name = "role")
