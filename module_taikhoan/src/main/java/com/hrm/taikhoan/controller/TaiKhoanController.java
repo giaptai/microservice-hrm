@@ -74,6 +74,12 @@ public class TaiKhoanController {
         return ResDTO.reply(taiKhoanService.them(reqTaiKhoan), ResEnum.TAO_TAI_KHOAN_THANH_CONG);
     }
 
+    @PostMapping("/nhan-vien/tai-khoan-api")
+    @Transactional(Transactional.TxType.NEVER)
+    public ResponseEntity<ResDTO<ResTaiKhoan>> addTaiKhoanApi(@RequestBody ReqTaiKhoan reqTaiKhoan) {
+        return ResDTO.reply(taiKhoanService.themApi(reqTaiKhoan), ResEnum.TAO_TAI_KHOAN_THANH_CONG);
+    }
+
     //EMPLOYEE - EMPLOYEE - EMPLOYEE
     @GetMapping("/ca-nhan/tai-khoan")
     @Transactional

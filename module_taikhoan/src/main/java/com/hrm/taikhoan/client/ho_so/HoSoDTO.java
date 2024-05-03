@@ -12,7 +12,7 @@ import lombok.Builder;
 @Builder
 public record HoSoDTO(
         UUID id,
-        String hovaten,
+        String hoVaTen,
         GioiTinh gioiTinh,
         String cacTenGoiKhac,
         LocalDateTime sinhNgay,

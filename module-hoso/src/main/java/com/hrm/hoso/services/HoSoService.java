@@ -1,5 +1,8 @@
 package com.hrm.hoso.services;
 
+import com.hrm.hoso.client.qua_trinh_cong_tac.QuaTrinhCongTacClient;
+import com.hrm.hoso.client.qua_trinh_cong_tac.ReqQuaTrinhCongTac;
+import com.hrm.hoso.client.qua_trinh_cong_tac.ResQuaTrinhCongTac;
 import com.hrm.hoso.dto.mapper.MapperChucVuHienTai;
 import com.hrm.hoso.dto.mapper.MapperHoSo;
 import com.hrm.hoso.dto.mapper.MapperHoSoTomTat;
@@ -92,6 +95,8 @@ public class HoSoService implements IHoSoService {
     final MapperHoSoTomTat mapperHoSoTomTat;
     //criticizable
     final EntityManager entityManager;
+    //client
+    final QuaTrinhCongTacClient quaTrinhCongTacClient;
 
 
     @Override
@@ -140,64 +145,64 @@ public class HoSoService implements IHoSoService {
     }
 
     private ResListHoSo locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
-        long totalRecord;
-        int totalPage;
+        long totalRecord = 0;
+        int totalPage = 1;
         //JPA Criteria API
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaBuilder countBuilder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder countBuilder = entityManager.getCriteriaBuilder(); //count
 
         CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
-        CriteriaQuery<Long> countQuery = countBuilder.createQuery(Long.class);
+        CriteriaQuery<Long> countQuery = countBuilder.createQuery(Long.class); //count
 
 
         Root<HoSo> root = query.from(HoSo.class);
-        Root<HoSo> countRoot = countQuery.from(HoSo.class);
+        Root<HoSo> countRoot = countQuery.from(HoSo.class); //count
 
         Predicate predicate = null;
-        Predicate countPredicate = null;
+        Predicate countPredicate = null; //count
 
         Join<HoSo, ChucVuHienTai> join = root.join("chucVuHienTai", JoinType.LEFT);
-        Join<HoSo, ChucVuHienTai> countJoin = countRoot.join("chucVuHienTai", JoinType.LEFT);
+        Join<HoSo, ChucVuHienTai> countJoin = countRoot.join("chucVuHienTai", JoinType.LEFT); //count
 
         if (hoVaTen != null && !hoVaTen.isEmpty()) {
             predicate = builder.like(builder.lower(root.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%");
-            countPredicate = builder.like(builder.lower(countJoin.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%");
+            countPredicate = builder.like(builder.lower(countJoin.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%"); //count
         }
         if (danTocId > 0) {
             Predicate danTocPredicate = builder.equal(root.get("danTocId"), danTocId);
-            Predicate danTocCountPredicate = builder.equal(countJoin.get("danTocId"), danTocId);
+            Predicate danTocCountPredicate = builder.equal(countJoin.get("danTocId"), danTocId); //count
 
             predicate = (predicate != null) ? builder.and(predicate, danTocPredicate) : danTocPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, danTocCountPredicate) : danTocCountPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, danTocCountPredicate) : danTocCountPredicate; //count
         }
         if (chucVuHienTaiId > 0) {
             Predicate chucVuPredicate = builder.equal(join.get("chucVuId"), chucVuHienTaiId);
-            Predicate chucVuCountPredicate = builder.equal(countJoin.get("chucVuId"), chucVuHienTaiId);
+            Predicate chucVuCountPredicate = builder.equal(countJoin.get("chucVuId"), chucVuHienTaiId); //count
 
             predicate = (predicate != null) ? builder.and(predicate, chucVuPredicate) : chucVuPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, chucVuCountPredicate) : chucVuCountPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, chucVuCountPredicate) : chucVuCountPredicate; //count
         }
         if (coQuanToChucDonViId > 0) {
             Predicate coQuanPredicate = builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
-            Predicate coQuanCountPredicate = builder.equal(countJoin.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
+            Predicate coQuanCountPredicate = builder.equal(countJoin.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId); //count
 
 
             predicate = (predicate != null) ? builder.and(predicate, coQuanPredicate) : coQuanPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, coQuanCountPredicate) : coQuanCountPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, coQuanCountPredicate) : coQuanCountPredicate; //count
         }
         if (pheDuyet != null) {
             Predicate pheDuyetPredicate = builder.equal(root.get("pheDuyet"), pheDuyet);
-            Predicate pheDuyetCountPredicate = builder.equal(countRoot.get("pheDuyet"), pheDuyet);
+            Predicate pheDuyetCountPredicate = builder.equal(countRoot.get("pheDuyet"), pheDuyet); //count
 
 
             predicate = (predicate != null) ? builder.and(predicate, pheDuyetPredicate) : pheDuyetPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, pheDuyetCountPredicate) : pheDuyetCountPredicate;
+            countPredicate = (countPredicate != null) ? builder.and(countPredicate, pheDuyetCountPredicate) : pheDuyetCountPredicate; //count
         }
         if (predicate != null) {
             query.where(predicate);
         }
         if (countPredicate != null) {
-            countQuery.select(countBuilder.count(countRoot)).where(countPredicate);
+            countQuery.select(countBuilder.count(countRoot)).where(countPredicate); //count
         }
         totalRecord = entityManager.createQuery(countQuery).getSingleResult();
         totalPage = Math.round(((float) totalRecord / pageSize));
@@ -273,6 +278,42 @@ public class HoSoService implements IHoSoService {
         // flush and close producer
         producer.close();
         return resChucVu;
+    }
+
+    @Override
+    public ResChucVu capNhatChucVuHienTaiApi(UUID id, ReqChucVu reqChucVu) {
+        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+        ChucVuHienTai chucVuHienTai = chucVuHienTaiRepository.findById(hoSo.getId()).orElse(null);
+        ResQuaTrinhCongTac tac = null;
+        ResChucVu resChucVu = null;
+        if (reqChucVu != null) {
+            if (chucVuHienTai != null) {
+                chucVuHienTai.setChucVuId(reqChucVu.chucVuHienTaiId());
+                chucVuHienTai.setNgayBoNhiem(reqChucVu.ngayBoNhiem());
+                chucVuHienTai.setNgayBoNhiemLai(reqChucVu.ngayBoNhiemLai());
+                chucVuHienTai.setDuocQuyHoacChucDanh(reqChucVu.duocQuyHoacChucDanh());
+                chucVuHienTai.setPhuCapChucVu(reqChucVu.phuCapChucVu());
+                chucVuHienTai.setCoQuanToChucDonViTuyenDungId(reqChucVu.coQuanToChucDonViTuyenDungId());
+                chucVuHienTai.setUpdate_at();
+            } else {
+                chucVuHienTai = new ChucVuHienTai(
+                        reqChucVu.chucVuHienTaiId(),
+                        reqChucVu.ngayBoNhiem(),
+                        reqChucVu.ngayBoNhiemLai(),
+                        reqChucVu.duocQuyHoacChucDanh(),
+                        reqChucVu.phuCapChucVu(),
+                        reqChucVu.coQuanToChucDonViTuyenDungId(),
+                        hoSo);
+            }
+            tac = quaTrinhCongTacClient.add(id, new ReqQuaTrinhCongTac(reqChucVu.ngayBoNhiem(), reqChucVu.ngayBoNhiemLai(), reqChucVu.coQuanToChucDonViTuyenDungId(), reqChucVu.duocQuyHoacChucDanh()));
+        }
+        if (tac == null) {
+            throw new ResponseStatusException(ResEnum.KHONG_HOP_LE.getCode());
+        }
+        chucVuHienTaiRepository.save(chucVuHienTai);
+        resChucVu = mapperChucVuHienTai.mapToResChucVu(chucVuHienTai);
+        return resChucVu;
+
     }
 
     @Override

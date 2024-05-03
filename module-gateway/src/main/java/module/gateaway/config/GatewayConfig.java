@@ -87,6 +87,7 @@ public class GatewayConfig {
                 )
                 .route("tai-khoan-id",
                         pred -> pred.path("/api/v1/nhan-vien/tai-khoan/**",
+                                        "/api/v1/nhan-vien/tai-khoan-api",
                                         "/api/v1/ca-nhan/tai-khoan/**")
                                 .filters(f -> f.filter(filter))
                                 .uri(taiKhoanURL)

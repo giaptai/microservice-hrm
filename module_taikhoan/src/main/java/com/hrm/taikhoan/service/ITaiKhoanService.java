@@ -28,7 +28,13 @@ public interface ITaiKhoanService {
 
     ResTaiKhoan them(ReqTaiKhoan taiKhoan);
 
+    ResTaiKhoan themApi(ReqTaiKhoan taiKhoan);
+
     ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin login);
+
+     default void quenMatKhau(String email){
+
+    };
 
     static boolean checkMatKhau(String matkhau) {
         Pattern pattern = Pattern.compile("^[\\p{Lower}\\p{Upper}\\d\\S]{6,15}$");
