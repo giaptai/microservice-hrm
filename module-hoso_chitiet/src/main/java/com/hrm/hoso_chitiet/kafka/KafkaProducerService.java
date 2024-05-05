@@ -71,15 +71,17 @@ public class KafkaProducerService {
         producer.close();
     }
     @Async
-    @Scheduled(fixedRate = 3_600_000)
+    @Scheduled(fixedRate = 1_000)
     protected void showKhenThuong() {
         List<ResKhenThuong> khenThuongs = khenThuongRepository.getAllByHoSoInLast7Days().stream().map(mapperKhenThuong::maptoResKhenThuong).toList();
         System.out.println(khenThuongs.size());
-        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKhenThuong.ResKhenThuongSerializer.class.getName());
+//        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKhenThuong.ResKhenThuongSerializer.class.getName());
+        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), StringSerializer.class.getName());
         // create the producer
-        KafkaProducer<String, List<ResKhenThuong>> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
+//        KafkaProducer<String, List<ResKhenThuong>> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
+        KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
         // create a producer record
-        ProducerRecord<String, List<ResKhenThuong>> producerRecord = new ProducerRecord<>("khen_thuong", khenThuongs);
+        ProducerRecord<String, String> producerRecord = new ProducerRecord<>("khen_thuong", khenThuongs.toString());
         // send data - asynchronous
         producer.send(producerRecord, new Callback() {
             @Override
