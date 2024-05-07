@@ -24,14 +24,14 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaConsumerService {
     final QuaTrinhCongTacRepository quaTrinhCongTacRepository;
-
+    final KafkaConsumerConfig consumerConfig;
     @Async
     @EventListener(value = ApplicationReadyEvent.class)
     protected void QuaTrinhCongTacListener() {
-        KafkaConsumerConfig config = new KafkaConsumerConfig("my-quatrinhcongtac-app", StringDeserializer.class.getName(), ResChucVu.ResChucVuSoDeserializer.class.getName());
+//        KafkaConsumerConfig config = new KafkaConsumerConfig("my-quatrinhcongtac-app", StringDeserializer.class.getName(), ResChucVu.ResChucVuSoDeserializer.class.getName());
         System.out.println("crush em t");
         // create consumer
-        KafkaConsumer<String, ResChucVu> consumer = new KafkaConsumer<>(config.getProperties());
+        KafkaConsumer<String, ResChucVu> consumer = new KafkaConsumer<>(consumerConfig.quaTrinhCongTacProducerConfig());
         // get a reference to the current thread
         final Thread mainThread = Thread.currentThread();
         // adding the shutdown hook

@@ -29,6 +29,10 @@ ext {
 dependencies {
 	// https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
 	implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.7.0'
+	// https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+//	implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.6.1'
+	// https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams
+	implementation group: 'org.apache.kafka', name: 'kafka-streams', version: '3.7.0'
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign
 	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.0'
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
