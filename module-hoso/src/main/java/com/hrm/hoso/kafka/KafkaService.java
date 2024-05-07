@@ -65,8 +65,9 @@ public class KafkaService {
                                     Value: %s
                                     Partition: %d
                                     Offset: %d
+                                    Timestamp: %5$tD ,%5$tT
                                     """,
-                            record.key(), record.value(), record.partition(), record.offset());
+                            record.key(), record.value(), record.partition(), record.offset(), record.timestamp());
                     HoSo hoSo = HoSo.builder()
                             .hoVaTen(record.value().hoVaTen())
                             .soCCCD(record.value().soCCCD())

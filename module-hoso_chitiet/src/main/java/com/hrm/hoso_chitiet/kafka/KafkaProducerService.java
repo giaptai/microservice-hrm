@@ -19,12 +19,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EnableScheduling
 public class KafkaProducerService {
     final KyLuatRepository kyLuatRepository;
     final KhenThuongRepository khenThuongRepository;
@@ -32,37 +34,33 @@ public class KafkaProducerService {
     final MapperKyLuat mapperKyLuat;
     final MapperKhenThuong mapperKhenThuong;
     //producer kafka
-    private KafkaProducerConfig kafkaProducerConfig;
+    final KafkaProducerConfig kafkaProducerConfig;
 
     @Async
     @Scheduled(fixedRate = 3_600_000)
     protected void showKyLuat() {
         List<ResKyLuat> kyLuats = kyLuatRepository.getAllByHoSoInLast7Days().stream().map(mapperKyLuat::mapToResKyLuat).toList();
         System.out.println(kyLuats.size());
-        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKyLuat.ResKyLuatSerializer.class.getName());
         // create the producer
-        KafkaProducer<String, List<ResKyLuat>> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
+        KafkaProducer<String, List<ResKyLuat>> producer = new KafkaProducer<>(kafkaProducerConfig.KyLuatProducerConfig());
         // create a producer record
         ProducerRecord<String, List<ResKyLuat>> producerRecord = new ProducerRecord<>("ky_luat", kyLuats);
         // send data - asynchronous
-        producer.send(producerRecord, new Callback() {
-            @Override
-            public void onCompletion(RecordMetadata metadata, Exception e) {
-                if (e == null) {
-                    System.out.printf("""
-                                    Received new metadata
-                                    "Topic: %s
-                                    Size: %d
-                                    Partition: %s
-                                    Offset: %s
-                                    Timestamp: %s
-                                    """,
-                            metadata.topic(),
-                            kyLuats.size(),
-                            metadata.partition(),
-                            metadata.offset(),
-                            metadata.timestamp());
-                }
+        producer.send(producerRecord, (metadata, e) -> {
+            if (e == null) {
+                System.out.printf("""
+                                Received new metadata
+                                "Topic: %s
+                                Size: %d
+                                Partition: %s
+                                Offset: %s
+                                Timestamp: %s
+                                """,
+                        metadata.topic(),
+                        kyLuats.size(),
+                        metadata.partition(),
+                        metadata.offset(),
+                        metadata.timestamp());
             }
         });
         // flush data - synchronous
@@ -70,16 +68,15 @@ public class KafkaProducerService {
         // flush and close producer
         producer.close();
     }
+
     @Async
-    @Scheduled(fixedRate = 1_000)
+    @Scheduled(fixedDelay = 3_000, initialDelay = 1_000)
     protected void showKhenThuong() {
         List<ResKhenThuong> khenThuongs = khenThuongRepository.getAllByHoSoInLast7Days().stream().map(mapperKhenThuong::maptoResKhenThuong).toList();
         System.out.println(khenThuongs.size());
 //        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), ResKhenThuong.ResKhenThuongSerializer.class.getName());
-        kafkaProducerConfig = new KafkaProducerConfig(StringSerializer.class.getName(), StringSerializer.class.getName());
         // create the producer
-//        KafkaProducer<String, List<ResKhenThuong>> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
-        KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProducerConfig.getProperties());
+        KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProducerConfig.KhenThuongProducerConfig());
         // create a producer record
         ProducerRecord<String, String> producerRecord = new ProducerRecord<>("khen_thuong", khenThuongs.toString());
         // send data - asynchronous
@@ -87,13 +84,15 @@ public class KafkaProducerService {
             @Override
             public void onCompletion(RecordMetadata metadata, Exception e) {
                 if (e == null) {
+                    // Date and time formatting can be done very easily using the printf method. You use a two-letter format,
+                    // starting with t and ending in one of the letters of the table as shown in the following code.
                     System.out.printf("""
                                     Received new metadata
                                     "Topic: %s
                                     Size: %d
                                     Partition: %s
                                     Offset: %s
-                                    Timestamp: %s
+                                    Timestamp: %5$td/%5$tm/%5$tY, %5$tH:%5$tM:%5$tS
                                     """,
                             metadata.topic(),
                             khenThuongs.size(),

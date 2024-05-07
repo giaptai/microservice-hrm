@@ -38,6 +38,25 @@ public record ResKhenThuong(
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime update_at
 ) {
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ", \"nam\":\"" + nam + '\"' +
+                ", \"xepLoaiChuyenMon\":\"" + xepLoaiChuyenMon + '\"' +
+                ", \"xepLoaiThiDua\":\"" + xepLoaiThiDua + '\"' +
+                ", \"hinhThucKhenThuongId\":" + hinhThucKhenThuongId +
+                ", \"hinhThucKhenThuongName\":\"" + hinhThucKhenThuongName + '\"' +
+                ", \"lyDo\":\"" + lyDo + '\"' +
+                ", \"xacNhan\":\"" + xacNhan + '\"' +
+                ", \"hoSoId\":\"" + hoSoId + '\"' +
+                ", \"hoVaTen\":\"" + hoVaTen + '\"' +
+                ", \"soCCCD\":\"" + soCCCD + '\"' +
+                ", \"create_at\":\"" + create_at + '\"' +
+                ", \"update_at\":\"" + update_at + '\"' +
+                "}";
+    }
+
     public static class ResKhenThuongSerializer implements Serializer<List<ResKhenThuong>> {
         private final ObjectMapper objectMapper = new ObjectMapper();
 
