@@ -1,6 +1,10 @@
 package com.hrm.hoso.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import com.hrm.hoso.dto.request.ReqChucVu;
+import com.hrm.hoso.dto.request.ReqHoSoTest;
 import com.hrm.hoso.dto.request.ReqTaoHoSo;
 import com.hrm.hoso.dto.request.ReqHoSo;
 import com.hrm.hoso.dto.response.ResChucVu;
@@ -10,18 +14,26 @@ import com.hrm.hoso.dto.response.ResListHoSo;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.response.ResEnum;
 import com.hrm.hoso.services.IHoSoService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -87,12 +99,28 @@ public class HoSoController {
         return new ResponseEntity<>(chucVu, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
     }
 
-    @PatchMapping("/nhan-vien/ho-so/{id}")
+    @PatchMapping(value = "/nhan-vien/ho-so/{id}", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
     @Transactional
     public ResponseEntity<ResHoSo> editHoSo(@PathVariable(name = "id", required = false) UUID id,
-                                            @RequestBody ReqHoSo reqHoSo) {
-        ResHoSo resHoSo = hoSoService.capNhatHoSoCCVC(id, reqHoSo);
+                                            @RequestPart(required = false) String reqHoSo,
+                                            @RequestPart(value = "anh", required = false) @Schema(type = "string", format = "binary") MultipartFile anh) {
+        ResHoSo resHoSo = hoSoService.capNhatHoSoCCVC(id, reqHoSo, anh);
         return new ResponseEntity<>(resHoSo, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
+    }
+
+    @PutMapping(value = "/nhan-vien/ho-so-test", consumes = {
+            MediaType.APPLICATION_JSON_VALUE,
+            MediaType.MULTIPART_FORM_DATA_VALUE
+    })
+    public ResponseEntity<String> editHoSoTest(@RequestPart() String reqHoSoTest,
+                                               @RequestPart(value = "anh", required = false) @Schema(type = "string", format = "binary") MultipartFile anh
+    ) {
+//        ReqHoSoTest soTest = new Gson().toJson(reqHoSoTest);
+        System.out.println(reqHoSoTest);
+        return new ResponseEntity<>("", ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
     }
 
 //    @GetMapping("/nhan-vien/ho-so/tim-kiem")

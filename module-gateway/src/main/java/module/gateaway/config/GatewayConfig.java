@@ -77,6 +77,7 @@ public class GatewayConfig {
         return builder.routes()
                 .route("ho-so-id",
                         pred -> pred.path("/api/v1/nhan-vien/ho-so/**",
+                                        "/api/v1/nhan-vien/ho-so-test",
                                         "/api/v1/ca-nhan/ho-so/**")
                                 .filters(f -> f.filter(filter))
                                 .uri(hoSoURL)

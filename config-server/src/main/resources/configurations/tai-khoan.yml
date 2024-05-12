@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8002
   servlet:
     context-path: /api/v1
 
@@ -62,7 +62,7 @@ logging:
 
 moduleUrl:
   auth-token: http://localhost:8079/api/v1
-  ho-so: http://localhost:8081/api/v1
-  ho-so-chi-tiet: http://localhost:8083/api/v1
+  ho-so: http://localhost:8003/api/v1
+  ho-so-chi-tiet: http://localhost:8004/api/v1
 
 

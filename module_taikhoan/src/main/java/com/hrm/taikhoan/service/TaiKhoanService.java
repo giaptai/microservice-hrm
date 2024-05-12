@@ -137,8 +137,10 @@ public class TaiKhoanService implements ITaiKhoanService {
 //            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqHoSo);
             // create the producer
             KafkaProducer<String, ReqTaoHoSoClient> producer = new KafkaProducer<>(hoSoProducer.getProperties());
+            KafkaProducer<String, String> producerTaiKhoan = new KafkaProducer<>(hoSoProducer.taiKhoanProducer());
             // create a producer record
             ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", reqTaoHoSoClient);
+            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", taiKhoan.getEmail());
             // send data - asynchronous
             producer.send(producerRecord, new Callback() {
                 @Override
@@ -162,6 +164,28 @@ public class TaiKhoanService implements ITaiKhoanService {
                         } catch (Exception ex) {
                             throw new RuntimeException(ex);
                         }
+                    }
+                }
+            });
+            producerTaiKhoan.send(taiKhoanRecord, (metadata, e) -> {
+                if (e == null) {
+                    System.out.printf("""
+                                    Received new metadata
+                                    "Topic: %s
+                                    Partition: %s
+                                    Offset: %s
+                                    Timestamp: %s
+                                    """,
+                            metadata.topic(),
+                            metadata.partition(),
+                            metadata.offset(),
+                            metadata.timestamp());
+                } else {
+                    try {
+                        System.err.println(e.getMessage());
+                        throw e;
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
             });

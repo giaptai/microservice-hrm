@@ -53,6 +53,12 @@ public class HoSo extends DateTimeObject {
     @Column(name = "id", columnDefinition = "BINARY(16)")
     UUID id;
 
+    @Column(name = "anh_dai_dien", columnDefinition = "varchar(200) default ''")
+    String anhDaiDien;
+
+    @Column(name = "anh", columnDefinition = "varchar(200) default ''")
+    String anh;
+
     @Column(name = "ho_va_ten", columnDefinition = "varchar(50) default ''")
     String hoVaTen;
 
