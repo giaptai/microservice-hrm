@@ -1,5 +1,12 @@
 package com.hrm.hoso.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.hrm.hoso.client.qua_trinh_cong_tac.QuaTrinhCongTacClient;
 import com.hrm.hoso.client.qua_trinh_cong_tac.ReqQuaTrinhCongTac;
 import com.hrm.hoso.client.qua_trinh_cong_tac.ResQuaTrinhCongTac;
@@ -64,16 +71,26 @@ import lombok.experimental.FieldDefaults;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -219,11 +236,43 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
-    public ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo req) {
-        HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
-        mapToHoSo(hoSo, req);
-        hoSoRepository.save(hoSo);
-        return mapperHoSo.mapToResHoSo(hoSo);
+    public ResHoSo capNhatHoSoCCVC(UUID id, String req, MultipartFile anh) {
+        try {
+            HoSo hoSo;
+            Path path = Paths.get("module-hoso/src/main/uploads");
+//            File file = new File(path.toString());
+//            if (!file.exists()) {
+//                if (file.mkdirs()) {
+//                    System.out.println("Create folder successfully");
+//                } else System.out.println("Create folder failed");
+//            }
+            if (!Files.exists(path)) {
+                Files.createDirectories(path);
+            }
+            if (anh.getSize() <= 5_242_880 && Objects.equals(anh.getContentType(), "image/png")) {
+                //https://howtodoinjava.com/gson/gson-typeadapter-for-inaccessibleobjectexception/
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
+                ReqHoSo json = gson.fromJson(req, ReqHoSo.class);
+                hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+                mapToHoSo(hoSo, json);
+                Resource res = anh.getResource();
+                // Lấy tên gốc của file
+                String nameAnh = anh.getOriginalFilename();
+                nameAnh = hoSo.getHoVaTen();
+                // Xác định đường dẫn đích trong thư mục "uploads"
+                Path destinationPath = path.resolve(nameAnh);
+                Files.copy(anh.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+            } else throw new IllegalArgumentException("File size exceeds 5 MB limit.\n" +
+                    "File is not image/png type");
+            hoSoRepository.save(hoSo);
+            return mapperHoSo.mapToResHoSo(hoSo);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return null;
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -350,7 +399,7 @@ public class HoSoService implements IHoSoService {
     @Override
     public ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo) {
         HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
-        return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
+        return capNhatHoSoCCVC(hoSo.getId(), reqHoSo.toString(), null);
     }
 
     private double tinhLuong(ResHoSo hoSo) {

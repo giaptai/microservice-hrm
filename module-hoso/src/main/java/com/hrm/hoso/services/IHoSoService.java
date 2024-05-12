@@ -8,6 +8,7 @@ import com.hrm.hoso.dto.response.ResHoSoTomTat;
 import com.hrm.hoso.dto.response.ResListHoSo;
 import com.hrm.hoso.enums.PheDuyet;
 import com.hrm.hoso.dto.request.ReqHoSo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public interface IHoSoService {
 
     ResListHoSo xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize);
 
-    ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo reqHoSo);
+    ResHoSo capNhatHoSoCCVC(UUID id, String reqHoSo, MultipartFile anh);
 
     ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu);
 

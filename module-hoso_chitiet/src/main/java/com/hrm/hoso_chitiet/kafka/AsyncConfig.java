@@ -1,12 +1,14 @@
 package com.hrm.hoso_chitiet.kafka;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -18,7 +20,9 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @EnableScheduling
 public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
-//    @Bean
+//    @Autowired
+//    private MySqlSourceTask mySqlSourceTask;
+    //    @Bean
 //    public Executor taskScheduler() {
 //        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
 //        threadPoolTaskExecutor.setCorePoolSize(5);
@@ -28,7 +32,19 @@ public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
 //        threadPoolTaskExecutor.initialize();
 //        return threadPoolTaskExecutor;
 //    }
-
+//    @Bean
+//    public MySqlSourceConnector mySqlSourceConnector() {
+//        return new MySqlSourceConnector();
+//    }
+//
+//    @Bean
+//    public MySqlSourceTask mySqlSourceTask() {
+//        return new MySqlSourceTask();
+//    }
+//    @Scheduled(fixedRate = 10000)
+//    public void runTask() throws InterruptedException {
+//        mySqlSourceTask.poll();
+//    }
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
