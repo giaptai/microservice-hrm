@@ -3,6 +3,7 @@ package com.hrm.hoso.dto.mapper;
 import com.hrm.hoso.client.chuc_vu.ChucVuClient;
 import com.hrm.hoso.client.coquan_tochuc_donvi.CoQuanToChucDonViClient;
 import com.hrm.hoso.dto.response.ResChucVu;
+import com.hrm.hoso.enums.XacNhan;
 import com.hrm.hoso.models.ChucVuHienTai;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ public class MapperChucVuHienTai {
                 chucVu.getPhuCapChucVu(),
                 chucVu.getCoQuanToChucDonViTuyenDungId(),
                 coQuanName,
-                "DA_XAC_NHAN",
+                XacNhan.DA_PHE_DUYET,
                 chucVu.getId()
         );
     }

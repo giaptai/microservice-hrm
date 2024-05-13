@@ -16,7 +16,7 @@ public record ResChucVu(
         String chucVuHienTaiName,
         LocalDateTime ngayBoNhiem,
         LocalDateTime ngayBoNhiemLai,
-        String duocQuyHoacChucDanh,
+        String duocQuyHoachChucDanh,
         double phuCapChucVu,
         int coQuanToChucDonViTuyenDungId,
         String coQuanToChucDonViTuyenDungName,

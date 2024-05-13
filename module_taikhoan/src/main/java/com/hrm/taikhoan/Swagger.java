@@ -34,7 +34,7 @@ public class Swagger {
         Server gatewayServer = new Server();
         gatewayServer.setUrl("http://localhost:8888/api/v1");
         Server internalServer = new Server();
-        internalServer.setUrl("http://localhost:8082/api/v1");
+        internalServer.setUrl("http://localhost:8002/api/v1");
         Server gitpodServer = new Server();
         internalServer.setUrl(taiKhoanURL);
         return new OpenAPI().servers(List.of(gatewayServer, internalServer, gitpodServer));

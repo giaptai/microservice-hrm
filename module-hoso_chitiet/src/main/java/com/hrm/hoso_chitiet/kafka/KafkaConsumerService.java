@@ -1,5 +1,6 @@
 package com.hrm.hoso_chitiet.kafka;
 
+import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.models.QuaTrinhCongTac;
 import com.hrm.hoso_chitiet.repositories.QuaTrinhCongTacRepository;
 import lombok.AccessLevel;
@@ -14,20 +15,23 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.List;
 
 @Service
+@EnableAsync
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaConsumerService {
     final QuaTrinhCongTacRepository quaTrinhCongTacRepository;
     final KafkaConsumerConfig consumerConfig;
+
     @Async
     @EventListener(value = ApplicationReadyEvent.class)
-    protected void QuaTrinhCongTacListener() {
+    public void QuaTrinhCongTacListener() {
 //        KafkaConsumerConfig config = new KafkaConsumerConfig("my-quatrinhcongtac-app", StringDeserializer.class.getName(), ResChucVu.ResChucVuSoDeserializer.class.getName());
         System.out.println("crush em t");
         // create consumer
@@ -66,7 +70,7 @@ public class KafkaConsumerService {
                             record.value().ngayBoNhiem(),
                             record.value().ngayBoNhiemLai(),
                             record.value().coQuanToChucDonViTuyenDungId(),
-                            record.value().duocQuyHoacChucDanh(),
+                            record.value().duocQuyHoachChucDanh(),
                             record.value().xacNhan(),
                             record.value().hoSoId());
                     quaTrinhCongTacRepository.save(tac);
@@ -76,7 +80,7 @@ public class KafkaConsumerService {
             System.err.println(e);
             // we ignore this as this is an expected exception when closing a consumer
         } catch (Exception e) {
-            System.err.printf("Unexpected exception: %s", e);
+            System.err.printf("Unexpected exception: %s\n", e);
         } finally {
             consumer.close(); // this will also commit the offsets if need be.
             System.err.printf("%s", "The consumer is now gracefully closed.");
