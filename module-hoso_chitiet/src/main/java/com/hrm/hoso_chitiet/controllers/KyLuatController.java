@@ -4,6 +4,7 @@ import com.hrm.hoso_chitiet.dto.request.ReqKyLuat;
 import com.hrm.hoso_chitiet.dto.response.ResKyLuat;
 import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.enums.XacNhan;
+import com.hrm.hoso_chitiet.kafka.KafkaProducerService;
 import com.hrm.hoso_chitiet.response.ResEnum;
 import com.hrm.hoso_chitiet.services.IHoSoChiTietServices;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -25,11 +26,18 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Tag(name = "Kỷ luật ")
+@Tag(name = "Kỷ luật")
 @SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor // create constructor if field set final or @not null
 public class KyLuatController {
     private final IHoSoChiTietServices.IHoKyLuatServiceChiTiet kyLuatService;
+    private final KafkaProducerService kafkaProducerService;
+
+//    @GetMapping("/ky-luat/stream-kafka")
+//    public ResponseEntity<String> getkafka() {
+//        kafkaProducerService.toKyLuat();
+//        return new ResponseEntity<>("ls", ResEnum.THANH_CONG.getStatusCode());
+//    }
 
     @GetMapping("/{id}/ky-luat")
     public ResponseEntity<ResTheDTO<ResKyLuat>> getAllByHoSoId(
@@ -63,6 +71,13 @@ public class KyLuatController {
     @Transactional
     public ResponseEntity<ResKyLuat> add(@PathVariable(name = "id") UUID id, @RequestBody ReqKyLuat cu) {
         ResKyLuat ls = kyLuatService.them(id, cu);
+        return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
+    }
+
+    @PostMapping("/ky-luat/api-thuan/{id}")
+    @Transactional
+    public ResponseEntity<ResKyLuat> addApi(@PathVariable(name = "id") UUID id, @RequestBody ReqKyLuat cu) {
+        ResKyLuat ls = kyLuatService.themApi(id, cu);
         return new ResponseEntity<>(ls, ResEnum.TAO_THANH_CONG.getStatusCode());
     }
 

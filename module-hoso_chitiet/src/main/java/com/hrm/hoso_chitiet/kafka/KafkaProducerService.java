@@ -1,77 +1,54 @@
 package com.hrm.hoso_chitiet.kafka;
 
-import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
-import com.hrm.hoso_chitiet.dto.mapper.MapperKyLuat;
-import com.hrm.hoso_chitiet.dto.response.ResKhenThuong;
-import com.hrm.hoso_chitiet.dto.response.ResKyLuat;
-import com.hrm.hoso_chitiet.repositories.KhenThuongRepository;
-import com.hrm.hoso_chitiet.repositories.KyLuatRepository;
+import com.hrm.hoso_chitiet.dto.mapper.MapperStructKyLuat;
+import com.hrm.hoso_chitiet.dto.request.ReqKyLuat;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringSerializer;
-//import org.apache.kafka.connect.source.SourceRecord;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.apache.kafka.connect.data.Struct;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.Collections;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaProducerService {
-    final KyLuatRepository kyLuatRepository;
-    final KhenThuongRepository khenThuongRepository;
-    //mapper
-    final MapperKyLuat mapperKyLuat;
-    final MapperKhenThuong mapperKhenThuong;
     //producer kafka
     final KafkaProducerConfig kafkaProducerConfig;
-//    final MySqlSourceConnector connector;
+    //mapper
+    final MapperStructKyLuat structKyLuat;
 
-//    @Async
-//    @Scheduled(fixedRate = 3_600_000)
-//    protected void showKyLuat() {
-//        List<ResKyLuat> kyLuats = kyLuatRepository.getAllByHoSoInLast7Days().stream().map(mapperKyLuat::mapToResKyLuat).toList();
-//        System.out.println(kyLuats.size());
-//        // create the producer
-//        KafkaProducer<String, List<ResKyLuat>> producer = new KafkaProducer<>(kafkaProducerConfig.KyLuatProducerConfig());
-//        // create a producer record
-//        ProducerRecord<String, List<ResKyLuat>> producerRecord = new ProducerRecord<>("ky_luat", kyLuats);
-//        // send data - asynchronous
-//        producer.send(producerRecord, (metadata, e) -> {
-//            if (e == null) {
-//                System.out.printf("""
-//                                Received new metadata
-//                                "Topic: %s
-//                                Size: %d
-//                                Partition: %s
-//                                Offset: %s
-//                                Timestamp: %s
-//                                """,
-//                        metadata.topic(),
-//                        kyLuats.size(),
-//                        metadata.partition(),
-//                        metadata.offset(),
-//                        metadata.timestamp());
-//            }
-//        });
-//        // flush data - synchronous
-//        producer.flush();
-//        // flush and close producer
-//        producer.close();
-//    }
+    public void addKyLuatConnect(UUID uuid, ReqKyLuat c) {
+        KafkaProducer<String, Struct> producer = new KafkaProducer<>(kafkaProducerConfig.KyLuatProducerConfig());
+        Struct struct = structKyLuat.formatStruct(uuid, c);
+        ProducerRecord<String, Struct> producerRecord = new ProducerRecord<>("ky_luat", uuid.toString(), struct);
+        // send data - asynchronous
+        producer.send(producerRecord, (metadata, e) -> {
+            if (e == null) {
+                System.out.printf("""
+                                Received new metadata
+                                "Topic: %s
+                                Size: %d
+                                Partition: %s
+                                Offset: %s
+                                Timestamp: %s
+                                """,
+                        metadata.topic(),
+                        1,
+                        metadata.partition(),
+                        metadata.offset(),
+                        metadata.timestamp());
+            }
+        });
+        // flush data - synchronous
+        producer.flush();
+        // flush and close producer
+        producer.close();
+    }
 
 //    @Async
 //    @Scheduled(fixedDelay = 3_000, initialDelay = 1_000)

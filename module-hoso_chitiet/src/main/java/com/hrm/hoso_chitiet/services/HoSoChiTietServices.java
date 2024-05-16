@@ -43,6 +43,8 @@ import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
 import com.hrm.hoso_chitiet.enums.XacNhan;
+import com.hrm.hoso_chitiet.kafka.KafkaProducerConfig;
+import com.hrm.hoso_chitiet.kafka.KafkaProducerService;
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.models.KhenThuong;
 import com.hrm.hoso_chitiet.models.KienThucAnNinhQuocPhong;
@@ -73,6 +75,12 @@ import com.hrm.hoso_chitiet.response.ResEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.connect.data.Schema;
+import org.apache.kafka.connect.data.SchemaBuilder;
+import org.apache.kafka.connect.data.Struct;
+import org.apache.kafka.connect.data.Timestamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -81,9 +89,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import static com.hrm.hoso_chitiet.kafka.ResKyLuatMapper.getFromLocalDateTime;
+import static com.hrm.hoso_chitiet.kafka.ResKyLuatMapper.uuidToBytes;
 
 @Service
 @RequiredArgsConstructor // create constructor if field is set final or @notnull
@@ -119,6 +132,8 @@ public class HoSoChiTietServices {
     private final MapperQuanHeGiaDinh mapperQuanHeGiaDinh;
     private final MapperQuaTrinhCongTac mapperQuaTrinhCongTac;
     private final MapperTinHoc mapperTinHoc;
+    //kafka service
+    private final KafkaProducerService kafkaProducerService;
 
 
 //    public ResHoSoChiTiet getAllByHoSoId(UUID id) {
@@ -513,9 +528,21 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public ResKyLuat them(UUID id, ReqKyLuat req) {
+        public ResKyLuat themApi(UUID id, ReqKyLuat req) {
             try {
                 KyLuat luat = kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperKyLuat.mapToResKyLuat(luat);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                throw e;
+            }
+        }
+
+        @Override
+        public ResKyLuat them(UUID id, ReqKyLuat req) {
+            try {
+                KyLuat luat = new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id);
+                kafkaProducerService.addKyLuatConnect(id, req);
                 return mapperKyLuat.mapToResKyLuat(luat);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());
