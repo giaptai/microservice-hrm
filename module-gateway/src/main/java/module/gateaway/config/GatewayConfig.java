@@ -83,7 +83,7 @@ public class GatewayConfig {
                                 .uri(hoSoURL)
                 )
                 .route("dang-nhap-id",
-                        pred -> pred.path("/api/v1/dang-nhap")
+                        pred -> pred.path("/api/v1/dang-nhap", "/api/v1/dang-nhap/quen-mat-khau")
                                 .uri(taiKhoanURL)
                 )
                 .route("tai-khoan-id",

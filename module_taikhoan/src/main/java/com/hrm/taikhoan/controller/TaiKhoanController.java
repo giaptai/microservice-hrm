@@ -36,11 +36,17 @@ import org.springframework.web.bind.annotation.RestController;
 @SecurityRequirement(name = "Bearer Authentication")
 public class TaiKhoanController {
     final ITaiKhoanService taiKhoanService;
-
     @PostMapping("/dang-nhap")
     public ResponseEntity<ResDTO<ResTaiKhoanLogin>> dangNhap(@RequestBody ReqTaiKhoanLogin reqTaiKhoanLogin) {
         ResTaiKhoanLogin taiKhoan = taiKhoanService.dangNhap(reqTaiKhoanLogin);
         return ResDTO.reply(taiKhoan, ResEnum.DANG_NHAP_THANH_CONG);
+    }
+
+    @PostMapping("/dang-nhap/quen-mat-khau")
+    public ResponseEntity<Boolean> quenMatKhau(@RequestBody String email) {
+        boolean sss = taiKhoanService.quenMatKhau(email);
+//        streamsService.taiKhoanStreams();
+        return new ResponseEntity<>(sss, ResEnum.DANG_NHAP_THANH_CONG.getStatusCode());
     }
 
     @GetMapping("/nhan-vien/tai-khoan")

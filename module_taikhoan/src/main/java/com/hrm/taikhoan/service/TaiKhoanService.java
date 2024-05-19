@@ -2,7 +2,6 @@ package com.hrm.taikhoan.service;
 
 import com.hrm.taikhoan.client.ho_so.HoSoClient;
 import com.hrm.taikhoan.client.ho_so.HoSoDTO;
-import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaoHoSoClient;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
@@ -51,7 +50,6 @@ public class TaiKhoanService implements ITaiKhoanService {
 //    final IAuthenticationFacade facade;
 //    final KafkaProducers producers;
     //mappers
-    final MapperAuth mapperAuth;
     final MapperTaiKhoan mapperTaiKhoan;
     final HoSoProducer hoSoProducer;
 
@@ -271,5 +269,21 @@ public class TaiKhoanService implements ITaiKhoanService {
         }
         //không tạo refresh token ok
         throw new ResponseStatusException(ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.getStatusCode(), ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.name());
+    }
+
+    @Override
+    public boolean quenMatKhau(String email) {
+        try {
+            TaiKhoan taiKhoan = taiKhoanRepository.findByEmailContaining(email);
+            if (taiKhoan != null) {
+                taiKhoan.setUpdateAt();
+                taiKhoanRepository.save(taiKhoan);
+                return true;
+            }
+            return false;
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
     }
 }

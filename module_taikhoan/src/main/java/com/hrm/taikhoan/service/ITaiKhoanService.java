@@ -18,6 +18,8 @@ public interface ITaiKhoanService {
 
     boolean doiMatKhauTaiKhoanCaNhan(int id, String matkhau);
 
+    boolean quenMatKhau(String email);
+
     boolean doiEmailTaiKhoanCaNhan(int id, String email);
 
     ResTheDTO xemDanhSachTaiKhoan(String byDate, String username, RoleTaiKhoan role, int pageNumber, int pageSize); //admin
@@ -31,10 +33,6 @@ public interface ITaiKhoanService {
     ResTaiKhoan themApi(ReqTaiKhoan taiKhoan);
 
     ResTaiKhoanLogin dangNhap(ReqTaiKhoanLogin login);
-
-     default void quenMatKhau(String email){
-
-    };
 
     static boolean checkMatKhau(String matkhau) {
         Pattern pattern = Pattern.compile("^[\\p{Lower}\\p{Upper}\\d\\S]{6,15}$");

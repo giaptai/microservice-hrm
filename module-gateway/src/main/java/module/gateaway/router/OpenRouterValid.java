@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 public class OpenRouterValid {
     public static final List<String> openApiEndpoints = List.of(
             "/api/v1/dang-nhap",
+            "/api/v1/dang-nhap/quen-mat-khau",
             "/api/v1/bac-luong",
             "/api/v1/cap-bac-loai-quan-ham-quan-doi",
             "/api/v1/chuc-danh-dang",
