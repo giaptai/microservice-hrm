@@ -62,7 +62,6 @@ public class TaiKhoanStreamConfig {
         proTK.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
         proTK.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
         StreamsBuilder builder = new StreamsBuilder();
-        ;
         KStream<String, String> source = builder.stream("tai_khoan");
         KStream<String, String> processedStream = source.mapValues(value -> {
             try {
