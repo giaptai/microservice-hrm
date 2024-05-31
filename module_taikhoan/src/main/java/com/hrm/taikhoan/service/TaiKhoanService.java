@@ -3,6 +3,7 @@ package com.hrm.taikhoan.service;
 import com.hrm.taikhoan.client.ho_so.HoSoClient;
 import com.hrm.taikhoan.client.ho_so.HoSoDTO;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
+import com.hrm.taikhoan.dto.request.ReqEmail;
 import com.hrm.taikhoan.dto.request.ReqTaoHoSoClient;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
@@ -138,7 +139,8 @@ public class TaiKhoanService implements ITaiKhoanService {
             KafkaProducer<String, String> producerTaiKhoan = new KafkaProducer<>(hoSoProducer.taiKhoanProducer());
             // create a producer record
             ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", reqTaoHoSoClient);
-            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", taiKhoan.getEmail());
+            ReqEmail reqEmail = new ReqEmail(taiKhoan.getEmail());
+            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", reqEmail.toString());
             // send data - asynchronous
             producer.send(producerRecord, new Callback() {
                 @Override
@@ -279,8 +281,7 @@ public class TaiKhoanService implements ITaiKhoanService {
                 taiKhoan.setUpdateAt();
                 taiKhoanRepository.save(taiKhoan);
                 return true;
-            }
-            return false;
+            }else return false;
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             throw e;

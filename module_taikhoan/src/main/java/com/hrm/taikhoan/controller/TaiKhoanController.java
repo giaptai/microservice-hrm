@@ -45,7 +45,6 @@ public class TaiKhoanController {
     @PostMapping("/dang-nhap/quen-mat-khau")
     public ResponseEntity<Boolean> quenMatKhau(@RequestBody String email) {
         boolean sss = taiKhoanService.quenMatKhau(email);
-//        streamsService.taiKhoanStreams();
         return new ResponseEntity<>(sss, ResEnum.DANG_NHAP_THANH_CONG.getStatusCode());
     }
 

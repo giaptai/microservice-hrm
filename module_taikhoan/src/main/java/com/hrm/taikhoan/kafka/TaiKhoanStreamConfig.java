@@ -11,7 +11,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.kafka.clients.CommonClientConfigs;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
+import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -49,15 +51,15 @@ public class TaiKhoanStreamConfig {
 //        return proTK;
 //    }
 
-
+    //    @Async
     @Bean
-//    @Async
     public KafkaStreams taiKhoanStreams() {
         Properties proTK = new Properties();
         proTK.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
         proTK.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "tai_khoan_id");
         proTK.setProperty(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         proTK.setProperty(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+        proTK.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         proTK.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
         proTK.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
         proTK.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
@@ -69,6 +71,7 @@ public class TaiKhoanStreamConfig {
                 JsonNode payloadNode = rootNode.get("payload").get("email");
                 System.err.println(payloadNode.asText());
                 TaiKhoan taiKhoan = taiKhoanRepository.findByEmailContaining(payloadNode.asText());
+                //return 3 properties: email, username, pass
                 QuenMatKhau matKhau = new QuenMatKhau(taiKhoan.getEmail(), taiKhoan.getUsername(), taiKhoan.getPassword());
                 return matKhau.toString();
             } catch (Exception e) {
@@ -78,13 +81,43 @@ public class TaiKhoanStreamConfig {
         });
         processedStream.to("send_mail", Produced.with(Serdes.String(), Serdes.String()));
         Topology topology = builder.build();
+        // cach thu 2 dung Thread hoac Runnable
+//        KafkaStreams streams = new KafkaStreams(topology, proTK);
+//        new Thread(() -> {
+//            try {
+//                streams.start();
+//                Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+//            } catch (TimeoutException e) {
+//                System.err.println("Timeout while starting Kafka Streams: " + e.getMessage());
+//                throw e;
+//            } catch (RuntimeException e) {
+//                System.err.println("Error while starting Kafka Streams: " + e.getMessage());
+//                throw e;
+//            }
+//        }).start();
+//        RUNNABLE
+//        Runnable kafkaStreamsTask = () -> {
+//            try {
+//                streams.start();
+//                Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+//            } catch (TimeoutException e) {
+//                System.err.println("Timeout while starting Kafka Streams: " + e.getMessage());
+//            } catch (RuntimeException e) {
+//                System.err.println("Error while starting Kafka Streams: " + e.getMessage());
+//            }
+//        };
+//        Thread kafkaStreamsThread = new Thread(kafkaStreamsTask);
+//        kafkaStreamsThread.start();
+//        return streams;
+        // cach thu 2
+
+// Cách đầu tiên
         try {
             KafkaStreams streams = new KafkaStreams(topology, proTK);
             streams.start();
             Thread.sleep(15000); //thực chất không cần, nhưng cái dit con me no cai nay2 phai chay het thi moi bat dau gui email
             Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
             return streams;
-//            return CompletableFuture.completedFuture(streams);
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             throw e;
