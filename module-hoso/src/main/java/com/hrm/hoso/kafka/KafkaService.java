@@ -7,6 +7,7 @@ import com.hrm.hoso.repository.HoSoRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -53,8 +54,9 @@ public class KafkaService {
             }
         });
         try {
+            NewTopic hoso_create= new NewTopic("hoso_create", 3, (short) 3);
             // subscribe consumer to our topic(s)
-            consumer.subscribe(List.of("hoso_create"));
+            consumer.subscribe(List.of(hoso_create.name()));
 //            Collection<TopicPartition> partitions = consumer.partitionsFor("hoso_create").stream();
             // poll for new data
 //            boolean flag = true;

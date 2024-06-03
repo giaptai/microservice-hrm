@@ -138,9 +138,9 @@ public class TaiKhoanService implements ITaiKhoanService {
             KafkaProducer<String, ReqTaoHoSoClient> producer = new KafkaProducer<>(hoSoProducer.getProperties());
             KafkaProducer<String, String> producerTaiKhoan = new KafkaProducer<>(hoSoProducer.taiKhoanProducer());
             // create a producer record
-            ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", reqTaoHoSoClient);
+            ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", "hoso_key_2", reqTaoHoSoClient);
             ReqEmail reqEmail = new ReqEmail(taiKhoan.getEmail());
-            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", reqEmail.toString());
+            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", "taikhoan_key", reqEmail.toString());
             // send data - asynchronous
             producer.send(producerRecord, new Callback() {
                 @Override
@@ -281,7 +281,7 @@ public class TaiKhoanService implements ITaiKhoanService {
                 taiKhoan.setUpdateAt();
                 taiKhoanRepository.save(taiKhoan);
                 return true;
-            }else return false;
+            } else return false;
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             throw e;

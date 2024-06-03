@@ -1,6 +1,5 @@
 package module.gateaway.router;
 
-
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 

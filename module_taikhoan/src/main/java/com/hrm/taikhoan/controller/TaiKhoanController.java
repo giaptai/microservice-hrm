@@ -43,8 +43,8 @@ public class TaiKhoanController {
     }
 
     @PostMapping("/dang-nhap/quen-mat-khau")
-    public ResponseEntity<Boolean> quenMatKhau(@RequestBody String email) {
-        boolean sss = taiKhoanService.quenMatKhau(email);
+    public ResponseEntity<Boolean> quenMatKhau(@RequestBody ReqEmail email) {
+        boolean sss = taiKhoanService.quenMatKhau(email.email());
         return new ResponseEntity<>(sss, ResEnum.DANG_NHAP_THANH_CONG.getStatusCode());
     }
 
