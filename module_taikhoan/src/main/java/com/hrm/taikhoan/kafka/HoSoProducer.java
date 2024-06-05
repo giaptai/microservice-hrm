@@ -15,7 +15,10 @@ import java.util.Properties;
 @Getter
 public class HoSoProducer {
     Properties properties;
-    final String BOOTSTRAP_SERVER = "localhost:9092";
+    String key;
+    String value;
+    final String BOOTSTRAP_SERVER = "localhost:9092,localhost:9094,localhost:9096";
+
     public HoSoProducer() {
         this.properties = new Properties();
         properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
@@ -26,9 +29,19 @@ public class HoSoProducer {
         properties.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
     }
 
+//    public Properties producerConfig(String key, String value) {
+//        this.properties = new Properties();
+//        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+//        properties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
+//        properties.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
+//        properties.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
+//        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, key);
+//        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, value);
+//        return properties;
+//    }
 
     @Bean
-    public Properties taiKhoanProducer(){
+    public Properties taiKhoanProducer() {
         Properties tkProperties = new Properties();
         tkProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
         tkProperties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());

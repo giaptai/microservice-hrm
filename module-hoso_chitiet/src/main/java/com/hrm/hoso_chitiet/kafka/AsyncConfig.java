@@ -1,11 +1,9 @@
 package com.hrm.hoso_chitiet.kafka;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -17,11 +15,11 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @EnableScheduling
 public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
-    final CustomStream customStream;
+//    final CustomStream customStream;
 
-    public AsyncConfig(CustomStream customStream) {
-        this.customStream = customStream;
-    }
+//    public AsyncConfig(CustomStream customStream) {
+//        this.customStream = customStream;
+//    }
 
     //    @Autowired
 //    private MySqlSourceTask mySqlSourceTask;
@@ -48,11 +46,11 @@ public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
 //    public void runTask() throws InterruptedException {
 //        mySqlSourceTask.poll();
 //    }
-    @Async
-    @Scheduled(fixedRate = 30_000)
-    public void runTaskCC() {
-        customStream.KhenThuongStream();
-    }
+//    @Async
+//    @Scheduled(fixedRate = 30_000)
+//    public void runTaskCC() {
+//        customStream.KhenThuongStream();
+//    }
 
     @Override
     public Executor getAsyncExecutor() {

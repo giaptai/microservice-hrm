@@ -10,7 +10,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.connect.data.Struct;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.UUID;
 
 @Service
@@ -24,18 +23,29 @@ public class KafkaProducerService {
 
     public void addKyLuatConnect(UUID uuid, ReqKyLuat c) {
         KafkaProducer<String, Struct> producer = new KafkaProducer<>(kafkaProducerConfig.KyLuatProducerConfig());
+//        KafkaProducer<String, String> producer = new KafkaProducer<>(kafkaProducerConfig.KyLuatProducerConfig());
         Struct struct = structKyLuat.formatStruct(uuid, c);
+//        HashMap<String, Object> objectHashMap = new HashMap<>();
+//        objectHashMap.put("coquan_tochuc_donvi_id", c.coQuanQuyetDinhId());
+//        objectHashMap.put("xac_nhan", 1);
+//        objectHashMap.put("bat_dau", c.batDau());
+//        objectHashMap.put("ket_thuc", c.ketThuc());
+//        objectHashMap.put("ho_so_id", uuid);
+//        objectHashMap.put("hanh_vi_vi_pham_chinh", c.hanhViViPhamChinh());
+//        objectHashMap.put("hinh_thuc", c.hinhThuc());
+//        String okkk ="{\"ket_thuc\":1717577757557,\"ho_so_id\":\"C5sS9YBXRqawCsw6VxmrwA==\",\"hanh_vi_vi_pham_chinh\":\"string\",\"bat_dau\":1717577757557,\"hinh_thuc\":\"con cac nha may 6\",\"coquan_tochuc_donvi_id\":3,\"xac_nhan\":1}";
+//        ProducerRecord<String, String> producerRecord = new ProducerRecord<>("ky_luat", uuid.toString(), okkk);
         ProducerRecord<String, Struct> producerRecord = new ProducerRecord<>("ky_luat", uuid.toString(), struct);
         // send data - asynchronous
         producer.send(producerRecord, (metadata, e) -> {
             if (e == null) {
                 System.out.printf("""
                                 Received new metadata
-                                "Topic: %s
-                                Size: %d
-                                Partition: %s
-                                Offset: %s
-                                Timestamp: %s
+                                "Topic: %1$s
+                                Size: %2$d
+                                Partition: %3$s
+                                Offset: %4$s
+                                Timestamp: %5$tT %5$tD
                                 """,
                         metadata.topic(),
                         1,

@@ -2,18 +2,13 @@ package com.hrm.taikhoan.kafka;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.QuenMatKhau;
-import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
-import com.hrm.taikhoan.models.TaiKhoan;
-import com.hrm.taikhoan.repository.TaiKhoanRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
-import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -23,21 +18,18 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.Properties;
-import java.util.concurrent.CompletableFuture;
 
 @Configuration
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class TaiKhoanStreamConfig {
-    private final String BOOTSTRAP_SERVER = "localhost:9092";
+    private final String BOOTSTRAP_SERVER = "localhost:9092,localhost:9094,localhost:9096";
     //    StreamsBuilder builder = new StreamsBuilder();;
 //    KStream<String, String> source;
     final ObjectMapper objectMapper = new ObjectMapper();
-    final TaiKhoanRepository taiKhoanRepository;
 //    @Bean
 //    public Properties taiKhoanStreamsConfig() {
 //        Properties proTK = new Properties();
@@ -59,20 +51,22 @@ public class TaiKhoanStreamConfig {
         proTK.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "tai_khoan_id");
         proTK.setProperty(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         proTK.setProperty(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        proTK.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        proTK.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
-        proTK.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        proTK.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
+        proTK.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        proTK.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
+        proTK.setProperty(SaslConfigs.SASL_MECHANISM, "PLAIN");
+        proTK.setProperty(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, String> source = builder.stream("tai_khoan");
         KStream<String, String> processedStream = source.mapValues(value -> {
             try {
                 JsonNode rootNode = objectMapper.readTree(value);
-                JsonNode payloadNode = rootNode.get("payload").get("email");
-                System.err.println(payloadNode.asText());
-                TaiKhoan taiKhoan = taiKhoanRepository.findByEmailContaining(payloadNode.asText());
+                JsonNode payload= rootNode.get("payload");
+                JsonNode nodeEmail = payload.get("email");
+                JsonNode nodeUsername = payload.get("username");
+                JsonNode nodePass = payload.get("password");
+                System.err.println(payload.asText());
                 //return 3 properties: email, username, pass
-                QuenMatKhau matKhau = new QuenMatKhau(taiKhoan.getEmail(), taiKhoan.getUsername(), taiKhoan.getPassword());
+                QuenMatKhau matKhau = new QuenMatKhau(nodeEmail.asText(), nodeUsername.asText(), nodePass.asText());
                 return matKhau.toString();
             } catch (Exception e) {
                 System.err.println("Failed to process record: " + e.getMessage());

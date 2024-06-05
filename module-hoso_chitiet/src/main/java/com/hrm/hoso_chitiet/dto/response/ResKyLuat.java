@@ -17,6 +17,8 @@ import org.apache.kafka.connect.data.Timestamp;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +101,6 @@ public record ResKyLuat(
         }
 
         private List<Map<String, Object>> fieldsToJson(Schema schema) {
-            List<Map<String, Object>> list = new ArrayList<>();
 
             //coquan_tochuc_donvi_id
             Map<String, Object> map0 = new HashMap<>();
@@ -144,13 +145,14 @@ public record ResKyLuat(
             map6.put("optional", schema.fields().get(6).schema().isOptional());
             map6.put("field", schema.fields().get(6).name());
 
-            list.add(map0);
-            list.add(map1);
-            list.add(map2);
-            list.add(map3);
-            list.add(map4);
-            list.add(map5);
-            list.add(map6);
+            List<Map<String, Object>> list = new ArrayList<>(Arrays.asList(map0, map1, map2, map3, map4, map5, map6));
+//            list.add(map0);
+//            list.add(map1);
+//            list.add(map2);
+//            list.add(map3);
+//            list.add(map4);
+//            list.add(map5);
+//            list.add(map6);
             return list;
         }
     }

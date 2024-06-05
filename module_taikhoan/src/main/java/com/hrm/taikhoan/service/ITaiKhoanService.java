@@ -24,8 +24,6 @@ public interface ITaiKhoanService {
 
     ResTheDTO xemDanhSachTaiKhoan(String byDate, String username, RoleTaiKhoan role, int pageNumber, int pageSize); //admin
 
-//    Page<ResTaiKhoan> xemTheoUsername(String username, int pageNumber, int pageSize); //admin user
-
     ResTaiKhoan xemTheoId(int id); //admin user
 
     ResTaiKhoan them(ReqTaiKhoan taiKhoan);

@@ -44,7 +44,6 @@ public class KafkaService {
             public void run() {
                 System.err.println("Detected a shutdown, let's exit by calling consumer.wakeup()...");
                 consumer.wakeup();
-
                 // join the main thread to allow the execution of the code in the main thread
                 try {
                     mainThread.join();
@@ -54,9 +53,8 @@ public class KafkaService {
             }
         });
         try {
-            NewTopic hoso_create= new NewTopic("hoso_create", 3, (short) 3);
             // subscribe consumer to our topic(s)
-            consumer.subscribe(List.of(hoso_create.name()));
+            consumer.subscribe(List.of("hoso_create"));
 //            Collection<TopicPartition> partitions = consumer.partitionsFor("hoso_create").stream();
             // poll for new data
 //            boolean flag = true;

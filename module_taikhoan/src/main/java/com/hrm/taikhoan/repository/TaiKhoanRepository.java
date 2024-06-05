@@ -23,7 +23,7 @@ public interface TaiKhoanRepository extends JpaRepository<TaiKhoan, Integer> {
     TaiKhoan findByUsernameAndPassword(String username, String password);
 
     @Query
-    TaiKhoan findByEmailContaining(String email);
+    TaiKhoan findByEmail(String email);
 
     //JPQL
     @Query(value = "UPDATE TaiKhoan tk SET tk.trangThai = ?1 where tk.id= ?2")

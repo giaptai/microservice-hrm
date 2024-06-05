@@ -1,6 +1,5 @@
 package com.hrm.hoso_chitiet.kafka;
 
-import com.hrm.hoso_chitiet.enums.XacNhan;
 import com.hrm.hoso_chitiet.models.QuaTrinhCongTac;
 import com.hrm.hoso_chitiet.repositories.QuaTrinhCongTacRepository;
 import lombok.AccessLevel;
@@ -10,12 +9,10 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -60,12 +57,13 @@ public class KafkaConsumerService {
                 ConsumerRecords<String, ResChucVu> records = consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, ResChucVu> record : records) {
                     System.out.printf("""
-                                    Key: %s
-                                    Value: %s
-                                    Partition: %d
-                                    Offset: %d
+                                    Key: %1$s
+                                    Value: %2$s
+                                    Partition: %3$d
+                                    Offset: %4$d
+                                    Timestamp: %5$s
                                     """,
-                            record.key(), record.value(), record.partition(), record.offset());
+                            record.key(), record.value(), record.partition(), record.offset(), record.timestamp());
                     QuaTrinhCongTac tac = new QuaTrinhCongTac(
                             record.value().ngayBoNhiem(),
                             record.value().ngayBoNhiemLai(),

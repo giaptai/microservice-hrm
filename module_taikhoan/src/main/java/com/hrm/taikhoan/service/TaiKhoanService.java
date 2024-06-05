@@ -35,9 +35,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -276,8 +278,9 @@ public class TaiKhoanService implements ITaiKhoanService {
     @Override
     public boolean quenMatKhau(String email) {
         try {
-            TaiKhoan taiKhoan = taiKhoanRepository.findByEmailContaining(email);
+            TaiKhoan taiKhoan = taiKhoanRepository.findByEmail(email);
             if (taiKhoan != null) {
+                taiKhoan.setPassword(createRandomPassword());
                 taiKhoan.setUpdateAt();
                 taiKhoanRepository.save(taiKhoan);
                 return true;
@@ -286,5 +289,28 @@ public class TaiKhoanService implements ITaiKhoanService {
             System.err.println(e.getMessage());
             throw e;
         }
+    }
+
+
+    /**  https://www.baeldung.com/java-random-string */
+    private String createRandomPassword() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 6;
+        Random random = new Random();
+
+//        String generatedString = random.ints(leftLimit, rightLimit + 1)
+//                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+//                .limit(targetStringLength)
+//                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+//                .toString();
+
+        // Tạo một stream các số nguyên ngẫu nhiên trong phạm vi từ leftLimit đến rightLimit
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)) // Lọc các ký tự không phải là ký tự chữ và số
+                .limit(targetStringLength) // Giới hạn số lượng ký tự cần tạo ra
+                .forEach(i -> buffer.appendCodePoint(i)); // Thu thập các ký tự vào StringBuilder
+        return buffer.toString(); // Chuyển StringBuilder thành chuỗi
     }
 }

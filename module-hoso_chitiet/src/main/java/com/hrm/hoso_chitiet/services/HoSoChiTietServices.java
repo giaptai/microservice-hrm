@@ -2,6 +2,7 @@ package com.hrm.hoso_chitiet.services;
 
 import com.hrm.hoso_chitiet.client.ho_so.HoSoClient;
 import com.hrm.hoso_chitiet.client.ho_so.ResHoSoTomTatClient;
+
 import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
 import com.hrm.hoso_chitiet.dto.mapper.MapperKienThucAnNinhQuocPhong;
 import com.hrm.hoso_chitiet.dto.mapper.MapperKyLuat;
@@ -15,6 +16,7 @@ import com.hrm.hoso_chitiet.dto.mapper.MapperPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.mapper.MapperTinHoc;
+
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKienThucAnNinhQuocPhong;
@@ -42,9 +44,11 @@ import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
+
 import com.hrm.hoso_chitiet.enums.XacNhan;
-import com.hrm.hoso_chitiet.kafka.KafkaProducerConfig;
+
 import com.hrm.hoso_chitiet.kafka.KafkaProducerService;
+
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.models.KhenThuong;
 import com.hrm.hoso_chitiet.models.KienThucAnNinhQuocPhong;
@@ -75,12 +79,6 @@ import com.hrm.hoso_chitiet.response.ResEnum;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.connect.data.Schema;
-import org.apache.kafka.connect.data.SchemaBuilder;
-import org.apache.kafka.connect.data.Struct;
-import org.apache.kafka.connect.data.Timestamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -89,14 +87,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-import static com.hrm.hoso_chitiet.kafka.ResKyLuatMapper.getFromLocalDateTime;
-import static com.hrm.hoso_chitiet.kafka.ResKyLuatMapper.uuidToBytes;
 
 @Service
 @RequiredArgsConstructor // create constructor if field is set final or @notnull

@@ -1,13 +1,9 @@
 package com.hrm.hoso_chitiet.kafka;
 
-import com.hrm.hoso_chitiet.dto.response.ResKyLuat;
-import org.apache.kafka.connect.data.Struct;
-
 import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 public class ResKyLuatMapper {

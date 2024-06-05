@@ -16,7 +16,7 @@ import java.util.Properties;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaConsumerConfig {
-    final String BOOTSTRAP_SERVER = "localhost:9092";
+    final String BOOTSTRAP_SERVER = "localhost:9092,localhost:9094,localhost:9096";
 
     public KafkaConsumerConfig() {
     }
@@ -30,14 +30,14 @@ public class KafkaConsumerConfig {
 //        qtct.put(SslConfigs.SSL_TRUSTSTORE_LOCATION_CONFIG, "\\\\wsl.localhost\\Ubuntu\\home\\macmkay\\kafka\\security\\tls\\server.truststore.jks");
 //        qtct.put(SslConfigs.SSL_TRUSTSTORE_PASSWORD_CONFIG, "test1234");
 //        qtct.put(SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG, "");
-        qtct.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
-        qtct.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-        qtct.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ResChucVu.ResChucVuSoDeserializer.class.getName());
-        qtct.put(ConsumerConfig.GROUP_ID_CONFIG, "quatrinhcongtac-app");
-        qtct.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-        qtct.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
-        qtct.put(SaslConfigs.SASL_MECHANISM, "PLAIN");
-        qtct.put(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
+        qtct.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        qtct.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        qtct.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ResChucVu.ResChucVuSoDeserializer.class.getName());
+        qtct.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "quatrinhcongtac-app");
+        qtct.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        qtct.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
+        qtct.setProperty(SaslConfigs.SASL_MECHANISM, "PLAIN");
+        qtct.setProperty(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
         return qtct;
     }
 
