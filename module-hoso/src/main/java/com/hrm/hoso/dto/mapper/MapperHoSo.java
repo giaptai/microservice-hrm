@@ -9,6 +9,8 @@ import com.hrm.hoso.dto.response.ResChucVu;
 import com.hrm.hoso.dto.response.ResChucVuKiemNhiem;
 import com.hrm.hoso.dto.response.ResHoSo;
 
+import com.hrm.hoso.dto.response.ResNgachNhanVien;
+import com.hrm.hoso.dto.response.ResViecLam;
 import com.hrm.hoso.models.ChucVuHienTai;
 import com.hrm.hoso.models.ChucVuKiemNhiem;
 import com.hrm.hoso.models.HoSo;
@@ -24,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import org.springframework.stereotype.Component;
+
+import java.text.DecimalFormat;
 
 @Component
 @RequiredArgsConstructor
@@ -44,6 +48,7 @@ public class MapperHoSo {
     final DoiTuongChinhSachClient doiTuongChinhSachClient;
 //    final ChucVuClient chucVuClient;
     final ChucVuDangClient chucVuDangClient;
+    final DecimalFormat df = new DecimalFormat("#.##");
 
     public ResHoSo mapToResHoSo(HoSo hoSo) {
         ThongTinTuyenDung tuyenDung = hoSo.getThongTinTuyenDung();
@@ -96,7 +101,7 @@ public class MapperHoSo {
                 chucVuDangHienTaiName,
                 hoSo.getChucVuDangKiemNhiemId(),
                 chucVuDangKiemNhiemName,
-                hoSo.getTienLuong(),
+                tinhLuong(hoSo),
                 mapperNgach.mapToResNgachNhanVien(ngach),
 //                hoSo.getPhuCapChucVu(),
 //                hoSo.getPhuCapKiemNhiem(),
@@ -108,5 +113,30 @@ public class MapperHoSo {
                 hoSo.getCreateAt(),
                 hoSo.getUpdateAt()
         );
+    }
+
+    private double tinhLuong(HoSo hoSo) {
+        ChucVuHienTai chucVu = hoSo.getChucVuHienTai();
+        ChucVuKiemNhiem kiemNhiem = hoSo.getChucVuKiemNhiem();
+        NgachNhanVien ngach = hoSo.getNgach();
+        ResNgachNhanVien resNgach = mapperNgach.mapToResNgachNhanVien(ngach);
+        ViecLam viecLam = hoSo.getViecLam();
+        ResViecLam resViecLam = mapperViecLam.mapToResViecLam(viecLam);
+//        Tien
+        double phuCapChucVu = chucVu.getPhuCapChucVu();
+        double phuCapKiemNhiem = kiemNhiem.getPhuCapKiemNhiem();
+        double phuCapKhac = kiemNhiem.getPhuCapKhac();
+        float heSoNgach = resNgach.heSo();
+        float phanTramNgach = resNgach.phanTramHuongLuongNgach()/100;
+        double phuCapNgach = resNgach.phuCapThamNienVuotKhungNgach();
+        double luongCoBan = 1_800_000;
+        float phanTramViecLam = resViecLam.phamTramHuongLuong()/100;
+        double phuCapTNVVkiecLam = resViecLam.phuCapThamNienVuotKhung();
+        double luongViecLam = resViecLam.tienLuong();
+//
+        double tienLuongNhan = (phuCapChucVu + phuCapKiemNhiem + phuCapKhac) +
+                (heSoNgach * phanTramNgach * luongCoBan + phuCapNgach) +
+                (phanTramViecLam * luongViecLam + phuCapTNVVkiecLam);
+        return Double.parseDouble(df.format(tienLuongNhan));
     }
 }

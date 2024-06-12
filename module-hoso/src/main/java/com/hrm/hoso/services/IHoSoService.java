@@ -22,7 +22,9 @@ public interface IHoSoService {
 
     ResListHoSo xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize);
 
-    ResHoSo capNhatHoSoCCVC(UUID id, String reqHoSo, MultipartFile anh);
+//    ResHoSo capNhatHoSoCCVC(UUID id, String reqHoSo, MultipartFile anh);
+
+    ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo reqHoSo);
 
     ResChucVu capNhatChucVuHienTai(UUID id, ReqChucVu reqChucVu);
 

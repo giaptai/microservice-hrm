@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.config.SaslConfigs;
+import org.apache.kafka.common.errors.TimeoutException;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -76,19 +77,19 @@ public class TaiKhoanStreamConfig {
         processedStream.to("send_mail", Produced.with(Serdes.String(), Serdes.String()));
         Topology topology = builder.build();
         // cach thu 2 dung Thread hoac Runnable
-//        KafkaStreams streams = new KafkaStreams(topology, proTK);
-//        new Thread(() -> {
-//            try {
-//                streams.start();
-//                Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-//            } catch (TimeoutException e) {
-//                System.err.println("Timeout while starting Kafka Streams: " + e.getMessage());
-//                throw e;
-//            } catch (RuntimeException e) {
-//                System.err.println("Error while starting Kafka Streams: " + e.getMessage());
-//                throw e;
-//            }
-//        }).start();
+        KafkaStreams streams = new KafkaStreams(topology, proTK);
+        new Thread(() -> {
+            try {
+                streams.start();
+                Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+            } catch (TimeoutException e) {
+                System.err.println("Timeout while starting Kafka Streams: " + e.getMessage());
+                throw e;
+            } catch (RuntimeException e) {
+                System.err.println("Error while starting Kafka Streams: " + e.getMessage());
+                throw e;
+            }
+        }).start();
 //        RUNNABLE
 //        Runnable kafkaStreamsTask = () -> {
 //            try {
@@ -102,21 +103,22 @@ public class TaiKhoanStreamConfig {
 //        };
 //        Thread kafkaStreamsThread = new Thread(kafkaStreamsTask);
 //        kafkaStreamsThread.start();
-//        return streams;
+//        Chung
+        return streams;
         // cach thu 2
 
 // Cách đầu tiên
-        try {
-            KafkaStreams streams = new KafkaStreams(topology, proTK);
-            streams.start();
-            Thread.sleep(15000); //thực chất không cần, nhưng cái dit con me no cai nay2 phai chay het thi moi bat dau gui email
-            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-            return streams;
-        } catch (RuntimeException e) {
-            System.err.println(e.getMessage());
-            throw e;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            KafkaStreams streams = new KafkaStreams(topology, proTK);
+//            streams.start();
+//            Thread.sleep(15000); //thực chất không cần, nhưng cái dit con me no cai nay2 phai chay het thi moi bat dau gui email
+//            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+//            return streams;
+//        } catch (RuntimeException e) {
+//            System.err.println(e.getMessage());
+//            throw e;
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 }
