@@ -123,6 +123,11 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
+    public boolean checkHoSoCCCD(String soCCCD) {
+        return hoSoRepository.findBySoCCCD(soCCCD) > 0;
+    }
+
+    @Override
     public ResHoSo taoHoSo(ReqTaoHoSo req) {
         HoSo hoSo = HoSo.builder()
                 .hoVaTen(req.hoVaTen())

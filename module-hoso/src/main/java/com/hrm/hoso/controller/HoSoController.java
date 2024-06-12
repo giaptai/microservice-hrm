@@ -50,6 +50,11 @@ public class HoSoController {
         return new ResponseEntity<>(hoSoService.layHoSoId(id), ResEnum.THANH_CONG.getCode());
     }
 
+    @GetMapping(path = "/ho-so-cccd")
+    public ResponseEntity<Boolean> getHoSoCCCD(@RequestParam(name = "soCCCD") String soCCCD) {
+        return new ResponseEntity<>(hoSoService.checkHoSoCCCD(soCCCD), ResEnum.THANH_CONG.getCode());
+    }
+
 //    @GetMapping(path = "/ho-so-tom-tat-id/{id}")
 //    public ResponseEntity<ResHoSoTomTat> getHoSoTomTatId(@PathVariable(name = "taiKhoanId") int id) {
 //        return new ResponseEntity<>(hoSoService.layHoSoId(id), ResEnum.THANH_CONG.getCode());

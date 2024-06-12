@@ -76,7 +76,9 @@ public class GatewayConfig {
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("ho-so-id",
-                        pred -> pred.path("/api/v1/nhan-vien/ho-so/**",
+                        pred -> pred.path(
+                                        "/api/v1/ho-so-cccd",
+                                        "/api/v1/nhan-vien/ho-so/**",
                                         "/api/v1/nhan-vien/ho-so-test",
                                         "/api/v1/ca-nhan/ho-so/**")
                                 .filters(f -> f.filter(filter))
@@ -94,7 +96,8 @@ public class GatewayConfig {
                                 .uri(taiKhoanURL)
                 )
                 .route("cau-hinh-id",
-                        pred -> pred.path("/api/v1/bac-luong/**",
+                        pred -> pred.path(
+                                        "/api/v1/bac-luong/**",
                                         "/api/v1/cap-bac-loai-quan-ham-quan-doi/**",
                                         "/api/v1/chuc-danh-dang/**",
                                         "/api/v1/chuc-vu/**",

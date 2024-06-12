@@ -35,12 +35,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -118,7 +116,7 @@ public class TaiKhoanService implements ITaiKhoanService {
     @Override
     public ResTaiKhoan them(ReqTaiKhoan reqTaiKhoan) {
         TaiKhoan taiKhoan;
-        UUID uuid = UUID.randomUUID();
+//        UUID uuid = UUID.randomUUID();
         try {
             List<TaiKhoan> listUsername = taiKhoanRepository.findAll();
             //tạo username
@@ -133,6 +131,10 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .trangThai(true)
                     .createAt(LocalDateTime.now())
                     .build();
+            //check trùng số CCCD
+            if (hoSoClient.getHoSoCCCD(taiKhoan.getPassword())) {
+                throw new RuntimeException("Trùng số CCCD");
+            }
             taiKhoanRepository.save(taiKhoan);
             ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
 //            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqHoSo);
@@ -225,6 +227,10 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .createAt(LocalDateTime.now())
                     .build();
             taiKhoanRepository.save(taiKhoan);
+            //check trùng số CCCD
+            if (!hoSoClient.getHoSoCCCD(taiKhoan.getPassword())) {
+                throw new RuntimeException("Trùng số CCCD");
+            }
             ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
             HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqTaoHoSoClient);
             if (hoSoDTO != null) {
@@ -292,7 +298,9 @@ public class TaiKhoanService implements ITaiKhoanService {
     }
 
 
-    /**  https://www.baeldung.com/java-random-string */
+    /**
+     * https://www.baeldung.com/java-random-string
+     */
     private String createRandomPassword() {
         int leftLimit = 48; // numeral '0'
         int rightLimit = 122; // letter 'z'

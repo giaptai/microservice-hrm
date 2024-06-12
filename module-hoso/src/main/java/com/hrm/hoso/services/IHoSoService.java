@@ -16,6 +16,8 @@ import java.util.UUID;
 public interface IHoSoService {
     ResHoSoTomTat layHoSoId(int taiKhoanId);
 
+    boolean checkHoSoCCCD(String soCCCD);
+
     ResHoSo taoHoSo(ReqTaoHoSo req);
 
     ResListHoSo xemDanhSachHoSo(String soCCCD, String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize);
