@@ -7,6 +7,7 @@ import com.hrm.taikhoan.dto.request.ReqEmail;
 import com.hrm.taikhoan.dto.request.ReqTaoHoSoClient;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
+import com.hrm.taikhoan.dto.resopnse.QuenMatKhau;
 import com.hrm.taikhoan.dto.resopnse.ResTheDTO;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
@@ -136,6 +137,7 @@ public class TaiKhoanService implements ITaiKhoanService {
                 throw new RuntimeException("Trùng số CCCD");
             }
             taiKhoanRepository.save(taiKhoan);
+            QuenMatKhau matKhau = new QuenMatKhau(taiKhoan.getEmail(), taiKhoan.getUsername(), taiKhoan.getPassword(), "create");
             ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
 //            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqHoSo);
             // create the producer
@@ -144,7 +146,7 @@ public class TaiKhoanService implements ITaiKhoanService {
             // create a producer record
             ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", "hoso_key_2", reqTaoHoSoClient);
             ReqEmail reqEmail = new ReqEmail(taiKhoan.getEmail());
-            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", "taikhoan_key", reqEmail.toString());
+            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("send_mail", "taikhoan_key", matKhau.toString());
             // send data - asynchronous
             producer.send(producerRecord, new Callback() {
                 @Override

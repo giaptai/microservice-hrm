@@ -69,7 +69,7 @@ public class TaiKhoanStreamConfig {
                 // Kiểm tra nếu nodeEmail không phải là null hoặc không rỗng
                 if (!nodeEmail.asText().equals("null")) {
                     //return 3 properties: email, username, pass
-                    QuenMatKhau matKhau = new QuenMatKhau(nodeEmail.asText(), nodeUsername.asText(), nodePass.asText());
+                    QuenMatKhau matKhau = new QuenMatKhau(nodeEmail.asText(), nodeUsername.asText(), nodePass.asText(), "forget-password");
                     return matKhau.toString();
                 } else {
                     // Nếu nodeEmail là null hoặc rỗng, không xử lý và trả về null
@@ -83,19 +83,19 @@ public class TaiKhoanStreamConfig {
         processedStream.filter((key, value) -> value != null).to("send_mail", Produced.with(Serdes.String(), Serdes.String()));
         Topology topology = builder.build();
         // cach thu 2 dung Thread hoac Runnable
-        KafkaStreams streams = new KafkaStreams(topology, proTK);
-        new Thread(() -> {
-            try {
-                streams.start();
-                Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-            } catch (TimeoutException e) {
-                System.err.println("Timeout while starting Kafka Streams: " + e.getMessage());
-                throw e;
-            } catch (RuntimeException e) {
-                System.err.println("Error while starting Kafka Streams: " + e.getMessage());
-                throw e;
-            }
-        }).start();
+//        KafkaStreams streams = new KafkaStreams(topology, proTK);
+//        new Thread(() -> {
+//            try {
+//                streams.start();
+//                Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+//            } catch (TimeoutException e) {
+//                System.err.println("Timeout while starting Kafka Streams: " + e.getMessage());
+//                throw e;
+//            } catch (RuntimeException e) {
+//                System.err.println("Error while starting Kafka Streams: " + e.getMessage());
+//                throw e;
+//            }
+//        }).start();
 //        RUNNABLE
 //        Runnable kafkaStreamsTask = () -> {
 //            try {
@@ -110,21 +110,21 @@ public class TaiKhoanStreamConfig {
 //        Thread kafkaStreamsThread = new Thread(kafkaStreamsTask);
 //        kafkaStreamsThread.start();
 //        Chung
-        return streams;
+//        return streams;
         // cach thu 2
 
 // Cách đầu tiên
-//        try {
-//            KafkaStreams streams = new KafkaStreams(topology, proTK);
-//            streams.start();
-//            Thread.sleep(15000); //thực chất không cần, nhưng cái dit con me no cai nay2 phai chay het thi moi bat dau gui email
-//            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-//            return streams;
-//        } catch (RuntimeException e) {
-//            System.err.println(e.getMessage());
-//            throw e;
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            KafkaStreams streams = new KafkaStreams(topology, proTK);
+            streams.start();
+            Thread.sleep(15000); //thực chất không cần, nhưng cái dit con me no cai nay2 phai chay het thi moi bat dau gui email
+            Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+            return streams;
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
