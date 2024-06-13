@@ -46,7 +46,7 @@ public class MapperHoSo {
     final TonGiaoClient tonGiaoClient;
     final ThanhPhanGiaDinhClient thanhPhanGiaDinhClient;
     final DoiTuongChinhSachClient doiTuongChinhSachClient;
-//    final ChucVuClient chucVuClient;
+    //    final ChucVuClient chucVuClient;
     final ChucVuDangClient chucVuDangClient;
     final DecimalFormat df = new DecimalFormat("#.##");
 
@@ -123,16 +123,16 @@ public class MapperHoSo {
         ViecLam viecLam = hoSo.getViecLam();
         ResViecLam resViecLam = mapperViecLam.mapToResViecLam(viecLam);
 //        Tien
-        double phuCapChucVu = chucVu.getPhuCapChucVu();
-        double phuCapKiemNhiem = kiemNhiem.getPhuCapKiemNhiem();
-        double phuCapKhac = kiemNhiem.getPhuCapKhac();
-        float heSoNgach = resNgach.heSo();
-        float phanTramNgach = resNgach.phanTramHuongLuongNgach()/100;
-        double phuCapNgach = resNgach.phuCapThamNienVuotKhungNgach();
+        double phuCapChucVu = chucVu != null ? chucVu.getPhuCapChucVu() : 0.0;
+        double phuCapKiemNhiem = kiemNhiem != null ? kiemNhiem.getPhuCapKiemNhiem() : 0.0;
+        double phuCapKhac = kiemNhiem != null ? kiemNhiem.getPhuCapKhac() : 0.0;
+        float heSoNgach = resNgach != null ? resNgach.heSo() : 0f;
+        float phanTramNgach = resNgach != null ? resNgach.phanTramHuongLuongNgach() / 100 : 0f;
+        double phuCapNgach = resNgach != null ? resNgach.phuCapThamNienVuotKhungNgach() : 0.0;
         double luongCoBan = 1_800_000;
-        float phanTramViecLam = resViecLam.phamTramHuongLuong()/100;
-        double phuCapTNVVkiecLam = resViecLam.phuCapThamNienVuotKhung();
-        double luongViecLam = resViecLam.tienLuong();
+        float phanTramViecLam = resViecLam != null ? resViecLam.phamTramHuongLuong() / 100 : 0f;
+        double phuCapTNVVkiecLam = resViecLam != null ? resViecLam.phuCapThamNienVuotKhung() : 0.0;
+        double luongViecLam = resViecLam != null ? resViecLam.tienLuong() : 0.0;
 //
         double tienLuongNhan = (phuCapChucVu + phuCapKiemNhiem + phuCapKhac) +
                 (heSoNgach * phanTramNgach * luongCoBan + phuCapNgach) +

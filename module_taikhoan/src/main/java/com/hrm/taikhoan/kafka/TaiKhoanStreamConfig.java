@@ -1,5 +1,6 @@
 package com.hrm.taikhoan.kafka;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hrm.taikhoan.dto.resopnse.QuenMatKhau;
@@ -52,7 +53,7 @@ public class TaiKhoanStreamConfig {
         proTK.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "tai_khoan_id");
         proTK.setProperty(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         proTK.setProperty(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        proTK.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        proTK.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         proTK.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
         proTK.setProperty(SaslConfigs.SASL_MECHANISM, "PLAIN");
         proTK.setProperty(SaslConfigs.SASL_JAAS_CONFIG, "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"admin\" password=\"admin-secret\";");
@@ -61,20 +62,25 @@ public class TaiKhoanStreamConfig {
         KStream<String, String> processedStream = source.mapValues(value -> {
             try {
                 JsonNode rootNode = objectMapper.readTree(value);
-                JsonNode payload= rootNode.get("payload");
+                JsonNode payload = rootNode.get("payload");
                 JsonNode nodeEmail = payload.get("email");
                 JsonNode nodeUsername = payload.get("username");
                 JsonNode nodePass = payload.get("password");
-                System.err.println(payload.asText());
-                //return 3 properties: email, username, pass
-                QuenMatKhau matKhau = new QuenMatKhau(nodeEmail.asText(), nodeUsername.asText(), nodePass.asText());
-                return matKhau.toString();
+                // Kiểm tra nếu nodeEmail không phải là null hoặc không rỗng
+                if (!nodeEmail.asText().equals("null")) {
+                    //return 3 properties: email, username, pass
+                    QuenMatKhau matKhau = new QuenMatKhau(nodeEmail.asText(), nodeUsername.asText(), nodePass.asText());
+                    return matKhau.toString();
+                } else {
+                    // Nếu nodeEmail là null hoặc rỗng, không xử lý và trả về null
+                    return null;
+                }
             } catch (Exception e) {
                 System.err.println("Failed to process record: " + e.getMessage());
                 return null;
             }
         });
-        processedStream.to("send_mail", Produced.with(Serdes.String(), Serdes.String()));
+        processedStream.filter((key, value) -> value != null).to("send_mail", Produced.with(Serdes.String(), Serdes.String()));
         Topology topology = builder.build();
         // cach thu 2 dung Thread hoac Runnable
         KafkaStreams streams = new KafkaStreams(topology, proTK);

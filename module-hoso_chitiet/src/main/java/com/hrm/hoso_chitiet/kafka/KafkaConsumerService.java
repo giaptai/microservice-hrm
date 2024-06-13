@@ -19,7 +19,6 @@ import java.time.Duration;
 import java.util.List;
 
 @Service
-@EnableAsync
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaConsumerService {
