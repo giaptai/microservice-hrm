@@ -2,6 +2,7 @@ package com.hrm.hoso_chitiet.services;
 
 import com.hrm.hoso_chitiet.client.ho_so.HoSoClient;
 import com.hrm.hoso_chitiet.client.ho_so.ResHoSoTomTatClient;
+
 import com.hrm.hoso_chitiet.dto.mapper.MapperKhenThuong;
 import com.hrm.hoso_chitiet.dto.mapper.MapperKienThucAnNinhQuocPhong;
 import com.hrm.hoso_chitiet.dto.mapper.MapperKyLuat;
@@ -15,6 +16,7 @@ import com.hrm.hoso_chitiet.dto.mapper.MapperPhuCapKhac;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.mapper.MapperQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.mapper.MapperTinHoc;
+
 import com.hrm.hoso_chitiet.dto.request.ReqLamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.dto.request.ReqKhenThuong;
 import com.hrm.hoso_chitiet.dto.request.ReqKienThucAnNinhQuocPhong;
@@ -42,7 +44,11 @@ import com.hrm.hoso_chitiet.dto.response.ResQuaTrinhCongTac;
 import com.hrm.hoso_chitiet.dto.response.ResQuanHeGiaDinh;
 import com.hrm.hoso_chitiet.dto.response.ResTheDTO;
 import com.hrm.hoso_chitiet.dto.response.ResTinHoc;
+
 import com.hrm.hoso_chitiet.enums.XacNhan;
+
+import com.hrm.hoso_chitiet.kafka.KafkaProducerService;
+
 import com.hrm.hoso_chitiet.models.LamViecChoCheDoCu;
 import com.hrm.hoso_chitiet.models.KhenThuong;
 import com.hrm.hoso_chitiet.models.KienThucAnNinhQuocPhong;
@@ -119,6 +125,8 @@ public class HoSoChiTietServices {
     private final MapperQuanHeGiaDinh mapperQuanHeGiaDinh;
     private final MapperQuaTrinhCongTac mapperQuaTrinhCongTac;
     private final MapperTinHoc mapperTinHoc;
+    //kafka service
+    private final KafkaProducerService kafkaProducerService;
 
 
 //    public ResHoSoChiTiet getAllByHoSoId(UUID id) {
@@ -513,9 +521,21 @@ public class HoSoChiTietServices {
         }
 
         @Override
-        public ResKyLuat them(UUID id, ReqKyLuat req) {
+        public ResKyLuat themApi(UUID id, ReqKyLuat req) {
             try {
                 KyLuat luat = kyLuatRepository.save(new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id));
+                return mapperKyLuat.mapToResKyLuat(luat);
+            } catch (RuntimeException e) {
+                System.err.println(e.getMessage());
+                throw e;
+            }
+        }
+
+        @Override
+        public ResKyLuat them(UUID id, ReqKyLuat req) {
+            try {
+                KyLuat luat = new KyLuat(req.batDau(), req.ketThuc(), req.hinhThuc(), req.hanhViViPhamChinh(), req.coQuanQuyetDinhId(), XacNhan.CHO_PHE_DUYET, id);
+                kafkaProducerService.addKyLuatConnect(id, req);
                 return mapperKyLuat.mapToResKyLuat(luat);
             } catch (RuntimeException e) {
                 System.err.println(e.getMessage());

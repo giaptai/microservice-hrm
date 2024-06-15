@@ -13,6 +13,9 @@ public interface HoSoRepository extends JpaRepository<HoSo, UUID> {
     @Query
     Optional<HoSo> findFirstBySoCCCD(String soCCCD);
 
+    @Query(value = "SELECT COUNT(h.soCCCD) FROM HoSo h WHERE h.soCCCD = ?1")
+    int findBySoCCCD(String soCCCD);
+
     //using JPQL
     @Query(value = "UPDATE HoSo h SET h.trangThai = ?1 WHERE h.id = ?2")
     abstract HoSo updateTrangThaiSoYeuLyLich(boolean check, UUID id);

@@ -9,7 +9,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.errors.WakeupException;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -25,9 +24,10 @@ import java.util.List;
 public class KafkaConsumerService {
     final QuaTrinhCongTacRepository quaTrinhCongTacRepository;
     final KafkaConsumerConfig consumerConfig;
+
     @Async
     @EventListener(value = ApplicationReadyEvent.class)
-    protected void QuaTrinhCongTacListener() {
+    public void QuaTrinhCongTacListener() {
 //        KafkaConsumerConfig config = new KafkaConsumerConfig("my-quatrinhcongtac-app", StringDeserializer.class.getName(), ResChucVu.ResChucVuSoDeserializer.class.getName());
         System.out.println("crush em t");
         // create consumer
@@ -56,17 +56,18 @@ public class KafkaConsumerService {
                 ConsumerRecords<String, ResChucVu> records = consumer.poll(Duration.ofMillis(1000));
                 for (ConsumerRecord<String, ResChucVu> record : records) {
                     System.out.printf("""
-                                    Key: %s
-                                    Value: %s
-                                    Partition: %d
-                                    Offset: %d
+                                    Key: %1$s
+                                    Value: %2$s
+                                    Partition: %3$d
+                                    Offset: %4$d
+                                    Timestamp: %5$s
                                     """,
-                            record.key(), record.value(), record.partition(), record.offset());
+                            record.key(), record.value(), record.partition(), record.offset(), record.timestamp());
                     QuaTrinhCongTac tac = new QuaTrinhCongTac(
                             record.value().ngayBoNhiem(),
                             record.value().ngayBoNhiemLai(),
                             record.value().coQuanToChucDonViTuyenDungId(),
-                            record.value().duocQuyHoacChucDanh(),
+                            record.value().duocQuyHoachChucDanh(),
                             record.value().xacNhan(),
                             record.value().hoSoId());
                     quaTrinhCongTacRepository.save(tac);
@@ -76,7 +77,7 @@ public class KafkaConsumerService {
             System.err.println(e);
             // we ignore this as this is an expected exception when closing a consumer
         } catch (Exception e) {
-            System.err.printf("Unexpected exception: %s", e);
+            System.err.printf("Unexpected exception: %s\n", e);
         } finally {
             consumer.close(); // this will also commit the offsets if need be.
             System.err.printf("%s", "The consumer is now gracefully closed.");

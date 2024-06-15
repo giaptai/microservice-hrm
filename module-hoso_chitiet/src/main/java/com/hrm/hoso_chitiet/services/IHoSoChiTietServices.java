@@ -95,6 +95,9 @@ public interface IHoSoChiTietServices<T, H> {
     }
 
     interface IHoKyLuatServiceChiTiet extends IHoSoChiTietServices<ResKyLuat, ReqKyLuat> {
+        default ResKyLuat themApi(UUID id, ReqKyLuat req) {
+            return null;
+        }
         default List<KyLuat> kyLuatNhanVien(List<ReqKyLuatNhanVien> vien) {
             return new ArrayList<>();
         }

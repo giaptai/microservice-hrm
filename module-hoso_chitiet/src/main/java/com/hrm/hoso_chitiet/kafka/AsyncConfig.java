@@ -1,14 +1,9 @@
 package com.hrm.hoso_chitiet.kafka;
 
-import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -20,7 +15,13 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @EnableScheduling
 public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
-//    @Autowired
+//    final CustomStream customStream;
+
+//    public AsyncConfig(CustomStream customStream) {
+//        this.customStream = customStream;
+//    }
+
+    //    @Autowired
 //    private MySqlSourceTask mySqlSourceTask;
     //    @Bean
 //    public Executor taskScheduler() {
@@ -45,6 +46,12 @@ public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
 //    public void runTask() throws InterruptedException {
 //        mySqlSourceTask.poll();
 //    }
+//    @Async
+//    @Scheduled(fixedRate = 30_000)
+//    public void runTaskCC() {
+//        customStream.KhenThuongStream();
+//    }
+
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -59,7 +66,7 @@ public class AsyncConfig implements SchedulingConfigurer, AsyncConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-        threadPoolTaskScheduler.setPoolSize(5);
+        threadPoolTaskScheduler.setPoolSize(10);
         threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
         threadPoolTaskScheduler.initialize();
         taskRegistrar.setTaskScheduler(threadPoolTaskScheduler);

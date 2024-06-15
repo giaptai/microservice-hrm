@@ -566,3 +566,9 @@ VALUES ('Giám đốc', 6, 9000000),
        ('Thư ký', 4, 6000000),
        ('Thù kho', 2, 3000000),
        ('Phó giám đốc', 5, 7000000);
+
+-- chuc_vu/chuc_vu_kiem_nhiem
+INSERT into chuc_vu (name)
+VALUES ('Giám đốc kho'),
+       ('Nhân viên khoo'),
+       ('Phó giám đốc');

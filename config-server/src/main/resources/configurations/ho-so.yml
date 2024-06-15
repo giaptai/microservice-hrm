@@ -37,5 +37,5 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:8761/eureka
 
 moduleUrl:
-  ho-so-chi-tiet: http://localhost:8004/api/v1
   cau-hinh: http://localhost:8001/api/v1
+  ho-so-chi-tiet: http://localhost:8004/api/v1

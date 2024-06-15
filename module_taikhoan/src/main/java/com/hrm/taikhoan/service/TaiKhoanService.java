@@ -2,11 +2,12 @@ package com.hrm.taikhoan.service;
 
 import com.hrm.taikhoan.client.ho_so.HoSoClient;
 import com.hrm.taikhoan.client.ho_so.HoSoDTO;
-import com.hrm.taikhoan.dto.mapper.MapperAuth;
 import com.hrm.taikhoan.dto.mapper.MapperTaiKhoan;
+import com.hrm.taikhoan.dto.request.ReqEmail;
 import com.hrm.taikhoan.dto.request.ReqTaoHoSoClient;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoan;
 import com.hrm.taikhoan.dto.request.ReqTaiKhoanLogin;
+import com.hrm.taikhoan.dto.resopnse.QuenMatKhau;
 import com.hrm.taikhoan.dto.resopnse.ResTheDTO;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoan;
 import com.hrm.taikhoan.dto.resopnse.ResTaiKhoanLogin;
@@ -38,7 +39,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.UUID;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -51,7 +52,6 @@ public class TaiKhoanService implements ITaiKhoanService {
 //    final IAuthenticationFacade facade;
 //    final KafkaProducers producers;
     //mappers
-    final MapperAuth mapperAuth;
     final MapperTaiKhoan mapperTaiKhoan;
     final HoSoProducer hoSoProducer;
 
@@ -117,7 +117,7 @@ public class TaiKhoanService implements ITaiKhoanService {
     @Override
     public ResTaiKhoan them(ReqTaiKhoan reqTaiKhoan) {
         TaiKhoan taiKhoan;
-        UUID uuid = UUID.randomUUID();
+//        UUID uuid = UUID.randomUUID();
         try {
             List<TaiKhoan> listUsername = taiKhoanRepository.findAll();
             //tạo username
@@ -132,15 +132,21 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .trangThai(true)
                     .createAt(LocalDateTime.now())
                     .build();
+            //check trùng số CCCD
+            if (hoSoClient.getHoSoCCCD(taiKhoan.getPassword())) {
+                throw new RuntimeException("Trùng số CCCD");
+            }
             taiKhoanRepository.save(taiKhoan);
+            QuenMatKhau matKhau = new QuenMatKhau(taiKhoan.getEmail(), taiKhoan.getUsername(), taiKhoan.getPassword(), "create");
             ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
 //            HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqHoSo);
             // create the producer
             KafkaProducer<String, ReqTaoHoSoClient> producer = new KafkaProducer<>(hoSoProducer.getProperties());
             KafkaProducer<String, String> producerTaiKhoan = new KafkaProducer<>(hoSoProducer.taiKhoanProducer());
             // create a producer record
-            ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", reqTaoHoSoClient);
-            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("taikhoan_email", taiKhoan.getEmail());
+            ProducerRecord<String, ReqTaoHoSoClient> producerRecord = new ProducerRecord<>("hoso_create", "hoso_key_2", reqTaoHoSoClient);
+            ReqEmail reqEmail = new ReqEmail(taiKhoan.getEmail());
+            ProducerRecord<String, String> taiKhoanRecord = new ProducerRecord<>("send_mail", "taikhoan_key", matKhau.toString());
             // send data - asynchronous
             producer.send(producerRecord, new Callback() {
                 @Override
@@ -223,6 +229,10 @@ public class TaiKhoanService implements ITaiKhoanService {
                     .createAt(LocalDateTime.now())
                     .build();
             taiKhoanRepository.save(taiKhoan);
+            //check trùng số CCCD
+            if (!hoSoClient.getHoSoCCCD(taiKhoan.getPassword())) {
+                throw new RuntimeException("Trùng số CCCD");
+            }
             ReqTaoHoSoClient reqTaoHoSoClient = new ReqTaoHoSoClient(taiKhoan.getHoVaTen(), taiKhoan.getPassword(), taiKhoan.getId());
             HoSoDTO hoSoDTO = hoSoClient.addHoSo(reqTaoHoSoClient);
             if (hoSoDTO != null) {
@@ -271,5 +281,46 @@ public class TaiKhoanService implements ITaiKhoanService {
         }
         //không tạo refresh token ok
         throw new ResponseStatusException(ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.getStatusCode(), ResEnum.SAI_TAI_KHOAN_HOAC_MAT_KHAU.name());
+    }
+
+    @Override
+    public boolean quenMatKhau(String email) {
+        try {
+            TaiKhoan taiKhoan = taiKhoanRepository.findByEmail(email);
+            if (taiKhoan != null) {
+                taiKhoan.setPassword(createRandomPassword());
+                taiKhoan.setUpdateAt();
+                taiKhoanRepository.save(taiKhoan);
+                return true;
+            } else return false;
+        } catch (RuntimeException e) {
+            System.err.println(e.getMessage());
+            throw e;
+        }
+    }
+
+
+    /**
+     * https://www.baeldung.com/java-random-string
+     */
+    private String createRandomPassword() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 6;
+        Random random = new Random();
+
+//        String generatedString = random.ints(leftLimit, rightLimit + 1)
+//                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+//                .limit(targetStringLength)
+//                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+//                .toString();
+
+        // Tạo một stream các số nguyên ngẫu nhiên trong phạm vi từ leftLimit đến rightLimit
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97)) // Lọc các ký tự không phải là ký tự chữ và số
+                .limit(targetStringLength) // Giới hạn số lượng ký tự cần tạo ra
+                .forEach(i -> buffer.appendCodePoint(i)); // Thu thập các ký tự vào StringBuilder
+        return buffer.toString(); // Chuyển StringBuilder thành chuỗi
     }
 }

@@ -29,6 +29,8 @@ ext {
 dependencies {
     // https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
     implementation group: 'org.apache.kafka', name: 'kafka-clients', version: '3.7.0'
+    // https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams
+    implementation group: 'org.apache.kafka', name: 'kafka-streams', version: '3.7.0'
     // https://mvnrepository.com/artifact/io.github.openfeign/feign-hc5
     implementation group: 'io.github.openfeign', name: 'feign-hc5', version: '13.2.1'
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign

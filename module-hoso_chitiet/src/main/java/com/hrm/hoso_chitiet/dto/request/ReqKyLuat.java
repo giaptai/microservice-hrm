@@ -8,5 +8,5 @@ public record ReqKyLuat(
         String hinhThuc,
         String hanhViViPhamChinh,
         int coQuanQuyetDinhId //DonVi
-) {
+)  {
 }

@@ -2,6 +2,7 @@ package com.hrm.hoso.dto.response;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.hrm.hoso.enums.XacNhan;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Serializer;
 
@@ -14,11 +15,11 @@ public record ResChucVu(
         String chucVuHienTaiName,
         LocalDateTime ngayBoNhiem,
         LocalDateTime ngayBoNhiemLai,
-        String duocQuyHoacChucDanh,
+        String duocQuyHoachChucDanh,
         double phuCapChucVu,
         int coQuanToChucDonViTuyenDungId,
         String coQuanToChucDonViTuyenDungName,
-        String xacNhan,
+        XacNhan xacNhan,
         UUID hoSoId
 ) {
     public static class ResChucVuSerializer implements Serializer<ResChucVu> {

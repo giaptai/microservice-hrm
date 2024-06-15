@@ -72,6 +72,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -123,6 +124,11 @@ public class HoSoService implements IHoSoService {
     }
 
     @Override
+    public boolean checkHoSoCCCD(String soCCCD) {
+        return hoSoRepository.findBySoCCCD(soCCCD) > 0;
+    }
+
+    @Override
     public ResHoSo taoHoSo(ReqTaoHoSo req) {
         HoSo hoSo = HoSo.builder()
                 .hoVaTen(req.hoVaTen())
@@ -143,13 +149,13 @@ public class HoSoService implements IHoSoService {
         }
         if (hoVaTen != null || danTocId != -1 || chucVuHienTaiId != -1 || coQuanToChucDonViId != -1 || pheDuyet != null) {
             return locHoSo(hoVaTen, danTocId, chucVuHienTaiId, coQuanToChucDonViId, pheDuyet, byDate, pageNumber, pageSize);
-        } else {
-            Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
-            List<ResHoSo> resHoSos = hoSoRepository.findAll(pageable).stream().map(mapperHoSo::mapToResHoSo).toList();
-            long totalRecord = hoSoRepository.findAll(pageable).getTotalElements();
-            int totalPage = hoSoRepository.findAll(pageable).getTotalPages();
-            return new ResListHoSo(resHoSos, totalRecord, totalPage);
         }
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, byDate));
+        Page<HoSo> hoSoPage = hoSoRepository.findAll(pageable);
+        List<ResHoSo> resHoSos = hoSoPage.stream().map(mapperHoSo::mapToResHoSo).toList();
+        long totalRecord = hoSoPage.getTotalElements();
+        int totalPage = hoSoPage.getTotalPages();
+        return new ResListHoSo(resHoSos, totalRecord, totalPage);
     }
 
     private ResHoSo xemHoSoTheoSoCCCD(String q) {
@@ -162,113 +168,206 @@ public class HoSoService implements IHoSoService {
     }
 
     private ResListHoSo locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
-        long totalRecord = 0;
-        int totalPage = 1;
-        //JPA Criteria API
+        // Initialize Criteria Builders
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaBuilder countBuilder = entityManager.getCriteriaBuilder(); //count
 
+        // Create Queries
         CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
-        CriteriaQuery<Long> countQuery = countBuilder.createQuery(Long.class); //count
+        CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 
-
+        // Set Roots
         Root<HoSo> root = query.from(HoSo.class);
-        Root<HoSo> countRoot = countQuery.from(HoSo.class); //count
+        Root<HoSo> countRoot = countQuery.from(HoSo.class);
 
-        Predicate predicate = null;
-        Predicate countPredicate = null; //count
+        // Initialize Predicates
+        List<Predicate> predicates = new ArrayList<>();
+        List<Predicate> countPredicates = new ArrayList<>();
 
+        // Join Relations
         Join<HoSo, ChucVuHienTai> join = root.join("chucVuHienTai", JoinType.LEFT);
-        Join<HoSo, ChucVuHienTai> countJoin = countRoot.join("chucVuHienTai", JoinType.LEFT); //count
+        Join<HoSo, ChucVuHienTai> countJoin = countRoot.join("chucVuHienTai", JoinType.LEFT);
 
+        // Add Conditions
         if (hoVaTen != null && !hoVaTen.isEmpty()) {
-            predicate = builder.like(builder.lower(root.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%");
-            countPredicate = builder.like(builder.lower(countJoin.get("hoVaTen")), "%" + hoVaTen.toLowerCase() + "%"); //count
+            String hoVaTenLower = "%" + hoVaTen.toLowerCase() + "%";
+            predicates.add(builder.like(builder.lower(root.get("hoVaTen")), hoVaTenLower));
+            countPredicates.add(builder.like(builder.lower(countJoin.get("hoVaTen")), hoVaTenLower));
         }
         if (danTocId > 0) {
-            Predicate danTocPredicate = builder.equal(root.get("danTocId"), danTocId);
-            Predicate danTocCountPredicate = builder.equal(countJoin.get("danTocId"), danTocId); //count
+            predicates.add(builder.equal(root.get("danTocId"), danTocId));
+            countPredicates.add(builder.equal(countJoin.get("danTocId"), danTocId));
 
-            predicate = (predicate != null) ? builder.and(predicate, danTocPredicate) : danTocPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, danTocCountPredicate) : danTocCountPredicate; //count
+//            Predicate danTocPredicate = builder.equal(root.get("danTocId"), danTocId);
+//            Predicate danTocCountPredicate = builder.equal(countJoin.get("danTocId"), danTocId); //count
+
+//            predicates = (predicates != null) ? builder.and(predicates, danTocPredicate) : danTocPredicate;
+//            countPredicate = (countPredicate != null) ? builder.and(countPredicate, danTocCountPredicate) : danTocCountPredicate; //count
         }
         if (chucVuHienTaiId > 0) {
-            Predicate chucVuPredicate = builder.equal(join.get("chucVuId"), chucVuHienTaiId);
-            Predicate chucVuCountPredicate = builder.equal(countJoin.get("chucVuId"), chucVuHienTaiId); //count
-
-            predicate = (predicate != null) ? builder.and(predicate, chucVuPredicate) : chucVuPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, chucVuCountPredicate) : chucVuCountPredicate; //count
+            predicates.add(builder.equal(join.get("chucVuId"), chucVuHienTaiId));
+            countPredicates.add(builder.equal(countJoin.get("chucVuId"), chucVuHienTaiId));
         }
         if (coQuanToChucDonViId > 0) {
-            Predicate coQuanPredicate = builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
-            Predicate coQuanCountPredicate = builder.equal(countJoin.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId); //count
-
-
-            predicate = (predicate != null) ? builder.and(predicate, coQuanPredicate) : coQuanPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, coQuanCountPredicate) : coQuanCountPredicate; //count
+            predicates.add(builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId));
+            countPredicates.add(builder.equal(countJoin.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId));
         }
         if (pheDuyet != null) {
-            Predicate pheDuyetPredicate = builder.equal(root.get("pheDuyet"), pheDuyet);
-            Predicate pheDuyetCountPredicate = builder.equal(countRoot.get("pheDuyet"), pheDuyet); //count
+            predicates.add(builder.equal(root.get("pheDuyet"), pheDuyet));
+            countPredicates.add(builder.equal(countRoot.get("pheDuyet"), pheDuyet));
+        }
 
+        // Apply Predicates
+        if (!predicates.isEmpty()) {
+            query.where(builder.and(predicates.toArray(new Predicate[0])));
+            countQuery.select(builder.count(countRoot)).where(builder.and(countPredicates.toArray(new Predicate[0])));
+        } else {
+            countQuery.select(builder.count(countRoot));
+        }
 
-            predicate = (predicate != null) ? builder.and(predicate, pheDuyetPredicate) : pheDuyetPredicate;
-            countPredicate = (countPredicate != null) ? builder.and(countPredicate, pheDuyetCountPredicate) : pheDuyetCountPredicate; //count
-        }
-        if (predicate != null) {
-            query.where(predicate);
-        }
-        if (countPredicate != null) {
-            countQuery.select(countBuilder.count(countRoot)).where(countPredicate); //count
-        }
-        totalRecord = entityManager.createQuery(countQuery).getSingleResult();
-        totalPage = Math.round(((float) totalRecord / pageSize));
-        // Apply order by
+        // Get Total Records and Pages
+        long totalRecord = entityManager.createQuery(countQuery).getSingleResult();
+        int totalPage = (int) Math.ceil((double) totalRecord / pageSize);
+
+        // Apply Ordering
         if (byDate != null) {
             query.orderBy(builder.desc(root.get(byDate)));
         }
+
+        // Execute Query with Pagination
         List<HoSo> hoSos = entityManager.createQuery(query)
                 .setFirstResult(pageNumber * pageSize)
                 .setMaxResults(pageSize)
                 .getResultList();
+
+        // Map Results
         List<ResHoSo> resHoSos = hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
+
+        // Return Results
         return new ResListHoSo(resHoSos, totalRecord, totalPage);
     }
 
-    @Override
-    public ResHoSo capNhatHoSoCCVC(UUID id, String req, MultipartFile anh) {
-        try {
-            HoSo hoSo;
-            Path path = Paths.get("module-hoso/src/main/uploads");
-//            File file = new File(path.toString());
-//            if (!file.exists()) {
-//                if (file.mkdirs()) {
-//                    System.out.println("Create folder successfully");
-//                } else System.out.println("Create folder failed");
-//            }
-            if (!Files.exists(path)) {
-                Files.createDirectories(path);
+    /*
+        private ResListHoSo locHoSo(String hoVaTen, int danTocId, int chucVuHienTaiId, int coQuanToChucDonViId, PheDuyet pheDuyet, String byDate, int pageNumber, int pageSize) {
+            //JPA Criteria API
+            // Initialize Criteria Builders
+            CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+            CriteriaBuilder countBuilder = entityManager.getCriteriaBuilder(); //count
+
+            // Create Queries
+            CriteriaQuery<HoSo> query = builder.createQuery(HoSo.class);
+            CriteriaQuery<Long> countQuery = countBuilder.createQuery(Long.class); //count
+
+            // Set Roots
+            Root<HoSo> root = query.from(HoSo.class);
+            Root<HoSo> countRoot = countQuery.from(HoSo.class); //count
+
+            // Initialize Predicate
+            Predicate predicate = null;
+            Predicate countPredicate = null; //count
+
+            // Join Relations
+            Join<HoSo, ChucVuHienTai> join = root.join("chucVuHienTai", JoinType.LEFT);
+            Join<HoSo, ChucVuHienTai> countJoin = countRoot.join("chucVuHienTai", JoinType.LEFT); //count
+
+            if (hoVaTen != null && !hoVaTen.isEmpty()) {
+                String lowHoVaTen = "%" + hoVaTen.toLowerCase() + "%";
+                predicate = builder.like(builder.lower(root.get("hoVaTen")), lowHoVaTen);
+                countPredicate = builder.like(builder.lower(countJoin.get("hoVaTen")), lowHoVaTen); //count
             }
-            if (anh.getSize() <= 5_242_880 && Objects.equals(anh.getContentType(), "image/png")) {
-                //https://howtodoinjava.com/gson/gson-typeadapter-for-inaccessibleobjectexception/
-                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
-                ReqHoSo json = gson.fromJson(req, ReqHoSo.class);
-                hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
-                mapToHoSo(hoSo, json);
-                Resource res = anh.getResource();
-                // Lấy tên gốc của file
-                String nameAnh = anh.getOriginalFilename();
-                nameAnh = hoSo.getHoVaTen();
-                // Xác định đường dẫn đích trong thư mục "uploads"
-                Path destinationPath = path.resolve(nameAnh);
-                Files.copy(anh.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            } else throw new IllegalArgumentException("File size exceeds 5 MB limit.\n" +
-                    "File is not image/png type");
+            if (danTocId > 0) {
+                Predicate danTocPredicate = builder.equal(root.get("danTocId"), danTocId);
+                Predicate danTocCountPredicate = builder.equal(countJoin.get("danTocId"), danTocId); //count
+
+                predicate = (predicate != null) ? builder.and(predicate, danTocPredicate) : danTocPredicate;
+                countPredicate = (countPredicate != null) ? builder.and(countPredicate, danTocCountPredicate) : danTocCountPredicate; //count
+            }
+            if (chucVuHienTaiId > 0) {
+                Predicate chucVuPredicate = builder.equal(join.get("chucVuId"), chucVuHienTaiId);
+                Predicate chucVuCountPredicate = builder.equal(countJoin.get("chucVuId"), chucVuHienTaiId); //count
+
+                predicate = (predicate != null) ? builder.and(predicate, chucVuPredicate) : chucVuPredicate;
+                countPredicate = (countPredicate != null) ? builder.and(countPredicate, chucVuCountPredicate) : chucVuCountPredicate; //count
+            }
+            if (coQuanToChucDonViId > 0) {
+                Predicate coQuanPredicate = builder.equal(join.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId);
+                Predicate coQuanCountPredicate = builder.equal(countJoin.get("coQuanToChucDonViTuyenDungId"), coQuanToChucDonViId); //count
+
+
+                predicate = (predicate != null) ? builder.and(predicate, coQuanPredicate) : coQuanPredicate;
+                countPredicate = (countPredicate != null) ? builder.and(countPredicate, coQuanCountPredicate) : coQuanCountPredicate; //count
+            }
+            if (pheDuyet != null) {
+                Predicate pheDuyetPredicate = builder.equal(root.get("pheDuyet"), pheDuyet);
+                Predicate pheDuyetCountPredicate = builder.equal(countRoot.get("pheDuyet"), pheDuyet); //count
+
+
+                predicate = (predicate != null) ? builder.and(predicate, pheDuyetPredicate) : pheDuyetPredicate;
+                countPredicate = (countPredicate != null) ? builder.and(countPredicate, pheDuyetCountPredicate) : pheDuyetCountPredicate; //count
+            }
+            if (predicate != null) {
+                query.where(predicate);
+            }
+            if (countPredicate != null) {
+                countQuery.select(countBuilder.count(countRoot)).where(countPredicate); //count
+            }
+            long totalRecord = entityManager.createQuery(countQuery).getSingleResult();
+            int totalPage = Math.round(((float) totalRecord / pageSize));
+            // Apply order by
+            if (byDate != null) {
+                query.orderBy(builder.desc(root.get(byDate)));
+            }
+            List<HoSo> hoSos = entityManager.createQuery(query)
+                    .setFirstResult(pageNumber * pageSize)
+                    .setMaxResults(pageSize)
+                    .getResultList();
+            List<ResHoSo> resHoSos = hoSos.stream().map(mapperHoSo::mapToResHoSo).toList();
+            return new ResListHoSo(resHoSos, totalRecord, totalPage);
+        }
+    */
+//    @Override
+//    public ResHoSo capNhatHoSoCCVC(UUID id, String req, MultipartFile anh) {
+//        try {
+//            HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+//            //https://howtodoinjava.com/gson/gson-typeadapter-for-inaccessibleobjectexception/
+//            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter()).create();
+//            ReqHoSo json = gson.fromJson(req, ReqHoSo.class);
+//            mapToHoSo(hoSo, json); //chuyen tu json thanh model HoSo
+//            Path path = Paths.get("module-hoso/src/main/uploads");
+////            File file = new File(path.toString());
+////            if (!file.exists()) {
+////                if (file.mkdirs()) {
+////                    System.out.println("Create folder successfully");
+////                } else System.out.println("Create folder failed");
+////            }
+//            if (!Files.exists(path)) {
+//                Files.createDirectories(path);
+//            }
+//            if (anh.getSize() <= 5_242_880 && Objects.equals(anh.getContentType(), "image/png")) {
+//                Resource res = anh.getResource();
+//                // Lấy tên gốc của file
+//                String nameAnh = anh.getOriginalFilename();
+//                nameAnh = hoSo.getHoVaTen();
+//                // Xác định đường dẫn đích trong thư mục "uploads"
+//                Path destinationPath = path.resolve(nameAnh);
+//                Files.copy(anh.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
+//            } else throw new IllegalArgumentException("File size exceeds 5 MB limit.\n" + "File is not image/png type");
+//            hoSoRepository.save(hoSo);
+//            return mapperHoSo.mapToResHoSo(hoSo);
+//        } catch (IOException e) {
+//            System.err.println(e.getMessage());
+//            return null;
+//        } catch (RuntimeException e) {
+//            System.err.println(e.getMessage());
+//            throw e;
+//        }
+//    }
+    @Override
+    public ResHoSo capNhatHoSoCCVC(UUID id, ReqHoSo req) {
+        try {
+            HoSo hoSo = hoSoRepository.findById(id).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
+            mapToHoSo(hoSo, req);
             hoSoRepository.save(hoSo);
             return mapperHoSo.mapToResHoSo(hoSo);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return null;
         } catch (RuntimeException e) {
             System.err.println(e.getMessage());
             throw e;
@@ -399,29 +498,29 @@ public class HoSoService implements IHoSoService {
     @Override
     public ResHoSo capNhatHoSoCaNhan(int taiKhoanId, ReqHoSo reqHoSo) {
         HoSo hoSo = hoSoRepository.findByTaiKhoanId(taiKhoanId).orElseThrow(() -> new ResponseStatusException(ResEnum.HONG_TIM_THAY.getCode()));
-        return capNhatHoSoCCVC(hoSo.getId(), reqHoSo.toString(), null);
+        return capNhatHoSoCCVC(hoSo.getId(), reqHoSo);
     }
 
-    private double tinhLuong(ResHoSo hoSo) {
-        ResChucVu chucVu = hoSo.chucVu();
-        ResChucVuKiemNhiem kiemNhiem = hoSo.chucVuKiemNhiem();
-        ResNgachNhanVien ngach = hoSo.ngach();
-        ResViecLam viecLam = hoSo.viecLam();
-        double phuCapChucVu = chucVu.phuCapChucVu();
-        double phuCapKiemNhiem = kiemNhiem.phuCapKiemNhiem();
-        double phuCapKhac = kiemNhiem.phuCapKhac();
-        float heSoNgach = ngach.heSo();
-        float phanTramNgach = ngach.phanTramHuongLuongNgach();
-        double phuCapNgach = ngach.phuCapThamNienVuotKhungNgach();
-        double luongCoBan = 1_800_000;
-        float phanTramViecLam = viecLam.phamTramHuongLuong();
-        double phuCapViecLam = viecLam.phuCapThamNienVuotKhung();
-        double luongViecLam = viecLam.tienLuong();
-        double tienLuongNhan = (phuCapChucVu + phuCapKiemNhiem + phuCapKhac) +
-                (heSoNgach * phanTramNgach * luongCoBan + phuCapNgach) +
-                (phanTramViecLam * luongViecLam + phuCapViecLam);
-        return tienLuongNhan;
-    }
+//    private double tinhLuong(ResHoSo hoSo) {
+//        ResChucVu chucVu = hoSo.chucVu();
+//        ResChucVuKiemNhiem kiemNhiem = hoSo.chucVuKiemNhiem();
+//        ResNgachNhanVien ngach = hoSo.ngach();
+//        ResViecLam viecLam = hoSo.viecLam();
+//        double phuCapChucVu = chucVu.phuCapChucVu();
+//        double phuCapKiemNhiem = kiemNhiem.phuCapKiemNhiem();
+//        double phuCapKhac = kiemNhiem.phuCapKhac();
+//        float heSoNgach = ngach.heSo();
+//        float phanTramNgach = ngach.phanTramHuongLuongNgach();
+//        double phuCapNgach = ngach.phuCapThamNienVuotKhungNgach();
+//        double luongCoBan = 1_800_000;
+//        float phanTramViecLam = viecLam.phamTramHuongLuong();
+//        double phuCapViecLam = viecLam.phuCapThamNienVuotKhung();
+//        double luongViecLam = viecLam.tienLuong();
+//        double tienLuongNhan = (phuCapChucVu + phuCapKiemNhiem + phuCapKhac) +
+//                (heSoNgach * phanTramNgach * luongCoBan + phuCapNgach) +
+//                (phanTramViecLam * luongViecLam + phuCapViecLam);
+//        return tienLuongNhan;
+//    }
 
     private void mapToHoSo(HoSo hoSo, ReqHoSo req) {
         ReqThongTinTuyenDung tuyenDung = req.thongTinTuyenDung();

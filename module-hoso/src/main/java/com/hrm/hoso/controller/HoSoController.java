@@ -50,6 +50,11 @@ public class HoSoController {
         return new ResponseEntity<>(hoSoService.layHoSoId(id), ResEnum.THANH_CONG.getCode());
     }
 
+    @GetMapping(path = "/ho-so-cccd")
+    public ResponseEntity<Boolean> getHoSoCCCD(@RequestParam(name = "soCCCD") String soCCCD) {
+        return new ResponseEntity<>(hoSoService.checkHoSoCCCD(soCCCD), ResEnum.THANH_CONG.getCode());
+    }
+
 //    @GetMapping(path = "/ho-so-tom-tat-id/{id}")
 //    public ResponseEntity<ResHoSoTomTat> getHoSoTomTatId(@PathVariable(name = "taiKhoanId") int id) {
 //        return new ResponseEntity<>(hoSoService.layHoSoId(id), ResEnum.THANH_CONG.getCode());
@@ -99,15 +104,23 @@ public class HoSoController {
         return new ResponseEntity<>(chucVu, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
     }
 
-    @PatchMapping(value = "/nhan-vien/ho-so/{id}", consumes = {
-            MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE
-    })
+//    @PatchMapping(value = "/nhan-vien/ho-so/{id}", consumes = {
+//            MediaType.APPLICATION_JSON_VALUE,
+//            MediaType.MULTIPART_FORM_DATA_VALUE
+//    })
+//    @Transactional
+//    public ResponseEntity<ResHoSo> editHoSo(@PathVariable(name = "id", required = false) UUID id,
+//                                            @RequestPart(required = false) String reqHoSo,
+//                                            @RequestPart(value = "anh", required = false) @Schema(type = "string", format = "binary") MultipartFile anh) {
+//        ResHoSo resHoSo = hoSoService.capNhatHoSoCCVC(id, reqHoSo, anh);
+//        return new ResponseEntity<>(resHoSo, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
+//    }
+
+    @PatchMapping(value = "/nhan-vien/ho-so/{id}")
     @Transactional
     public ResponseEntity<ResHoSo> editHoSo(@PathVariable(name = "id", required = false) UUID id,
-                                            @RequestPart(required = false) String reqHoSo,
-                                            @RequestPart(value = "anh", required = false) @Schema(type = "string", format = "binary") MultipartFile anh) {
-        ResHoSo resHoSo = hoSoService.capNhatHoSoCCVC(id, reqHoSo, anh);
+                                            @RequestBody(required = false) ReqHoSo reqHoSo) {
+        ResHoSo resHoSo = hoSoService.capNhatHoSoCCVC(id, reqHoSo);
         return new ResponseEntity<>(resHoSo, ResEnum.CAP_NHAT_HO_SO_THANH_CONG.getCode());
     }
 

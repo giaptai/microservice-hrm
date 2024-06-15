@@ -1,4 +1,4 @@
-package com.hrm.hoso.kafka;
+package com.hrm.taikhoan.kafka;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,12 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @EnableScheduling
 public class AsyncConfig implements AsyncConfigurer {
+
+//    @Async
+//    @Scheduled(fixedRate = 15_000)
+//    public void runTaskCC() {
+//        streamsService.taiKhoanStreams();
+//    }
 
     @Override
     public Executor getAsyncExecutor() {

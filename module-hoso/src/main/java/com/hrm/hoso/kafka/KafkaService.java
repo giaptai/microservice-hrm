@@ -7,6 +7,7 @@ import com.hrm.hoso.repository.HoSoRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -43,7 +44,6 @@ public class KafkaService {
             public void run() {
                 System.err.println("Detected a shutdown, let's exit by calling consumer.wakeup()...");
                 consumer.wakeup();
-
                 // join the main thread to allow the execution of the code in the main thread
                 try {
                     mainThread.join();
